@@ -84,3 +84,4 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 /.idea/
+/app/release/output-metadata.json
