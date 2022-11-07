@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.minseonglove.ucmc'
+    namespace 'com.gta.ucmc'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.minseonglove.ucmc"
+        applicationId "com.gta.ucmc"
         minSdk 23
         targetSdk 33
         versionCode 1

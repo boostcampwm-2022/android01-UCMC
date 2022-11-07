@@ -1,4 +1,4 @@
-package com.minseonglove.ucmc
+package com.gta.ucmc
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

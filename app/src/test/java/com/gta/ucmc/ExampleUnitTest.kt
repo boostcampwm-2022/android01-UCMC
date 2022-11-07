@@ -1,4 +1,4 @@
-package com.minseonglove.ucmc
+package com.gta.ucmc
 
 import org.junit.Test
 
