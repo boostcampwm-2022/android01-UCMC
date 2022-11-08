@@ -4,6 +4,10 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+configurations {
+    ktlint
+}
+
 android {
     namespace 'com.gta.ucmc'
     compileSdk 33
@@ -34,6 +38,7 @@ android {
 }
 
 dependencies {
+    ktlint 'com.pinterest:ktlint:0.47.1'
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
@@ -44,4 +49,19 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:31.0.2')
     implementation 'com.google.firebase:firebase-analytics-ktx'
+}
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    mainClass.set("com.pinterest.ktlint.Main")
+    classpath = configurations.ktlint
+    args "src/**/*.kt"
+}
+check.dependsOn ktlint
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    mainClass.set("com.pinterest.ktlint.Main")
+    classpath = configurations.ktlint
+    args "-F", "src/**/*.kt"
 }
