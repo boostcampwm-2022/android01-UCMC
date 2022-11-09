@@ -1,0 +1,64 @@
+name: ucmc CI
+
+on:
+  push:
+    branches: [ develop, sandbox ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Create google-service
+        run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Build Signed APK
+        uses: victorbnl/build-signed-apk@main
+        with:
+          keystore_b64: ${{ secrets.SIGN_KEY }}
+          keystore_password: ${{ secrets.KEY_STORE_PASSWORD }}
+          key_alias: ${{ secrets.ALIAS }}
+          key_password: ${{ secrets.KEY_STORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "30.0.2"
+      - name: signed app bundle
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./app/build/outputs/apk/release/app-release.apk
+      - name: Download APK from build
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d-%H-%M')"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_TOKEN }}
+        with:
+          tag_name: ${{ steps.date.outputs.date }}
+          release_name: Release-prod-${{ steps.date.outputs.date }}
+      - name: Upload Release APK
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./app/build/outputs/apk/release/app-release.apk
+          asset_name: UCMC.apk
+          asset_content_type: application/zip
