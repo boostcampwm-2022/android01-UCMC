@@ -1,4 +1,3 @@
 package com.gta.data.di
 
-object FirebaseModule {
-}
+object FirebaseModule
