@@ -85,3 +85,6 @@ lint/tmp/
 # lint/reports/
 /.idea/
 /app/release/output-metadata.json
+
+# Mac
+*.DS_Store
