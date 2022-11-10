@@ -4,8 +4,18 @@ buildscript {
         google()
         mavenCentral()
     }
+
+    ext {
+        kotlinVersion = "1.4.30"
+        navigationVersion = "2.5.2"
+        hiltVersion = "2.42"
+        coroutineVersion = "1.6.4"
+    }
+
     dependencies {
         classpath 'com.google.gms:google-services:4.3.13'
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
     }
 }
 
