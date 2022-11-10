@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/mapFragment">
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.gta.presentation.ui.map.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/chattingFragment"
+        android:name="com.gta.presentation.ui.chatting.ChattingFragment"
+        android:label="fragment_chatting"
+        tools:layout="@layout/fragment_chatting" />
+
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.gta.presentation.ui.mypage.MyPageFragment"
+        android:label="fragment_mypage"
+        tools:layout="@layout/fragment_mypage" />
+
+</navigation>
