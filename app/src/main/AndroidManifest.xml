@@ -12,6 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UCMC"
-        tools:targetApi="33"/>
+        tools:targetApi="33">
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.gta.ucmc.androidx-startup">
+            <meta-data android:name="com.gta.ucmc.LoggerInitializer"
+                android:value="androidx.startup" />
+        </provider>
+    </application>
 
 </manifest>
