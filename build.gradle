@@ -6,16 +6,25 @@ buildscript {
     }
 
     ext {
+        androidCoreVersion = "1.9.0"
         kotlinVersion = "1.4.30"
-        navigationVersion = "2.5.2"
-        hiltVersion = "2.42"
+        lifecycleVersion = "2.5.1"
+        navigationVersion = "2.5.3"
+        hiltVersion = "2.44"
         coroutineVersion = "1.6.4"
+        roomVersion = "2.4.3"
+        timberVersion = "5.0.1"
+        glideVersion = "4.14.2"
+        viewPagerVersion = "1.0.0"
+        naverMapsVersion = "3.16.0"
+        streamChatVersion = "5.11.0"
     }
 
     dependencies {
-        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'com.google.gms:google-services:4.3.14'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.2'
     }
 }
 

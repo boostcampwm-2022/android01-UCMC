@@ -10,6 +10,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // It needs to use naver map.
+        jcenter()
+        maven {
+            url 'https://naver.jfrog.io/artifactory/maven/'
+        }
+        maven {
+            url "https://jitpack.io/"
+        }
     }
 }
 rootProject.name = "UCMC"
