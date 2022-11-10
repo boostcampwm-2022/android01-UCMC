@@ -25,3 +25,27 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
     id 'org.jetbrains.kotlin.jvm' version '1.7.10' apply false
 }
+
+subprojects {
+    configurations {
+        ktlint
+    }
+
+    dependencies {
+        ktlint 'com.pinterest:ktlint:0.47.1'
+    }
+
+    task ktlint(type: JavaExec, group: "verification") {
+        description = "Check Kotlin code style."
+        mainClass.set("com.pinterest.ktlint.Main")
+        classpath = configurations.ktlint
+        args "src/**/*.kt"
+    }
+
+    task ktlintFormat(type: JavaExec, group: "formatting") {
+        description = "Fix Kotlin code style deviations."
+        mainClass.set("com.pinterest.ktlint.Main")
+        classpath = configurations.ktlint
+        args "-F", "src/**/*.kt"
+    }
+}
