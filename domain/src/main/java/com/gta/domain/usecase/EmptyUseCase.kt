@@ -1,4 +1,3 @@
 package com.gta.domain.usecase
 
-class EmptyUseCase {
-}
+class EmptyUseCase

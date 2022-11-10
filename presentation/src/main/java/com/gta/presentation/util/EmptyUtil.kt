@@ -1,4 +1,3 @@
 package com.gta.presentation.util
 
-class EmptyUtil {
-}
+class EmptyUtil
