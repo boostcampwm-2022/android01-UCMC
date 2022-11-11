@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mapFragment"
+        android:title="@string/my_near"
+        android:icon="@drawable/ic_bottom_nav_car"/>
+
+    <item
+        android:id="@+id/chattingFragment"
+        android:title="@string/chatting"
+        android:icon="@drawable/ic_bottom_nav_chatting"/>
+
+    <item
+        android:id="@+id/myPageFragment"
+        android:title="@string/my_page"
+        android:icon="@drawable/ic_bottom_nav_my"/>
+
+</menu>
