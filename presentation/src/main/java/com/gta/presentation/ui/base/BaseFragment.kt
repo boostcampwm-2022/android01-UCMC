@@ -23,7 +23,7 @@ abstract class BaseFragment<VB : ViewDataBinding>(
     ): View {
         _binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
         return binding.run {
-            lifecycleOwner = this@BaseFragment
+            lifecycleOwner = viewLifecycleOwner
             root
         }
     }
