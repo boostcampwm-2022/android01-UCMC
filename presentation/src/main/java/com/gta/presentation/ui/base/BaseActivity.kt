@@ -1,21 +1,19 @@
 package com.gta.presentation.ui.base
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.viewbinding.ViewBinding
 
-abstract class BaseActivity<VB : ViewDataBinding>(
-    @LayoutRes private val layoutRes: Int
+abstract class BaseActivity<VB : ViewBinding>(
+    private val bindingFactory: (LayoutInflater) -> VB
 ) : AppCompatActivity() {
 
     protected lateinit var binding: VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView<VB>(this, layoutRes).apply {
-            lifecycleOwner = this@BaseActivity
-        }
+        binding = bindingFactory(layoutInflater)
+        setContentView(binding.root)
     }
 }

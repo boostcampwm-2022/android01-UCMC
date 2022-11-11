@@ -7,7 +7,8 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.ActivityMainBinding
 import com.gta.presentation.ui.base.BaseActivity
 
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val navHostFragment =
