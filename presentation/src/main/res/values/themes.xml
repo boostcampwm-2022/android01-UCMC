@@ -17,5 +17,9 @@
         <!-- Customize your theme here. -->
         <item name="toolbarStyle">@style/Theme.UCMC.Toolbar</item>
     </style>
+
+    <style name="Theme.UCMC.ChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
+
+    </style>
 </resources>
 
