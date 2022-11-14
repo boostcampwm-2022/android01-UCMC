@@ -16,7 +16,6 @@ import com.gta.presentation.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,7 +54,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loginEvent.collectLatest { state ->
-                    Timber.tag("Login").i("결과 $state")
+                    /*
+                        로그인에 성공 했다면
+                        1. real time db에 회원정보가 저장되어있는지 확인
+                        2. 있으면 바로 화면 전환
+                        3. 없으면 db에 회원정보 생성 후 화면 전환
+                     */
+                    if (state) {
+                        startMainActivity()
+                    }
                 }
             }
         }

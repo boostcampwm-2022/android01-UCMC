@@ -27,8 +27,9 @@ class LoginViewModel @Inject constructor(
         token ?: return
         val credential = GoogleAuthProvider.getCredential(token, null)
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
-            emitLoginEvent(task.isSuccessful)
-            if (task.isCanceled) {
+            if (task.isSuccessful) {
+                emitLoginEvent(true)
+            } else {
                 Timber.e(task.exception)
             }
         }
