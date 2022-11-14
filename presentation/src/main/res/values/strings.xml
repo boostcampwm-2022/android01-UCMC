@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">니차내차</string>
     <string name="my_near">내주변</string>
     <string name="chatting">채팅</string>
     <string name="my_page">마이페이지</string>
