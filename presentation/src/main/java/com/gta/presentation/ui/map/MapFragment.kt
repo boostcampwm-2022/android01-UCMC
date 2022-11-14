@@ -1,20 +1,17 @@
 package com.gta.presentation.ui.map
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
+import android.view.MotionEvent
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
-import androidx.annotation.UiThread
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.*
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.naver.maps.map.*
 import com.naver.maps.map.util.FusedLocationSource
+
 
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
     private lateinit var mapView: MapView
@@ -47,6 +44,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
         naverMap.locationSource = locationSource
@@ -58,6 +56,16 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             isCompassEnabled = true
             isScaleBarEnabled = true
             isLocationButtonEnabled = true
+        }
+
+        mapView.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_MOVE -> { binding.cgFilter.visibility = View.GONE }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    binding.cgFilter.visibility = View.VISIBLE
+                }
+            }
+            mapView.onTouchEvent(event)
         }
     }
 
