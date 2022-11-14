@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.gta.presentation.databinding.ActivityLoginBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseActivity
@@ -20,9 +19,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate) {
-
-    @Inject
-    lateinit var googleSignInOptions: GoogleSignInOptions
 
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
