@@ -1,6 +1,5 @@
 package com.gta.domain.model
 
-
 data class CarDetail(
     val id: String,
     val title: String,

@@ -12,7 +12,7 @@ import com.gta.presentation.model.PriceType
 import com.gta.presentation.model.toCarOwner
 import com.gta.presentation.model.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.* // ktlint-disable no-wildcard-imports
 import timber.log.Timber
 import javax.inject.Inject
 

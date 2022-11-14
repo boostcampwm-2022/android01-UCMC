@@ -25,5 +25,4 @@ class RepositoryModule {
     fun provideCarRepository(): CarRepository {
         return CarRepositoryImpl()
     }
-
 }
