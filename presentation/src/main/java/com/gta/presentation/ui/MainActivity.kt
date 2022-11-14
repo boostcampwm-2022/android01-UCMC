@@ -9,7 +9,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ActivityMainBinding
 import com.gta.presentation.ui.base.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val navHostFragment by lazy { supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment }
     private val navController by lazy { navHostFragment.navController }
