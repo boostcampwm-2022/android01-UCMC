@@ -3,4 +3,11 @@
     <string name="my_near">내 주변</string>
     <string name="chatting">채팅</string>
     <string name="my_page">마이페이지</string>
+
+    <string name="reservation">예약하기</string>
+    <string name="report_it">신고하기</string>
+    <string name="manners_temperature">매너 온도</string>
+    <string name="chat_going">채팅하기</string>
+    <string name="car_detail_comment_label">코멘트</string>
+    <string name="car_detail_car_owner_label">차주 정보</string>
 </resources>
