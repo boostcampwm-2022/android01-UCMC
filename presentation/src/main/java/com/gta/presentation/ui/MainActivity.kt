@@ -8,7 +8,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ActivityMainBinding
+import com.gta.presentation.secret.NAVER_MAP_CLIENT_ID
 import com.gta.presentation.ui.base.BaseActivity
+import com.naver.maps.map.NaverMapSdk
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val navHostFragment by lazy { supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment }
@@ -22,6 +24,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         setupWithBottomNavigation()
 
         setupWithAppBar()
+
+        setupWithNaverMaps()
     }
 
     private fun setupWithAppBar() {
@@ -38,6 +42,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 else -> hideBottomNav()
             }
         }
+    }
+
+    private fun setupWithNaverMaps() {
+        NaverMapSdk.getInstance(this).client =
+            NaverMapSdk.NaverCloudPlatformClient(NAVER_MAP_CLIENT_ID)
     }
 
     private fun showBottomNav() {
