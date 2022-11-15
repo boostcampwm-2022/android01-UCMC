@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.UCMC.BottomButton" parent="Widget.MaterialComponents.Button">
         <item name="android:minHeight">56dp</item>
         <item name="android:insetTop">0dp</item>
@@ -29,6 +30,17 @@
         <item name="android:backgroundTint">?attr/colorSurface</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="Theme.UCMC.DatePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorOnPrimary">@color/neutral90</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent
+        </item>
+    </style>
+
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerSize">16dp</item>
     </style>
 
     <style name="Title" parent="TextAppearance.AppCompat">
