@@ -9,9 +9,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
-import com.naver.maps.map.*
+import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.MapView
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
-
 
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
     private lateinit var mapView: MapView
@@ -60,7 +62,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
         mapView.setOnTouchListener { _, event ->
             when (event.action) {
-                MotionEvent.ACTION_MOVE -> { binding.cgFilter.visibility = View.GONE }
+                MotionEvent.ACTION_MOVE -> {
+                    binding.cgFilter.visibility = View.GONE
+                }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     binding.cgFilter.visibility = View.VISIBLE
                 }
