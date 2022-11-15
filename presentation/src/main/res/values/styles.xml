@@ -20,4 +20,8 @@
         <item name="colorPrimary">@color/neutral99</item>
         <item name="colorOnPrimary">?attr/colorOnBackground</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
