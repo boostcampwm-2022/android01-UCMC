@@ -9,8 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -49,9 +47,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
         naverMap.locationSource = locationSource
-
-        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.3588798, 127.1051933))
-        naverMap.moveCamera(cameraUpdate)
 
         activityResultLauncher.launch(permissions)
 
