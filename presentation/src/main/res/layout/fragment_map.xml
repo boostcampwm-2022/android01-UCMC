@@ -7,32 +7,30 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/abl_appbar"
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/Theme.UCMC"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/tb_toolbar"
+            <EditText
+                android:id="@+id/et_search"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary">
+                android:layout_height="match_parent"
+                android:importantForAutofill="no"
+                android:textColor="?attr/colorOnPrimary"
+                android:padding="@dimen/padding_small"
+                android:layout_marginEnd="@dimen/padding_medium"
+                android:hint="@string/search_hint"
+                android:inputType="text"
+                android:background="@drawable/edittext_style"
+                android:drawableStart="@drawable/ic_search"
+                android:drawableTint="?attr/colorOnSurface" />
 
-                <EditText
-                    android:id="@+id/et_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:importantForAutofill="no"
-                    android:hint="@string/search_hint"
-                    android:inputType="text"
-                    android:drawableStart="@drawable/ic_search"
-                    android:drawableTint="?attr/colorOnPrimary"/>
-
-            </com.google.android.material.appbar.MaterialToolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <com.naver.maps.map.MapView
             android:id="@+id/map_view"
@@ -41,9 +39,11 @@
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_filter"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/abl_appbar">
+            app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_type"
@@ -57,6 +57,7 @@
                 android:text="@string/filter_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/padding_small"
                 style="@style/Theme.UCMC.ChipStyle"/>
 
             <com.google.android.material.chip.Chip
