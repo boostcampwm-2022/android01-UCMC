@@ -16,7 +16,7 @@ object LoginModule {
 
     @Singleton
     @Provides
-    fun provideLoginDataSource(databaseReference: DatabaseReference) =
+    fun provideLoginDataSource(databaseReference: DatabaseReference): LoginDataSource =
         LoginDataSource(databaseReference)
 
     @Singleton

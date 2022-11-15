@@ -1,5 +1,6 @@
 package com.gta.data.di
 
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
@@ -13,5 +14,5 @@ object FirebaseModule {
 
     @Singleton
     @Provides
-    fun provideDatabaseReference() = FirebaseDatabase.getInstance().reference
+    fun provideDatabaseReference(): DatabaseReference = FirebaseDatabase.getInstance().reference
 }
