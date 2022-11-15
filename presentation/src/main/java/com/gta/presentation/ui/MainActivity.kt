@@ -38,7 +38,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.mapFragment, R.id.chattingFragment, R.id.myPageFragment -> showBottomNav()
+                R.id.mapFragment -> {
+                    supportActionBar?.hide()
+                    showBottomNav()
+                }
+                R.id.chattingFragment, R.id.myPageFragment -> {
+                    supportActionBar?.show()
+                    showBottomNav()
+                }
                 else -> hideBottomNav()
             }
         }
