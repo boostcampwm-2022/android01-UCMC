@@ -7,7 +7,7 @@ import timber.log.Timber
 data class CarOwner(
     val id: String,
     val name: String,
-    val temp: Int,
+    val temp: String,
     val image: String?
 ) {
     fun onChattingClick() {
@@ -19,16 +19,16 @@ data class CarOwner(
     }
 }
 
-fun UserProfile.toPresentation(): CarOwner = CarOwner(
+fun UserProfile.toCarOwner(): CarOwner = CarOwner(
     id = id,
     name = name,
-    temp = temp,
+    temp = temp.toString(),
     image = image
 )
 
 fun CarDetail.toCarOwner(): CarOwner = CarOwner(
     id = owner.id,
     name = owner.name,
-    temp = owner.temp,
+    temp = owner.temp.toString(),
     image = owner.image
 )

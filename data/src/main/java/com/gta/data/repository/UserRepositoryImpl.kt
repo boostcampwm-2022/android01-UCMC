@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class UserRepositoryImpl : UserRepository {
     override fun getMyUserId(): String {
-        return "myUserId"
+        return "(test)myId"
     }
 
     override fun getUserProfile(userId: String): Flow<UserProfile> {
-        return MutableStateFlow(UserProfile(userId, "(test)선구자", 25, null))
+        return MutableStateFlow(UserProfile(userId, "(test)$userId", 36.5F, null))
     }
 }
