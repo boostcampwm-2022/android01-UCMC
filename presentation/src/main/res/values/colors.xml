@@ -8,8 +8,13 @@
   <color name="secondaryLightColor">#fffe50</color>
   <color name="secondaryDarkColor">#c19b00</color>
 
-  <color name="primaryTextColor">#000000</color>
-  <color name="primaryDarkTextColor">#FFFFFF</color>
+  <color name="primaryTextColor">#FFFFFF</color>
+  <color name="primaryDarkTextColor">#000000</color>
   <color name="secondaryTextColor">#000000</color>
   <color name="secondaryDarkTextColor">#000000</color>
+
+  <color name="neutral99">#FEFBFF</color>
+  <color name="neutral90">#E4E2E6</color>
+  <color name="neutral10">#1B1B1F</color>
+
 </resources>

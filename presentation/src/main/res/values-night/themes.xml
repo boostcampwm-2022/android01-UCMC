@@ -9,6 +9,9 @@
         <item name="colorSecondary">@color/secondaryLightColor</item>
         <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
         <item name="colorOnSecondary">@color/secondaryDarkTextColor</item>
+
+        <item name="android:colorBackground">@color/neutral10</item>
+        <item name="colorOnBackground">@color/neutral90</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
