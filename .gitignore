@@ -88,3 +88,4 @@ lint/tmp/
 
 # Mac
 *.DS_Store
+/presentation/src/main/java/com/gta/presentation/secret/Secrets.kt

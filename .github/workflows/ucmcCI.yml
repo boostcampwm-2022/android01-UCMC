@@ -22,6 +22,10 @@ jobs:
         run: chmod +x gradlew
       - name: Create google-service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./data/google-services.json
+      - name: Create data dir
+        run: mkdir ./presentation/src/main/java/com/gta/presentation/secret
+      - name: Create Secrets
+        run: echo '${{ secrets.CONSTANTS }}' > ./presentation/src/main/java/com/gta/presentation/secret/Secrets.kt
       - name: Build with Gradle
         run: ./gradlew build
       - name: Build Signed APK
