@@ -22,6 +22,7 @@
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
         android:label="@string/my_page"
         tools:layout="@layout/fragment_mypage" />
+
     <fragment
         android:id="@+id/licenseGuideFragment"
         android:name="com.gta.presentation.ui.license.guide.LicenseGuideFragment"
@@ -37,6 +38,16 @@
         <argument
             android:name="uri"
             app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reservationFragment"
+        android:name="com.gta.presentation.ui.reservation.ReservationFragment"
+        android:label="@string/reservation"
+        tools:layout="@layout/fragment_reservation" >
+        <argument
+            android:name="carInfo"
+            app:argType="com.gta.presentation.ui.reservation.TmpCarInfo" />
     </fragment>
 
 </navigation>
