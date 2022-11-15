@@ -1,4 +1,4 @@
-package com.gta.presentation.model
+package com.gta.presentation.model.carDetail
 
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.UserProfile
