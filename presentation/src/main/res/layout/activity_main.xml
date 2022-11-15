@@ -6,20 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/tb_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fcv_home_fragment"
+        android:id="@+id/fcv_main"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@id/bnv_home_bottom_nav"
+        app:layout_constraintBottom_toTopOf="@id/bnv_main"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_main"
         app:navGraph="@navigation/nav_main" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bnv_home_bottom_nav"
+        android:id="@+id/bnv_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

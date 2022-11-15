@@ -8,19 +8,19 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.gta.presentation.ui.map.MapFragment"
-        android:label="fragment_map"
+        android:label="@string/my_near"
         tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/chattingFragment"
         android:name="com.gta.presentation.ui.chatting.ChattingFragment"
-        android:label="fragment_chatting"
+        android:label="@string/chatting"
         tools:layout="@layout/fragment_chatting" />
 
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
-        android:label="fragment_mypage"
+        android:label="@string/my_page"
         tools:layout="@layout/fragment_mypage" />
 
 </navigation>
