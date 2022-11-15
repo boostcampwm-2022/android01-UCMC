@@ -5,5 +5,5 @@ data class DrivingLicense(
     val name: String,
     val residentNumber: String,
     val aptitudeTestDate: String,
-    val expireDate: String,
+    val expireDate: String
 )
