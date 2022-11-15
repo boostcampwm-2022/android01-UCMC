@@ -4,7 +4,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.gta.presentation.R
-import com.gta.presentation.model.BtnType
+import com.gta.presentation.model.carDetail.BtnType
 
 @BindingAdapter("car_type", "car_title")
 fun setCarDetailTitle(textView: TextView, type: String, title: String) {
