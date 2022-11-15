@@ -12,14 +12,12 @@
 
         <item name="android:colorBackground">@color/neutral99</item>
         <item name="colorOnBackground">@color/neutral10</item>
+        <item name="colorSurface">@color/neutral99</item>
+        <item name="colorOnSurface">@color/neutral10</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="toolbarStyle">@style/Theme.UCMC.Toolbar</item>
-    </style>
-
-    <style name="Theme.UCMC.ChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
-
     </style>
 </resources>
 

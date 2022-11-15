@@ -12,8 +12,11 @@
 
         <item name="android:colorBackground">@color/neutral10</item>
         <item name="colorOnBackground">@color/neutral90</item>
+        <item name="colorSurface">@color/neutral10</item>
+        <item name="colorOnSurface">@color/neutral80</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="toolbarStyle">@style/Theme.UCMC.Toolbar</item>
     </style>
 </resources>
