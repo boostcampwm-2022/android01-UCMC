@@ -49,6 +49,7 @@
             android:layout_marginTop="@dimen/padding_large"
             android:layout_marginBottom="24dp"
             android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/include_license_guide_info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.25"
