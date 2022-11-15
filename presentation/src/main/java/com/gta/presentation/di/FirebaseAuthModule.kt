@@ -14,7 +14,7 @@ object FirebaseAuthModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseAuth() = FirebaseAuth.getInstance().apply {
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance().apply {
         setLanguageCode(Locale.getDefault().language)
     }
 }

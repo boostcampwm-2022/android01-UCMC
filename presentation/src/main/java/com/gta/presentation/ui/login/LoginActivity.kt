@@ -43,19 +43,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
     override fun onResume() {
         super.onResume()
-        viewModel.checkLoginState()
+        viewModel.checkCurrentUser()
     }
 
     private fun initCollector() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loginEvent.collectLatest { state ->
-                    /*
-                        로그인에 성공 했다면
-                        1. real time db에 회원정보가 저장되어있는지 확인
-                        2. 있으면 바로 화면 전환
-                        3. 없으면 db에 회원정보 생성 후 화면 전환
-                     */
                     if (state) {
                         startMainActivity()
                     }
