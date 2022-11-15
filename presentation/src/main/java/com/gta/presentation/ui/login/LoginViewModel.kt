@@ -35,14 +35,10 @@ class LoginViewModel @Inject constructor(
 
     fun checkCurrentUser() {
         val uid = auth.currentUser?.uid ?: return
-        useCase.invoke(uid) { state ->
-            emitLoginEvent(state)
-        }
-    }
-
-    private fun emitLoginEvent(state: Boolean) {
         viewModelScope.launch {
-            _loginEvent.emit(state)
+            useCase(uid).collect { state ->
+                _loginEvent.emit(state)
+            }
         }
     }
 }

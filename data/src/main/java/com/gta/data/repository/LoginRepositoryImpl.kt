@@ -2,29 +2,28 @@ package com.gta.data.repository
 
 import com.gta.data.source.LoginDataSource
 import com.gta.domain.repository.LoginRepository
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(
     private val dataSource: LoginDataSource
 ) : LoginRepository {
     override fun checkCurrentUser(
-        uid: String,
-        onCompleted: ((Boolean) -> Unit)?
-    ) {
+        uid: String
+    ): Flow<Boolean> = callbackFlow {
         dataSource.getUser(uid).addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
-                onCompleted?.invoke(true)
+                trySend(true)
             } else {
-                createUser(uid, onCompleted)
+                dataSource.createUser(uid).addOnCompleteListener { result ->
+                    trySend(result.isSuccessful)
+                }
             }
         }.addOnFailureListener {
-            onCompleted?.invoke(false)
+            trySend(false)
         }
-    }
-
-    private fun createUser(uid: String, onCompleted: ((Boolean) -> Unit)?) {
-        dataSource.createUser(uid).addOnCompleteListener { result ->
-            onCompleted?.invoke(result.isSuccessful)
-        }
+        awaitClose()
     }
 }
