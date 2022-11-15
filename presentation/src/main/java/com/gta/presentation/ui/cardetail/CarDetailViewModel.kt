@@ -27,7 +27,9 @@ class CarDetailViewModel @Inject constructor(
 
     val owner: StateFlow<CarOwner>
 
-    val btnState = MutableStateFlow(BtnType.User)
+    private val _btnState = MutableStateFlow(BtnType.User)
+    val btnState: StateFlow<BtnType>
+        get() = _btnState
 
     init {
         // TODO : Safe Args 연결
@@ -58,7 +60,7 @@ class CarDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             car.collectLatest {
-                btnState.value = if (isMyCarUseCase(carId)) {
+                _btnState.value = if (isMyCarUseCase(carId)) {
                     BtnType.Owner
                 } else if (isNowMyRentCarUseCase(carId)) {
                     BtnType.Rented
