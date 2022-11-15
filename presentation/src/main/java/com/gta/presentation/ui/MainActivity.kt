@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gta.presentation.R
@@ -15,6 +16,7 @@ import com.naver.maps.map.NaverMapSdk
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val navHostFragment by lazy { supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment }
     private val navController by lazy { navHostFragment.navController }
+    private val appBarConfiguration = AppBarConfiguration(setOf(R.id.mapFragment, R.id.chattingFragment, R.id.myPageFragment))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,13 +25,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         setupWithBottomNavigation()
 
-        setupWithAppBar()
-
         setupWithNaverMaps()
-    }
-
-    private fun setupWithAppBar() {
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.mapFragment, R.id.chattingFragment, R.id.myPageFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
@@ -62,5 +58,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun hideBottomNav() {
         binding.bnvMain.visibility = View.GONE
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration)
+                || super.onSupportNavigateUp()
     }
 }
