@@ -50,8 +50,8 @@
             android:textStyle="bold"
             app:car_title="@{vm.car.title}"
             app:car_type="@{vm.car.carType}"
-            app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintEnd_toEndOf="@+id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintTop_toBottomOf="@+id/iv_car"
             tools:text="[차 종류] 이름 뭐시기" />
 
@@ -63,8 +63,8 @@
             android:text="@{@string/car_detail_day_price(vm.car.price)}"
             android:textSize="@dimen/font_body_large"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintEnd_toEndOf="@+id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             tools:text="금액 : 1일 23,000원" />
 
@@ -75,8 +75,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
             android:text="@{@string/car_detail_location(vm.car.location)}"
-            app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintEnd_toEndOf="@+id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintTop_toBottomOf="@+id/tv_price"
             tools:text="위치 : 무슨동 오션타운 주차장" />
 
@@ -109,8 +109,8 @@
             android:layout_marginTop="@dimen/padding_small"
             android:text="@{vm.car.comment}"
             android:textSize="@dimen/font_body_medium"
-            app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintEnd_toEndOf="@+id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintTop_toBottomOf="@+id/tv_comment_label"
             tools:text="깨끗하게 사용해주세요. 찾아갑니다." />
 
@@ -129,8 +129,8 @@
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/padding_medium"
             android:layout_marginTop="@dimen/padding_small"
+            app:cardCornerRadius="@dimen/padding_medium"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintTop_toBottomOf="@+id/tv_owner_label">
@@ -148,8 +148,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_small"
             android:paddingHorizontal="@dimen/padding_medium"
-            android:text="@string/reservation"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:set_car_detail_btn_state="@{vm.btnState}"
+            tools:text="예약하기" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
