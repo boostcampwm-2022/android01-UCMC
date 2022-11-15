@@ -8,14 +8,66 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/Theme.UCMC"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAutofill="no"
+                android:textColor="?attr/colorOnPrimary"
+                android:padding="@dimen/padding_small"
+                android:layout_marginEnd="@dimen/padding_medium"
+                android:hint="@string/search_hint"
+                android:inputType="text"
+                android:background="@drawable/edittext_style"
+                android:drawableStart="@drawable/ic_search"
+                android:drawableTint="?attr/colorOnSurface" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <com.naver.maps.map.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="map fragment"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_type"
+                android:text="@string/filter_car_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Theme.UCMC.ChipStyle"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_day"
+                android:text="@string/filter_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/padding_small"
+                style="@style/Theme.UCMC.ChipStyle"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_cost"
+                android:text="@string/filter_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Theme.UCMC.ChipStyle"/>
+
+        </com.google.android.material.chip.ChipGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

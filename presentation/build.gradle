@@ -79,6 +79,8 @@ dependencies {
 
     // Naver Map
     implementation "com.naver.maps:map-sdk:$naverMapsVersion"
+    // Location Permission - Required Version not change
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
 
     // Stream Chat
     implementation "io.getstream:stream-chat-android-ui-components:$streamChatVersion"
