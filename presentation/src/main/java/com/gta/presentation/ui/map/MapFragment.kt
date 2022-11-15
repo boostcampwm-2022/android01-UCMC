@@ -12,13 +12,11 @@ import com.gta.presentation.ui.base.BaseFragment
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
 
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
-    private lateinit var mapView: MapView
     private lateinit var naverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
     private val activityResultLauncher =
@@ -41,10 +39,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mapView = view.findViewById(R.id.map_view)
-        mapView.onCreate(savedInstanceState)
+        binding.mapView.onCreate(savedInstanceState)
 
-        mapView.getMapAsync(this)
+        binding.mapView.getMapAsync(this)
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
@@ -58,63 +55,57 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
         activityResultLauncher.launch(permissions)
 
-        val setting = naverMap.uiSettings
-
-        with(setting) {
+        naverMap.uiSettings.apply {
             isCompassEnabled = true
             isScaleBarEnabled = true
             isLocationButtonEnabled = true
         }
 
-        mapView.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_MOVE -> {
-                    binding.cgFilter.visibility = View.GONE
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    binding.cgFilter.visibility = View.VISIBLE
-                }
+        binding.mapView.setOnTouchListener { _, event ->
+            binding.cgFilter.visibility = when (event.action) {
+                MotionEvent.ACTION_MOVE -> View.GONE
+                else -> View.VISIBLE
             }
-            mapView.onTouchEvent(event)
+            binding.mapView.onTouchEvent(event)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        mapView.onStart()
+        binding.mapView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        mapView.onResume()
+        binding.mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
+        binding.mapView.onPause()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
+        binding.mapView.onSaveInstanceState(outState)
     }
 
     override fun onStop() {
         super.onStop()
-        mapView.onStop()
+        binding.mapView.onStop()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mapView.onDestroy()
+        binding.mapView.onDestroy()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView.onLowMemory()
+        binding.mapView.onLowMemory()
     }
 
     companion object {
-        const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 }
