@@ -8,9 +8,21 @@ import com.gta.domain.model.CarState
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.IsMyCarUseCase
 import com.gta.domain.usecase.cardetail.IsNowMyRentCarUseCase
-import com.gta.presentation.model.carDetail.* // ktlint-disable no-wildcard-imports
+import com.gta.presentation.model.carDetail.BtnType
+import com.gta.presentation.model.carDetail.CarInfo
+import com.gta.presentation.model.carDetail.CarOwner
+import com.gta.presentation.model.carDetail.PriceType
+import com.gta.presentation.model.carDetail.toCarInfo
+import com.gta.presentation.model.carDetail.toCarOwner
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.* // ktlint-disable no-wildcard-imports
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
