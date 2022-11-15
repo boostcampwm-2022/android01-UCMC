@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_license_registration_result"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/btn_license_registration"
+            app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="@id/gl_license_registration_start"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.25"
+            tools:srcCompat="@drawable/img_driving_license" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_license_registration_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_begin="@dimen/padding_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_license_registration_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_end="@dimen/padding_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_license_registration"
+            style="@style/Theme.UCMC.BottomButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="신청하기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_license_registration_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_large"
+            android:text="면허 번호"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_medium"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
+            app:layout_constraintTop_toBottomOf="@+id/iv_license_registration_result" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_license_registration_number"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
+            app:layout_constraintStart_toStartOf="@id/gl_license_registration_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_license_registration_number">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_license_registration_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="면허 번호"
+                android:maxLines="1"
+                android:textSize="@dimen/font_body_medium"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_license_registration_resident"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_medium"
+            android:text="주민등록번호"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_medium"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
+            app:layout_constraintTop_toBottomOf="@+id/tl_license_registration_number" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_license_registration_resident_front"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:layout_marginEnd="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@+id/tl_license_registration_resident_back"
+            app:layout_constraintStart_toStartOf="@id/gl_license_registration_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_license_registration_resident">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_license_registration_resident_front"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="주민 번호"
+                android:maxLines="1"
+                android:textSize="@dimen/font_body_medium"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_license_registration_resident_back"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toBottomOf="@+id/tl_license_registration_resident_front"
+            app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
+            app:layout_constraintStart_toEndOf="@+id/tl_license_registration_resident_front"
+            app:layout_constraintTop_toTopOf="@+id/tl_license_registration_resident_front">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_license_registration_resident_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="주민 번호"
+                android:maxLines="1"
+                android:textSize="@dimen/font_body_medium"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_license_registration_aptitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_medium"
+            android:text="적성검사"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_medium"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
+            app:layout_constraintTop_toBottomOf="@+id/tl_license_registration_resident_front" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_license_registration_resident_aptitude"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:layout_marginEnd="@dimen/padding_small"
+            android:layout_marginBottom="88dp"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/btn_license_registration"
+            app:layout_constraintEnd_toStartOf="@+id/tl_license_registration_resident_expiration"
+            app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_license_registration_aptitude"
+            app:layout_constraintVertical_bias="0.0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_license_registration_resident_aptitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="적성검사"
+                android:maxLines="1"
+                android:textSize="@dimen/font_body_medium"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_license_registration_resident_expiration"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toBottomOf="@+id/tl_license_registration_resident_aptitude"
+            app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
+            app:layout_constraintStart_toEndOf="@+id/tl_license_registration_resident_aptitude"
+            app:layout_constraintTop_toTopOf="@+id/tl_license_registration_resident_aptitude">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_license_registration_resident_expiration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="만료일"
+                android:maxLines="1"
+                android:textSize="@dimen/font_body_medium"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_license_registration_expiration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="만료일"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_medium"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_license_registration_aptitude"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tl_license_registration_resident_expiration"
+            app:layout_constraintTop_toTopOf="@+id/tv_license_registration_aptitude" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
