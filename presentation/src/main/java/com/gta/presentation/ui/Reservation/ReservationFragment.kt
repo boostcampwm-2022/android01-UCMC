@@ -1,4 +1,4 @@
-package com.gta.presentation.ui.map
+package com.gta.presentation.ui.reservation
 
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
