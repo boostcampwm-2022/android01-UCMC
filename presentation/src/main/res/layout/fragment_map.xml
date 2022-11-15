@@ -35,7 +35,9 @@
         <com.naver.maps.map.MapView
             android:id="@+id/map_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:navermap_latitude="37.3588798"
+            app:navermap_longitude="127.1051933"/>
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_filter"
