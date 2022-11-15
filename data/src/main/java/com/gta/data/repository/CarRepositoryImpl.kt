@@ -21,7 +21,7 @@ class CarRepositoryImpl : CarRepository {
             CarDetail(
                 carId,
                 "새 차 몰고 싶을 때",
-                CarState.Available,
+                CarState.AVAILABLE,
                 "신당동 앞마당",
                 "아반테 신형",
                 183000,

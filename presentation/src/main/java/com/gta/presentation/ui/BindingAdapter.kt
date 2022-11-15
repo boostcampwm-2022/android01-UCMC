@@ -14,13 +14,13 @@ fun setCarDetailTitle(textView: TextView, type: String, title: String) {
 @BindingAdapter("set_car_detail_btn_state")
 fun setCarDetailBtnState(button: Button, state: BtnType) {
     button.text = when (state) {
-        BtnType.Owner -> {
+        BtnType.OWNER -> {
             button.resources.getString(R.string.correction)
         }
-        BtnType.Rented -> {
+        BtnType.RENTED -> {
             button.resources.getString(R.string.extension_and_return)
         }
-        BtnType.User -> {
+        BtnType.USER -> {
             button.resources.getString(R.string.reservation)
         }
         BtnType.NONE -> {

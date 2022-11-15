@@ -39,7 +39,7 @@ class CarDetailViewModel @Inject constructor(
 
     val owner: StateFlow<CarOwner>
 
-    private val _btnState = MutableStateFlow(BtnType.User)
+    private val _btnState = MutableStateFlow(BtnType.USER)
     val btnState: StateFlow<BtnType>
         get() = _btnState
 
@@ -54,10 +54,10 @@ class CarDetailViewModel @Inject constructor(
             initialValue = CarInfo(
                 "",
                 "",
-                CarState.Unavailable,
+                CarState.UNAVAILABLE,
                 "",
                 "",
-                PriceType.Day,
+                PriceType.DAY,
                 0,
                 "없음",
                 emptyList()
@@ -73,11 +73,11 @@ class CarDetailViewModel @Inject constructor(
         viewModelScope.launch {
             car.collectLatest {
                 _btnState.value = if (isMyCarUseCase(carId)) {
-                    BtnType.Owner
+                    BtnType.OWNER
                 } else if (isNowMyRentCarUseCase(carId)) {
-                    BtnType.Rented
-                } else if (it.state != CarState.Unavailable) {
-                    BtnType.User
+                    BtnType.RENTED
+                } else if (it.state != CarState.UNAVAILABLE) {
+                    BtnType.USER
                 } else {
                     BtnType.NONE
                 }

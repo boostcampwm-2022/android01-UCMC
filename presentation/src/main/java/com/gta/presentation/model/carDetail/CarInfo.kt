@@ -4,11 +4,11 @@ import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarState
 
 enum class PriceType {
-    Time, Day
+    TIME, DAY
 }
 
 enum class BtnType {
-    Owner, Rented, User, NONE
+    OWNER, RENTED, USER, NONE
 }
 
 data class CarInfo(
@@ -29,7 +29,7 @@ fun CarDetail.toCarInfo(): CarInfo = CarInfo(
     state = state,
     location = location,
     carType = carType,
-    priceType = PriceType.Day,
+    priceType = PriceType.DAY,
     price = price,
     comment = comment,
     images = images
