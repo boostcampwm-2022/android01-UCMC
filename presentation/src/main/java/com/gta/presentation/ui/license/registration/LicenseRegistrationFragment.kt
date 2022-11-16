@@ -27,7 +27,8 @@ class LicenseRegistrationFragment : BaseFragment<FragmentLicenseRegistrationBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        (requireActivity() as MainActivity).supportActionBar?.title = "운전면허 확인"
+        (requireActivity() as MainActivity).supportActionBar?.title =
+            getString(R.string.license_registration_toolbar)
         Glide.with(this)
             .load(navArgs.uri)
             .into(binding.ivLicenseRegistrationResult)

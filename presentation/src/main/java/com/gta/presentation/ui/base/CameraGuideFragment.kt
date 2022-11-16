@@ -49,7 +49,7 @@ abstract class CameraGuideFragment : BaseFragment<FragmentCameraGuideBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnLicenseGuidePicture.setOnClickListener {
+        binding.btnCameraGuidePicture.setOnClickListener {
             takePicture()
         }
     }
