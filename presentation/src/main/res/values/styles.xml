@@ -43,6 +43,16 @@
         <item name="cornerSize">16dp</item>
     </style>
 
+    <style name="Theme.UCMC.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.RadioButton</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+
+    <style name="ThemeOverlay.App.RadioButton" parent="">
+        <item name="colorOnSurface">@color/neutral</item>
+        <item name="colorSecondary">@color/primaryColor</item>
+    </style>
+
     <style name="Title" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">@dimen/font_title_large</item>
@@ -53,4 +63,5 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">@dimen/font_body_large</item>
     </style>
+
 </resources>
