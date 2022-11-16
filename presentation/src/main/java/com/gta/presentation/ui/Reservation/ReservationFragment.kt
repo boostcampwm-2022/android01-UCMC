@@ -1,5 +1,12 @@
 package com.gta.presentation.ui.reservation
 
+import android.os.Bundle
+import android.os.Parcelable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.util.toKotlinPair
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -11,10 +18,27 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
+@AndroidEntryPoint
 class ReservationFragment :
     BaseFragment<FragmentReservationBinding>(R.layout.fragment_reservation) {
     private val args: ReservationFragmentArgs by navArgs()
     private val carInfo by lazy { args.carInfo }
+
+    private val viewModel: ReservationViewModel by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+        Timber.d(carInfo.toString())
+        return binding.run {
+            vm = viewModel
+            carInfo = this@ReservationFragment.carInfo
+            root
+        }
+    }
 
     override fun onStart() {
         super.onStart()
@@ -35,7 +59,7 @@ class ReservationFragment :
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            Timber.d(it.toString())
+            viewModel.selectedDateRange.value = it.toKotlinPair()
         }
 
         binding.ivReservationNext.setOnClickListener {

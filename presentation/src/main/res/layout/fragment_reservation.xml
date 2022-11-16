@@ -2,7 +2,21 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.Reservation.reservationFragment">
+    tools:context=".ui.reservation.reservationFragment">
+
+    <data>
+
+        <import type="com.gta.presentation.model.DateType" />
+
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.reservation.ReservationViewModel" />
+
+
+        <variable
+            name="carInfo"
+            type="com.gta.presentation.ui.reservation.TmpCarInfo" />
+    </data>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -41,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_small"
+                android:text="@{carInfo.title}"
                 android:textAppearance="@style/Body"
                 app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
@@ -63,9 +78,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
                 android:textAppearance="@style/Body"
+                app:date_type="@{DateType.RANGE}"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_time"
-                tools:text="11/01 ~ 11/02" />
+                app:selection="@{vm.selectedDateRange}"
+                tools:text="22/11/01 ~ 22/11/02" />
 
             <TextView
                 android:id="@+id/tv_reservation_total_time"
@@ -73,8 +90,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/padding_small"
                 android:textAppearance="@style/Body"
+                app:date_type="@{DateType.DAY_COUNT}"
                 app:layout_constraintEnd_toStartOf="@id/iv_reservation_next"
                 app:layout_constraintTop_toTopOf="@id/tv_reservation_time"
+                app:selection="@{vm.selectedDateRange}"
                 tools:text="총 1일" />
 
             <ImageView
@@ -117,6 +136,7 @@
                 android:id="@+id/tv_reservation_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{@string/price_format(carInfo.price)}"
                 android:textAppearance="@style/Body"
                 app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
                 app:layout_constraintTop_toTopOf="@id/tv_reservation_title_fee"
@@ -196,10 +216,10 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_reservation_paying"
+                style="@style/Theme.UCMC.BottomButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
-                style="@style/Theme.UCMC.BottomButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
