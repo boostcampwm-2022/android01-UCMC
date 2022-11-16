@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="com.gta.presentation.model.DateType" />
+
         <variable
             name="vm"
             type="com.gta.presentation.ui.reservation.ReservationViewModel" />
@@ -76,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
                 android:textAppearance="@style/Body"
+                app:date_type="@{DateType.RANGE}"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_time"
                 app:selection="@{vm.selectedDateRange}"
@@ -86,10 +89,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/padding_small"
-                android:text="@{}"
                 android:textAppearance="@style/Body"
+                app:date_type="@{DateType.DAY_COUNT}"
                 app:layout_constraintEnd_toStartOf="@id/iv_reservation_next"
                 app:layout_constraintTop_toTopOf="@id/tv_reservation_time"
+                app:selection="@{vm.selectedDateRange}"
                 tools:text="총 1일" />
 
             <ImageView
