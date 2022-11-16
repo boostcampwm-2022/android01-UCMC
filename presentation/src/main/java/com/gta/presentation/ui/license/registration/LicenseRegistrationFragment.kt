@@ -7,9 +7,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentLicenseRegistrationBinding
+import com.gta.presentation.ui.GlideApp
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +29,7 @@ class LicenseRegistrationFragment : BaseFragment<FragmentLicenseRegistrationBind
         binding.vm = viewModel
         (requireActivity() as MainActivity).supportActionBar?.title =
             getString(R.string.license_registration_toolbar)
-        Glide.with(this)
+        GlideApp.with(this)
             .load(navArgs.uri)
             .into(binding.ivLicenseRegistrationResult)
         initCollector()
