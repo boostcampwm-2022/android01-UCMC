@@ -12,12 +12,12 @@
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            app:layout_constraintBottom_toTopOf="@+id/btn_license_registration"
+            app:layout_constraintBottom_toTopOf="@+id/tv_license_registration_id"
             app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
             app:layout_constraintHeight_percent="0.25"
             app:layout_constraintStart_toStartOf="@id/gl_license_registration_start"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:srcCompat="@drawable/img_driving_license" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -54,37 +54,43 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/tv_license_registration_number"
+            android:id="@+id/tv_license_registration_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_large"
             android:text="면허 번호"
             android:textColor="@color/black"
-            android:textSize="@dimen/font_title_medium"
+            android:textSize="@dimen/font_title_small"
             android:textStyle="bold"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
-            app:layout_constraintTop_toBottomOf="@+id/iv_license_registration_result" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_license_registration_result"
+            app:layout_constraintBottom_toTopOf="@id/tl_license_registration_id"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tl_license_registration_number"
+            android:id="@+id/tl_license_registration_id"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
             app:hintEnabled="false"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@id/tv_license_registration_resident"
             app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
             app:layout_constraintStart_toStartOf="@id/gl_license_registration_start"
-            app:layout_constraintTop_toBottomOf="@id/tv_license_registration_number">
+            app:layout_constraintTop_toBottomOf="@id/tv_license_registration_id">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_license_registration_number"
+                android:id="@+id/et_license_registration_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="면허 번호"
                 android:maxLines="1"
-                android:textSize="@dimen/font_body_medium"
+                android:textColor="@color/black"
+                android:enabled="false"
+                android:textSize="@dimen/font_body_small"
                 tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -96,12 +102,14 @@
             android:layout_marginTop="@dimen/padding_medium"
             android:text="주민등록번호"
             android:textColor="@color/black"
-            android:textSize="@dimen/font_title_medium"
+            android:textSize="@dimen/font_title_small"
             android:textStyle="bold"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@id/tl_license_registration_resident_front"
             app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
-            app:layout_constraintTop_toBottomOf="@+id/tl_license_registration_number" />
+            app:layout_constraintTop_toBottomOf="@+id/tl_license_registration_id" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tl_license_registration_resident_front"
@@ -111,6 +119,8 @@
             android:layout_marginTop="@dimen/padding_small"
             android:layout_marginEnd="@dimen/padding_small"
             app:hintEnabled="false"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@id/tv_license_registration_aptitude"
             app:layout_constraintEnd_toStartOf="@+id/tl_license_registration_resident_back"
             app:layout_constraintStart_toStartOf="@id/gl_license_registration_start"
             app:layout_constraintTop_toBottomOf="@id/tv_license_registration_resident">
@@ -121,7 +131,9 @@
                 android:layout_height="wrap_content"
                 android:hint="주민 번호"
                 android:maxLines="1"
-                android:textSize="@dimen/font_body_medium"
+                android:textColor="@color/black"
+                android:enabled="false"
+                android:textSize="@dimen/font_body_small"
                 tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -144,7 +156,9 @@
                 android:layout_height="wrap_content"
                 android:hint="주민 번호"
                 android:maxLines="1"
-                android:textSize="@dimen/font_body_medium"
+                android:textColor="@color/black"
+                android:enabled="false"
+                android:textSize="@dimen/font_body_small"
                 tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -156,10 +170,12 @@
             android:layout_marginTop="@dimen/padding_medium"
             android:text="적성검사"
             android:textColor="@color/black"
-            android:textSize="@dimen/font_title_medium"
+            android:textSize="@dimen/font_title_small"
             android:textStyle="bold"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@id/tl_license_registration_resident_aptitude"
             app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
             app:layout_constraintTop_toBottomOf="@+id/tl_license_registration_resident_front" />
 
@@ -170,7 +186,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
             android:layout_marginEnd="@dimen/padding_small"
-            android:layout_marginBottom="88dp"
             app:hintEnabled="false"
             app:layout_constraintBottom_toTopOf="@+id/btn_license_registration"
             app:layout_constraintEnd_toStartOf="@+id/tl_license_registration_resident_expiration"
@@ -184,7 +199,9 @@
                 android:layout_height="wrap_content"
                 android:hint="적성검사"
                 android:maxLines="1"
-                android:textSize="@dimen/font_body_medium"
+                android:textColor="@color/black"
+                android:enabled="false"
+                android:textSize="@dimen/font_body_small"
                 tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -207,7 +224,9 @@
                 android:layout_height="wrap_content"
                 android:hint="만료일"
                 android:maxLines="1"
-                android:textSize="@dimen/font_body_medium"
+                android:textColor="@color/black"
+                android:enabled="false"
+                android:textSize="@dimen/font_body_small"
                 tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -218,7 +237,7 @@
             android:layout_height="wrap_content"
             android:text="만료일"
             android:textColor="@color/black"
-            android:textSize="@dimen/font_title_medium"
+            android:textSize="@dimen/font_title_small"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/tv_license_registration_aptitude"
             app:layout_constraintEnd_toEndOf="parent"
