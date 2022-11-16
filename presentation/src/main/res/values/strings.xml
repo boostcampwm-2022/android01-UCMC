@@ -28,8 +28,13 @@
     <string name="total_payment">최종 결제 금액</string>
     <string name="total_time">총 %d일</string>
     <string name="reservation_fee">대여 요금</string>
-    <string name="price_format">%,2d</string>
+    <string name="price_format">%,2d 원</string>
     <string name="more">더보기</string>
     <string name="insurance_fee">보험료</string>
-    <string name="insurance_option">자차 면책 보험료 %d만원</string>
+    <string name="insurance_option_1">자차 면책 보험료 5만원</string>
+    <string name="insurance_option_2">자차 면책 보험료 30만원</string>
+    <string name="insurance_option_3">자차 면책 보험료 70만원</string>
+    <string name="action_pay">결제하기</string>
+    <string name="placeholder_date_count">총 -일</string>
+    <string name="placeholder_date_range">시작일 ~ 종료일</string>
 </resources>
