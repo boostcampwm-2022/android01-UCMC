@@ -8,4 +8,5 @@ import javax.inject.Inject
 @HiltViewModel
 class ReservationViewModel @Inject constructor() : ViewModel() {
     val selectedDateRange = MutableLiveData<Pair<Long, Long>>()
+    val selectedInsuranceOption = MutableLiveData<Pair<Int, Int>>()
 }

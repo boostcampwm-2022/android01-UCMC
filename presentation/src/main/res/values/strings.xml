@@ -34,4 +34,5 @@
     <string name="insurance_option_1">자차 면책 보험료 5만원</string>
     <string name="insurance_option_2">자차 면책 보험료 30만원</string>
     <string name="insurance_option_3">자차 면책 보험료 70만원</string>
+    <string name="action_pay_total_payment">총 %,2d 원 결제하기</string>
 </resources>
