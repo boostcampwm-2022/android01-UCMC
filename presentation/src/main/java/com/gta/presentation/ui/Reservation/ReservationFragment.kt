@@ -12,6 +12,7 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
+import com.gta.presentation.model.InsuranceLevel
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateValidator
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,6 +65,22 @@ class ReservationFragment :
 
         binding.ivReservationNext.setOnClickListener {
             datePicker.show(childFragmentManager, null)
+        }
+
+        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { _, isChecked ->
+            val price = carInfo.price + when (isChecked) {
+                R.id.rg_reservation_insurance_option_1 -> {
+                    InsuranceLevel.LOW.price
+                }
+                R.id.rg_reservation_insurance_option_2 -> {
+                    InsuranceLevel.MEDIUM.price
+                }
+                R.id.rg_reservation_insurance_option_3 -> {
+                    InsuranceLevel.HIGH.price
+                }
+                else -> 0
+            }
+            viewModel.selectedInsuranceOption.value = isChecked to price
         }
     }
 }
