@@ -21,6 +21,12 @@
         <item name="colorOnPrimary">?attr/colorOnBackground</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize5Percent" parent="">
+        <item name="cornerSize">5%</item>
 
     <style name="Theme.UCMC.ChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
         <item name="android:minWidth">80dp</item>
