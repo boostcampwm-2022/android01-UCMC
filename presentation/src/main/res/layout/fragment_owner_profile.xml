@@ -111,7 +111,8 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="@+id/gl_start"
-            app:layout_constraintTop_toBottomOf="@id/tv_cars_label" />
+            app:layout_constraintTop_toBottomOf="@id/tv_cars_label"
+            tools:listitem="@layout/item_owner_car" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
