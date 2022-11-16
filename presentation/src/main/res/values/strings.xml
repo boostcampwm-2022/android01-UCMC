@@ -37,7 +37,6 @@
     <string name="action_pay">결제하기</string>
     <string name="placeholder_date_count">총 -일</string>
     <string name="placeholder_date_range">시작일 ~ 종료일</string>
-    <string name="action_pay_total_payment">총 %,2d 원 결제하기</string>
 
     <string name="license_guide_toolbar">운전자 등록</string>
     <string name="license_guide_title">운전면허를 등록해주세요</string>
