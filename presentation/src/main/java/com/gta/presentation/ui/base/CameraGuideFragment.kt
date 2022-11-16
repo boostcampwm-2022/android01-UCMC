@@ -1,7 +1,6 @@
 package com.gta.presentation.ui.base
 
 import android.Manifest
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
@@ -12,9 +11,11 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCameraGuideBinding
 import java.io.File
 
-abstract class CameraGuideFragment(
-    private val onSuccess: (Uri) -> Unit
-) : BaseFragment<FragmentCameraGuideBinding>(R.layout.fragment_camera_guide) {
+abstract class CameraGuideFragment : BaseFragment<FragmentCameraGuideBinding>(
+    R.layout.fragment_camera_guide
+) {
+
+    abstract fun navigate(uri: String)
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -26,7 +27,7 @@ abstract class CameraGuideFragment(
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { isSucceed ->
             if (isSucceed) {
-                onSuccess(photoUri)
+                navigate(photoUri.toString())
             }
         }
 
