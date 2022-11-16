@@ -67,7 +67,7 @@ class CarDetailViewModel @Inject constructor(
         owner = data.map { it.toCarOwner() }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = CarOwner("", "", "0", "")
+            initialValue = CarOwner("", "", 0f, "")
         )
     }
 

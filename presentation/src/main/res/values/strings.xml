@@ -16,7 +16,7 @@
 
     <string name="car_detail_day_price">금액 : 1일 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>
-    <string name="temperature_type">%s℃</string>
+    <string name="temperature_type">%.1f℃</string>
 
     <string name="search_hint">검색어를 입력하세요.</string>
     <string name="filter_car_type">차종</string>
