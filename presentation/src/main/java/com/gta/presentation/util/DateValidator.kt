@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class DateValidator(
     private val reservationRange: Pair<Long, Long>,
-    private val inValidList: List<Pair<Long, Long>>
+    private val inValidList: List<Pair<Long, Long>>?
 ) : CalendarConstraints.DateValidator {
 
     override fun isValid(date: Long): Boolean {
@@ -17,6 +17,8 @@ class DateValidator(
     }
 
     private fun checkInvalidList(date: Long): Boolean {
+        inValidList ?: return true
+
         for (range in inValidList) {
             if (date in range.first..range.second) {
                 return false
