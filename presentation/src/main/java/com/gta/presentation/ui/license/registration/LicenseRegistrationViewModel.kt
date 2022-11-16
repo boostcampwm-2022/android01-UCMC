@@ -9,11 +9,11 @@ import com.gta.domain.usecase.license.GetLicenseUseCase
 import com.gta.domain.usecase.license.SetLicenseUseCase
 import com.gta.presentation.util.ImageUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -41,10 +41,7 @@ class LicenseRegistrationViewModel @Inject constructor(
     private fun getLicense(uri: String) {
         val buffer = imageUtil.getByteBuffer(uri) ?: return
         viewModelScope.launch {
-            getLicenseUseCase(buffer).collect { license ->
-                _drivingLicense.emit(license)
-                cancel()
-            }
+            _drivingLicense.emit(getLicenseUseCase(buffer).first())
         }
     }
 
@@ -52,10 +49,7 @@ class LicenseRegistrationViewModel @Inject constructor(
         val license = drivingLicense.value ?: return
         val uid = auth.currentUser?.uid ?: return
         viewModelScope.launch {
-            setLicenseUseCase(uid, license).collect { state ->
-                _registerEvent.emit(state)
-                cancel()
-            }
+            _registerEvent.emit(setLicenseUseCase(uid, license).first())
         }
     }
 }
