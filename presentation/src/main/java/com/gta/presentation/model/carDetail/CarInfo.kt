@@ -7,7 +7,7 @@ enum class PriceType {
     TIME, DAY
 }
 
-enum class BtnType {
+enum class UserState {
     OWNER, RENTED, USER, NONE
 }
 
