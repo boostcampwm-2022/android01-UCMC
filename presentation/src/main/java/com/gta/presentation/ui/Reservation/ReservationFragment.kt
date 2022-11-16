@@ -12,11 +12,11 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
-import com.gta.presentation.model.InsuranceLevel
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateValidator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.parcelize.Parcelize
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReservationFragment :
@@ -24,7 +24,15 @@ class ReservationFragment :
     private val args: ReservationFragmentArgs by navArgs()
     private val carInfo by lazy { args.carInfo }
 
-    private val viewModel: ReservationViewModel by viewModels()
+    @Inject
+    lateinit var viewModelFactory: ReservationViewModel.AssistedFactory
+
+    private val viewModel: ReservationViewModel by viewModels {
+        ReservationViewModel.provideFactory(
+            assistedFactory = viewModelFactory,
+            carInfo = carInfo
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,8 +43,6 @@ class ReservationFragment :
 
         setupDatePicker()
 
-        setupRadioGroup()
-
         return binding.run {
             vm = viewModel
             carInfo = this@ReservationFragment.carInfo
@@ -44,30 +50,9 @@ class ReservationFragment :
         }
     }
 
-    private fun setupRadioGroup() {
-        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { _, isChecked ->
-            val price = carInfo.price + when (isChecked) {
-                R.id.rg_reservation_insurance_option_1 -> {
-                    InsuranceLevel.LOW.price
-                }
-                R.id.rg_reservation_insurance_option_2 -> {
-                    InsuranceLevel.MEDIUM.price
-                }
-                R.id.rg_reservation_insurance_option_3 -> {
-                    InsuranceLevel.HIGH.price
-                }
-                else -> 0
-            }
-            viewModel.selectedInsuranceOption.value = isChecked to price
-        }
-    }
-
     private fun setupDatePicker() {
-        // 임시 불가능한 날짜들
-        val invalidateDates = listOf(1669248000000 to 1669420800000)
-
         val constraints = CalendarConstraints.Builder()
-            .setValidator(DateValidator(carInfo.reservationRange, invalidateDates))
+            .setValidator(DateValidator(carInfo.reservationRange, null))
             .setStart(carInfo.reservationRange.first)
             .setEnd(carInfo.reservationRange.second)
             .build()
