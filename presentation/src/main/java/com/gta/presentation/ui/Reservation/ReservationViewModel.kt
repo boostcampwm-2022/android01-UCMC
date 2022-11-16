@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.gta.presentation.R
 import com.gta.presentation.model.InsuranceLevel
+import com.gta.presentation.util.DateUtil
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
@@ -19,7 +20,7 @@ class ReservationViewModel @AssistedInject constructor(@Assisted private val car
 
     init {
         totalPrice.addSource(selectedDateRange) { range ->
-            dateCount = getDateCount(range.first, range.second)
+            dateCount = DateUtil.getDateCount(range.first, range.second)
 
             val insurancePrice = selectedInsuranceOption.value ?: 0
             totalPrice.value = (dateCount * carInfo.price).plus(insurancePrice)
@@ -51,11 +52,6 @@ class ReservationViewModel @AssistedInject constructor(@Assisted private val car
     }
 
     companion object {
-        private const val DAY_TIME_UNIT = 86400000L
-
-        fun getDateCount(startDate: Long, endDate: Long) =
-            (endDate - startDate).div(DAY_TIME_UNIT).plus(1).toInt()
-
         fun provideFactory(
             assistedFactory: AssistedFactory,
             carInfo: TmpCarInfo
@@ -68,4 +64,3 @@ class ReservationViewModel @AssistedInject constructor(@Assisted private val car
         }
     }
 }
-

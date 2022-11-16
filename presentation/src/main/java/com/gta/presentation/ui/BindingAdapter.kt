@@ -6,6 +6,7 @@ import androidx.databinding.BindingAdapter
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
 import com.gta.presentation.model.carDetail.UserState
+import com.gta.presentation.util.DateUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,9 +48,10 @@ fun setReservationTime(textView: TextView, selection: Pair<Long, Long>?, dateTyp
         }
         DateType.DAY_COUNT -> {
             textView.text = selection?.let {
-                val dayTimeUnit = 86400000L
-                val dayCount = (selection.second - selection.first).div(dayTimeUnit).plus(1)
-                String.format(textView.resources.getString(R.string.total_time), dayCount)
+                String.format(
+                    textView.resources.getString(R.string.total_time),
+                    DateUtil.getDateCount(it.first, it.second)
+                )
             } ?: textView.resources.getString(R.string.placeholder_date_count)
         }
     }
