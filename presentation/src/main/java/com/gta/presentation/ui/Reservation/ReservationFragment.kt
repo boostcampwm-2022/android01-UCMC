@@ -17,7 +17,6 @@ import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateValidator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ReservationFragment :
@@ -33,7 +32,11 @@ class ReservationFragment :
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        Timber.d(carInfo.toString())
+
+        setupDatePicker()
+
+        setupRadioGroup()
+
         return binding.run {
             vm = viewModel
             carInfo = this@ReservationFragment.carInfo
@@ -41,9 +44,25 @@ class ReservationFragment :
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun setupRadioGroup() {
+        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { _, isChecked ->
+            val price = carInfo.price + when (isChecked) {
+                R.id.rg_reservation_insurance_option_1 -> {
+                    InsuranceLevel.LOW.price
+                }
+                R.id.rg_reservation_insurance_option_2 -> {
+                    InsuranceLevel.MEDIUM.price
+                }
+                R.id.rg_reservation_insurance_option_3 -> {
+                    InsuranceLevel.HIGH.price
+                }
+                else -> 0
+            }
+            viewModel.selectedInsuranceOption.value = isChecked to price
+        }
+    }
 
+    private fun setupDatePicker() {
         // 임시 불가능한 날짜들
         val invalidateDates = listOf(1669248000000 to 1669420800000)
 
@@ -65,22 +84,6 @@ class ReservationFragment :
 
         binding.ivReservationNext.setOnClickListener {
             datePicker.show(childFragmentManager, null)
-        }
-
-        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { _, isChecked ->
-            val price = carInfo.price + when (isChecked) {
-                R.id.rg_reservation_insurance_option_1 -> {
-                    InsuranceLevel.LOW.price
-                }
-                R.id.rg_reservation_insurance_option_2 -> {
-                    InsuranceLevel.MEDIUM.price
-                }
-                R.id.rg_reservation_insurance_option_3 -> {
-                    InsuranceLevel.HIGH.price
-                }
-                else -> 0
-            }
-            viewModel.selectedInsuranceOption.value = isChecked to price
         }
     }
 }
