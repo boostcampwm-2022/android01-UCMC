@@ -19,22 +19,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class CarDetailViewModel @Inject constructor(
     args: SavedStateHandle,
-    isMyCarUseCase: IsMyCarUseCase,
-    isNowMyRentCarUseCase: IsNowMyRentCarUseCase,
+    private val isMyCarUseCase: IsMyCarUseCase,
+    private val isNowMyRentCarUseCase: IsNowMyRentCarUseCase,
     getCarDetailDataUseCase: GetCarDetailDataUseCase
 ) : ViewModel() {
 
+    private var carId: String
     val car: StateFlow<CarInfo>
 
     val owner: StateFlow<CarOwner>
@@ -45,7 +43,7 @@ class CarDetailViewModel @Inject constructor(
 
     init {
         // TODO : Safe Args 연결
-        val carId = args.get<String>("CAR_ID") ?: "debug"
+        carId = args.get<String>("CAR_ID") ?: "debug"
         val data: Flow<CarDetail> = getCarDetailDataUseCase(carId)
 
         car = data.map { it.toCarInfo() }.stateIn(
@@ -69,19 +67,17 @@ class CarDetailViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = CarOwner("", "", "0", "")
         )
+    }
 
-        viewModelScope.launch {
-            car.collectLatest {
-                _btnState.value = if (isMyCarUseCase(carId)) {
-                    BtnType.OWNER
-                } else if (isNowMyRentCarUseCase(carId)) {
-                    BtnType.RENTED
-                } else if (it.state != CarState.UNAVAILABLE) {
-                    BtnType.USER
-                } else {
-                    BtnType.NONE
-                }
-            }
+    fun getPageState() {
+        _btnState.value = if (isMyCarUseCase(carId)) {
+            BtnType.OWNER
+        } else if (isNowMyRentCarUseCase(carId)) {
+            BtnType.RENTED
+        } else if (car.value.state != CarState.UNAVAILABLE) {
+            BtnType.USER
+        } else {
+            BtnType.NONE
         }
     }
 
