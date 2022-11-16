@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/mapFragment">
+    app:startDestination="@id/licenseGuideFragment">
 
     <fragment
         android:id="@+id/mapFragment"
@@ -22,5 +22,21 @@
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
         android:label="@string/my_page"
         tools:layout="@layout/fragment_mypage" />
+    <fragment
+        android:id="@+id/licenseGuideFragment"
+        android:name="com.gta.presentation.ui.license.guide.LicenseGuideFragment"
+        android:label="LicenseGuideFragment" >
+        <action
+            android:id="@+id/action_licenseGuideFragment_to_licenseRegistrationFragment"
+            app:destination="@id/licenseRegistrationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/licenseRegistrationFragment"
+        android:name="com.gta.presentation.ui.license.registration.LicenseRegistrationFragment"
+        android:label="LicenseRegistrationFragment" >
+        <argument
+            android:name="uri"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

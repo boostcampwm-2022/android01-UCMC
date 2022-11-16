@@ -1,9 +1,10 @@
-package com.gta.data.model
+package com.gta.domain.model
 
 data class DrivingLicense(
     val id: String,
     val name: String,
-    val residentNumber: String,
+    val residentNumberFront: String,
+    val residentNumberBack: String,
     val aptitudeTestDate: String,
     val expireDate: String
 )

@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.license.registration.LicenseRegistrationViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -48,6 +55,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="신청하기"
+            android:onClick="@{() -> vm.registerLicense()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -87,6 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="면허 번호"
+                android:text="@{vm.drivingLicense.id}"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:enabled="false"
@@ -130,6 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="주민 번호"
+                android:text="@{vm.drivingLicense.residentNumberFront}"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:enabled="false"
@@ -155,6 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="주민 번호"
+                android:text="@{vm.drivingLicense.residentNumberBack}"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:enabled="false"
@@ -198,6 +209,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="적성검사"
+                android:text="@{vm.drivingLicense.aptitudeTestDate}"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:enabled="false"
@@ -223,6 +235,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="만료일"
+                android:text="@{vm.drivingLicense.expireDate}"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:enabled="false"
