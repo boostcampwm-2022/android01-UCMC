@@ -13,6 +13,7 @@
     <string name="chat_going">채팅하기</string>
     <string name="car_detail_comment_label">코멘트</string>
     <string name="car_detail_car_owner_label">차주 정보</string>
+    <string name="registered_vehicle">등록한 차량</string>
 
     <string name="car_detail_day_price">금액 : 1일 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>
