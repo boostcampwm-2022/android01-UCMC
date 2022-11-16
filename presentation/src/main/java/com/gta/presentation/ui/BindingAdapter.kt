@@ -4,14 +4,12 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
-import com.gta.presentation.ui.reservation.ReservationViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 @BindingAdapter("selection", "date_type")
 fun setReservationTime(textView: TextView, selection: Pair<Long, Long>?, dateType: DateType) {
-    when(dateType) {
+    when (dateType) {
         DateType.RANGE -> {
             textView.text = selection?.let {
                 val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
