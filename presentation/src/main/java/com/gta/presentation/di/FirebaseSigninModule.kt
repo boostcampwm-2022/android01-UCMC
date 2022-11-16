@@ -2,6 +2,7 @@ package com.gta.presentation.di
 
 import android.content.Context
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.gta.presentation.secret.FIREBASE_CLIENT_ID
 import dagger.Module
@@ -14,13 +15,15 @@ import dagger.hilt.android.qualifiers.ActivityContext
 @InstallIn(ActivityComponent::class)
 class FirebaseSigninModule {
     @Provides
-    fun provideGoogleSignInOptions() = GoogleSignInOptions
+    fun provideGoogleSignInOptions(): GoogleSignInOptions = GoogleSignInOptions
         .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestIdToken(FIREBASE_CLIENT_ID)
         .requestEmail()
         .build()
 
     @Provides
-    fun provideGoogleSignInClient(@ActivityContext context: Context, options: GoogleSignInOptions) =
-        GoogleSignIn.getClient(context, options)
+    fun provideGoogleSignInClient(
+        @ActivityContext context: Context,
+        options: GoogleSignInOptions
+    ): GoogleSignInClient = GoogleSignIn.getClient(context, options)
 }

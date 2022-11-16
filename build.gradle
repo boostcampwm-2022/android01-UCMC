@@ -18,6 +18,7 @@ buildscript {
         viewPagerVersion = "1.0.0"
         naverMapsVersion = "3.16.0"
         streamChatVersion = "5.11.0"
+        locationPermissionVersion = "20.0.0"
     }
 
     dependencies {

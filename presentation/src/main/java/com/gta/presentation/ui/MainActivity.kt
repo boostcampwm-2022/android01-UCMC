@@ -8,8 +8,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ActivityMainBinding
+import com.gta.presentation.secret.NAVER_MAP_CLIENT_ID
 import com.gta.presentation.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
+import com.naver.maps.map.NaverMapSdk
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -24,6 +26,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         setupWithBottomNavigation()
 
         setupWithAppBar()
+
+        setupWithNaverMaps()
     }
 
     private fun setupWithAppBar() {
@@ -36,10 +40,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.mapFragment, R.id.chattingFragment, R.id.myPageFragment -> showBottomNav()
+                R.id.mapFragment -> {
+                    supportActionBar?.hide()
+                    showBottomNav()
+                }
+                R.id.chattingFragment, R.id.myPageFragment -> {
+                    supportActionBar?.show()
+                    showBottomNav()
+                }
                 else -> hideBottomNav()
             }
         }
+    }
+
+    private fun setupWithNaverMaps() {
+        NaverMapSdk.getInstance(this).client =
+            NaverMapSdk.NaverCloudPlatformClient(NAVER_MAP_CLIENT_ID)
     }
 
     private fun showBottomNav() {

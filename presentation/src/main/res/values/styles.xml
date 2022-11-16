@@ -17,7 +17,7 @@
     </style>
 
     <style name="ThemeOverlay.App.Toolbar" parent="">
-        <item name="colorPrimary">@color/neutral99</item>
+        <item name="colorPrimary">?android:attr/colorBackground</item>
         <item name="colorOnPrimary">?attr/colorOnBackground</item>
     </style>
 
@@ -27,5 +27,13 @@
 
     <style name="ShapeAppearanceOverlay.App.CornerSize5Percent" parent="">
         <item name="cornerSize">5%</item>
+
+    <style name="Theme.UCMC.ChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="android:minWidth">80dp</item>
+        <item name="android:textSize">@dimen/font_label_large</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:backgroundTint">?attr/colorSurface</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:elevation">4dp</item>
     </style>
 </resources>
