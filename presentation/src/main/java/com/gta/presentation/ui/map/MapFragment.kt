@@ -69,6 +69,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         this.naverMap = naverMap
         setupWithMap()
         setupWithMarker()
+        setupWithBottomSheet()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -80,12 +81,13 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             isLocationButtonEnabled = true
         }
 
-        binding.mapView.setOnTouchListener { _, event ->
-            binding.cgFilter.visibility = when (event.action) {
-                MotionEvent.ACTION_MOVE -> View.GONE
-                else -> View.VISIBLE
+        binding.mapView.setOnTouchListener { v, event ->
+            if (event.y >= binding.bottomSheet.top && event.y <= binding.bottomSheet.bottom) {
+                true
+            } else {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                binding.mapView.onTouchEvent(event)
             }
-            binding.mapView.onTouchEvent(event)
         }
     }
 

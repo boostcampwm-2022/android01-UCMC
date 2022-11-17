@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.map.MapFragment">
-
-    <data>
-        <variable
-            name="vm"
-            type="com.gta.presentation.ui.cardetail.CarDetailViewModel" />
-    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -61,23 +54,20 @@
                     android:id="@+id/chip_type"
                     android:text="@string/filter_car_type"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Theme.UCMC.ChipStyle"/>
+                    android:layout_height="wrap_content"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_day"
                     android:text="@string/filter_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/padding_small"
-                    style="@style/Theme.UCMC.ChipStyle"/>
+                    android:layout_marginHorizontal="@dimen/padding_small"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_cost"
                     android:text="@string/filter_cost"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Theme.UCMC.ChipStyle"/>
+                    android:layout_height="wrap_content"/>
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -86,16 +76,52 @@
         <FrameLayout
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="200dp"
             android:orientation="vertical"
             android:background="@color/neutral99"
+            android:padding="@dimen/padding_large"
             app:behavior_hideable="true"
-            app:behavior_peekHeight="250dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-            <include
-                layout="@layout/fragment_car_detail"
-                bind:vm="@{vm}" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_car"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_bottom_nav_car"
+                    app:tint="@color/primaryColor"
+                    app:layout_constraintDimensionRatio="H,1:1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="주영이 포르쉐"
+                    android:textSize="@dimen/font_title_large"
+                    android:textStyle="bold"
+                    android:layout_marginStart="@dimen/padding_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/tv_price"
+                    app:layout_constraintVertical_chainStyle="spread"
+                    app:layout_constraintStart_toEndOf="@id/iv_car"/>
+
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "금액 : 1000원"
+                    android:textSize="@dimen/font_body_large"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"/>
+                <!-- android:text="@{@string/car_detail_day_price(vm.car.price)}" -->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
