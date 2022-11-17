@@ -53,4 +53,7 @@
     <string name="license_registration_aptitude">적성검사</string>
     <string name="license_registration_expiration">만료일</string>
     <string name="license_registration_button">신청하기</string>
+
+    <string name="pink_slip_guide_toolbar">자동차 등록</string>
+    <string name="pink_slip_guide_title">자동차 등록증을 등록해주세요</string>
 </resources>
