@@ -15,9 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -158,11 +156,7 @@
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </ScrollView>
-
-
-
-
+        </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_next"
