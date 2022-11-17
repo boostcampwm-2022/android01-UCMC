@@ -13,7 +13,6 @@ import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class LicenseRegistrationFragment : BaseFragment<FragmentLicenseRegistrationBinding>(
@@ -33,7 +32,7 @@ class LicenseRegistrationFragment : BaseFragment<FragmentLicenseRegistrationBind
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.registerEvent.collectLatest { state ->
-                    Timber.tag("License").i("$state")
+                    // 네비게이트
                 }
             }
         }

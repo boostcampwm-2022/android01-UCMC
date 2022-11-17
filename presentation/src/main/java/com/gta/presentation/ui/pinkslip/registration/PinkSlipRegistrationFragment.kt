@@ -13,7 +13,6 @@ import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class PinkSlipRegistrationFragment : BaseFragment<FragmentPinkSlipRegistrationBinding>(
@@ -33,7 +32,7 @@ class PinkSlipRegistrationFragment : BaseFragment<FragmentPinkSlipRegistrationBi
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.registerEvent.collectLatest { state ->
-                    Timber.tag("PinkSlip").i("$state")
+                    // 네비게이트
                 }
             }
         }
