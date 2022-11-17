@@ -18,7 +18,7 @@
             type="com.gta.presentation.ui.reservation.TmpCarInfo" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -81,7 +81,7 @@
                 app:date_type="@{DateType.RANGE}"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_time"
-                app:selection="@{vm.selectedDateRange}"
+                app:selection="@{vm.reservationDate}"
                 tools:text="22/11/01 ~ 22/11/02" />
 
             <TextView
@@ -93,7 +93,7 @@
                 app:date_type="@{DateType.DAY_COUNT}"
                 app:layout_constraintEnd_toStartOf="@id/iv_reservation_next"
                 app:layout_constraintTop_toTopOf="@id/tv_reservation_time"
-                app:selection="@{vm.selectedDateRange}"
+                app:selection="@{vm.reservationDate}"
                 tools:text="총 1일" />
 
             <ImageView
@@ -136,7 +136,7 @@
                 android:id="@+id/tv_reservation_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/price_format(carInfo.price)}"
+                android:text="@{@string/price_format(vm.basePrice ?? 0)}"
                 android:textAppearance="@style/Body"
                 app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
                 app:layout_constraintTop_toTopOf="@id/tv_reservation_title_fee"
@@ -162,24 +162,15 @@
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintTop_toBottomOf="@id/view_reservation_sub_divider" />
 
-            <TextView
-                android:id="@+id/tv_reservation_more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/more"
-                android:textColor="@color/neutral"
-                android:textSize="@dimen/font_label_large"
-                app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
-                app:layout_constraintTop_toTopOf="@id/tv_reservation_title_insurance_fee" />
-
             <RadioGroup
                 android:id="@+id/rg_reservation_insurance_options"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_small"
                 android:checkedButton="@={vm.selectedInsuranceOption}"
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
+                app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
                 app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_insurance_fee">
 
                 <RadioButton
@@ -208,7 +199,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
                 android:text="@string/total_payment"
-                android:textColor="@color/neutral"
+                android:textColor="@color/neutral40"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/btn_reservation_paying"
@@ -233,7 +224,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
-                android:enabled="@{vm.selectedDateRange != null &amp;&amp; vm.selectedInsuranceOption != null}"
+                android:enabled="@{vm.reservationDate != null &amp;&amp; vm.selectedInsuranceOption != null}"
                 android:text="@string/action_pay"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
@@ -242,6 +233,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </layout>

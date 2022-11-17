@@ -5,9 +5,9 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
+import com.gta.presentation.model.ReservationDate
 import com.gta.presentation.model.carDetail.UserState
 import com.gta.presentation.util.DateUtil
-import java.text.SimpleDateFormat
 import java.util.*
 
 @BindingAdapter("car_type", "car_title")
@@ -38,19 +38,18 @@ fun setCarDetailBtnState(button: Button, state: UserState) {
 }
 
 @BindingAdapter("selection", "date_type")
-fun setReservationTime(textView: TextView, selection: Pair<Long, Long>?, dateType: DateType) {
+fun setReservationTime(textView: TextView, selection: ReservationDate?, dateType: DateType) {
     when (dateType) {
         DateType.RANGE -> {
             textView.text = selection?.let {
-                val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
-                "${dateFormat.format(selection.first)} ~ ${dateFormat.format(selection.second)}"
+                "${DateUtil.dateFormat.format(selection.startDate)} ~ ${DateUtil.dateFormat.format(selection.endDate)}"
             } ?: textView.resources.getString(R.string.placeholder_date_range)
         }
         DateType.DAY_COUNT -> {
             textView.text = selection?.let {
                 String.format(
                     textView.resources.getString(R.string.total_time),
-                    DateUtil.getDateCount(it.first, it.second)
+                    DateUtil.getDateCount(it.startDate, it.endDate)
                 )
             } ?: textView.resources.getString(R.string.placeholder_date_count)
         }

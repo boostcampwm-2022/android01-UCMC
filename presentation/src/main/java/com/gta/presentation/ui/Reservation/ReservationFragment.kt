@@ -5,13 +5,13 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.util.toKotlinPair
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
+import com.gta.presentation.model.ReservationDate
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateValidator
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,9 +52,9 @@ class ReservationFragment :
 
     private fun setupDatePicker() {
         val constraints = CalendarConstraints.Builder()
-            .setValidator(DateValidator(carInfo.reservationRange, null))
-            .setStart(carInfo.reservationRange.first)
-            .setEnd(carInfo.reservationRange.second)
+            .setValidator(DateValidator(carInfo.reservationDate, null))
+            .setStart(carInfo.reservationDate.first)
+            .setEnd(carInfo.reservationDate.second)
             .build()
 
         val datePicker = MaterialDatePicker.Builder
@@ -64,7 +64,7 @@ class ReservationFragment :
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.selectedDateRange.value = it.toKotlinPair()
+            viewModel.setReservationDate(ReservationDate(it.first, it.second))
         }
 
         binding.ivReservationNext.setOnClickListener {
@@ -83,5 +83,5 @@ data class TmpCarInfo(
     val price: Int,
     val comment: String,
     val images: List<String>,
-    val reservationRange: Pair<Long, Long>
+    val reservationDate: Pair<Long, Long>
 ) : Parcelable

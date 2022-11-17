@@ -1,9 +1,16 @@
 package com.gta.presentation.util
 
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.math.abs
+
 object DateUtil {
-    private const val DAY_TIME_UNIT = 86400000L
+    private const val DAY_TIME_UNIT = 60 * 60 * 24 * 1000L
+
+    @JvmStatic
+    val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
 
     @JvmStatic
     fun getDateCount(startDate: Long, endDate: Long) =
-        (endDate - startDate).div(DAY_TIME_UNIT).plus(1).toInt()
+        abs(endDate - startDate).div(DAY_TIME_UNIT).plus(1).toInt()
 }

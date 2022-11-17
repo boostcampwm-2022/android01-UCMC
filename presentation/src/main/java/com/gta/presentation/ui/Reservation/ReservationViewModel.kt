@@ -1,33 +1,41 @@
 package com.gta.presentation.ui.reservation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.gta.presentation.R
 import com.gta.presentation.model.InsuranceLevel
+import com.gta.presentation.model.ReservationDate
 import com.gta.presentation.util.DateUtil
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
 class ReservationViewModel @AssistedInject constructor(@Assisted private val carInfo: TmpCarInfo) :
     ViewModel() {
-    val selectedDateRange = MutableLiveData<Pair<Long, Long>>()
-    val selectedInsuranceOption = MutableLiveData<Int>()
-    val totalPrice = MediatorLiveData<Int>()
+    private val _reservationDate = MutableLiveData<ReservationDate>()
+    val reservationDate: LiveData<ReservationDate> = _reservationDate
 
-    private var dateCount = 0
+    val selectedInsuranceOption = MutableLiveData<Int>()
+
+    private val _totalPrice = MediatorLiveData<Int>()
+    val totalPrice: LiveData<Int> = _totalPrice
+
+    val basePrice: LiveData<Int> = Transformations.map(_reservationDate) {
+        DateUtil.getDateCount(it.startDate, it.endDate) * carInfo.price
+    }
 
     init {
-        totalPrice.addSource(selectedDateRange) { range ->
-            dateCount = DateUtil.getDateCount(range.first, range.second)
-
-            val insurancePrice = selectedInsuranceOption.value ?: 0
-            totalPrice.value = (dateCount * carInfo.price).plus(insurancePrice)
+        _totalPrice.addSource(basePrice) { basePrice ->
+            val insurancePrice = selectedInsuranceOption.value?.let { getOptionPrice(it) } ?: 0
+            _totalPrice.value = basePrice.plus(insurancePrice)
         }
 
-        totalPrice.addSource(selectedInsuranceOption) { option ->
-            totalPrice.value = (dateCount * carInfo.price).plus(getOptionPrice(option))
+        _totalPrice.addSource(selectedInsuranceOption) { option ->
+            val price = basePrice.value ?: 0
+            _totalPrice.value = price.plus(getOptionPrice(option))
         }
     }
 
@@ -44,6 +52,10 @@ class ReservationViewModel @AssistedInject constructor(@Assisted private val car
             }
             else -> 0
         }
+    }
+
+    fun setReservationDate(selected: ReservationDate) {
+        _reservationDate.value = selected
     }
 
     @dagger.assisted.AssistedFactory
