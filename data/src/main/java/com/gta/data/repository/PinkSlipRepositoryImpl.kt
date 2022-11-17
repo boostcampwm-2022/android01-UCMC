@@ -6,7 +6,6 @@ import com.gta.domain.repository.PinkSlipRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import timber.log.Timber
 import java.nio.ByteBuffer
 import javax.inject.Inject
 
@@ -32,11 +31,9 @@ class PinkSlipRepositoryImpl @Inject constructor(
                     trySend(it.isSuccessful)
                 }
             }.addOnFailureListener {
-                Timber.tag("PinkSlip").i("실패2")
                 trySend(false)
             }
         }.addOnFailureListener {
-            Timber.tag("PinkSlip").i("실패1")
             trySend(false)
         }
         awaitClose()
