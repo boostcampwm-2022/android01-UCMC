@@ -9,5 +9,5 @@ class LicenseDataSource @Inject constructor(
     private val databaseReference: DatabaseReference
 ) {
     fun registerLicense(uid: String, license: DrivingLicense): Task<Void> =
-        databaseReference.child("user").child(uid).child("license").setValue(license)
+        databaseReference.child("users").child(uid).child("license").setValue(license)
 }

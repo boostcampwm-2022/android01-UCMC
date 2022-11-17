@@ -278,7 +278,7 @@
                 android:enabled="false"
                 android:hint="@string/pink_slip_registration_year"
                 android:maxLines="1"
-                android:text="@{String.valueOf()}"
+                android:text="@{String.valueOf(vm.pinkSlip.year)}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_body_small"
                 tools:ignore="TouchTargetSizeCheck" />
