@@ -6,7 +6,6 @@
     tools:context=".ui.cardetail.CarDetailFragment">
 
     <data>
-
         <variable
             name="vm"
             type="com.gta.presentation.ui.cardetail.CarDetailViewModel" />
