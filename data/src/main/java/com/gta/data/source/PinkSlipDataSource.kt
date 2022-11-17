@@ -37,6 +37,7 @@ class PinkSlipDataSource @Inject constructor(
         return (1..INFORMATION_NUMBER_LENGTH).map { charset.random(rand) }.joinToString("")
     }
 
+    // 가짜 자동차 등록증 데이터를 반환 합니다.
     fun matizOrPorsche(): PinkSlip = cars
         .random(Random(System.currentTimeMillis()))
         .copy(informationNumber = getRandomInformationNumber())
