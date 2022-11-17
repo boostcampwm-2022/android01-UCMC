@@ -32,8 +32,14 @@ class LicenseRegistrationViewModel @Inject constructor(
     private val _registerEvent = MutableSharedFlow<Boolean>()
     val registerEvent: SharedFlow<Boolean> get() = _registerEvent
 
+    private val _licensePicture = MutableStateFlow("")
+    val licensePicture: StateFlow<String> get() = _licensePicture
+
     init {
         args.get<String>("uri")?.let { uri ->
+            viewModelScope.launch {
+                _licensePicture.emit(uri)
+            }
             getLicense(uri)
         }
     }

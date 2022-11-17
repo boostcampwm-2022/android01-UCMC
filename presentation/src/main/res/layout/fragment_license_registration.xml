@@ -19,6 +19,7 @@
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
+            app:image_uri="@{vm.licensePicture}"
             app:layout_constraintBottom_toTopOf="@+id/tv_license_registration_id"
             app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
             app:layout_constraintHeight_percent="0.25"
