@@ -91,16 +91,17 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     @SuppressLint("ResourceAsColor")
     private fun setupWithMarker() {
-        val marker = Marker()
-        marker.icon = MarkerIcons.BLACK
-        marker.iconTintColor = requireContext().getColor(R.color.primaryColor)
-        marker.position = LatLng(37.36, 127.1052)
-        marker.map = naverMap
+        val marker = Marker().apply { // 변수를 없애지 않은 이유는 나중에 Firebase에서 들고와야 하니까,, 일단 냅두겠습니다
+            this.icon = MarkerIcons.BLACK
+            this.iconTintColor = requireContext().getColor(R.color.primaryColor)
+            this.position = LatLng(37.36, 127.1052)
+            this.map = naverMap
 
-        marker.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            binding.cgFilter.visibility = View.GONE
-            true
+            this.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                binding.cgFilter.visibility = View.GONE
+                true
+            }
         }
     }
 
