@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentOwnerProfileBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -30,7 +31,18 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.vm = viewModel
-        binding.rvCars.adapter = carListAdapter
+        binding.rvCars.adapter = carListAdapter.apply {
+            setItemClickListener(
+                object : CarListAdapter.OnItemClickListener {
+                    override fun onClick(id: String) {
+                        findNavController().navigate(
+                            OwnerProfileFragmentDirections
+                                .actionOwnerProfileFragment2ToCarDetailFragment(id)
+                        )
+                    }
+                }
+            )
+        }
         return binding.root
     }
 

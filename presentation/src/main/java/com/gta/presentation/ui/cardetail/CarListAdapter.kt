@@ -12,10 +12,29 @@ import com.gta.presentation.databinding.ItemOwnerCarBinding
 
 class CarListAdapter : ListAdapter<SimpleCar, CarListAdapter.CarViewHolder>(CarListDiffCallback()) {
 
+    private var itemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onClick(id: String)
+    }
+
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        itemClickListener = onItemClickListener
+    }
+
+
     class CarViewHolder(
-        private val binding: ItemOwnerCarBinding
+        private val binding: ItemOwnerCarBinding,
+        itemClickListener: OnItemClickListener?
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            itemView.setOnClickListener {
+                binding.item?.let { car ->
+                    itemClickListener?.onClick(car.id)
+                }
+            }
+        }
         fun bind(item: SimpleCar) {
             with(binding) {
                 this.item = item
@@ -31,7 +50,8 @@ class CarListAdapter : ListAdapter<SimpleCar, CarListAdapter.CarViewHolder>(CarL
                 R.layout.item_owner_car,
                 parent,
                 false
-            )
+            ),
+            itemClickListener
         )
     }
 
