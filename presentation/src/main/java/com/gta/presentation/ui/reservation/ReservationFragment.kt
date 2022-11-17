@@ -9,9 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.gta.domain.model.AvailableDate
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
-import com.gta.presentation.model.ReservationDate
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateValidator
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +64,7 @@ class ReservationFragment :
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.setReservationDate(ReservationDate(it.first, it.second))
+            viewModel.setReservationDate(AvailableDate(it.first, it.second))
         }
 
         binding.ivReservationNext.setOnClickListener {

@@ -6,17 +6,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.gta.domain.model.AvailableDate
 import com.gta.presentation.R
 import com.gta.presentation.model.InsuranceLevel
-import com.gta.presentation.model.ReservationDate
 import com.gta.presentation.util.DateUtil
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
 class ReservationViewModel @AssistedInject constructor(@Assisted private val carInfo: TmpCarInfo) :
     ViewModel() {
-    private val _reservationDate = MutableLiveData<ReservationDate>()
-    val reservationDate: LiveData<ReservationDate> = _reservationDate
+    private val _reservationDate = MutableLiveData<AvailableDate>()
+    val reservationDate: LiveData<AvailableDate> = _reservationDate
 
     val selectedInsuranceOption = MutableLiveData<Int>()
 
@@ -24,7 +24,7 @@ class ReservationViewModel @AssistedInject constructor(@Assisted private val car
     val totalPrice: LiveData<Int> = _totalPrice
 
     val basePrice: LiveData<Int> = Transformations.map(_reservationDate) {
-        DateUtil.getDateCount(it.startDate, it.endDate) * carInfo.price
+        DateUtil.getDateCount(it.start, it.end) * carInfo.price
     }
 
     init {
@@ -54,7 +54,7 @@ class ReservationViewModel @AssistedInject constructor(@Assisted private val car
         }
     }
 
-    fun setReservationDate(selected: ReservationDate) {
+    fun setReservationDate(selected: AvailableDate) {
         _reservationDate.value = selected
     }
 
