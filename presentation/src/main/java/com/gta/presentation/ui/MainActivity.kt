@@ -10,8 +10,8 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.ActivityMainBinding
 import com.gta.presentation.secret.NAVER_MAP_CLIENT_ID
 import com.gta.presentation.ui.base.BaseActivity
-import dagger.hilt.android.AndroidEntryPoint
 import com.naver.maps.map.NaverMapSdk
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {

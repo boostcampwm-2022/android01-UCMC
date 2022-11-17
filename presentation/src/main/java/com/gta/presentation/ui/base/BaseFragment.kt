@@ -28,6 +28,8 @@ abstract class BaseFragment<VB : ViewDataBinding>(
         }
     }
 
+    fun isBindingNotNull(): Boolean = _binding != null
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

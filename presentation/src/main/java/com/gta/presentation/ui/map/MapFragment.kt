@@ -104,7 +104,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        binding.mapView.onSaveInstanceState(outState)
+        if (super.isBindingNotNull()) {
+            binding.mapView.onSaveInstanceState(outState)
+        }
         super.onSaveInstanceState(outState)
     }
 
