@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.cardetail.OwnerProfileFragment">
 
+    <data>
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.cardetail.OwnerProfileViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -41,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_extra_large"
             android:textSize="@dimen/font_title_large"
+            android:text="@{vm.owner.name}"
             app:layout_constraintBottom_toTopOf="@+id/tv_manners_temperature_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
@@ -67,6 +74,7 @@
             android:layout_marginStart="@dimen/padding_medium"
             android:textSize="@dimen/font_body_large"
             android:textStyle="bold"
+            android:text="@{@string/temperature_type(vm.owner.temp)}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_manners_temperature_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"

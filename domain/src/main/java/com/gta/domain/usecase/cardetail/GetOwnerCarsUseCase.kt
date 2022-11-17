@@ -9,7 +9,12 @@ import javax.inject.Inject
 class GetOwnerCarsUseCase @Inject constructor(
     private val carRepository: CarRepository
 ) {
-    operator fun invoke(carId: String): Flow<SimpleCar> {
-        return MutableStateFlow(SimpleCar("", "[말티즈] 멍멍", ""))
+    operator fun invoke(ownerId: String): Flow<List<SimpleCar>> {
+        return MutableStateFlow(
+            listOf(
+                SimpleCar("1", "[말티즈] 멍멍", ""),
+                SimpleCar("1", "[모닝 구형] 여기저기 가기 좋습니다", "")
+            )
+        )
     }
 }

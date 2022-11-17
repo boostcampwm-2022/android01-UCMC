@@ -10,6 +10,6 @@ class GetOwnerInfoUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     operator fun invoke(ownerId: String): Flow<UserProfile> {
-        return MutableStateFlow(UserProfile("", "", 0F, ""))
+        return MutableStateFlow(UserProfile("ownerId", "김철수", 36.5F, ""))
     }
 }
