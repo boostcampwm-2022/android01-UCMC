@@ -5,13 +5,17 @@ enum class CarState(val string: String) {
 }
 
 data class CarDetail(
-    val id: String,
-    val title: String,
-    val state: CarState,
-    val location: String,
+    val images: List<String> = emptyList(),
     val carType: String,
-    val price: Int,
-    val comment: String,
-    val images: List<String>,
-    val owner: UserProfile
+    val model: String,
+    val year: Int,
+    val licensePlate: String,
+    val price: Int = 10000,
+    val location: String = "동훈이 집",
+    val coordinate: Coordinate = Coordinate(),
+    val rentState: String = CarState.UNAVAILABLE.string,
+    val comment: String = "차였어요",
+    val availableDate: AvailableDate = AvailableDate(),
+    val reservations: List<String> = emptyList(),
+    val ownerId: String
 )
