@@ -3,20 +3,16 @@ package com.gta.presentation.ui.map
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Color
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
-import com.gta.presentation.ui.cardetail.CarDetailViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
@@ -28,8 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
-    private val viewModel: CarDetailViewModel by viewModels()
-
     private lateinit var naverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
     private lateinit var backPressedCallback: OnBackPressedCallback
@@ -55,7 +49,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.vm = viewModel
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
 
@@ -101,9 +94,17 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
             this.setOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                binding.cgFilter.visibility = View.GONE
                 true
             }
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupWithBottomSheet() {
+        binding.bottomSheet.setOnTouchListener { _, _ ->
+            val navAction = MapFragmentDirections.actionMapFragmentToCarDetailFragment("test")
+            findNavController().navigate(navAction)
+            false
         }
     }
 
