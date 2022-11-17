@@ -22,5 +22,21 @@
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
         android:label="@string/my_page"
         tools:layout="@layout/fragment_mypage" />
+    <fragment
+        android:id="@+id/licenseGuideFragment"
+        android:name="com.gta.presentation.ui.license.guide.LicenseGuideFragment"
+        android:label="LicenseGuideFragment" >
+        <action
+            android:id="@+id/action_licenseGuideFragment_to_licenseRegistrationFragment"
+            app:destination="@id/licenseRegistrationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/licenseRegistrationFragment"
+        android:name="com.gta.presentation.ui.license.registration.LicenseRegistrationFragment"
+        android:label="LicenseRegistrationFragment" >
+        <argument
+            android:name="uri"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

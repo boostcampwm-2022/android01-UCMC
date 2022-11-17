@@ -37,4 +37,20 @@
     <string name="action_pay">결제하기</string>
     <string name="placeholder_date_count">총 -일</string>
     <string name="placeholder_date_range">시작일 ~ 종료일</string>
+    
+    <string name="license_guide_toolbar">운전자 등록</string>
+    <string name="license_guide_title">운전면허를 등록해주세요</string>
+    <string name="license_guide_subtitle">이렇게 찍어주세요!</string>
+    <string name="license_guide_info1">카메라 영역에 꽉 차게 찍어주세요.</string>
+    <string name="license_guide_info2">카메라 초점을 잘 맞춰주세요.</string>
+    <string name="license_guide_info3">빛반사 없이 찍어주세요.</string>
+    <string name="license_guide_camera_button">카메라</string>
+
+    <string name="license_registration_toolbar">운전면허 확인</string>
+    <string name="license_registration_id">면허 번호</string>
+    <string name="license_registration_resident">주민등록번호</string>
+    <string name="license_registration_resident_back">%1$c******</string>
+    <string name="license_registration_aptitude">적성검사</string>
+    <string name="license_registration_expiration">만료일</string>
+    <string name="license_registration_button">신청하기</string>
 </resources>
