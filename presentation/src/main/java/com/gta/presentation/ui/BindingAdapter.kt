@@ -1,6 +1,7 @@
 package com.gta.presentation.ui
 
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.gta.presentation.R
@@ -9,6 +10,13 @@ import com.gta.presentation.model.ReservationDate
 import com.gta.presentation.model.carDetail.UserState
 import com.gta.presentation.util.DateUtil
 import java.util.*
+
+@BindingAdapter("image_uri")
+fun bindImageUri(view: ImageView, uri: String) {
+    GlideApp.with(view.context)
+        .load(uri)
+        .into(view)
+}
 
 @BindingAdapter("car_type", "car_title")
 fun setCarDetailTitle(textView: TextView, type: String, title: String) {

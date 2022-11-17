@@ -1,12 +1,12 @@
-package com.gta.presentation.ui.license.registration
+package com.gta.presentation.ui.pinkslip.registration
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.gta.domain.model.DrivingLicense
-import com.gta.domain.usecase.license.GetLicenseUseCase
-import com.gta.domain.usecase.license.SetLicenseUseCase
+import com.gta.domain.model.PinkSlip
+import com.gta.domain.usecase.pinkslip.GetPinkSlipUseCase
+import com.gta.domain.usecase.pinkslip.SetPinkSlipUseCase
 import com.gta.presentation.util.ImageUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,44 +18,44 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LicenseRegistrationViewModel @Inject constructor(
+class PinkSlipRegistrationViewModel @Inject constructor(
     private val imageUtil: ImageUtil,
     private val auth: FirebaseAuth,
-    private val getLicenseUseCase: GetLicenseUseCase,
-    private val setLicenseUseCase: SetLicenseUseCase,
+    private val getPinkSlipUseCase: GetPinkSlipUseCase,
+    private val setPinkSlipUseCase: SetPinkSlipUseCase,
     args: SavedStateHandle
 ) : ViewModel() {
 
-    private val _drivingLicense = MutableStateFlow<DrivingLicense?>(null)
-    val drivingLicense: StateFlow<DrivingLicense?> get() = _drivingLicense
+    private val _pinkSlip = MutableStateFlow<PinkSlip?>(null)
+    val pinkSlip: StateFlow<PinkSlip?> get() = _pinkSlip
 
     private val _registerEvent = MutableSharedFlow<Boolean>()
     val registerEvent: SharedFlow<Boolean> get() = _registerEvent
 
-    private val _licensePicture = MutableStateFlow("")
-    val licensePicture: StateFlow<String> get() = _licensePicture
+    private val _pinkSlipPicture = MutableStateFlow("")
+    val pinkSlipPicture: StateFlow<String> get() = _pinkSlipPicture
 
     init {
         args.get<String>("uri")?.let { uri ->
             viewModelScope.launch {
-                _licensePicture.emit(uri)
+                _pinkSlipPicture.emit(uri)
             }
-            getLicense(uri)
+            getPinkSlip(uri)
         }
     }
 
-    private fun getLicense(uri: String) {
+    private fun getPinkSlip(uri: String) {
         val buffer = imageUtil.getByteBuffer(uri) ?: return
         viewModelScope.launch {
-            _drivingLicense.emit(getLicenseUseCase(buffer).first())
+            _pinkSlip.emit(getPinkSlipUseCase(buffer).first())
         }
     }
 
-    fun registerLicense() {
-        val license = drivingLicense.value ?: return
+    fun registerPinkSlip() {
+        val pinkSlip = pinkSlip.value ?: return
         val uid = auth.currentUser?.uid ?: return
         viewModelScope.launch {
-            _registerEvent.emit(setLicenseUseCase(uid, license).first())
+            _registerEvent.emit(setPinkSlipUseCase(uid, pinkSlip).first())
         }
     }
 }

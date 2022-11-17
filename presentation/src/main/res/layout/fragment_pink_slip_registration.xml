@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.pinkslip.registration.PinkSlipRegistrationViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_pink_slip_registration_result"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:image_uri="@{vm.pinkSlipPicture}"
+            app:layout_constraintBottom_toTopOf="@id/tv_pink_slip_registration_id"
+            app:layout_constraintEnd_toEndOf="@id/gl_pink_slip_registration_end"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="@id/gl_pink_slip_registration_start"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:srcCompat="@drawable/img_pink_slip" />
+
+        <TextView
+            android:id="@+id/tv_pink_slip_registration_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_large"
+            android:text="@string/pink_slip_registration_id"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_small"
+            android:textStyle="bold"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/gl_pink_slip_registration_start"
+            app:layout_constraintTop_toBottomOf="@+id/iv_pink_slip_registration_result"
+            app:layout_constraintBottom_toTopOf="@id/tl_pink_slip_registration_id"/>
+
+        <TextView
+            android:id="@+id/tv_pink_slip_registration_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pink_slip_registration_owner"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_small"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_pink_slip_registration_id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tl_pink_slip_registration_owner"
+            app:layout_constraintTop_toTopOf="@+id/tv_pink_slip_registration_id"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_pink_slip_registration_id"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:layout_marginEnd="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@id/tv_pink_slip_registration_information_number"
+            app:layout_constraintEnd_toStartOf="@id/tl_pink_slip_registration_owner"
+            app:layout_constraintStart_toStartOf="@id/gl_pink_slip_registration_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_pink_slip_registration_id">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_pink_slip_registration_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="@string/pink_slip_registration_id"
+                android:maxLines="1"
+                android:text="@{vm.pinkSlip.id}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_body_small"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_pink_slip_registration_owner"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toBottomOf="@id/tl_pink_slip_registration_id"
+            app:layout_constraintEnd_toEndOf="@id/gl_pink_slip_registration_end"
+            app:layout_constraintStart_toEndOf="@id/tl_pink_slip_registration_id"
+            app:layout_constraintTop_toTopOf="@id/tl_pink_slip_registration_id">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_pink_slip_registration_owner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="@string/pink_slip_registration_owner"
+                android:maxLines="1"
+                android:text="@{vm.pinkSlip.owner}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_body_small"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_pink_slip_registration_information_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_medium"
+            android:layout_marginBottom="8dp"
+            android:text="@string/pink_slip_registration_information_number"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_small"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tl_pink_slip_registration_information_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/gl_pink_slip_registration_start"
+            app:layout_constraintTop_toBottomOf="@+id/tl_pink_slip_registration_id"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_pink_slip_registration_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pink_slip_registration_type"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_small"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_pink_slip_registration_information_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tl_pink_slip_registration_information_number"
+            app:layout_constraintStart_toStartOf="@+id/tl_pink_slip_registration_type"
+            app:layout_constraintTop_toTopOf="@+id/tv_pink_slip_registration_information_number"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_pink_slip_registration_information_number"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:layout_marginEnd="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@id/tv_pink_slip_registration_model"
+            app:layout_constraintEnd_toStartOf="@id/tl_pink_slip_registration_type"
+            app:layout_constraintStart_toStartOf="@id/gl_pink_slip_registration_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_pink_slip_registration_information_number">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_pink_slip_registration_information_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="@string/pink_slip_registration_information_number"
+                android:maxLines="1"
+                android:text="@{vm.pinkSlip.informationNumber}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_body_small"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_pink_slip_registration_type"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toBottomOf="@id/tl_pink_slip_registration_information_number"
+            app:layout_constraintEnd_toEndOf="@id/gl_pink_slip_registration_end"
+            app:layout_constraintStart_toEndOf="@id/tl_pink_slip_registration_information_number"
+            app:layout_constraintTop_toTopOf="@id/tl_pink_slip_registration_information_number">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_pink_slip_registration_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="@string/pink_slip_registration_type"
+                android:maxLines="1"
+                android:text="@{vm.pinkSlip.type}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_body_small"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_pink_slip_registration_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_medium"
+            android:layout_marginBottom="8dp"
+            android:text="@string/pink_slip_registration_model"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_small"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tl_pink_slip_registration_model"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/gl_pink_slip_registration_start"
+            app:layout_constraintTop_toBottomOf="@+id/tl_pink_slip_registration_information_number"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_pink_slip_registration_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pink_slip_registration_year"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_title_small"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_pink_slip_registration_model"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tl_pink_slip_registration_year"
+            app:layout_constraintTop_toTopOf="@+id/tv_pink_slip_registration_model"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_pink_slip_registration_model"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:layout_marginEnd="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/btn_pink_slip_registration"
+            app:layout_constraintEnd_toStartOf="@id/tl_pink_slip_registration_year"
+            app:layout_constraintStart_toStartOf="@id/gl_pink_slip_registration_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_pink_slip_registration_model">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_pink_slip_registration_model"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="@string/pink_slip_registration_model"
+                android:maxLines="1"
+                android:text="@{vm.pinkSlip.model}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_body_small"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_pink_slip_registration_year"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_small"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toBottomOf="@id/tl_pink_slip_registration_model"
+            app:layout_constraintEnd_toEndOf="@id/gl_pink_slip_registration_end"
+            app:layout_constraintStart_toEndOf="@id/tl_pink_slip_registration_model"
+            app:layout_constraintTop_toTopOf="@id/tl_pink_slip_registration_model">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_pink_slip_registration_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="@string/pink_slip_registration_year"
+                android:maxLines="1"
+                android:text="@{String.valueOf(vm.pinkSlip.year)}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_body_small"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_pink_slip_registration_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_begin="@dimen/padding_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_pink_slip_registration_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_end="@dimen/padding_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_pink_slip_registration"
+            style="@style/Theme.UCMC.BottomButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> vm.registerPinkSlip()}"
+            android:text="@string/license_registration_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

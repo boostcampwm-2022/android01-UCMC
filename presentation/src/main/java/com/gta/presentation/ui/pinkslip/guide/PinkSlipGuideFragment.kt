@@ -1,4 +1,4 @@
-package com.gta.presentation.ui.license.guide
+package com.gta.presentation.ui.pinkslip.guide
 
 import android.os.Bundle
 import android.view.View
@@ -7,18 +7,18 @@ import com.gta.presentation.R
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.CameraGuideFragment
 
-class LicenseGuideFragment : CameraGuideFragment() {
+class PinkSlipGuideFragment : CameraGuideFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as MainActivity).supportActionBar?.title =
-            getString(R.string.license_guide_toolbar)
-        binding.tvCameraGuideTitle.setText(R.string.license_guide_title)
-        binding.ivCameraGuideSample.setImageResource(R.drawable.img_driving_license)
+            getString(R.string.pink_slip_guide_toolbar)
+        binding.tvCameraGuideTitle.setText(R.string.pink_slip_guide_title)
+        binding.ivCameraGuideSample.setImageResource(R.drawable.img_pink_slip)
     }
 
     override fun navigate(uri: String) {
-        val direction = LicenseGuideFragmentDirections
-            .actionLicenseGuideFragmentToLicenseRegistrationFragment(uri)
+        val direction = PinkSlipGuideFragmentDirections
+            .actionPinkSlipGuideFragmentToPinkSlipRegistrationFragment(uri)
         findNavController().navigate(direction)
     }
 }

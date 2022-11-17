@@ -10,7 +10,7 @@ class LoginDataSource @Inject constructor(
     databaseReference: DatabaseReference
 ) {
 
-    private val userDatabaseReference: DatabaseReference = databaseReference.child("user")
+    private val userDatabaseReference: DatabaseReference = databaseReference.child("users")
 
     fun getUser(uid: String): Task<DataSnapshot> = userDatabaseReference.child(uid).get()
 

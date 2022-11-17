@@ -39,6 +39,22 @@
             android:name="uri"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/pinkSlipGuideFragment"
+        android:name="com.gta.presentation.ui.pinkslip.guide.PinkSlipGuideFragment"
+        android:label="PinkSlipGuideFragment" >
+        <action
+            android:id="@+id/action_pinkSlipGuideFragment_to_pinkSlipRegistrationFragment"
+            app:destination="@id/pinkSlipRegistrationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pinkSlipRegistrationFragment"
+        android:name="com.gta.presentation.ui.pinkslip.registration.PinkSlipRegistrationFragment"
+        android:label="PinkSlipRegistrationFragment" >
+        <argument
+            android:name="uri"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/reservationFragment"
