@@ -8,6 +8,7 @@ import com.gta.domain.usecase.login.CheckCurrentUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -36,9 +37,7 @@ class LoginViewModel @Inject constructor(
     fun checkCurrentUser() {
         val uid = auth.currentUser?.uid ?: return
         viewModelScope.launch {
-            useCase(uid).collect { state ->
-                _loginEvent.emit(state)
-            }
+            _loginEvent.emit(useCase(uid).first())
         }
     }
 }

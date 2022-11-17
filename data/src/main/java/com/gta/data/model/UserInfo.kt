@@ -1,5 +1,7 @@
 package com.gta.data.model
 
+import com.gta.domain.model.DrivingLicense
+
 data class UserInfo(
     val chatId: Long,
     val nickname: String = "이동훈",

@@ -19,6 +19,7 @@
         <!-- Customize your theme here. -->
         <item name="toolbarStyle">@style/Theme.UCMC.Toolbar</item>
         <item name="chipStyle">@style/Theme.UCMC.ChipStyle</item>
+        <item name="radioButtonStyle">@style/Theme.UCMC.RadioButton</item>
     </style>
 </resources>
 
