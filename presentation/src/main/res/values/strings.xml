@@ -56,4 +56,12 @@
 
     <string name="pink_slip_guide_toolbar">자동차 등록</string>
     <string name="pink_slip_guide_title">자동차 등록증을 등록해주세요</string>
+
+    <string name="pink_slip_registration_toolbar">운전면허 확인</string>
+    <string name="pink_slip_registration_id">자동차 등록번호</string>
+    <string name="pink_slip_registration_owner">소유주</string>
+    <string name="pink_slip_registration_information_number">차대번호</string>
+    <string name="pink_slip_registration_type">차종</string>
+    <string name="pink_slip_registration_model">모델명</string>
+    <string name="pink_slip_registration_year">모델연도</string>
 </resources>
