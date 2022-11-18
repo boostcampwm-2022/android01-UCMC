@@ -9,7 +9,11 @@
         android:id="@+id/mapFragment"
         android:name="com.gta.presentation.ui.map.MapFragment"
         android:label="@string/my_near"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map">
+        <action
+            android:id="@+id/action_mapFragment_to_carDetailFragment"
+            app:destination="@id/carDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/chattingFragment"
@@ -22,6 +26,15 @@
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
         android:label="@string/my_page"
         tools:layout="@layout/fragment_mypage" />
+    <fragment
+        android:id="@+id/carDetailFragment"
+        android:name="com.gta.presentation.ui.cardetail.CarDetailFragment"
+        android:label="fragment_car_detail"
+        tools:layout="@layout/fragment_car_detail" >
+        <argument
+            android:name="CAR_ID"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/licenseGuideFragment"

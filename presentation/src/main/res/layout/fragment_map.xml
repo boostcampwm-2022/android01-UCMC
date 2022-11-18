@@ -4,73 +4,124 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.map.MapFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/Theme.UCMC"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/et_search"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/tb_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/Theme.UCMC"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/et_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAutofill="no"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:padding="@dimen/padding_small"
+                    android:layout_marginEnd="@dimen/padding_medium"
+                    android:hint="@string/search_hint"
+                    android:inputType="text"
+                    android:background="@drawable/edittext_style"
+                    android:drawableStart="@drawable/ic_search"
+                    android:drawableTint="?attr/colorOnSurface" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <com.naver.maps.map.MapView
+                android:id="@+id/map_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:importantForAutofill="no"
-                android:textColor="?attr/colorOnPrimary"
-                android:padding="@dimen/padding_small"
-                android:layout_marginEnd="@dimen/padding_medium"
-                android:hint="@string/search_hint"
-                android:inputType="text"
-                android:background="@drawable/edittext_style"
-                android:drawableStart="@drawable/ic_search"
-                android:drawableTint="?attr/colorOnSurface" />
+                app:navermap_latitude="37.3588798"
+                app:navermap_longitude="127.1051933"/>
 
-        </com.google.android.material.appbar.MaterialToolbar>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <com.naver.maps.map.MapView
-            android:id="@+id/map_view"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_type"
+                    android:text="@string/filter_car_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_day"
+                    android:text="@string/filter_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/padding_small"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_cost"
+                    android:text="@string/filter_cost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:navermap_latitude="37.3588798"
-            app:navermap_longitude="127.1051933"/>
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            android:background="@color/neutral99"
+            android:padding="@dimen/padding_large"
+            app:behavior_hideable="true"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_type"
-                android:text="@string/filter_car_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Theme.UCMC.ChipStyle"/>
+                <ImageView
+                    android:id="@+id/iv_car"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_bottom_nav_car"
+                    app:tint="@color/primaryColor"
+                    app:layout_constraintDimensionRatio="H,1:1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_day"
-                android:text="@string/filter_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/padding_small"
-                style="@style/Theme.UCMC.ChipStyle"/>
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="주영이 포르쉐"
+                    android:textSize="@dimen/font_title_large"
+                    android:textStyle="bold"
+                    android:layout_marginStart="@dimen/padding_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/tv_price"
+                    app:layout_constraintVertical_chainStyle="spread"
+                    app:layout_constraintStart_toEndOf="@id/iv_car"/>
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_cost"
-                android:text="@string/filter_cost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Theme.UCMC.ChipStyle"/>
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "금액 : 1000원"
+                    android:textSize="@dimen/font_body_large"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"/>
+                <!-- android:text="@{@string/car_detail_day_price(vm.car.price)}" -->
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.chip.ChipGroup>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
