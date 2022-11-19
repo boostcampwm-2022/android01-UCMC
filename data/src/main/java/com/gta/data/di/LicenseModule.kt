@@ -1,6 +1,6 @@
 package com.gta.data.di
 
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.repository.LicenseRepositoryImpl
 import com.gta.data.source.LicenseDataSource
 import com.gta.domain.repository.LicenseRepository
@@ -15,8 +15,8 @@ import javax.inject.Singleton
 object LicenseModule {
     @Singleton
     @Provides
-    fun provideLicenseDataSource(databaseReference: DatabaseReference): LicenseDataSource =
-        LicenseDataSource(databaseReference)
+    fun provideLicenseDataSource(fireStore: FirebaseFirestore): LicenseDataSource =
+        LicenseDataSource(fireStore)
 
     @Singleton
     @Provides
