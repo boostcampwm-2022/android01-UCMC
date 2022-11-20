@@ -2,6 +2,8 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 
 object Dependencies {
     object Versions {
+        const val ANDROID = "7.3.0"
+
         // AndrdoidX
         const val APP_COMPAT = "1.5.1"
         const val MATERIAL = "1.7.0"
@@ -9,11 +11,12 @@ object Dependencies {
         const val STARTUP = "1.2.0-alpha01"
 
         // KTX
-        const val KOTLIN = "1.4.30"
+        const val KOTLIN = "1.7.10"
         const val CORE = "1.9.0"
         const val COROUTINE = "1.6.4"
 
         // Google Play Service
+        const val PLAY_SERVICES = "4.3.14"
         const val PLAY_SERVICES_AUTH = "20.3.0"
         const val PLAY_SERVICES_LOCATION = "20.0.0"
 
@@ -35,11 +38,21 @@ object Dependencies {
 
         // Firebase
         const val FIREBASE = "31.1.0"
+        const val CRASHLYTICS = "2.9.2"
 
         // Test
         const val JUNIT = "4.13.2"
         const val JUNIT_EXT = "1.1.4"
         const val ESPRESSO_CORE = "3.5.0"
+    }
+
+    object Classpaths {
+        const val GOOGLE_SERVICES = "com.google.gms:google-services:${Versions.PLAY_SERVICES}"
+        const val NAVIGATION =
+            "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.NAVIGATION}"
+        const val HILT = "com.google.dagger:hilt-android-gradle-plugin:${Versions.HILT}"
+        const val CRASHLYTICS =
+            "com.google.firebase:firebase-crashlytics-gradle:${Versions.CRASHLYTICS}"
     }
 
     object Libraries {
@@ -238,5 +251,11 @@ fun DependencyHandler.androidTestImplementation(list: List<String>) {
 fun DependencyHandler.testImplementation(list: List<String>) {
     list.forEach { dependency ->
         add("testImplementation", dependency)
+    }
+}
+
+fun DependencyHandler.classpath(list: List<String>) {
+    list.forEach { dependency ->
+        add("classpath", dependency)
     }
 }
