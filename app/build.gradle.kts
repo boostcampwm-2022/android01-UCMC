@@ -43,12 +43,12 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
 
     // Timber
-    implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation "com.jakewharton.timber:timber:5.0.1"
     implementation "androidx.startup:startup-runtime:1.2.0-alpha01"
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:$hiltVersion"
-    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
 
     implementation project(":data")
     implementation project(":domain")
