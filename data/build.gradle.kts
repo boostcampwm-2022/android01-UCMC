@@ -1,25 +1,23 @@
 import com.gta.buildsrc.Configuration
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     kotlin("android")
+    id("com.google.gms.google-services")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
-    id("com.google.firebase.crashlytics")
 }
 
 android {
-    namespace = "com.gta.ucmc"
+    namespace = "com.gta.data"
     compileSdk = Configuration.compileSdk
 
     defaultConfig {
-        applicationId = "com.gta.ucmc"
         minSdk = Configuration.minSdk
         targetSdk = Configuration.targetSdk
-        versionCode = Configuration.versionCode
-        versionName = Configuration.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -33,7 +31,6 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -44,10 +41,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":data"))
     implementation(project(":domain"))
-    implementation(project(":presentation"))
 
-    implementation(Dependencies.Libraries.appLibraries)
-    kapt(Dependencies.Libraries.appKaptLibraries)
+    implementation(platform(Dependencies.Libraries.Firebase.PLATFORM))
+
+    implementation(Dependencies.Libraries.dataLibraries)
+    kapt(Dependencies.Libraries.dataKaptLibraries)
+
+    testImplementation(Dependencies.Libraries.Test.JUNIT)
 }

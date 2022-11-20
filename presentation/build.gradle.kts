@@ -1,25 +1,24 @@
 import com.gta.buildsrc.Configuration
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
-    id("com.google.firebase.crashlytics")
+    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "com.gta.ucmc"
+    namespace = "com.gta.presentation"
     compileSdk = Configuration.compileSdk
 
     defaultConfig {
-        applicationId = "com.gta.ucmc"
         minSdk = Configuration.minSdk
         targetSdk = Configuration.targetSdk
-        versionCode = Configuration.versionCode
-        versionName = Configuration.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -33,7 +32,6 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -41,13 +39,20 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
 }
 
 dependencies {
-    implementation(project(":data"))
     implementation(project(":domain"))
-    implementation(project(":presentation"))
 
-    implementation(Dependencies.Libraries.appLibraries)
-    kapt(Dependencies.Libraries.appKaptLibraries)
+    implementation(platform(Dependencies.Libraries.Firebase.PLATFORM))
+
+    implementation(Dependencies.Libraries.presentationLibraries)
+    kapt(Dependencies.Libraries.presentationKaptLibraries)
+
+    androidTestImplementation(Dependencies.Libraries.Test.EXT)
+    androidTestImplementation(Dependencies.Libraries.AndroidTest.ESPRESSO_CORE)
 }
