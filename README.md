@@ -14,3 +14,5 @@
 
 ## 📚 프로젝트 위키
 [바로가기](https://www.github.com/boostcampwm-2022/android01-UCMC/wiki)
+
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fboostcampwm-2022%2Fandroid01-UCMC&count_bg=%236A94FF&title_bg=%232E2E2E&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
