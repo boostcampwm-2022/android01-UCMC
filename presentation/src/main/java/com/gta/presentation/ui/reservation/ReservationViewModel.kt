@@ -8,9 +8,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.AvailableDate
-import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
-import com.gta.domain.usecase.GetCarRentInfoUseCase
+import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.presentation.R
 import com.gta.presentation.model.InsuranceLevel
 import com.gta.presentation.util.DateUtil
@@ -18,7 +17,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

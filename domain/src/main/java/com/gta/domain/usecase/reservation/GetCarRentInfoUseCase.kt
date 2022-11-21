@@ -1,4 +1,4 @@
-package com.gta.domain.usecase
+package com.gta.domain.usecase.reservation
 
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.repository.CarRepository
