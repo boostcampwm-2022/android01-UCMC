@@ -49,6 +49,8 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // TODO 신고하기 연결
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.carList.collectLatest {
