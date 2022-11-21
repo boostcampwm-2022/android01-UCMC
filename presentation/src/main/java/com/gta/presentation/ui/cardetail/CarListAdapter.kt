@@ -22,7 +22,6 @@ class CarListAdapter : ListAdapter<SimpleCar, CarListAdapter.CarViewHolder>(CarL
         itemClickListener = onItemClickListener
     }
 
-
     class CarViewHolder(
         private val binding: ItemOwnerCarBinding,
         itemClickListener: OnItemClickListener?
@@ -35,6 +34,7 @@ class CarListAdapter : ListAdapter<SimpleCar, CarListAdapter.CarViewHolder>(CarL
                 }
             }
         }
+
         fun bind(item: SimpleCar) {
             with(binding) {
                 this.item = item
