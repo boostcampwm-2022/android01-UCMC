@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.mypage.MyPageFragment">
 
+    <data>
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.mypage.MyPageViewModel" />
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -53,7 +59,7 @@
                 android:layout_marginTop="@dimen/padding_large"
                 android:layout_marginEnd="@dimen/padding_medium"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_driving_license"
+                app:image_uri="@{vm.userProfile.image}"
                 app:layout_constraintEnd_toStartOf="@+id/gl_mypage_end"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
@@ -75,37 +81,27 @@
                 android:id="@+id/tv_mypage_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{@string/mypage_nickname(vm.userProfile.name)}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
-                android:text="이동훈 님"
-                app:layout_constraintBottom_toTopOf="@+id/tv_mypage_email"
+                app:layout_constraintBottom_toTopOf="@id/tv_mypage_temperature"
                 app:layout_constraintEnd_toStartOf="@+id/iv_mypage_thumb"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
                 app:layout_constraintTop_toTopOf="@+id/iv_mypage_thumb"
-                tools:text="이동훈 님"/>
-
-            <TextView
-                android:id="@+id/tv_mypage_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/font_title_small"
-                android:text="qnfpdlr124@gmail.com"
-                app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
-                app:layout_constraintTop_toBottomOf="@+id/tv_mypage_nickname"
-                tools:text="qnfpdlr124@gmail.com"/>
+                tools:text="이동훈 님" />
 
             <TextView
                 android:id="@+id/tv_mypage_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="매너 온도"
+                android:text="@{String.valueOf(vm.userProfile.temp)}"
                 android:textSize="@dimen/font_title_small"
+                app:layout_constraintTop_toBottomOf="@id/tv_mypage_nickname"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_mypage_thumb"
                 app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
-                app:layout_constraintTop_toBottomOf="@+id/tv_mypage_email"
-                app:layout_constraintVertical_bias="1.0" />
+                tools:text="양심 36.5도"/>
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/div_mypage_level1"
