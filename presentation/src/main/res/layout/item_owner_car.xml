@@ -4,42 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="item"
             type="com.gta.domain.model.SimpleCar" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/padding_medium">
+        android:layout_margin="@dimen/padding_small"
+        app:cardCornerRadius="@dimen/padding_medium">
 
-        <ImageView
-            android:id="@+id/iv_thumbnail"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_small"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textSize="@dimen/font_title_medium"
-            android:textStyle="bold"
-            android:text="@{item.title}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_thumbnail"
-            tools:text="[말티즈] 멍멍 나들이 하세요" />
+            android:layout_marginEnd="@dimen/padding_medium"
+            android:padding="@dimen/padding_medium">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_thumbnail"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_logo"
+                app:image_uri="@{item.image}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Percent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_medium"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="@dimen/font_title_medium"
+                android:textStyle="bold"
+                app:car_title="@{item.model}"
+                app:car_type="@{item.carType}"
+                app:layout_constraintBottom_toTopOf="@+id/tv_price"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_thumbnail"
+                app:layout_constraintTop_toTopOf="@+id/iv_thumbnail"
+                tools:text="[말티즈] 멍멍 나들이 하세요" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{@string/car_detail_day_price(item.price)}"
+                android:textSize="@dimen/font_body_medium"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_thumbnail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                tools:text="하루당 10000원" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 
 </layout>
