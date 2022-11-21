@@ -7,7 +7,7 @@ import com.gta.domain.model.Coordinate
 import com.gta.domain.model.PinkSlip
 
 data class Car(
-    val pinkSlip: PinkSlip,
+    val pinkSlip: PinkSlip = PinkSlip(),
     val images: List<String> = emptyList(),
     val price: Int = 10000,
     val location: String = "동훈이 집",
