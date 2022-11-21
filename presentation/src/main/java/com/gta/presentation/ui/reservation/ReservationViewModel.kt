@@ -7,22 +7,31 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.CarRentInfo
+import com.gta.domain.model.Reservation
+import com.gta.domain.usecase.reservation.CreateReservationUseCase
 import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.presentation.R
 import com.gta.presentation.model.InsuranceLevel
 import com.gta.presentation.util.DateUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ReservationViewModel @Inject constructor(
-    args: SavedStateHandle,
-    getCarRentInfoUseCase: GetCarRentInfoUseCase
+    private val args: SavedStateHandle,
+    getCarRentInfoUseCase: GetCarRentInfoUseCase,
+    private val createReservationUseCase: CreateReservationUseCase,
+    private val auth: FirebaseAuth
 ) : ViewModel() {
     private val _reservationDate = MutableLiveData<AvailableDate>()
     val reservationDate: LiveData<AvailableDate> = _reservationDate
@@ -39,6 +48,9 @@ class ReservationViewModel @Inject constructor(
             initialValue = null
         )
     }
+
+    private val _createReservationEvent = MutableSharedFlow<Boolean>()
+    val createReservationEvent: SharedFlow<Boolean> get() = _createReservationEvent
 
     val basePrice: LiveData<Int> = Transformations.map(_reservationDate) {
         val carPrice = car?.value?.price ?: 0
@@ -74,5 +86,17 @@ class ReservationViewModel @Inject constructor(
 
     fun setReservationDate(selected: AvailableDate) {
         _reservationDate.value = selected
+    }
+
+    fun createReservation() {
+        val userId = auth.currentUser?.uid ?: return
+        val date = reservationDate.value ?: return
+        val price = totalPrice.value ?: return
+
+        args.get<String>("carId")?.let {
+            viewModelScope.launch {
+                _createReservationEvent.emit(createReservationUseCase(Reservation(carId = it, userId = userId, reservationDate = date, price = price)).first())
+            }
+        }
     }
 }

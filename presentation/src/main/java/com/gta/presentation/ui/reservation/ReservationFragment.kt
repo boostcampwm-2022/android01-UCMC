@@ -1,7 +1,6 @@
 package com.gta.presentation.ui.reservation
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,25 +8,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.gta.domain.model.AvailableDate
-import com.gta.domain.model.CarRentInfo
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
-import com.gta.presentation.model.carDetail.CarInfo
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateValidator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
-import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class ReservationFragment : BaseFragment<FragmentReservationBinding>(R.layout.fragment_reservation) {
+class ReservationFragment :
+    BaseFragment<FragmentReservationBinding>(R.layout.fragment_reservation) {
     private val viewModel: ReservationViewModel by viewModels()
 
     override fun onCreateView(
@@ -48,6 +42,16 @@ class ReservationFragment : BaseFragment<FragmentReservationBinding>(R.layout.fr
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.car?.collectLatest { car ->
                     car?.let { setupDatePicker(it.availableDate) }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.createReservationEvent.collectLatest { state ->
+                    if (state) {
+                        // 결제하기
+                    }
                 }
             }
         }
