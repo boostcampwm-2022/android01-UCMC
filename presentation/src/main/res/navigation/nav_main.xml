@@ -26,6 +26,21 @@
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
         android:label="@string/my_page"
         tools:layout="@layout/fragment_mypage" />
+
+    <fragment
+        android:id="@+id/myPageCarListFragment"
+        android:name="com.gta.presentation.ui.mypage.mycars.MyCarsFragment"
+        android:label="@string/mypage_carlist"
+        tools:layout="@layout/fragment_my_cars">
+        <action
+            android:id="@+id/action_myPageCarListFragment_to_pinkSlipGuideFragment"
+            app:destination="@id/pinkSlipGuideFragment"/>
+        <action
+            android:id="@+id/action_myPageCarListFragment_to_carDetailFragment"
+            app:destination="@id/carDetailFragment"/>
+    </fragment>
+
+
     <fragment
         android:id="@+id/carDetailFragment"
         android:name="com.gta.presentation.ui.cardetail.CarDetailFragment"
@@ -58,7 +73,8 @@
     <fragment
         android:id="@+id/pinkSlipGuideFragment"
         android:name="com.gta.presentation.ui.pinkslip.guide.PinkSlipGuideFragment"
-        android:label="PinkSlipGuideFragment">
+        android:label="PinkSlipGuideFragment"
+        tools:layout="@layout/fragment_camera_guide">
         <action
             android:id="@+id/action_pinkSlipGuideFragment_to_pinkSlipRegistrationFragment"
             app:destination="@id/pinkSlipRegistrationFragment" />
@@ -66,7 +82,8 @@
     <fragment
         android:id="@+id/pinkSlipRegistrationFragment"
         android:name="com.gta.presentation.ui.pinkslip.registration.PinkSlipRegistrationFragment"
-        android:label="PinkSlipRegistrationFragment">
+        android:label="PinkSlipRegistrationFragment"
+        tools:layout="@layout/fragment_pink_slip_registration">
         <argument
             android:name="uri"
             app:argType="string" />
