@@ -37,7 +37,7 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
                     override fun onClick(id: String) {
                         findNavController().navigate(
                             OwnerProfileFragmentDirections
-                                .actionOwnerProfileFragment2ToCarDetailFragment(id)
+                                .actionOwnerProfileFragmentToCarDetailFragment(id)
                         )
                     }
                 }

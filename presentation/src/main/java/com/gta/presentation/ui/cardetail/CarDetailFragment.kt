@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -34,6 +35,15 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.cvOwner.setOnClickListener {
+            findNavController().navigate(
+                CarDetailFragmentDirections
+                    .actionCarDetailFragmentToOwnerProfileFragment(
+                        viewModel.owner.value.id
+                    )
+            )
+        }
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
