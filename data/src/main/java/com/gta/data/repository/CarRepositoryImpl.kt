@@ -50,9 +50,7 @@ class CarRepositoryImpl @Inject constructor(private val carDataSource: CarDataSo
             snapshot?.toObject(Car::class.java)?.let {
                 trySend(it)
             }
-        }.addOnFailureListener {
-
-        }
+        }.addOnFailureListener {}
         awaitClose()
     }
 }

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
-class ReservationRepositoryImpl @Inject constructor(private val reservationDataSource: ReservationDataSource): ReservationRepository {
+class ReservationRepositoryImpl @Inject constructor(private val reservationDataSource: ReservationDataSource) : ReservationRepository {
     override fun createReservation(reservation: Reservation): Flow<Boolean> = callbackFlow {
         reservationDataSource.createReservation(reservation).addOnCompleteListener {
             trySend(it.isSuccessful)

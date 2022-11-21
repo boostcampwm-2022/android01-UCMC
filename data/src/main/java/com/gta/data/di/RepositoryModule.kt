@@ -5,7 +5,6 @@ import com.gta.data.repository.UserRepositoryImpl
 import com.gta.data.source.CarDataSource
 import com.gta.domain.repository.CarRepository
 import com.gta.domain.repository.UserRepository
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
