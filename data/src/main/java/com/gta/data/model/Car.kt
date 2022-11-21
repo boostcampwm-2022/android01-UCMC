@@ -1,4 +1,9 @@
-package com.gta.domain.model
+package com.gta.data.model
+
+import com.gta.domain.model.AvailableDate
+import com.gta.domain.model.CarState
+import com.gta.domain.model.Coordinate
+import com.gta.domain.model.PinkSlip
 
 data class Car(
     val pinkSlip: PinkSlip,
