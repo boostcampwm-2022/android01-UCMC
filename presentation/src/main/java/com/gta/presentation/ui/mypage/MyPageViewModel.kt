@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.UserProfile
+import com.gta.domain.usecase.mypage.DeleteThumbnailUseCase
 import com.gta.domain.usecase.mypage.SetThumbnailUseCase
 import com.gta.domain.usecase.user.GetUserProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     auth: FirebaseAuth,
     private val getUserProfileUseCase: GetUserProfileUseCase,
-    private val setThumbnailUseCase: SetThumbnailUseCase
+    private val setThumbnailUseCase: SetThumbnailUseCase,
+    private val deleteThumbnailUseCase: DeleteThumbnailUseCase
 ) : ViewModel() {
 
     private val _userProfile = MutableStateFlow<UserProfile?>(null)
@@ -36,7 +38,11 @@ class MyPageViewModel @Inject constructor(
 
     fun changeThumbnail(uri: String?) {
         uri ?: return
+        val previousImage = userProfile.value?.image
         viewModelScope.launch {
+            if (previousImage != null) {
+                deleteThumbnailUseCase(previousImage).first()
+            }
             _userProfile.emit(userProfile.value?.copy(image = uri))
         }
     }

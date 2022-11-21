@@ -26,4 +26,11 @@ class MyPageRepositoryImpl @Inject constructor(
         }
         awaitClose()
     }
+
+    override fun deleteThumbnail(path: String): Flow<Boolean> = callbackFlow {
+        storageDataSource.deleteThumbnail(path).addOnCompleteListener {
+            trySend(it.isSuccessful)
+        }
+        awaitClose()
+    }
 }

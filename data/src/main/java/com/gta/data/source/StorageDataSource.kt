@@ -18,4 +18,7 @@ class StorageDataSource @Inject constructor(
             ref.downloadUrl
         }
     }
+
+    fun deleteThumbnail(path: String): Task<Void> =
+        storageReference.storage.getReferenceFromUrl(path).delete()
 }
