@@ -9,6 +9,6 @@ data class UserInfo(
     val temperature: Float = 36.5f,
     val license: DrivingLicense? = null,
     val rentedCar: Long? = null,
-    val myCars: List<Long> = emptyList(),
+    val myCars: List<String> = emptyList(),
     val transactionHistory: List<Long> = emptyList()
 )

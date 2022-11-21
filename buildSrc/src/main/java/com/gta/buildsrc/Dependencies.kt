@@ -95,11 +95,12 @@ object Dependencies {
             const val DATABASE = "com.google.firebase:firebase-database"
             const val STORAGE = "com.google.firebase:firebase-storage-ktx"
             const val MESSAGING = "com.google.firebase:firebase-messaging-ktx"
+            const val FIRESTORE = "com.google.firebase:firebase-firestore-ktx"
             const val GOOGLE_SIGNIN_BUTTON =
                 "com.shobhitpuri.custombuttons:google-signin:${Versions.GOOGLE_SIGNIN_BUTTON}"
 
             fun getDataAll(): ArrayList<String> {
-                return arrayListOf(ANALYTICS, CRASHLYTICS, DATABASE, STORAGE, MESSAGING)
+                return arrayListOf(ANALYTICS, CRASHLYTICS, DATABASE, STORAGE, MESSAGING, FIRESTORE)
             }
 
             fun getPresentationAll(): ArrayList<String> {

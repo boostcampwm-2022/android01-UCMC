@@ -1,8 +1,9 @@
 package com.gta.data.di
 
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.repository.PinkSlipRepositoryImpl
 import com.gta.data.source.PinkSlipDataSource
+import com.gta.data.source.UserDataSource
 import com.gta.domain.repository.PinkSlipRepository
 import dagger.Module
 import dagger.Provides
@@ -15,11 +16,13 @@ import javax.inject.Singleton
 object PinkSlipModule {
     @Singleton
     @Provides
-    fun providePinkSlipRepository(dataSource: PinkSlipDataSource): PinkSlipRepository =
-        PinkSlipRepositoryImpl(dataSource)
+    fun providePinkSlipRepository(
+        userDataSource: UserDataSource,
+        pinkSlipDataSource: PinkSlipDataSource
+    ): PinkSlipRepository = PinkSlipRepositoryImpl(userDataSource, pinkSlipDataSource)
 
     @Singleton
     @Provides
-    fun providePinkSlipDataSource(databaseReference: DatabaseReference): PinkSlipDataSource =
-        PinkSlipDataSource(databaseReference)
+    fun providePinkSlipDataSource(fireStore: FirebaseFirestore): PinkSlipDataSource =
+        PinkSlipDataSource(fireStore)
 }
