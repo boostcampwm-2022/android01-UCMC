@@ -39,7 +39,7 @@ class CarRepositoryImpl @Inject constructor(
                 183000,
                 "깨끗이 써주세요. 찾아 갑니다.",
                 emptyList(),
-                UserProfile("(test)OwnerId", "(test)선구자", 25F, null)
+                UserProfile("9HQr7zD1L2eqQtdbCbM2W8hKPgo1", "(test)선구자", 25F, null)
             )
         )
     }
@@ -58,7 +58,12 @@ class CarRepositoryImpl @Inject constructor(
                         }
                     }
                 }
+                if (cars.isEmpty()) {
+                    trySend(emptyList())
+                }
             }
+        }.addOnFailureListener {
+            trySend(emptyList())
         }
         awaitClose()
     }
