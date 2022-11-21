@@ -24,9 +24,12 @@ class UserRepositoryImpl @Inject constructor(
                 trySend(
                     it.toObject(UserInfo::class.java)?.toProfile(it.id) ?: UserProfile()
                 )
+            } else {
+                trySend(UserProfile())
             }
         }.addOnFailureListener {
             Timber.d("실패")
+            trySend(UserProfile())
         }
         awaitClose()
     }
