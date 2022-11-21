@@ -6,8 +6,10 @@ package com.gta.domain.model
     추후 논의
  */
 data class CarRentInfo(
-    val image: String,
+    val images: List<String>,
+    val model: String,
     val price: Int = 10000,
     val comment: String = "차였어요",
-    val availableDate: AvailableDate = AvailableDate()
+    val availableDate: AvailableDate = AvailableDate(),
+    val reservations: List<String> = emptyList()
 )

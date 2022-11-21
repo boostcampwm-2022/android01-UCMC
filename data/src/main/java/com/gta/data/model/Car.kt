@@ -16,14 +16,16 @@ data class Car(
     val comment: String = "차였어요",
     val availableDate: AvailableDate = AvailableDate(),
     val reservations: List<String> = emptyList(),
-    val ownerId: String
+    val ownerId: String = ""
 ) {
     fun toCarRentInfo(): CarRentInfo {
         return CarRentInfo(
-            image = images[0],
+            images = images,
+            model = pinkSlip.model,
             price = price,
             comment = comment,
-            availableDate = availableDate
+            availableDate = availableDate,
+            reservations = reservations
         )
     }
 }
