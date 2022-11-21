@@ -1,7 +1,10 @@
 package com.gta.domain.model
 
 data class SimpleCar(
-    val id: String,
-    val title: String,
-    val image: String
+    val id: String = "정보 없음",
+    val image: String = "",
+    val carType: String = "정보 없음",
+    val model: String = "정보 없음",
+    val price: Int = 0,
+    val coordinate: Coordinate = Coordinate()
 )
