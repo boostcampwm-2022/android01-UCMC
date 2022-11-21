@@ -24,8 +24,7 @@ class OwnerProfileViewModel @Inject constructor(
     val carList: StateFlow<List<SimpleCar>>
 
     init {
-        // TODO : Safe Args 연결
-        val ownerId = args.get<String>("OWNER_ID") ?: "debug"
+        val ownerId = args.get<String>("OWNER_ID") ?: "정보없음"
 
         owner = getOwnerInfoUseCase(ownerId).stateIn(
             scope = viewModelScope,
