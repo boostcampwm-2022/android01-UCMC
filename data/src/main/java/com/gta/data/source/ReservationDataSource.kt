@@ -6,10 +6,10 @@ import com.gta.domain.model.Reservation
 import javax.inject.Inject
 
 class ReservationDataSource @Inject constructor(private val fireStore: FirebaseFirestore) {
-    fun createReservation(reservation: Reservation): Task<Void> {
+    fun createReservation(reservation: Reservation, reservationId: String): Task<Void> {
         return fireStore
             .collection("reservations")
-            .document(System.currentTimeMillis().toString())
+            .document(reservationId)
             .set(reservation)
     }
 }

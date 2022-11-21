@@ -10,4 +10,7 @@ class CarDataSource @Inject constructor(
 ) {
     fun getCar(uid: String): Task<DocumentSnapshot> =
         fireStore.collection("cars").document(uid).get()
+
+    fun updateCarReservations(uid: String, reservations: List<Any?>): Task<Void> =
+        fireStore.collection("cars").document(uid).update("reservations", reservations)
 }
