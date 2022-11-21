@@ -2,7 +2,7 @@ name: ucmc CI
 
 on:
   push:
-    branches: [ develop, sandbox ]
+    branches: [ release ]
 
 jobs:
   build:

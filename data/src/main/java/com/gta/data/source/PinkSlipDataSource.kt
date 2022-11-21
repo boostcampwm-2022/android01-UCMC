@@ -1,15 +1,14 @@
 package com.gta.data.source
 
 import com.google.android.gms.tasks.Task
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.domain.model.Car
 import com.gta.domain.model.PinkSlip
 import javax.inject.Inject
 import kotlin.random.Random
 
 class PinkSlipDataSource @Inject constructor(
-    private val databaseReference: DatabaseReference
+    private val fireStore: FirebaseFirestore
 ) {
     private val charset = "ABCDEFGHIJKLMNOPQRSTUVWXTZ0123456789"
 
@@ -42,17 +41,14 @@ class PinkSlipDataSource @Inject constructor(
         .random(Random(System.currentTimeMillis()))
         .copy(informationNumber = getRandomInformationNumber())
 
-    fun getCars(uid: String): Task<DataSnapshot> =
-        databaseReference.child("users").child(uid).child("cars").get()
-
     fun updateCars(uid: String, cars: List<Any?>): Task<Void> =
-        databaseReference.child("users").child(uid).child("cars").setValue(cars)
+        fireStore.collection("users").document(uid).update("myCars", cars)
 
     fun createCar(uid: String, pinkSlip: PinkSlip): Task<Void> =
-        databaseReference
-            .child("cars")
-            .child(pinkSlip.informationNumber)
-            .setValue(Car(ownerId = uid, pinkSlip = pinkSlip))
+        fireStore
+            .collection("cars")
+            .document(pinkSlip.informationNumber)
+            .set(Car(ownerId = uid, pinkSlip = pinkSlip))
 
     companion object {
         private const val INFORMATION_NUMBER_LENGTH = 17
