@@ -23,6 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReservationViewModel @Inject constructor(
+    args: SavedStateHandle,
     getCarRentInfoUseCase: GetCarRentInfoUseCase
 ) : ViewModel() {
     private val _reservationDate = MutableLiveData<AvailableDate>()
@@ -33,8 +34,17 @@ class ReservationViewModel @Inject constructor(
     private val _totalPrice = MediatorLiveData<Int>()
     val totalPrice: LiveData<Int> = _totalPrice
 
+    val car: StateFlow<CarRentInfo?>? = args.get<String>("carId")?.let { carId ->
+        getCarRentInfoUseCase(carId).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
+    }
+
     val basePrice: LiveData<Int> = Transformations.map(_reservationDate) {
-        DateUtil.getDateCount(it.start, it.end) * carInfo.price
+        val carPrice = car?.value?.price ?: 0
+        DateUtil.getDateCount(it.start, it.end) * carPrice
     }
 
     init {

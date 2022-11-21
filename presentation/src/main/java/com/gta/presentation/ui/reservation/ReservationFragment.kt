@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -17,15 +20,14 @@ import com.gta.presentation.model.carDetail.CarInfo
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateValidator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ReservationFragment :
-    BaseFragment<FragmentReservationBinding>(R.layout.fragment_reservation) {
-    private val args: ReservationFragmentArgs by navArgs()
-
+class ReservationFragment : BaseFragment<FragmentReservationBinding>(R.layout.fragment_reservation) {
     private val viewModel: ReservationViewModel by viewModels()
 
     override fun onCreateView(
@@ -35,20 +37,29 @@ class ReservationFragment :
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        setupDatePicker()
-
         return binding.run {
             vm = viewModel
-            carInfo = this@ReservationFragment.carInfo
             root
         }
     }
 
-    private fun setupDatePicker() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.car?.collectLatest { car ->
+                    car?.let { setupDatePicker(it.availableDate) }
+                }
+            }
+        }
+    }
+
+    private fun setupDatePicker(availableDate: AvailableDate) {
+        val (startDate, endDate) = availableDate
+
         val constraints = CalendarConstraints.Builder()
-            .setValidator(DateValidator(carInfo.reservationDate, null))
-            .setStart(carInfo.reservationDate.first)
-            .setEnd(carInfo.reservationDate.second)
+            .setValidator(DateValidator(startDate to endDate, null))
+            .setStart(startDate)
+            .setEnd(endDate)
             .build()
 
         val datePicker = MaterialDatePicker.Builder
