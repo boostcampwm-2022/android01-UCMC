@@ -22,8 +22,7 @@ class UserRepositoryImpl @Inject constructor(
         userDataSource.getUser(uid).addOnSuccessListener {
             if (it.exists()) {
                 trySend(
-                    it.toObject(UserInfo::class.java)?.toProfile(it.id)
-                        ?: UserProfile("null", "정보 없음", 0.0F, "")
+                    it.toObject(UserInfo::class.java)?.toProfile(it.id) ?: UserProfile()
                 )
             }
         }.addOnFailureListener {

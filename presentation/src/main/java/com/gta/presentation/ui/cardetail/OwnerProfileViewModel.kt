@@ -30,7 +30,7 @@ class OwnerProfileViewModel @Inject constructor(
         owner = getOwnerInfoUseCase(ownerId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = UserProfile("null", "정보 없음", 0.0F, "")
+            initialValue = UserProfile()
         )
 
         carList = getOwnerCarsUseCase(ownerId).stateIn(
