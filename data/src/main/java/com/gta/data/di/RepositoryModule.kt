@@ -2,8 +2,10 @@ package com.gta.data.di
 
 import com.gta.data.repository.CarRepositoryImpl
 import com.gta.data.repository.UserRepositoryImpl
+import com.gta.data.source.CarDataSource
 import com.gta.domain.repository.CarRepository
 import com.gta.domain.repository.UserRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +24,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideCarRepository(): CarRepository {
-        return CarRepositoryImpl()
+    fun provideCarRepository(carDataSource: CarDataSource): CarRepository {
+        return CarRepositoryImpl(carDataSource)
     }
 }
