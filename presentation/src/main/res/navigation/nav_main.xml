@@ -30,7 +30,7 @@
         android:id="@+id/carDetailFragment"
         android:name="com.gta.presentation.ui.cardetail.CarDetailFragment"
         android:label="fragment_car_detail"
-        tools:layout="@layout/fragment_car_detail" >
+        tools:layout="@layout/fragment_car_detail">
         <argument
             android:name="CAR_ID"
             app:argType="string" />
@@ -39,7 +39,7 @@
     <fragment
         android:id="@+id/licenseGuideFragment"
         android:name="com.gta.presentation.ui.license.guide.LicenseGuideFragment"
-        android:label="LicenseGuideFragment" >
+        android:label="LicenseGuideFragment">
         <action
             android:id="@+id/action_licenseGuideFragment_to_licenseRegistrationFragment"
             app:destination="@id/licenseRegistrationFragment" />
@@ -47,7 +47,7 @@
     <fragment
         android:id="@+id/licenseRegistrationFragment"
         android:name="com.gta.presentation.ui.license.registration.LicenseRegistrationFragment"
-        android:label="LicenseRegistrationFragment" >
+        android:label="LicenseRegistrationFragment">
         <argument
             android:name="uri"
             app:argType="string" />
@@ -55,7 +55,7 @@
     <fragment
         android:id="@+id/pinkSlipGuideFragment"
         android:name="com.gta.presentation.ui.pinkslip.guide.PinkSlipGuideFragment"
-        android:label="PinkSlipGuideFragment" >
+        android:label="PinkSlipGuideFragment">
         <action
             android:id="@+id/action_pinkSlipGuideFragment_to_pinkSlipRegistrationFragment"
             app:destination="@id/pinkSlipRegistrationFragment" />
@@ -63,7 +63,7 @@
     <fragment
         android:id="@+id/pinkSlipRegistrationFragment"
         android:name="com.gta.presentation.ui.pinkslip.registration.PinkSlipRegistrationFragment"
-        android:label="PinkSlipRegistrationFragment" >
+        android:label="PinkSlipRegistrationFragment">
         <argument
             android:name="uri"
             app:argType="string" />
@@ -73,10 +73,10 @@
         android:id="@+id/reservationFragment"
         android:name="com.gta.presentation.ui.reservation.ReservationFragment"
         android:label="@string/reservation"
-        tools:layout="@layout/fragment_reservation" >
+        tools:layout="@layout/fragment_reservation">
         <argument
-            android:name="carInfo"
-            app:argType="com.gta.presentation.ui.reservation.TmpCarInfo" />
+            android:name="carId"
+            app:argType="string" />
     </fragment>
 
 </navigation>

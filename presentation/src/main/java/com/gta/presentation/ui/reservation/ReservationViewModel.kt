@@ -3,18 +3,28 @@ package com.gta.presentation.ui.reservation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.AvailableDate
+import com.gta.domain.model.CarDetail
+import com.gta.domain.model.CarRentInfo
+import com.gta.domain.usecase.GetCarRentInfoUseCase
 import com.gta.presentation.R
 import com.gta.presentation.model.InsuranceLevel
 import com.gta.presentation.util.DateUtil
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReservationViewModel @AssistedInject constructor(@Assisted private val carInfo: TmpCarInfo) :
-    ViewModel() {
+@HiltViewModel
+class ReservationViewModel @Inject constructor(
+    getCarRentInfoUseCase: GetCarRentInfoUseCase
+) : ViewModel() {
     private val _reservationDate = MutableLiveData<AvailableDate>()
     val reservationDate: LiveData<AvailableDate> = _reservationDate
 
@@ -56,23 +66,5 @@ class ReservationViewModel @AssistedInject constructor(@Assisted private val car
 
     fun setReservationDate(selected: AvailableDate) {
         _reservationDate.value = selected
-    }
-
-    @dagger.assisted.AssistedFactory
-    interface AssistedFactory {
-        fun create(carInfo: TmpCarInfo): ReservationViewModel
-    }
-
-    companion object {
-        fun provideFactory(
-            assistedFactory: AssistedFactory,
-            carInfo: TmpCarInfo
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(carInfo) as T
-            }
-        }
     }
 }
