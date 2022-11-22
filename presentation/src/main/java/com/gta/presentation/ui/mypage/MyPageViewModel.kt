@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    auth: FirebaseAuth,
+    private val auth: FirebaseAuth,
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val setThumbnailUseCase: SetThumbnailUseCase,
     private val deleteThumbnailUseCase: DeleteThumbnailUseCase
@@ -59,5 +59,9 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             _thumbnailUpdateEvent.emit(setThumbnailUseCase(uid, uri).first())
         }
+    }
+
+    fun signOut() {
+        auth.signOut()
     }
 }

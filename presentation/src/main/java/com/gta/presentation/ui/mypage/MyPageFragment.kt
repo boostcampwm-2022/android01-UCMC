@@ -35,8 +35,15 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         initCollector()
+        initListener()
+    }
+
+    private fun initListener() {
         binding.ivMypageEditThumb.setOnClickListener {
             updateThumbnail()
+        }
+        binding.btnMypageSignOut.setOnClickListener {
+            viewModel.signOut()
         }
     }
 
