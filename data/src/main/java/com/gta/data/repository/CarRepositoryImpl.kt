@@ -67,19 +67,19 @@ class CarRepositoryImpl @Inject constructor(
     override fun getSimpleCarList(ownerId: String): Flow<List<SimpleCar>> = callbackFlow {
         userDataSource.getUser(ownerId).addOnSuccessListener { user ->
             if (user.exists()) {
-                val cars = mutableListOf<SimpleCar>()
-                user.toObject(UserInfo::class.java)?.myCars?.forEach { carId ->
-                    carDataSource.getCar(carId).addOnSuccessListener { car ->
-                        if (user.exists()) {
-                            cars.add(
-                                car.toObject(Car::class.java)?.toSimple(car.id) ?: SimpleCar()
-                            )
-                            trySend(cars)
+                val ownerCars = user.toObject(UserInfo::class.java)?.myCars
+                if (ownerCars == null) {
+                    trySend(listOf())
+                } else {
+                    carDataSource.getOwnerCars(ownerCars).addOnSuccessListener {
+                        it.map { car ->
+                            car.toObject(Car::class.java).toSimple(car.id)
+                        }.also { result ->
+                            trySend(result)
                         }
+                    }.addOnFailureListener {
+                        trySend(emptyList())
                     }
-                }
-                if (cars.isEmpty()) {
-                    trySend(emptyList())
                 }
             }
         }.addOnFailureListener {
@@ -97,6 +97,17 @@ class CarRepositoryImpl @Inject constructor(
             trySend(list)
         }.addOnFailureListener {
             trySend(emptyList())
+        }
+        awaitClose()
+    }
+    override fun removeCar(userId: String, carId: String): Flow<Boolean> = callbackFlow {
+        val carResult = carDataSource.removeCar(carId)
+        userDataSource.getUser(userId).addOnSuccessListener { snapshot ->
+            val myCars = snapshot.get("myCars") as List<String>
+            val newCars = myCars.filter { it != carId }
+            val userResult = userDataSource.removeCar(userId, newCars)
+
+            trySend(carResult.isSuccessful && userResult.isSuccessful)
         }
         awaitClose()
     }

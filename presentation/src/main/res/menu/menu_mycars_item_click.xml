@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/popup_detail"
+        android:title="상세화면 보기"
+        android:icon="@drawable/ic_bottom_nav_car"/>
+    <item
+        android:id="@+id/popup_delete"
+        android:title="내 차 삭제"
+        android:icon="@drawable/ic_delete"/>
+</menu>
