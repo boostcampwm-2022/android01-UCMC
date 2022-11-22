@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.whenStarted
 import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.CarState
 import com.gta.presentation.R
@@ -13,6 +17,9 @@ import com.gta.presentation.model.carDetail.PriceType
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_cars) {
@@ -45,21 +52,13 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
 
     private fun setupWithRecyclerView() {
         binding.rvCarList.adapter = adapter
-        adapter.submitList(
-            listOf(
-                CarInfo(
-                    "test",
-                    "test",
-                    CarState.AVAILABLE,
-                    "test",
-                    "test",
-                    PriceType.DAY,
-                    10000,
-                    "test",
-                    listOf("")
-                )
-            )
-        )
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userCarList.collectLatest {
+                    adapter.submitList(it)
+                }
+            }
+        }
     }
 
     private fun setupWithAdapterClickListener() {

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="data"
-            type="com.gta.presentation.model.carDetail.CarInfo" />
+            type="com.gta.domain.model.SimpleCar" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
             android:id="@+id/tv_model"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{data.title}"
+            android:text="@{data.model}"
             android:textSize="@dimen/font_title_large"
             android:textStyle="bold"
             android:layout_marginStart="@dimen/padding_medium"

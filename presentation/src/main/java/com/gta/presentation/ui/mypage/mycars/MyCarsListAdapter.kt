@@ -5,14 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.gta.domain.model.SimpleCar
 import com.gta.presentation.databinding.ItemMypageCarlistBinding
 import com.gta.presentation.model.carDetail.CarInfo
 
 class MyCarsListAdapter :
-    ListAdapter<CarInfo, MyCarsListAdapter.CarViewHolder>(diffUtil) {
+    ListAdapter<SimpleCar, MyCarsListAdapter.CarViewHolder>(diffUtil) {
     inner class CarViewHolder(private val binding: ItemMypageCarlistBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(info: CarInfo) {
+        fun bind(info: SimpleCar) {
             binding.data = info
             binding.root.setOnClickListener {
                 if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
@@ -45,17 +46,17 @@ class MyCarsListAdapter :
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<CarInfo>() {
+        val diffUtil = object : DiffUtil.ItemCallback<SimpleCar>() {
             override fun areItemsTheSame(
-                oldItem: CarInfo,
-                newItem: CarInfo
+                oldItem: SimpleCar,
+                newItem: SimpleCar
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: CarInfo,
-                newItem: CarInfo
+                oldItem: SimpleCar,
+                newItem: SimpleCar
             ): Boolean {
                 return oldItem == newItem
             }
