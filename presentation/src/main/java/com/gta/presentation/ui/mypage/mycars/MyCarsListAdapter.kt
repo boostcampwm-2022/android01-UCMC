@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gta.presentation.databinding.ItemMypageCarlistBinding
 import com.gta.presentation.model.carDetail.CarInfo
 
-class MyCarsListAdapter() :
+class MyCarsListAdapter :
     ListAdapter<CarInfo, MyCarsListAdapter.CarViewHolder>(diffUtil) {
     inner class CarViewHolder(private val binding: ItemMypageCarlistBinding) :
         RecyclerView.ViewHolder(binding.root) {

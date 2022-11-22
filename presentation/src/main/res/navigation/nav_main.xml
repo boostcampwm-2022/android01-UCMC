@@ -25,7 +25,11 @@
         android:id="@+id/myPageFragment"
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
         android:label="@string/my_page"
-        tools:layout="@layout/fragment_mypage" />
+        tools:layout="@layout/fragment_mypage" >
+        <action
+            android:id="@+id/action_myPageFragment_to_myPageCarListFragment"
+            app:destination="@id/myPageCarListFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/myPageCarListFragment"
