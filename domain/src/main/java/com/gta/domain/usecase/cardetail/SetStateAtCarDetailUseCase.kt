@@ -5,6 +5,4 @@ import javax.inject.Inject
 
 class SetStateAtCarDetailUseCase @Inject constructor(
     private val carRepository: CarRepository
-)  {
-
-}
+)
