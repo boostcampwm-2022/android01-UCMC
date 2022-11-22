@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -25,5 +26,18 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
         super.onCreateView(inflater, container, savedInstanceState)
         binding.vm = viewModel
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.cvOwner.setOnClickListener {
+            findNavController().navigate(
+                CarDetailFragmentDirections
+                    .actionCarDetailFragmentToOwnerProfileFragment(
+                        viewModel.carInfo.value.owner.id
+                    )
+            )
+        }
     }
 }
