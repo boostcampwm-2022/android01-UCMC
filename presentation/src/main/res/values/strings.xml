@@ -77,7 +77,7 @@
     <string name="mypage_btn_terms">이용 약관</string>
     <string name="mypage_btn_sign_out">로그아웃</string>
 
-    <style name="nickname_toolbar">닉네임 변경</style>
+    <string name="nickname_toolbar">닉네임 변경</string>
     <string name="nickname_input_text">닉네임</string>
     <string name="nickname_condition">한글, 영어, 숫자만 사용 가능해요 (2~10자)</string>
     <string name="nickname_error_min_length">닉네임은 2자 이상 입력해주세요</string>
