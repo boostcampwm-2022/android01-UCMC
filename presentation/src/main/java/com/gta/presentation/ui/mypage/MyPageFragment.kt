@@ -49,6 +49,9 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
         binding.btnMypageSignOut.setOnClickListener {
             viewModel.signOut()
         }
+        binding.btnMypageCar.setOnClickListener {
+            findNavController().navigate(R.id.action_myPageFragment_to_myPageCarListFragment)
+        }
     }
 
     private fun initCollector() {
