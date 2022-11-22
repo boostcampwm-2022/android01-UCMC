@@ -95,6 +95,8 @@ class CarRepositoryImpl @Inject constructor(
                 list.add(car.toObject(Car::class.java).toSimple(car.id))
             }
             trySend(list)
+        }.addOnFailureListener {
+            trySend(emptyList())
         }
         awaitClose()
     }

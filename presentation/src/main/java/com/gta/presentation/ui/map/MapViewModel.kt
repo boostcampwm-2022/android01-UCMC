@@ -24,10 +24,7 @@ class MapViewModel @Inject constructor(private val getAllCarsUseCase: GetAllCars
 
     fun getAllCars() {
         viewModelScope.launch {
-            getAllCarsUseCase().first() {
-                _cars.emit(it)
-                true
-            }
+            _cars.emit(getAllCarsUseCase().first())
         }
     }
 
