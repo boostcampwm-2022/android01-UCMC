@@ -10,6 +10,8 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.InsuranceOption
+import com.gta.domain.model.toPair
+import com.gta.domain.model.toPairList
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -31,7 +33,7 @@ class ReservationFragment :
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.car?.collectLatest { car ->
-                    car?.let { setupDatePicker(it.availableDate) }
+                    setupDatePicker(car.availableDate, car.reservationDates)
                 }
             }
         }
@@ -47,11 +49,11 @@ class ReservationFragment :
         }
     }
 
-    private fun setupDatePicker(availableDate: AvailableDate) {
+    private fun setupDatePicker(availableDate: AvailableDate, reservationDates: List<AvailableDate>) {
         val (startDate, endDate) = availableDate
 
         val constraints = CalendarConstraints.Builder()
-            .setValidator(DateValidator(startDate to endDate, null))
+            .setValidator(DateValidator(availableDate.toPair(), reservationDates.toPairList()))
             .setStart(startDate)
             .setEnd(endDate)
             .build()

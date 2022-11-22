@@ -14,11 +14,9 @@ import com.gta.domain.model.InsuranceOption
 import com.gta.domain.model.Reservation
 import com.gta.domain.usecase.reservation.CreateReservationUseCase
 import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
-import com.gta.presentation.R
 import com.gta.presentation.util.DateUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -43,7 +41,7 @@ class ReservationViewModel @Inject constructor(
     private val _totalPrice = MediatorLiveData<Int>()
     val totalPrice: LiveData<Int> = _totalPrice
 
-    val car: StateFlow<CarRentInfo?>? = args.get<String>("carId")?.let { carId ->
+    val car: StateFlow<CarRentInfo>? = args.get<String>("carId")?.let { carId ->
         getCarRentInfoUseCase(carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),

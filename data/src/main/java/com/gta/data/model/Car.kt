@@ -32,12 +32,13 @@ fun Car.toSimple(id: String): SimpleCar = SimpleCar(
     coordinate = coordinate
 )
 
-fun Car.toCarRentInfo(): CarRentInfo = CarRentInfo(
+fun Car.toCarRentInfo(reservationDates: List<AvailableDate>): CarRentInfo = CarRentInfo(
     images = images,
     model = pinkSlip.model,
     price = price,
     comment = comment,
-    availableDate = availableDate
+    availableDate = availableDate,
+    reservationDates = reservationDates
 )
 
 fun Car.toDetailCar(id: String, owner: UserProfile): CarDetail = CarDetail(
