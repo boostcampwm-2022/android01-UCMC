@@ -37,8 +37,7 @@ fun Car.toCarRentInfo(): CarRentInfo = CarRentInfo(
     model = pinkSlip.model,
     price = price,
     comment = comment,
-    availableDate = availableDate,
-    reservations = reservations
+    availableDate = availableDate
 )
 
 fun Car.toDetailCar(id: String, owner: UserProfile): CarDetail = CarDetail(
