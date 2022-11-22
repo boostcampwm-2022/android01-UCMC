@@ -6,6 +6,7 @@
     tools:context=".ui.cardetail.CarDetailFragment">
 
     <data>
+
         <variable
             name="vm"
             type="com.gta.presentation.ui.cardetail.CarDetailViewModel" />
@@ -18,8 +19,8 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/btn_next">
+            app:layout_constraintBottom_toTopOf="@+id/btn_next"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -63,6 +64,7 @@
                     android:textSize="@dimen/font_headline_medium"
                     android:textStyle="bold"
                     app:car_title="@{vm.carInfo.model}"
+                    app:car_year="@{vm.carInfo.year}"
                     app:car_type="@{vm.carInfo.carType}"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
@@ -94,6 +96,19 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_price"
                     tools:text="위치 : 무슨동 오션타운 주차장" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_licensePlate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_extra_large"
+                    android:textSize="@dimen/font_body_large"
+                    android:textStyle="bold"
+                    android:text="@{@string/car_detail_licensePlate(vm.carInfo.licensePlate)}"
+                    app:layout_constraintEnd_toEndOf="@+id/gl_end"
+                    app:layout_constraintStart_toStartOf="@+id/gl_start"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location"
+                    tools:text="번호판 : 12가2345" />
+
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_report_post"
@@ -103,7 +118,7 @@
                     android:onClick="@{() -> vm.onReportClick()}"
                     android:text="@string/report_it"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_location" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_licensePlate" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_comment_label"
