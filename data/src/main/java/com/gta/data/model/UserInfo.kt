@@ -4,7 +4,7 @@ import com.gta.domain.model.DrivingLicense
 import com.gta.domain.model.UserProfile
 
 data class UserInfo(
-    val chatId: Long = 0,
+    val chatId: Long = 0L,
     val nickname: String = "이동훈",
     val icon: String = "none",
     val temperature: Float = 36.5f,

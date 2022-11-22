@@ -19,13 +19,13 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(fireStore: FirebaseFirestore): UserRepository {
-        return UserRepositoryImpl(UserDataSource(fireStore))
+    fun provideUserRepository(dataSource: UserDataSource): UserRepository {
+        return UserRepositoryImpl(dataSource)
     }
 
     @Provides
     @Singleton
-    fun provideCarRepository(fireStore: FirebaseFirestore): CarRepository {
-        return CarRepositoryImpl(UserDataSource(fireStore), CarDataSource(fireStore))
+    fun provideCarRepository(userDataSource: UserDataSource, carDataSource: CarDataSource): CarRepository {
+        return CarRepositoryImpl(userDataSource, carDataSource)
     }
 }

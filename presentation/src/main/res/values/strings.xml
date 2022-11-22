@@ -65,4 +65,15 @@
     <string name="pink_slip_registration_type">차종</string>
     <string name="pink_slip_registration_model">모델명</string>
     <string name="pink_slip_registration_year">모델연도</string>
+
+    <string name="mypage_nickname">%1s 님</string>
+    <string name="mypage_title_payment">결제 관리</string>
+    <string name="mypage_btn_payment">결제 수단</string>
+    <string name="mypage_title_transaction">거래 관리</string>
+    <string name="mypage_btn_car">내 차 등록 / 관리</string>
+    <string name="mypage_btn_transaction">거래 내역</string>
+    <string name="mypage_btn_fine">딱지 청구</string>
+    <string name="mypage_title_other">기타</string>
+    <string name="mypage_btn_terms">이용 약관</string>
+    <string name="mypage_btn_sign_out">로그아웃</string>
 </resources>
