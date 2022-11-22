@@ -121,7 +121,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithBottomSheet() {
         binding.bottomSheet.setOnTouchListener { _, _ ->
-            val navAction = MapFragmentDirections.actionMapFragmentToCarDetailFragment("test")
+            val navAction = MapFragmentDirections.actionMapFragmentToCarDetailFragment(viewModel.selectCar.value.id)
             findNavController().navigate(navAction)
             false
         }
