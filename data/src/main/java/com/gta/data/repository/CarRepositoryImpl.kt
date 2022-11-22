@@ -1,10 +1,11 @@
 package com.gta.data.repository
 
+import com.gta.data.model.Car
 import com.gta.data.model.UserInfo
+import com.gta.data.model.toCarRentInfo
+import com.gta.data.model.toSimple
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.UserDataSource
-import com.gta.data.model.Car
-import com.gta.data.source.CarDataSource
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.CarState

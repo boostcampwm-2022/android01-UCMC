@@ -5,6 +5,7 @@ import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.CarState
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.PinkSlip
+import com.gta.domain.model.SimpleCar
 
 data class Car(
     val pinkSlip: PinkSlip = PinkSlip(),
@@ -17,15 +18,22 @@ data class Car(
     val availableDate: AvailableDate = AvailableDate(),
     val reservations: List<String> = emptyList(),
     val ownerId: String = ""
-) {
-    fun toCarRentInfo(): CarRentInfo {
-        return CarRentInfo(
-            images = images,
-            model = pinkSlip.model,
-            price = price,
-            comment = comment,
-            availableDate = availableDate,
-            reservations = reservations
-        )
-    }
-}
+)
+
+fun Car.toSimple(id: String): SimpleCar = SimpleCar(
+    id = id,
+    image = if (images.size > 1) images[0] else "",
+    carType = pinkSlip.type,
+    model = pinkSlip.model,
+    price = price,
+    coordinate = coordinate
+)
+
+fun Car.toCarRentInfo(): CarRentInfo = CarRentInfo(
+    images = images,
+    model = pinkSlip.model,
+    price = price,
+    comment = comment,
+    availableDate = availableDate,
+    reservations = reservations
+)
