@@ -87,4 +87,16 @@ class CarRepositoryImpl @Inject constructor(
         }
         awaitClose()
     }
+
+    override fun removeCar(userId: String, carId: String): Flow<Boolean> = callbackFlow {
+        val carResult = carDataSource.removeCar(carId)
+        userDataSource.getUser(userId).addOnSuccessListener { snapshot ->
+            val myCars = snapshot.get("myCars") as List<String>
+            val newCars = myCars.filter { it != carId }
+            val userResult = userDataSource.removeCar(userId, newCars)
+
+            trySend(carResult.isSuccessful && userResult.isSuccessful)
+        }
+        awaitClose()
+    }
 }

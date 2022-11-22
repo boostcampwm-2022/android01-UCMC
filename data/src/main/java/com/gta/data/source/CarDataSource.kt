@@ -13,4 +13,7 @@ class CarDataSource @Inject constructor(
 
     fun updateCarReservations(carId: String, reservations: List<Any?>): Task<Void> =
         fireStore.collection("cars").document(carId).update("reservations", reservations)
+
+    fun removeCar(carId: String): Task<Void> =
+        fireStore.collection("cars").document(carId).delete()
 }

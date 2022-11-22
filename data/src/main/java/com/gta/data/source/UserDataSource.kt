@@ -10,4 +10,7 @@ class UserDataSource @Inject constructor(
 ) {
     fun getUser(uid: String): Task<DocumentSnapshot> =
         fireStore.collection("users").document(uid).get()
+
+    fun removeCar(uid: String, newCars: List<String>): Task<Void> =
+        fireStore.collection("users").document(uid).update(mapOf("myCars" to newCars))
 }

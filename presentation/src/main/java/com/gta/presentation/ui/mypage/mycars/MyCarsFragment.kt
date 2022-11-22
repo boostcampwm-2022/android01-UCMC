@@ -84,7 +84,7 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
                             findNavController().navigate(navAction)
                         }
                         R.id.popup_delete -> {
-                            // 뷰모델한테 삭제 요청
+                            viewModel.deleteCar(carId)
                         }
                     }
                     return@setOnMenuItemClickListener false
