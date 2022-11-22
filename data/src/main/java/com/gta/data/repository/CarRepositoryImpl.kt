@@ -3,34 +3,54 @@ package com.gta.data.repository
 import com.gta.data.model.Car
 import com.gta.data.model.UserInfo
 import com.gta.data.model.toCarRentInfo
+import com.gta.data.model.toDetailCar
 import com.gta.data.model.toSimple
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.SimpleCar
+import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 class CarRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
     private val carDataSource: CarDataSource
 ) : CarRepository {
-    override fun getOwnerId(carId: String): String {
-        return "(test)OwnerId"
+    override suspend fun getOwnerId(carId: String): String {
+        return getCar(carId).first().ownerId
     }
 
     override fun getNowRentUserId(carId: String): Flow<String?> {
         return flowOf("9HQr7zD1L2eqQtdbCbM2W8hKPgo1")
     }
 
-    override fun getCarData(carId: String): Flow<CarDetail> {
-        return flowOf(CarDetail())
+    override fun getCarData(carId: String): Flow<CarDetail> = callbackFlow {
+        // car 정보
+        carDataSource.getCar(carId).addOnSuccessListener { snapshot ->
+            snapshot?.toObject(Car::class.java)?.let { car ->
+                // 차의 차주 id를 통해 차주 use 정보
+                userDataSource.getUser(car.ownerId).addOnSuccessListener { profile ->
+                    profile?.toObject(UserProfile::class.java)?.let { owner ->
+                        Timber.d("car rentState ${car.rentState}")
+                        trySend(car.toDetailCar(snapshot.id, owner))
+                    } ?: trySend(CarDetail())
+                }.addOnFailureListener {
+                    trySend(CarDetail())
+                }
+            } ?: trySend(CarDetail())
+        }.addOnFailureListener {
+            trySend(CarDetail())
+        }
+        awaitClose()
     }
 
     override fun getCarRentInfo(carId: String): Flow<CarRentInfo> {
