@@ -5,6 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     fun getMyUserId(): String
-
-    fun getUserProfile(uid: String): Flow<UserProfile?>
+    fun getUserProfile(uid: String): Flow<UserProfile>
 }

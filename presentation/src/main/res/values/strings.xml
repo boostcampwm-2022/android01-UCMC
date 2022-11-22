@@ -13,6 +13,7 @@
     <string name="chat_going">채팅하기</string>
     <string name="car_detail_comment_label">코멘트</string>
     <string name="car_detail_car_owner_label">차주 정보</string>
+    <string name="registered_vehicle">등록한 차량</string>
 
     <string name="car_detail_day_price">금액 : 1일 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>
@@ -31,9 +32,9 @@
     <string name="price_format">%,2d 원</string>
     <string name="more">더보기</string>
     <string name="insurance_fee">보험료</string>
-    <string name="insurance_option_1">자차 면책 보험료 5만원 (+6310)</string>
-    <string name="insurance_option_2">자차 면책 보험료 30만원 (+5210)</string>
-    <string name="insurance_option_3">자차 면책 보험료 70만원 (+3870)</string>
+    <string name="insurance_option_1">자차 면책 보험료 5만원 (+6,310)</string>
+    <string name="insurance_option_2">자차 면책 보험료 30만원 (+5,210)</string>
+    <string name="insurance_option_3">자차 면책 보험료 70만원 (+3,870)</string>
     <string name="action_pay">결제하기</string>
     <string name="placeholder_date_count">총 -일</string>
     <string name="placeholder_date_range">시작일 ~ 종료일</string>

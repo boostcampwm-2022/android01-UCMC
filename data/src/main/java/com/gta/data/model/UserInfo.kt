@@ -1,6 +1,7 @@
 package com.gta.data.model
 
 import com.gta.domain.model.DrivingLicense
+import com.gta.domain.model.UserProfile
 
 data class UserInfo(
     val chatId: Long = 0L,
@@ -11,4 +12,11 @@ data class UserInfo(
     val rentedCar: Long? = null,
     val myCars: List<String> = emptyList(),
     val transactionHistory: List<Long> = emptyList()
+)
+
+fun UserInfo.toProfile(id: String): UserProfile = UserProfile(
+    id = id,
+    name = nickname,
+    temp = temperature,
+    image = icon
 )
