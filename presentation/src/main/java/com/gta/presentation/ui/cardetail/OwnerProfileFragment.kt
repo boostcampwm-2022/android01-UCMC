@@ -10,18 +10,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
-import com.gta.presentation.databinding.FragmentCarDetailBinding
+import com.gta.presentation.databinding.FragmentOwnerProfileBinding
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
-    R.layout.fragment_car_detail
+class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
+    R.layout.fragment_owner_profile
 ) {
 
-    private val viewModel: CarDetailViewModel by viewModels()
+    private val viewModel: OwnerProfileViewModel by viewModels()
+    private val carListAdapter by lazy { CarListAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,25 +31,30 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.vm = viewModel
+        binding.rvCars.adapter = carListAdapter.apply {
+            setItemClickListener(
+                object : CarListAdapter.OnItemClickListener {
+                    override fun onClick(id: String) {
+                        findNavController().navigate(
+                            OwnerProfileFragmentDirections
+                                .actionOwnerProfileFragmentToCarDetailFragment(id)
+                        )
+                    }
+                }
+            )
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.cvOwner.setOnClickListener {
-            findNavController().navigate(
-                CarDetailFragmentDirections
-                    .actionCarDetailFragmentToOwnerProfileFragment(
-                        viewModel.owner.value.id
-                    )
-            )
-        }
+        // TODO 신고하기 연결
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.car.collectLatest {
-                    viewModel.getPageState()
+                viewModel.carList.collectLatest {
+                    carListAdapter.submitList(it)
                 }
             }
         }

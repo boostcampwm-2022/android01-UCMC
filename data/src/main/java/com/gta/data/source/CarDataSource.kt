@@ -8,9 +8,9 @@ import javax.inject.Inject
 class CarDataSource @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) {
-    fun getCar(uid: String): Task<DocumentSnapshot> =
-        fireStore.collection("cars").document(uid).get()
+    fun getCar(carId: String): Task<DocumentSnapshot> =
+        fireStore.collection("cars").document(carId).get()
 
-    fun updateCarReservations(uid: String, reservations: List<Any?>): Task<Void> =
-        fireStore.collection("cars").document(uid).update("reservations", reservations)
+    fun updateCarReservations(carId: String, reservations: List<Any?>): Task<Void> =
+        fireStore.collection("cars").document(carId).update("reservations", reservations)
 }
