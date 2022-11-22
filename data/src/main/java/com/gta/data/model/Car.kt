@@ -27,6 +27,7 @@ fun Car.toSimple(id: String): SimpleCar = SimpleCar(
     image = if (images.size > 1) images[0] else "",
     carType = pinkSlip.type,
     model = pinkSlip.model,
+    year = pinkSlip.year,
     price = price,
     coordinate = coordinate
 )
@@ -45,7 +46,7 @@ fun Car.toDetailCar(id: String, owner: UserProfile): CarDetail = CarDetail(
     carType = pinkSlip.type,
     model = pinkSlip.model,
     year = pinkSlip.year,
-    licensePlate = pinkSlip.informationNumber,
+    licensePlate = pinkSlip.id,
     price = price,
     location = location,
     rentState = RentState.values().filter { it.string == rentState }[0],
