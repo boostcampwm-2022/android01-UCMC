@@ -3,6 +3,7 @@ package com.gta.presentation.ui.cardetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.CarDetail
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.GetUseStateAboutCarUseCase
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CarDetailViewModel @Inject constructor(
     args: SavedStateHandle,
+    auth: FirebaseAuth,
     getCarDetailDataUseCase: GetCarDetailDataUseCase,
     setStateAtCarDetailUseCase: SetStateAtCarDetailUseCase,
     getUseStateAboutCarUseCase: GetUseStateAboutCarUseCase
@@ -28,6 +30,7 @@ class CarDetailViewModel @Inject constructor(
 
     init {
         val carId = args.get<String>("CAR_ID") ?: "정보 없음"
+        val uid = auth.currentUser?.uid
 
         carInfo = getCarDetailDataUseCase(carId).stateIn(
             scope = viewModelScope,
