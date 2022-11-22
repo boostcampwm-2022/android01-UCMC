@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentPinkSlipRegistrationBinding
 import com.gta.presentation.ui.MainActivity
@@ -13,6 +14,7 @@ import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class PinkSlipRegistrationFragment : BaseFragment<FragmentPinkSlipRegistrationBinding>(
@@ -32,7 +34,7 @@ class PinkSlipRegistrationFragment : BaseFragment<FragmentPinkSlipRegistrationBi
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.registerEvent.collectLatest { state ->
-                    // 네비게이트
+                    findNavController().navigate(R.id.action_pinkSlipRegistrationFragment_to_myPageCarListFragment)
                 }
             }
         }

@@ -91,6 +91,10 @@
         <argument
             android:name="uri"
             app:argType="string" />
+        <action
+            android:id="@+id/action_pinkSlipRegistrationFragment_to_myPageCarListFragment"
+            app:destination="@id/myPageCarListFragment"
+            app:popUpTo="@id/myPageCarListFragment" />
     </fragment>
 
     <fragment
