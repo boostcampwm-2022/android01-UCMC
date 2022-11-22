@@ -9,6 +9,9 @@ import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.gta.presentation.R
@@ -22,6 +25,8 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
@@ -89,15 +94,26 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     @SuppressLint("ResourceAsColor")
     private fun setupWithMarker() {
-        val marker = Marker().apply { // 변수를 없애지 않은 이유는 나중에 Firebase에서 들고와야 하니까,, 일단 냅두겠습니다
-            this.icon = MarkerIcons.BLACK
-            this.iconTintColor = requireContext().getColor(R.color.primaryColor)
-            this.position = LatLng(37.36, 127.1052)
-            this.map = naverMap
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getAllCars()
+                viewModel.cars.first() {
+                    it.forEach { car ->
+                        Marker().apply {
+                            icon = MarkerIcons.BLACK
+                            iconTintColor = requireContext().getColor(R.color.primaryColor)
+                            position = LatLng(car.coordinate.x, car.coordinate.y)
+                            map = naverMap
 
-            this.setOnClickListener {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                true
+                            setOnClickListener {
+                                viewModel.emitSelected(car)
+                                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                                true
+                            }
+                        }
+                    }
+                    true
+                }
             }
         }
     }
