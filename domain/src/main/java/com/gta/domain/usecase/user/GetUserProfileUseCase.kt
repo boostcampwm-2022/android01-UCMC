@@ -8,5 +8,5 @@ import javax.inject.Inject
 class GetUserProfileUseCase @Inject constructor(
     private val repository: UserRepository
 ) {
-    operator fun invoke(uid: String): Flow<UserProfile?> = repository.getUserProfile(uid)
+    operator fun invoke(uid: String): Flow<UserProfile> = repository.getUserProfile(uid)
 }
