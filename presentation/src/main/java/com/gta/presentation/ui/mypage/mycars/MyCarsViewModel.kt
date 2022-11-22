@@ -30,8 +30,9 @@ class MyCarsViewModel @Inject constructor(
     fun getCarList() {
         uid ?: return
         viewModelScope.launch {
-            getOwnerCarsUseCase(uid).collectLatest {
+            getOwnerCarsUseCase(uid).first() {
                 _userCarList.emit(it)
+                true
             }
         }
     }
@@ -39,9 +40,10 @@ class MyCarsViewModel @Inject constructor(
     fun deleteCar(carId: String) {
         uid ?: return
         viewModelScope.launch {
-            removeCarUseCase(uid, carId).collectLatest {
+            removeCarUseCase(uid, carId).first() {
                 _carRemoved.emit(it)
                 getCarList()
+                true
             }
         }
     }

@@ -12,5 +12,5 @@ class UserDataSource @Inject constructor(
         fireStore.collection("users").document(uid).get()
 
     fun removeCar(uid: String, newCars: List<String>): Task<Void> =
-        fireStore.collection("users").document(uid).update(mapOf("myCars" to newCars))
+        fireStore.collection("users").document(uid).update("myCars", newCars)
 }
