@@ -57,8 +57,10 @@ class CarRepositoryImpl @Inject constructor(
         carDataSource.getCar(carId).addOnSuccessListener { snapshot ->
             snapshot?.toObject(Car::class.java)?.let {
                 trySend(it)
-            }
-        }.addOnFailureListener {}
+            } ?: trySend(Car())
+        }.addOnFailureListener {
+            trySend(Car())
+        }
         awaitClose()
     }
 

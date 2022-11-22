@@ -45,7 +45,7 @@ class ReservationViewModel @Inject constructor(
         getCarRentInfoUseCase(carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = null
+            initialValue = CarRentInfo()
         )
     }
 

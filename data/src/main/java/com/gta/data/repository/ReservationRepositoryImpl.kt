@@ -20,7 +20,7 @@ class ReservationRepositoryImpl @Inject constructor(
             2. 차 예약 리스트 뒤에 새로운 예약 ID 붙이고 업데이트
             3. 에약 리스트 추가
          */
-        val reservationId = System.currentTimeMillis().toString()
+        val reservationId = "${System.currentTimeMillis()}${reservation.carId}"
 
         carDataSource.getCar(reservation.carId).addOnSuccessListener { snapshot ->
             val updateReservations = getUpdatedReservations(snapshot, reservationId)

@@ -1,9 +1,7 @@
 package com.gta.presentation.ui.reservation
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,20 +22,9 @@ class ReservationFragment :
     BaseFragment<FragmentReservationBinding>(R.layout.fragment_reservation) {
     private val viewModel: ReservationViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-
-        return binding.run {
-            vm = viewModel
-            root
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.vm = viewModel
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.car?.collectLatest { car ->
