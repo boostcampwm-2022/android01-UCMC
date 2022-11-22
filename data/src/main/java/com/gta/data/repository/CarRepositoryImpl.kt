@@ -4,6 +4,7 @@ import com.gta.data.model.Car
 import com.gta.data.model.UserInfo
 import com.gta.data.model.toCarRentInfo
 import com.gta.data.model.toDetailCar
+import com.gta.data.model.toProfile
 import com.gta.data.model.toSimple
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.UserDataSource
@@ -17,7 +18,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import javax.inject.Inject
 
 class CarRepositoryImpl @Inject constructor(
@@ -33,14 +33,16 @@ class CarRepositoryImpl @Inject constructor(
     }
 
     override fun getCarData(carId: String): Flow<CarDetail> = callbackFlow {
-        // car 정보
         carDataSource.getCar(carId).addOnSuccessListener { snapshot ->
-            snapshot?.toObject(Car::class.java)?.let { car ->
-                // 차의 차주 id를 통해 차주 use 정보
-                userDataSource.getUser(car.ownerId).addOnSuccessListener { profile ->
-                    profile?.toObject(UserProfile::class.java)?.let { owner ->
-                        Timber.d("car rentState ${car.rentState}")
-                        trySend(car.toDetailCar(snapshot.id, owner))
+            snapshot?.toObject(Car::class.java)?.let { carInfo ->
+                userDataSource.getUser(carInfo.ownerId).addOnSuccessListener { snapshot2 ->
+                    snapshot2?.toObject(UserInfo::class.java)?.let { ownerInfo ->
+                        trySend(
+                            carInfo.toDetailCar(
+                                snapshot.id,
+                                ownerInfo.toProfile(carInfo.ownerId)
+                            )
+                        )
                     } ?: trySend(CarDetail())
                 }.addOnFailureListener {
                     trySend(CarDetail())

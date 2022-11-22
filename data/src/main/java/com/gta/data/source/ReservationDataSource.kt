@@ -14,7 +14,6 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
             .set(reservation)
     }
 
-    // TODO ID 값이 없은 경우 예외 처리
     // TODO addSnapshotListener
     fun getReservation(reservationId: String): Task<DocumentSnapshot> =
         fireStore.collection("reservations").document(reservationId).get()
