@@ -9,6 +9,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.gta.domain.model.AvailableDate
+import com.gta.domain.model.InsuranceOption
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -24,6 +25,8 @@ class ReservationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
+
+        setUpRadioGroup()
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -65,6 +68,22 @@ class ReservationFragment :
 
         binding.ivReservationNext.setOnClickListener {
             datePicker.show(childFragmentManager, null)
+        }
+    }
+
+    private fun setUpRadioGroup() {
+        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.rg_reservation_insurance_option_1 -> {
+                    viewModel.setInsuranceOption(InsuranceOption.LOW)
+                }
+                R.id.rg_reservation_insurance_option_2 -> {
+                    viewModel.setInsuranceOption(InsuranceOption.MEDIUM)
+                }
+                R.id.rg_reservation_insurance_option_3 -> {
+                    viewModel.setInsuranceOption(InsuranceOption.HIGH)
+                }
+            }
         }
     }
 }

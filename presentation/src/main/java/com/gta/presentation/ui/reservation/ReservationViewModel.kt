@@ -18,6 +18,7 @@ import com.gta.presentation.R
 import com.gta.presentation.util.DateUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +37,8 @@ class ReservationViewModel @Inject constructor(
     private val _reservationDate = MutableLiveData<AvailableDate>()
     val reservationDate: LiveData<AvailableDate> = _reservationDate
 
-    val selectedInsuranceOption = MutableLiveData<Int>()
+    private val _insuranceOption = MutableLiveData<InsuranceOption>()
+    val insuranceOption: LiveData<InsuranceOption> = _insuranceOption
 
     private val _totalPrice = MediatorLiveData<Int>()
     val totalPrice: LiveData<Int> = _totalPrice
@@ -50,7 +52,7 @@ class ReservationViewModel @Inject constructor(
     }
 
     private val _createReservationEvent = MutableSharedFlow<Boolean>()
-    val createReservationEvent: SharedFlow<Boolean> get() = _createReservationEvent
+    val createReservationEvent: SharedFlow<Boolean> = _createReservationEvent
 
     val basePrice: LiveData<Int> = Transformations.map(_reservationDate) {
         val carPrice = car?.value?.price ?: 0
@@ -59,28 +61,13 @@ class ReservationViewModel @Inject constructor(
 
     init {
         _totalPrice.addSource(basePrice) { basePrice ->
-            val insurancePrice = selectedInsuranceOption.value?.let { getOptionPrice(it) } ?: 0
+            val insurancePrice = insuranceOption.value?.price ?: 0
             _totalPrice.value = basePrice.plus(insurancePrice)
         }
 
-        _totalPrice.addSource(selectedInsuranceOption) { option ->
+        _totalPrice.addSource(insuranceOption) { option ->
             val price = basePrice.value ?: 0
-            _totalPrice.value = price.plus(getOptionPrice(option))
-        }
-    }
-
-    private fun getOptionPrice(option: Int): Int {
-        return when (option) {
-            R.id.rg_reservation_insurance_option_1 -> {
-                InsuranceOption.LOW.price
-            }
-            R.id.rg_reservation_insurance_option_2 -> {
-                InsuranceOption.MEDIUM.price
-            }
-            R.id.rg_reservation_insurance_option_3 -> {
-                InsuranceOption.HIGH.price
-            }
-            else -> 0
+            _totalPrice.value = price.plus(option.price)
         }
     }
 
@@ -88,14 +75,29 @@ class ReservationViewModel @Inject constructor(
         _reservationDate.value = selected
     }
 
+    fun setInsuranceOption(option: InsuranceOption) {
+        _insuranceOption.value = option
+    }
+
     fun createReservation() {
         val userId = auth.currentUser?.uid ?: return
         val date = reservationDate.value ?: return
         val price = totalPrice.value ?: return
+        val option = insuranceOption.value ?: return
 
         args.get<String>("carId")?.let {
             viewModelScope.launch {
-                _createReservationEvent.emit(createReservationUseCase(Reservation(carId = it, userId = userId, reservationDate = date, price = price)).first())
+                _createReservationEvent.emit(
+                    createReservationUseCase(
+                        Reservation(
+                            carId = it,
+                            userId = userId,
+                            reservationDate = date,
+                            price = price,
+                            insuranceOption = option.name
+                        )
+                    ).first()
+                )
             }
         }
     }
