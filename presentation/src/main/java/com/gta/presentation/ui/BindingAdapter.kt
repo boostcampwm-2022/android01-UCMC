@@ -12,7 +12,8 @@ import com.gta.presentation.util.DateUtil
 import java.util.*
 
 @BindingAdapter("image_uri")
-fun bindImageUri(view: ImageView, uri: String) {
+fun bindImageUri(view: ImageView, uri: String?) {
+    uri ?: return
     GlideApp.with(view.context)
         .load(uri)
         .into(view)
