@@ -9,7 +9,6 @@ import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
 import com.gta.presentation.util.DateUtil
-import java.util.*
 
 @BindingAdapter("image_uri")
 fun bindImageUri(view: ImageView, uri: String?) {
@@ -39,7 +38,7 @@ fun setCarDetailBtnState(button: Button, state: UseState) {
             button.isEnabled = true
             button.resources.getString(R.string.reservation)
         }
-        UseState.NOT_AVAILABLE -> {
+        UseState.UNAVAILABLE -> {
             button.isEnabled = false
             button.resources.getString(R.string.reservation)
         }

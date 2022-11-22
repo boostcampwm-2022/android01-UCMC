@@ -30,7 +30,7 @@ class CarDetailViewModel @Inject constructor(
 
     init {
         val carId = args.get<String>("CAR_ID") ?: "정보 없음"
-        val uid = auth.currentUser?.uid
+        val uid = auth.currentUser?.uid ?: "정보 없음"
 
         carInfo = getCarDetailDataUseCase(carId).stateIn(
             scope = viewModelScope,
@@ -38,10 +38,10 @@ class CarDetailViewModel @Inject constructor(
             initialValue = CarDetail()
         )
 
-        useState = getUseStateAboutCarUseCase(carId).stateIn(
+        useState = getUseStateAboutCarUseCase(uid, carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = UseState.NOT_AVAILABLE
+            initialValue = UseState.UNAVAILABLE
         )
     }
 

@@ -9,14 +9,13 @@ import com.gta.data.source.CarDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
+import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
@@ -25,12 +24,12 @@ class CarRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
     private val carDataSource: CarDataSource
 ) : CarRepository {
-    override suspend fun getOwnerId(carId: String): String {
-        return getCar(carId).first().ownerId
+    override fun getOwnerId(carId: String): Flow<String> {
+        return getCar(carId).map { it.ownerId }
     }
 
-    override fun getNowRentUserId(carId: String): Flow<String?> {
-        return flowOf("9HQr7zD1L2eqQtdbCbM2W8hKPgo1")
+    override fun getCarRentState(carId: String): Flow<RentState> {
+        return getCar(carId).map { it.toDetailCar("", UserProfile()).rentState }
     }
 
     override fun getCarData(carId: String): Flow<CarDetail> = callbackFlow {

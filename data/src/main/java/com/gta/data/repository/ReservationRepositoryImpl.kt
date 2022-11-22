@@ -8,6 +8,7 @@ import com.gta.domain.repository.ReservationRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ReservationRepositoryImpl @Inject constructor(
@@ -48,6 +49,10 @@ class ReservationRepositoryImpl @Inject constructor(
             trySend(Reservation())
         }
         awaitClose()
+    }
+
+    override fun getReservationCar(reservationId: String): Flow<String> {
+        return getReservationInfo(reservationId).map { it.carId }
     }
 
     private fun getUpdatedReservations(snapshot: DocumentSnapshot, reservationId: String) =
