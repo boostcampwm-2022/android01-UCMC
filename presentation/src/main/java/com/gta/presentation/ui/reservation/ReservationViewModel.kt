@@ -10,11 +10,11 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.CarRentInfo
+import com.gta.domain.model.InsuranceOption
 import com.gta.domain.model.Reservation
 import com.gta.domain.usecase.reservation.CreateReservationUseCase
 import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.presentation.R
-import com.gta.presentation.model.InsuranceLevel
 import com.gta.presentation.util.DateUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -72,13 +72,13 @@ class ReservationViewModel @Inject constructor(
     private fun getOptionPrice(option: Int): Int {
         return when (option) {
             R.id.rg_reservation_insurance_option_1 -> {
-                InsuranceLevel.LOW.price
+                InsuranceOption.LOW.price
             }
             R.id.rg_reservation_insurance_option_2 -> {
-                InsuranceLevel.MEDIUM.price
+                InsuranceOption.MEDIUM.price
             }
             R.id.rg_reservation_insurance_option_3 -> {
-                InsuranceLevel.HIGH.price
+                InsuranceOption.HIGH.price
             }
             else -> 0
         }
