@@ -3,10 +3,10 @@ package com.gta.presentation.ui.nickname
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.NicknameState
 import com.gta.domain.usecase.nickname.CheckNicknameStateUseCase
 import com.gta.domain.usecase.nickname.UpdateNicknameUseCase
+import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NicknameViewModel @Inject constructor(
-    auth: FirebaseAuth,
     args: SavedStateHandle,
     private val checkNicknameStateUseCase: CheckNicknameStateUseCase,
     private val updateNicknameUseCase: UpdateNicknameUseCase
@@ -34,8 +33,6 @@ class NicknameViewModel @Inject constructor(
     private val _nicknameChangeEvent = MutableSharedFlow<Boolean>()
     val nicknameChangeEvent: SharedFlow<Boolean> get() = _nicknameChangeEvent
 
-    private val uid = auth.currentUser?.uid
-
     fun checkNicknameState(nickname: String) {
         viewModelScope.launch {
             _nicknameState.emit(checkNicknameStateUseCase(nickname))
@@ -43,10 +40,9 @@ class NicknameViewModel @Inject constructor(
     }
 
     fun updateNickname() {
-        uid ?: return
         if (nicknameState.value == NicknameState.GREAT) {
             viewModelScope.launch {
-                _nicknameChangeEvent.emit(updateNicknameUseCase(uid, nickname.value).first())
+                _nicknameChangeEvent.emit(updateNicknameUseCase(FirebaseUtil.uid, nickname.value).first())
             }
         }
     }

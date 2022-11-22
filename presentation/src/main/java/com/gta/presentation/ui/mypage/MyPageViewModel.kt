@@ -7,6 +7,7 @@ import com.gta.domain.model.UserProfile
 import com.gta.domain.usecase.mypage.DeleteThumbnailUseCase
 import com.gta.domain.usecase.mypage.SetThumbnailUseCase
 import com.gta.domain.usecase.user.GetUserProfileUseCase
+import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,14 +34,11 @@ class MyPageViewModel @Inject constructor(
     private val _nicknameEditEvent = MutableSharedFlow<String>()
     val nicknameEditEvent: SharedFlow<String> get() = _nicknameEditEvent
 
-    private val uid = auth.currentUser?.uid
-
     init {
         getUserProfile()
     }
 
     fun changeThumbnail(uri: String?) {
-        uri ?: return
         val previousImage = userProfile.value.image ?: ""
         viewModelScope.launch {
             if (previousImage.isNotEmpty()) {
@@ -51,16 +49,14 @@ class MyPageViewModel @Inject constructor(
     }
 
     private fun getUserProfile() {
-        uid ?: return
         viewModelScope.launch {
-            _userProfile.emit(getUserProfileUseCase(uid).first())
+            _userProfile.emit(getUserProfileUseCase(FirebaseUtil.uid).first())
         }
     }
 
     fun updateThumbnail(uri: String) {
-        uid ?: return
         viewModelScope.launch {
-            _thumbnailUpdateEvent.emit(setThumbnailUseCase(uid, uri).first())
+            _thumbnailUpdateEvent.emit(setThumbnailUseCase(FirebaseUtil.uid, uri).first())
         }
     }
 
