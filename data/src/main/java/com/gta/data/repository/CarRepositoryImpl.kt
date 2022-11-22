@@ -68,9 +68,9 @@ class CarRepositoryImpl @Inject constructor(
         userDataSource.getUser(ownerId).addOnSuccessListener { user ->
             if (user.exists()) {
                 val ownerCars = user.toObject(UserInfo::class.java)?.myCars
-                if (ownerCars == null)
+                if (ownerCars == null) {
                     trySend(listOf())
-                else
+                } else {
                     carDataSource.getOwnerCars(ownerCars).addOnSuccessListener {
                         it.map { car ->
                             car.toObject(Car::class.java).toSimple(car.id)
@@ -78,6 +78,7 @@ class CarRepositoryImpl @Inject constructor(
                             trySend(result)
                         }
                     }
+                }
             }
         }.addOnFailureListener {
             trySend(emptyList())

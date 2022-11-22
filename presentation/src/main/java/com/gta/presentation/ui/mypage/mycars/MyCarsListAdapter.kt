@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gta.domain.model.SimpleCar
 import com.gta.presentation.databinding.ItemMypageCarlistBinding
-import com.gta.presentation.model.carDetail.CarInfo
 
 class MyCarsListAdapter :
     ListAdapter<SimpleCar, MyCarsListAdapter.CarViewHolder>(diffUtil) {

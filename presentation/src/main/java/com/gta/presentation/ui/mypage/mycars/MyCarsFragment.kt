@@ -7,19 +7,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.whenStarted
 import androidx.navigation.fragment.findNavController
-import com.gta.domain.model.CarState
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMyCarsBinding
-import com.gta.presentation.model.carDetail.CarInfo
-import com.gta.presentation.model.carDetail.PriceType
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_cars) {

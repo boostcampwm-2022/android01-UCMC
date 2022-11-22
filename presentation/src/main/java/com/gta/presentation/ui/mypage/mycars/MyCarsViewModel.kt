@@ -7,9 +7,10 @@ import com.gta.domain.model.SimpleCar
 import com.gta.domain.usecase.cardetail.GetOwnerCarsUseCase
 import com.gta.domain.usecase.cardetail.RemoveCarUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
