@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMypageBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -37,6 +38,10 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
         initCollector()
         binding.ivMypageEditThumb.setOnClickListener {
             updateThumbnail()
+        }
+
+        binding.btnMypageCar.setOnClickListener {
+            findNavController().navigate(R.id.action_myPageFragment_to_myPageCarListFragment)
         }
     }
 

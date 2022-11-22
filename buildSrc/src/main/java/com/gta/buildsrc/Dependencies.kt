@@ -111,9 +111,10 @@ object Dependencies {
         object Lifecycle {
             const val VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE}"
             const val LIFECYCLE = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE}"
+            const val LIVEDATA = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.LIFECYCLE}"
 
             fun getAll(): ArrayList<String> {
-                return arrayListOf(VIEWMODEL, LIFECYCLE)
+                return arrayListOf(VIEWMODEL, LIFECYCLE, LIVEDATA)
             }
         }
 
