@@ -1,6 +1,5 @@
 package com.gta.data.di
 
-import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.repository.CarRepositoryImpl
 import com.gta.data.repository.UserRepositoryImpl
 import com.gta.data.source.CarDataSource

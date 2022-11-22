@@ -2,7 +2,7 @@ package com.gta.data.source
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
-import com.gta.domain.model.Car
+import com.gta.data.model.Car
 import com.gta.domain.model.PinkSlip
 import javax.inject.Inject
 import kotlin.random.Random

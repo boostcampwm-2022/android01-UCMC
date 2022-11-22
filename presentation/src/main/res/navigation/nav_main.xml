@@ -99,8 +99,8 @@
         android:label="@string/reservation"
         tools:layout="@layout/fragment_reservation">
         <argument
-            android:name="carInfo"
-            app:argType="com.gta.presentation.ui.reservation.TmpCarInfo" />
+            android:name="carId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/ownerProfileFragment"
