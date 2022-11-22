@@ -1,19 +1,22 @@
 package com.gta.data.repository
 
+import com.gta.data.model.Car
 import com.gta.data.model.UserInfo
+import com.gta.data.model.toCarRentInfo
+import com.gta.data.model.toSimple
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.UserDataSource
-import com.gta.domain.model.Car
 import com.gta.domain.model.CarDetail
+import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.CarState
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UserProfile
-import com.gta.domain.model.toSimple
 import com.gta.domain.repository.CarRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CarRepositoryImpl @Inject constructor(
@@ -42,6 +45,23 @@ class CarRepositoryImpl @Inject constructor(
                 UserProfile("9HQr7zD1L2eqQtdbCbM2W8hKPgo1", "(test)선구자", 25F, null)
             )
         )
+    }
+
+    override fun getCarRentInfo(carId: String): Flow<CarRentInfo> {
+        return getCar(carId).map {
+            it.toCarRentInfo()
+        }
+    }
+
+    private fun getCar(carId: String): Flow<Car> = callbackFlow {
+        carDataSource.getCar(carId).addOnSuccessListener { snapshot ->
+            snapshot?.toObject(Car::class.java)?.let {
+                trySend(it)
+            } ?: trySend(Car())
+        }.addOnFailureListener {
+            trySend(Car())
+        }
+        awaitClose()
     }
 
     override fun getSimpleCarList(ownerId: String): Flow<List<SimpleCar>> = callbackFlow {

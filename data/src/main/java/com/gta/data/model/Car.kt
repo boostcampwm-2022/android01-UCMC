@@ -1,4 +1,11 @@
-package com.gta.domain.model
+package com.gta.data.model
+
+import com.gta.domain.model.AvailableDate
+import com.gta.domain.model.CarRentInfo
+import com.gta.domain.model.CarState
+import com.gta.domain.model.Coordinate
+import com.gta.domain.model.PinkSlip
+import com.gta.domain.model.SimpleCar
 
 data class Car(
     val pinkSlip: PinkSlip = PinkSlip(),
@@ -20,4 +27,13 @@ fun Car.toSimple(id: String): SimpleCar = SimpleCar(
     model = pinkSlip.model,
     price = price,
     coordinate = coordinate
+)
+
+fun Car.toCarRentInfo(): CarRentInfo = CarRentInfo(
+    images = images,
+    model = pinkSlip.model,
+    price = price,
+    comment = comment,
+    availableDate = availableDate,
+    reservations = reservations
 )
