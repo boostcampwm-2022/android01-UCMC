@@ -77,6 +77,8 @@ class CarRepositoryImpl @Inject constructor(
                         }.also { result ->
                             trySend(result)
                         }
+                    }.addOnFailureListener {
+                        trySend(emptyList())
                     }
                 }
             }
