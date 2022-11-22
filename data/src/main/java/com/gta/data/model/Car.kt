@@ -3,9 +3,9 @@ package com.gta.data.model
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
-import com.gta.domain.model.RentState
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.PinkSlip
+import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UserProfile
 

@@ -24,15 +24,28 @@ class ReservationRepositoryImpl @Inject constructor(
 
         carDataSource.getCar(reservation.carId).addOnSuccessListener { snapshot ->
             val updateReservations = getUpdatedReservations(snapshot, reservationId)
-            carDataSource.updateCarReservations(reservation.carId, updateReservations).addOnSuccessListener {
-                reservationDataSource.createReservation(reservation, reservationId).addOnCompleteListener {
-                    trySend(it.isSuccessful)
+            carDataSource.updateCarReservations(reservation.carId, updateReservations)
+                .addOnSuccessListener {
+                    reservationDataSource.createReservation(reservation, reservationId)
+                        .addOnCompleteListener {
+                            trySend(it.isSuccessful)
+                        }
+                }.addOnFailureListener {
+                    trySend(false)
                 }
-            }.addOnFailureListener {
-                trySend(false)
-            }
         }.addOnFailureListener {
             trySend(false)
+        }
+        awaitClose()
+    }
+
+    override fun getReservationInfo(reservationId: String): Flow<Reservation> = callbackFlow {
+        reservationDataSource.getReservation(reservationId).addOnSuccessListener { snapshot ->
+            snapshot?.toObject(Reservation::class.java)?.let {
+                trySend(it)
+            } ?: trySend(Reservation())
+        }.addOnFailureListener {
+            trySend(Reservation())
         }
         awaitClose()
     }
