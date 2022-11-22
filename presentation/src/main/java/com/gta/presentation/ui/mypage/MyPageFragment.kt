@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMypageBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -42,6 +43,9 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
         binding.ivMypageEditThumb.setOnClickListener {
             updateThumbnail()
         }
+        binding.ivMypageEditNickname.setOnClickListener {
+            viewModel.navigateNicknameEdit()
+        }
         binding.btnMypageSignOut.setOnClickListener {
             viewModel.signOut()
         }
@@ -52,6 +56,15 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.thumbnailUpdateEvent.collectLatest { uri ->
                     viewModel.changeThumbnail(uri)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.nicknameEditEvent.collectLatest { thumb ->
+                    findNavController().navigate(
+                        MyPageFragmentDirections.actionMyPageFragmentToNicknameFragment(thumb)
+                    )
                 }
             }
         }

@@ -30,6 +30,9 @@ class MyPageViewModel @Inject constructor(
     private val _thumbnailUpdateEvent = MutableSharedFlow<String?>()
     val thumbnailUpdateEvent: SharedFlow<String?> get() = _thumbnailUpdateEvent
 
+    private val _nicknameEditEvent = MutableSharedFlow<String>()
+    val nicknameEditEvent: SharedFlow<String> get() = _nicknameEditEvent
+
     private val uid = auth.currentUser?.uid
 
     init {
@@ -58,6 +61,12 @@ class MyPageViewModel @Inject constructor(
         uid ?: return
         viewModelScope.launch {
             _thumbnailUpdateEvent.emit(setThumbnailUseCase(uid, uri).first())
+        }
+    }
+
+    fun navigateNicknameEdit() {
+        viewModelScope.launch {
+            _nicknameEditEvent.emit(userProfile.value?.image ?: "")
         }
     }
 

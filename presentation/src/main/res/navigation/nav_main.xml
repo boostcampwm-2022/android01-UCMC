@@ -104,6 +104,11 @@
         <argument
             android:name="thumb"
             app:argType="string" />
+        <action
+            android:id="@+id/action_nicknameFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment"
+            app:popUpTo="@id/myPageFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
