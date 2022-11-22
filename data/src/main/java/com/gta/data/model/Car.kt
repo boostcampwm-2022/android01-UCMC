@@ -1,11 +1,13 @@
 package com.gta.data.model
 
 import com.gta.domain.model.AvailableDate
+import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
-import com.gta.domain.model.CarState
+import com.gta.domain.model.RentState
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.PinkSlip
 import com.gta.domain.model.SimpleCar
+import com.gta.domain.model.UserProfile
 
 data class Car(
     val pinkSlip: PinkSlip = PinkSlip(),
@@ -13,7 +15,7 @@ data class Car(
     val price: Int = 10000,
     val location: String = "동훈이 집",
     val coordinate: Coordinate = Coordinate(),
-    val rentState: String = CarState.UNAVAILABLE.string,
+    val rentState: String = RentState.UNAVAILABLE.string,
     val comment: String = "차였어요",
     val availableDate: AvailableDate = AvailableDate(),
     val reservations: List<String> = emptyList(),
@@ -36,4 +38,19 @@ fun Car.toCarRentInfo(): CarRentInfo = CarRentInfo(
     comment = comment,
     availableDate = availableDate,
     reservations = reservations
+)
+
+fun Car.toDetailCar(id: String, owner: UserProfile): CarDetail = CarDetail(
+    id = id,
+    carType = pinkSlip.type,
+    model = pinkSlip.model,
+    year = pinkSlip.year,
+    licensePlate = pinkSlip.informationNumber,
+    price = price,
+    location = location,
+    rentState = RentState.values().filter { it.string == rentState }[0],
+    comment = comment,
+    availableDate = availableDate,
+    images = images,
+    owner = owner
 )

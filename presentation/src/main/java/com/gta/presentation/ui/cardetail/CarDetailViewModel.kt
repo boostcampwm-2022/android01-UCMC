@@ -4,23 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.CarDetail
-import com.gta.domain.model.CarState
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
-import com.gta.domain.usecase.cardetail.GetCarOwnerIdUseCase
-import com.gta.domain.usecase.cardetail.GetMyUserIdUserCase
-import com.gta.domain.usecase.cardetail.GetNowRentUserIdUseCase
-import com.gta.presentation.model.carDetail.CarInfo
-import com.gta.presentation.model.carDetail.CarOwner
-import com.gta.presentation.model.carDetail.PriceType
-import com.gta.presentation.model.carDetail.UserState
-import com.gta.presentation.model.carDetail.toCarInfo
-import com.gta.presentation.model.carDetail.toCarOwner
+import com.gta.domain.usecase.cardetail.GetUseStateAboutCarUseCase
+import com.gta.domain.usecase.cardetail.SetStateAtCarDetailUseCase
+import com.gta.domain.usecase.cardetail.UseState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,65 +18,28 @@ import javax.inject.Inject
 @HiltViewModel
 class CarDetailViewModel @Inject constructor(
     args: SavedStateHandle,
-    private val getNowRentUserIdUseCase: GetNowRentUserIdUseCase,
-    private val getCarOwnerIdUseCase: GetCarOwnerIdUseCase,
-    private val getMyUserIdUserCase: GetMyUserIdUserCase,
-    getCarDetailDataUseCase: GetCarDetailDataUseCase
+    getCarDetailDataUseCase: GetCarDetailDataUseCase,
+    setStateAtCarDetailUseCase: SetStateAtCarDetailUseCase,
+    getUseStateAboutCarUseCase: GetUseStateAboutCarUseCase
 ) : ViewModel() {
 
-    private var carId: String
-    val car: StateFlow<CarInfo>
-
-    val owner: StateFlow<CarOwner>
-
-    private val _userState = MutableStateFlow(UserState.NONE)
-    val userState: StateFlow<UserState>
-        get() = _userState
+    val carInfo: StateFlow<CarDetail>
+    val useState: StateFlow<UseState>
 
     init {
-        // TODO : Safe Args 연결
-        carId = args.get<String>("CAR_ID") ?: "debug"
-        val data: Flow<CarDetail> = getCarDetailDataUseCase(carId)
+        val carId = args.get<String>("CAR_ID") ?: "정보 없음"
 
-        car = data.map { it.toCarInfo() }.stateIn(
+        carInfo = getCarDetailDataUseCase(carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = CarInfo(
-                "",
-                "",
-                CarState.UNAVAILABLE,
-                "",
-                "",
-                PriceType.DAY,
-                0,
-                "없음",
-                emptyList()
-            )
+            initialValue = CarDetail()
         )
 
-        owner = data.map { it.toCarOwner() }.stateIn(
+        useState = getUseStateAboutCarUseCase(carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = CarOwner("", "", 0f, "")
+            initialValue = UseState.NOT_AVAILABLE
         )
-    }
-
-    fun getPageState() {
-        _userState.value = when (getMyUserIdUserCase()) {
-            getCarOwnerIdUseCase(carId) -> {
-                UserState.OWNER
-            }
-            getNowRentUserIdUseCase(carId) -> {
-                UserState.RENTED
-            }
-            else -> {
-                if (car.value.state != CarState.UNAVAILABLE) {
-                    UserState.USER
-                } else {
-                    UserState.NONE
-                }
-            }
-        }
     }
 
     fun onReportClick() {

@@ -62,8 +62,8 @@
                     android:maxLines="2"
                     android:textSize="@dimen/font_headline_medium"
                     android:textStyle="bold"
-                    app:car_title="@{vm.car.title}"
-                    app:car_type="@{vm.car.carType}"
+                    app:car_title="@{vm.carInfo.model}"
+                    app:car_type="@{vm.carInfo.carType}"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@+id/iv_car"
@@ -74,7 +74,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_medium"
-                    android:text="@{@string/car_detail_day_price(vm.car.price)}"
+                    android:text="@{@string/car_detail_day_price(vm.carInfo.price)}"
                     android:textSize="@dimen/font_body_large"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
@@ -88,7 +88,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_small"
-                    android:text="@{@string/car_detail_location(vm.car.location)}"
+                    android:text="@{@string/car_detail_location(vm.carInfo.location)}"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@+id/tv_price"
@@ -121,7 +121,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_small"
-                    android:text="@{vm.car.comment}"
+                    android:text="@{vm.carInfo.comment}"
                     android:textSize="@dimen/font_body_medium"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
@@ -152,7 +152,7 @@
 
                     <include
                         layout="@layout/include_owner_profile"
-                        bind:owner="@{vm.owner}" />
+                        bind:owner="@{vm.carInfo.owner}" />
 
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -165,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:set_car_detail_button="@{vm.userState}"
+            app:set_car_detail_button="@{vm.useState}"
             tools:text="예약하기" />
 
 

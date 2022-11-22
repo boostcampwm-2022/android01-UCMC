@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CarRepository {
     fun getOwnerId(carId: String): String
-    fun getNowRentUser(carId: String): String?
+    fun getNowRentUserId(carId: String): Flow<String?>
     fun getCarData(carId: String): Flow<CarDetail>
     fun getCarRentInfo(carId: String): Flow<CarRentInfo>
     fun getSimpleCarList(ownerId: String): Flow<List<SimpleCar>>
