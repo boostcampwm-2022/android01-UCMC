@@ -54,6 +54,7 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
         binding.rvCarList.adapter = adapter
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getCarList()
                 viewModel.userCarList.collectLatest {
                     adapter.submitList(it)
                 }

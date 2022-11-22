@@ -22,11 +22,7 @@ class MyCarsViewModel @Inject constructor(
 
     private val uid = auth.currentUser?.uid
 
-    init {
-        getCarList()
-    }
-
-    private fun getCarList() {
+    fun getCarList() {
         uid ?: return
         Timber.d(uid)
         viewModelScope.launch {
