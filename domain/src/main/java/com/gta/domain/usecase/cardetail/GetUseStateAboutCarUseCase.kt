@@ -17,14 +17,17 @@ class GetUseStateAboutCarUseCase @Inject constructor(
 ) {
     operator fun invoke(uid: String, carId: String): Flow<UseState> {
         return getNowRentCarUseCase(uid).combine(carRepository.getCarRentState(carId)) { nowRentCar, carRentState ->
-            if (uid == carRepository.getOwnerId(carId).first()) {
-                UseState.OWNER
-            } else if (carId == nowRentCar) {
-                UseState.NOW_RENT_USER
-            } else {
-                if (RentState.UNAVAILABLE == carRentState) {
+            when {
+                uid == carRepository.getOwnerId(carId).first() -> {
+                    UseState.OWNER
+                }
+                carId == nowRentCar -> {
+                    UseState.NOW_RENT_USER
+                }
+                RentState.UNAVAILABLE == carRentState -> {
                     UseState.UNAVAILABLE
-                } else {
+                }
+                else -> {
                     UseState.USER
                 }
             }
