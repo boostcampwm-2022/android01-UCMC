@@ -39,6 +39,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
     private var mapMode = LocationTrackingMode.None
     private val viewModel: MapViewModel by viewModels()
+    private lateinit var inputManager: InputMethodManager
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -212,19 +213,21 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     private fun hideKeyboard() {
-        val activity = requireActivity()
-        if (activity.currentFocus != null) {
-            val inputManager: InputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputManager.hideSoftInputFromWindow(
-                activity.currentFocus!!.windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
-            )
+        requireActivity().also { activity ->
+            if (activity.currentFocus != null) {
+                inputManager =
+                    activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                activity.currentFocus?.let { view ->
+                    inputManager.hideSoftInputFromWindow(
+                        view.windowToken,
+                        InputMethodManager.HIDE_NOT_ALWAYS
+                    )
+                }
+            }
         }
     }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-        private const val MODE_KEY = "MAP_MODE"
     }
 }
