@@ -27,6 +27,9 @@
         android:label="@string/my_page"
         tools:layout="@layout/fragment_mypage" >
         <action
+            android:id="@+id/action_myPageFragment_to_nicknameFragment"
+            app:destination="@id/nicknameFragment" />
+        <action
             android:id="@+id/action_myPageFragment_to_myPageCarListFragment"
             app:destination="@id/myPageCarListFragment" />
     </fragment>
@@ -43,7 +46,6 @@
             android:id="@+id/action_myPageCarListFragment_to_carDetailFragment"
             app:destination="@id/carDetailFragment"/>
     </fragment>
-
 
     <fragment
         android:id="@+id/carDetailFragment"
@@ -117,6 +119,19 @@
         <argument
             android:name="OWNER_ID"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/nicknameFragment"
+        android:name="com.gta.presentation.ui.nickname.NicknameFragment"
+        android:label="NicknameFragment" >
+        <argument
+            android:name="thumb"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nicknameFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment"
+            app:popUpTo="@id/myPageFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

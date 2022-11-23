@@ -36,10 +36,19 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         initCollector()
+        initListener()
+    }
+
+    private fun initListener() {
         binding.ivMypageEditThumb.setOnClickListener {
             updateThumbnail()
         }
-
+        binding.ivMypageEditNickname.setOnClickListener {
+            viewModel.navigateNicknameEdit()
+        }
+        binding.btnMypageSignOut.setOnClickListener {
+            viewModel.signOut()
+        }
         binding.btnMypageCar.setOnClickListener {
             findNavController().navigate(R.id.action_myPageFragment_to_myPageCarListFragment)
         }
@@ -50,6 +59,15 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.thumbnailUpdateEvent.collectLatest { uri ->
                     viewModel.changeThumbnail(uri)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.nicknameEditEvent.collectLatest { thumb ->
+                    findNavController().navigate(
+                        MyPageFragmentDirections.actionMyPageFragmentToNicknameFragment(thumb)
+                    )
                 }
             }
         }
