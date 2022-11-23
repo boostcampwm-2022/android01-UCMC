@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.review.ReviewViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_review_car"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_review_nickname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_review_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_label_medium"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@id/tv_review_car_model"
+            app:layout_constraintEnd_toEndOf="@+id/iv_review_car"
+            app:layout_constraintStart_toStartOf="@+id/iv_review_car"
+            app:layout_constraintTop_toBottomOf="@+id/iv_review_car"
+            tools:text="김민성님의"/>
+
+        <TextView
+            android:id="@+id/tv_review_car_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_label_large"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@id/rb_review_star"
+            app:layout_constraintEnd_toEndOf="@+id/tv_review_nickname"
+            app:layout_constraintStart_toStartOf="@+id/tv_review_nickname"
+            app:layout_constraintTop_toBottomOf="@+id/tv_review_nickname"
+            tools:text="올 뉴 마티즈"/>
+
+        <RatingBar
+            android:id="@+id/rb_review_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="32dp"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:rating="@={vm.rating}"
+            android:stepSize="0.5"
+            android:progressTint="?attr/colorPrimary"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@id/tv_review_input_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_review_car_model"
+            tools:rating="5.0"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/tv_review_input_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/review_input_label"
+            android:textSize="@dimen/font_label_large"
+            app:layout_constraintBottom_toTopOf="@+id/tl_review_input"
+            app:layout_constraintStart_toStartOf="@+id/tl_review_input"
+            app:layout_constraintTop_toBottomOf="@id/rb_review_star"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_review_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/padding_medium"
+            android:layout_marginBottom="32dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="300"
+            app:hintEnabled="false"
+            app:boxStrokeColor="?attr/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/btn_review_apply"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_review_input_label"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintVertical_chainStyle="packed">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_review_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:text="@={vm.review}"
+                android:textSize="@dimen/font_body_medium"
+                tools:hint="@string/review_input_hint_for_owner"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_review_apply"
+            style="@style/Theme.UCMC.BottomButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/review_btn_apply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
