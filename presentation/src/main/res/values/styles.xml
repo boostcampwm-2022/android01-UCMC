@@ -85,4 +85,12 @@
         <item name="android:stateListAnimator">@null</item>
     </style>
 
+    <style name="Theme.UCMC.Divider" parent="Widget.MaterialComponents.MaterialDivider">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.MaterialDivider</item>
+    </style>
+
+    <style name="ThemeOverlay.App.MaterialDivider" parent="">
+        <item name="colorOnSurface">@color/neutral40</item>
+    </style>
+
 </resources>
