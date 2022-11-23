@@ -4,6 +4,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
@@ -12,9 +13,11 @@ import com.gta.presentation.util.DateUtil
 
 @BindingAdapter("image_uri")
 fun bindImageUri(view: ImageView, uri: String?) {
-    uri ?: return
     GlideApp.with(view.context)
         .load(uri)
+        .placeholder(R.color.neutral80)
+        .error(R.drawable.ic_broken_image)
+        .fallback(R.drawable.ic_logo)
         .into(view)
 }
 
