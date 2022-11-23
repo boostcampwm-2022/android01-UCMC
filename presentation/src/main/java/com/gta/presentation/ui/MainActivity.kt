@@ -60,6 +60,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     supportActionBar?.show()
                     showBottomNav()
                 }
+                R.id.paymentFragment -> {
+                    supportActionBar?.hide()
+                    hideBottomNav()
+                }
                 else -> {
                     supportActionBar?.show()
                     hideBottomNav()

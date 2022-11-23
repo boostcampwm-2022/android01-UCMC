@@ -68,6 +68,7 @@
             android:id="@+id/action_licenseGuideFragment_to_licenseRegistrationFragment"
             app:destination="@id/licenseRegistrationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/licenseRegistrationFragment"
         android:name="com.gta.presentation.ui.license.registration.LicenseRegistrationFragment"
@@ -76,6 +77,7 @@
             android:name="uri"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/pinkSlipGuideFragment"
         android:name="com.gta.presentation.ui.pinkslip.guide.PinkSlipGuideFragment"
@@ -85,6 +87,7 @@
             android:id="@+id/action_pinkSlipGuideFragment_to_pinkSlipRegistrationFragment"
             app:destination="@id/pinkSlipRegistrationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/pinkSlipRegistrationFragment"
         android:name="com.gta.presentation.ui.pinkslip.registration.PinkSlipRegistrationFragment"
@@ -107,7 +110,17 @@
         <argument
             android:name="carId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_reservationFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.gta.presentation.ui.reservation.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" />
+
     <fragment
         android:id="@+id/ownerProfileFragment"
         android:name="com.gta.presentation.ui.cardetail.OwnerProfileFragment"

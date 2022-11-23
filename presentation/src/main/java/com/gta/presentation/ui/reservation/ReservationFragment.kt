@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.gta.domain.model.AvailableDate
@@ -41,9 +42,7 @@ class ReservationFragment :
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.createReservationEvent.collectLatest { state ->
-                    if (state) {
-                        // 결제하기
-                    }
+                    findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToPaymentFragment())
                 }
             }
         }

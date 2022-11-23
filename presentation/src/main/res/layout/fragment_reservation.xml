@@ -174,8 +174,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_small"
                 android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
+                app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_insurance_fee">
 
                 <RadioButton
@@ -224,8 +224,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_small"
                 android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
+                app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_payment_option">
 
                 <RadioButton
@@ -274,8 +274,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
                 android:enabled="@{vm.reservationDate != null &amp;&amp; vm.insuranceOption != null}"
-                android:text="@string/action_pay"
                 android:onClick="@{() -> vm.createReservation()}"
+                android:text="@string/action_pay"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
