@@ -273,7 +273,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
-                android:enabled="@{vm.reservationDate != null &amp;&amp; vm.insuranceOption != null}"
+                android:enabled="@{vm.reservationDate != null &amp;&amp; vm.insuranceOption != null &amp;&amp; vm.isPaymentOptionChecked}"
                 android:onClick="@{() -> vm.createReservation()}"
                 android:text="@string/action_pay"
                 app:layout_constraintBottom_toBottomOf="parent"

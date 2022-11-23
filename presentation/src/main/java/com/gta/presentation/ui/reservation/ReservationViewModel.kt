@@ -17,6 +17,7 @@ import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.presentation.util.DateUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -57,6 +58,9 @@ class ReservationViewModel @Inject constructor(
         DateUtil.getDateCount(it.start, it.end) * carPrice
     }
 
+    private val _isPaymentOptionChecked = MutableStateFlow(false)
+    val isPaymentOptionChecked: StateFlow<Boolean> = _isPaymentOptionChecked
+
     init {
         _totalPrice.addSource(basePrice) { basePrice ->
             val insurancePrice = insuranceOption.value?.price ?: 0
@@ -75,6 +79,10 @@ class ReservationViewModel @Inject constructor(
 
     fun setInsuranceOption(option: InsuranceOption) {
         _insuranceOption.value = option
+    }
+
+    fun setIsPaymentOptionChecked(isChecked: Boolean) {
+        _isPaymentOptionChecked.value = isChecked
     }
 
     fun createReservation() {
