@@ -15,4 +15,10 @@ class ReviewDataSource @Inject constructor(
             .collection("reviews")
             .document(reservationId)
             .set(review)
+
+    fun updateTemperature(opponentId: String, temperature: Float) =
+        fireStore
+            .collection("users")
+            .document(opponentId)
+            .update("temperature", temperature)
 }

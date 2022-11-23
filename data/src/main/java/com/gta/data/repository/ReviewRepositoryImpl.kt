@@ -29,8 +29,24 @@ class ReviewRepositoryImpl @Inject constructor(
         reservationId: String,
         review: UserReview
     ): Flow<Boolean> = callbackFlow {
-        reviewDataSource.addReview(opponentId, reservationId, review).addOnCompleteListener {
-            trySend(it.isSuccessful)
+        /*
+            1. 리뷰를 저장한다.
+            2. 상대방 정보를 불러온다.
+            3. 온도를 갱신한다.
+         */
+        reviewDataSource.addReview(opponentId, reservationId, review).addOnSuccessListener {
+            userDataSource.getUser(opponentId).addOnSuccessListener { userSnapshot ->
+                userSnapshot.toObject(UserInfo::class.java)?.let { userInfo ->
+                    val updatedTemperature = userInfo.temperature + calcTemperature(review.rating)
+                    reviewDataSource.updateTemperature(opponentId, updatedTemperature).addOnCompleteListener {
+                        trySend(it.isSuccessful)
+                    }
+                } ?: trySend(false)
+            }.addOnFailureListener {
+                trySend(false)
+            }
+        }.addOnFailureListener {
+            trySend(false)
         }
         awaitClose()
     }
@@ -70,5 +86,11 @@ class ReviewRepositoryImpl @Inject constructor(
             trySend(ReviewDTO())
         }
         awaitClose()
+    }
+
+    private fun calcTemperature(temperature: Float): Float = temperature - MIDDLE_RATING
+
+    companion object {
+        private const val MIDDLE_RATING = 3.0f
     }
 }
