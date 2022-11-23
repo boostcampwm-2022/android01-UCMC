@@ -5,6 +5,8 @@
     <string name="chatting">채팅</string>
     <string name="my_page">마이페이지</string>
 
+    <string name="car_detail_page">차 상세 페이지</string>
+    <string name="car_owner_profile">차주 프로필</string>
     <string name="reservation">예약하기</string>
     <string name="correction">수정하기</string>
     <string name="extension_and_return">연장/반납하기</string>
@@ -14,10 +16,13 @@
     <string name="car_detail_comment_label">코멘트</string>
     <string name="car_detail_car_owner_label">차주 정보</string>
     <string name="registered_vehicle">등록한 차량</string>
+    <string name="car_detail_info_label">세부 정보</string>
 
     <string name="car_detail_day_price">금액 : 1일 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>
     <string name="temperature_type">%.1f℃</string>
+    <string name="car_detail_year">%d년식</string>
+    <string name="car_detail_licensePlate">번호판 : %s</string>
 
     <string name="search_hint">검색어를 입력하세요.</string>
     <string name="filter_car_type">차종</string>

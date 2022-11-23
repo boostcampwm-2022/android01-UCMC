@@ -5,11 +5,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.gta.domain.model.AvailableDate
+import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
-import com.gta.presentation.model.carDetail.UserState
 import com.gta.presentation.util.DateUtil
-import java.util.*
 
 @BindingAdapter("image_uri")
 fun bindImageUri(view: ImageView, uri: String?) {
@@ -19,27 +18,25 @@ fun bindImageUri(view: ImageView, uri: String?) {
         .into(view)
 }
 
-@BindingAdapter("car_type", "car_title")
-fun setCarDetailTitle(textView: TextView, type: String, title: String) {
-    textView.text = "[$type] $title"
+@BindingAdapter("car_type", "car_year", "car_title")
+fun setCarDetailTitle(textView: TextView, type: String, year: Int, title: String) {
+    textView.text = "[$type] $year $title"
 }
 
 @BindingAdapter("set_car_detail_button")
-fun setCarDetailBtnState(button: Button, state: UserState) {
+fun setCarDetailBtnState(button: Button, state: UseState) {
+    button.isEnabled = true
     button.text = when (state) {
-        UserState.OWNER -> {
-            button.isEnabled = true
+        UseState.OWNER -> {
             button.resources.getString(R.string.correction)
         }
-        UserState.RENTED -> {
-            button.isEnabled = true
+        UseState.NOW_RENT_USER -> {
             button.resources.getString(R.string.extension_and_return)
         }
-        UserState.USER -> {
-            button.isEnabled = true
+        UseState.USER -> {
             button.resources.getString(R.string.reservation)
         }
-        UserState.NONE -> {
+        UseState.UNAVAILABLE -> {
             button.isEnabled = false
             button.resources.getString(R.string.reservation)
         }
@@ -51,7 +48,11 @@ fun setReservationTime(textView: TextView, selection: AvailableDate?, dateType: 
     when (dateType) {
         DateType.RANGE -> {
             textView.text = selection?.let {
-                "${DateUtil.dateFormat.format(selection.start)} ~ ${DateUtil.dateFormat.format(selection.end)}"
+                "${DateUtil.dateFormat.format(selection.start)} ~ ${
+                DateUtil.dateFormat.format(
+                    selection.end
+                )
+                }"
             } ?: textView.resources.getString(R.string.placeholder_date_range)
         }
         DateType.DAY_COUNT -> {

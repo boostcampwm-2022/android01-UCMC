@@ -60,7 +60,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     supportActionBar?.show()
                     showBottomNav()
                 }
-                else -> hideBottomNav()
+                else -> {
+                    supportActionBar?.show()
+                    hideBottomNav()
+                }
             }
         }
     }

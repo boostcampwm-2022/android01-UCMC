@@ -9,9 +9,9 @@ data class UserInfo(
     val icon: String = "",
     val temperature: Float = 36.5f,
     val license: DrivingLicense? = null,
-    val rentedCar: Long? = null,
+    val rentedCar: String? = null,
     val myCars: List<String> = emptyList(),
-    val transactionHistory: List<Long> = emptyList()
+    val transactionHistory: List<String> = emptyList()
 )
 
 fun UserInfo.toProfile(id: String): UserProfile = UserProfile(

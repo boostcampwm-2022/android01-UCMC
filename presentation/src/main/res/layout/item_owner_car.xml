@@ -41,6 +41,7 @@
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:car_title="@{item.model}"
+                app:car_year="@{item.year}"
                 app:car_type="@{item.carType}"
                 app:layout_constraintBottom_toTopOf="@+id/tv_price"
                 app:layout_constraintEnd_toEndOf="parent"

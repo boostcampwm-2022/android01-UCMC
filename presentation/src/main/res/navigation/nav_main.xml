@@ -50,7 +50,7 @@
     <fragment
         android:id="@+id/carDetailFragment"
         android:name="com.gta.presentation.ui.cardetail.CarDetailFragment"
-        android:label="fragment_car_detail"
+        android:label="@string/car_detail_page"
         tools:layout="@layout/fragment_car_detail">
         <argument
             android:name="CAR_ID"
@@ -111,7 +111,7 @@
     <fragment
         android:id="@+id/ownerProfileFragment"
         android:name="com.gta.presentation.ui.cardetail.OwnerProfileFragment"
-        android:label="fragment_owner_profile"
+        android:label="@string/car_owner_profile"
         tools:layout="@layout/fragment_owner_profile">
         <action
             android:id="@+id/action_ownerProfileFragment_to_carDetailFragment"

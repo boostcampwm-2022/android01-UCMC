@@ -7,7 +7,7 @@
 
         <variable
             name="owner"
-            type="com.gta.presentation.model.carDetail.CarOwner" />
+            type="com.gta.domain.model.UserProfile" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,12 +65,12 @@
             app:layout_constraintStart_toEndOf="@+id/tv_manners_temperature_label"
             tools:text="90ºC" />
 
+        <!-- TODO onClick 데이터 바인딩 해주기 -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_chatting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/padding_medium"
-            android:onClick="@{() -> owner.onChattingClick()}"
             android:text="@string/chat_going"
             app:layout_constraintBottom_toBottomOf="@+id/tv_report"
             app:layout_constraintEnd_toStartOf="@+id/tv_report"
@@ -84,7 +84,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/padding_medium"
             android:layout_marginBottom="@dimen/padding_small"
-            android:onClick="@{() -> owner.onReportClick()}"
             android:text="@string/report_it"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

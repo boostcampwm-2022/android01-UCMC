@@ -8,6 +8,7 @@ import com.gta.domain.repository.ReservationRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ReservationRepositoryImpl @Inject constructor(
@@ -24,17 +25,34 @@ class ReservationRepositoryImpl @Inject constructor(
 
         carDataSource.getCar(reservation.carId).addOnSuccessListener { snapshot ->
             val updateReservations = getUpdatedReservations(snapshot, reservationId)
-            carDataSource.updateCarReservations(reservation.carId, updateReservations).addOnSuccessListener {
-                reservationDataSource.createReservation(reservation, reservationId).addOnCompleteListener {
-                    trySend(it.isSuccessful)
+            carDataSource.updateCarReservations(reservation.carId, updateReservations)
+                .addOnSuccessListener {
+                    reservationDataSource.createReservation(reservation, reservationId)
+                        .addOnCompleteListener {
+                            trySend(it.isSuccessful)
+                        }
+                }.addOnFailureListener {
+                    trySend(false)
                 }
-            }.addOnFailureListener {
-                trySend(false)
-            }
         }.addOnFailureListener {
             trySend(false)
         }
         awaitClose()
+    }
+
+    override fun getReservationInfo(reservationId: String): Flow<Reservation> = callbackFlow {
+        reservationDataSource.getReservation(reservationId).addOnSuccessListener { snapshot ->
+            snapshot?.toObject(Reservation::class.java)?.let {
+                trySend(it)
+            } ?: trySend(Reservation())
+        }.addOnFailureListener {
+            trySend(Reservation())
+        }
+        awaitClose()
+    }
+
+    override fun getReservationCar(reservationId: String): Flow<String> {
+        return getReservationInfo(reservationId).map { it.carId }
     }
 
     private fun getUpdatedReservations(snapshot: DocumentSnapshot, reservationId: String) =
