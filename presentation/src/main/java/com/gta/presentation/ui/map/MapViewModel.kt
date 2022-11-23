@@ -28,7 +28,7 @@ class MapViewModel @Inject constructor(private val getAllCarsUseCase: GetAllCars
         }
     }
 
-    fun emitSelected(car: SimpleCar) {
+    fun setSelected(car: SimpleCar) {
         viewModelScope.launch {
             _selectCar.emit(car)
         }

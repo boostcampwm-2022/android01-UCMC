@@ -97,30 +97,33 @@
                     android:id="@+id/iv_car"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:src="@{vm.selectCar.image}"
+                    app:image_uri="@{vm.selectCar.image}"
                     app:tint="@color/primaryColor"
                     app:layout_constraintDimensionRatio="H,1:1"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.selectCar.model}"
+                    app:car_title="@{vm.selectCar.model}"
+                    app:car_year="@{vm.selectCar.year}"
+                    app:car_type="@{vm.selectCar.carType}"
                     android:textSize="@dimen/font_title_large"
                     android:textStyle="bold"
                     android:layout_marginStart="@dimen/padding_medium"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/tv_price"
-                    app:layout_constraintVertical_chainStyle="spread"
-                    app:layout_constraintStart_toEndOf="@id/iv_car"/>
+                    app:layout_constraintStart_toEndOf="@id/iv_car"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintVertical_chainStyle="spread"/>
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text = "@{Integer.toString(vm.selectCar.price)}"
+                    android:text="@{@string/car_detail_day_price(vm.selectCar.price)}"
                     android:textSize="@dimen/font_body_large"
                     app:layout_constraintTop_toBottomOf="@id/tv_title"
                     app:layout_constraintBottom_toBottomOf="parent"

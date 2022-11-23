@@ -57,6 +57,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.vm = viewModel
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
 
@@ -106,7 +107,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                             map = naverMap
 
                             setOnClickListener {
-                                viewModel.emitSelected(car)
+                                viewModel.setSelected(car)
                                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                                 true
                             }
