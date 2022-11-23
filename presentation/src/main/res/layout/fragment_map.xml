@@ -25,12 +25,12 @@
                 android:theme="@style/Theme.UCMC"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <EditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/et_search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:importantForAutofill="no"
-                    android:textColor="?attr/colorOnPrimary"
+                    android:textColor="?attr/colorOnBackground"
                     android:padding="@dimen/padding_small"
                     android:layout_marginEnd="@dimen/padding_medium"
                     android:hint="@string/search_hint"
