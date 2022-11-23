@@ -25,17 +25,15 @@ fun setCarDetailTitle(textView: TextView, type: String, year: Int, title: String
 
 @BindingAdapter("set_car_detail_button")
 fun setCarDetailBtnState(button: Button, state: UseState) {
+    button.isEnabled = true
     button.text = when (state) {
         UseState.OWNER -> {
-            button.isEnabled = true
             button.resources.getString(R.string.correction)
         }
         UseState.NOW_RENT_USER -> {
-            button.isEnabled = true
             button.resources.getString(R.string.extension_and_return)
         }
         UseState.USER -> {
-            button.isEnabled = true
             button.resources.getString(R.string.reservation)
         }
         UseState.UNAVAILABLE -> {
