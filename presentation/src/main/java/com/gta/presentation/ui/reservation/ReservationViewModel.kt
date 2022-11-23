@@ -34,13 +34,13 @@ class ReservationViewModel @Inject constructor(
     private val auth: FirebaseAuth
 ) : ViewModel() {
     private val _reservationDate = MutableLiveData<AvailableDate>()
-    val reservationDate: LiveData<AvailableDate> = _reservationDate
+    val reservationDate: LiveData<AvailableDate> get() = _reservationDate
 
     private val _insuranceOption = MutableLiveData<InsuranceOption>()
-    val insuranceOption: LiveData<InsuranceOption> = _insuranceOption
+    val insuranceOption: LiveData<InsuranceOption> get() = _insuranceOption
 
     private val _totalPrice = MediatorLiveData<Int>()
-    val totalPrice: LiveData<Int> = _totalPrice
+    val totalPrice: LiveData<Int> get() = _totalPrice
 
     val car: StateFlow<CarRentInfo>? = args.get<String>("carId")?.let { carId ->
         getCarRentInfoUseCase(carId).stateIn(
@@ -51,7 +51,7 @@ class ReservationViewModel @Inject constructor(
     }
 
     private val _createReservationEvent = MutableSharedFlow<Boolean>()
-    val createReservationEvent: SharedFlow<Boolean> = _createReservationEvent
+    val createReservationEvent: SharedFlow<Boolean> get() = _createReservationEvent
 
     val basePrice: LiveData<Int> = Transformations.map(_reservationDate) {
         val carPrice = car?.value?.price ?: 0
@@ -59,7 +59,7 @@ class ReservationViewModel @Inject constructor(
     }
 
     private val _isPaymentOptionChecked = MutableStateFlow(false)
-    val isPaymentOptionChecked: StateFlow<Boolean> = _isPaymentOptionChecked
+    val isPaymentOptionChecked: StateFlow<Boolean> get() = _isPaymentOptionChecked
 
     init {
         _totalPrice.addSource(basePrice) { basePrice ->
