@@ -60,13 +60,15 @@ class CarRepositoryImpl @Inject constructor(
     override fun getCarRentInfo(carId: String): Flow<CarRentInfo> = callbackFlow {
         carDataSource.getCar(carId).addOnSuccessListener { carSnapshot ->
             carSnapshot?.toObject(Car::class.java)?.let { car ->
-                reservationDataSource.getReservations(car.reservations)
-                    .addOnSuccessListener { querySnapshots ->
-                        val reservationDates = querySnapshots.map { snapshot ->
-                            snapshot.toObject(Reservation::class.java).reservationDate
-                        }
+                reservationDataSource.getAllReservations().addOnSuccessListener { collection ->
+                    collection.filter { document ->
+                        car.reservations.contains(document.id)
+                    }.map { document ->
+                        document.toObject(Reservation::class.java).reservationDate
+                    }.also { reservationDates ->
                         trySend(car.toCarRentInfo(reservationDates))
                     }
+                }
             }
         }.addOnFailureListener {
             trySend(CarRentInfo())
@@ -121,6 +123,7 @@ class CarRepositoryImpl @Inject constructor(
         }
         awaitClose()
     }
+
     override fun removeCar(userId: String, carId: String): Flow<Boolean> = callbackFlow {
         carDataSource.removeCar(carId).addOnSuccessListener {
             userDataSource.getUser(userId).addOnSuccessListener { snapshot ->
