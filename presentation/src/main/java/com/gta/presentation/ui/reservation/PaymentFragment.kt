@@ -18,5 +18,4 @@ class PaymentFragment : BaseFragment<FragmentPaymentBinding>(R.layout.fragment_p
             findNavController().navigate(PaymentFragmentDirections.actionPaymentFragmentToChattingFragment())
         }
     }
-
 }
