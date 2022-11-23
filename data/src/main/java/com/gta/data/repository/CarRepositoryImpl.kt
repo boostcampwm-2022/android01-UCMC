@@ -1,5 +1,6 @@
 package com.gta.data.repository
 
+import com.google.firebase.firestore.QuerySnapshot
 import com.gta.data.model.Car
 import com.gta.data.model.UserInfo
 import com.gta.data.model.toCarRentInfo
@@ -9,6 +10,7 @@ import com.gta.data.model.toSimple
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.UserDataSource
+import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.RentState
@@ -61,11 +63,7 @@ class CarRepositoryImpl @Inject constructor(
         carDataSource.getCar(carId).addOnSuccessListener { carSnapshot ->
             carSnapshot?.toObject(Car::class.java)?.let { car ->
                 reservationDataSource.getAllReservations().addOnSuccessListener { collection ->
-                    collection.filter { document ->
-                        car.reservations.contains(document.id)
-                    }.map { document ->
-                        document.toObject(Reservation::class.java).reservationDate
-                    }.also { reservationDates ->
+                    getCarReservationDates(collection, car).also { reservationDates ->
                         trySend(car.toCarRentInfo(reservationDates))
                     }
                 }
@@ -74,6 +72,14 @@ class CarRepositoryImpl @Inject constructor(
             trySend(CarRentInfo())
         }
         awaitClose()
+    }
+
+    private fun getCarReservationDates(collection: QuerySnapshot, car: Car): List<AvailableDate> {
+        return collection.filter { document ->
+            car.reservations.contains(document.id)
+        }.map { document ->
+            document.toObject(Reservation::class.java).reservationDate
+        }
     }
 
     private fun getCar(carId: String): Flow<Car> = callbackFlow {
