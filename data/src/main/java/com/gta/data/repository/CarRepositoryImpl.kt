@@ -33,13 +33,13 @@ class CarRepositoryImpl @Inject constructor(
     }
 
     override fun getCarData(carId: String): Flow<CarDetail> = callbackFlow {
-        carDataSource.getCar(carId).addOnSuccessListener { snapshot ->
-            snapshot?.toObject(Car::class.java)?.let { carInfo ->
-                userDataSource.getUser(carInfo.ownerId).addOnSuccessListener { snapshot2 ->
-                    snapshot2?.toObject(UserInfo::class.java)?.let { ownerInfo ->
+        carDataSource.getCar(carId).addOnSuccessListener { carSnapshot ->
+            carSnapshot?.toObject(Car::class.java)?.let { carInfo ->
+                userDataSource.getUser(carInfo.ownerId).addOnSuccessListener { ownerSnapshot ->
+                    ownerSnapshot?.toObject(UserInfo::class.java)?.let { ownerInfo ->
                         trySend(
                             carInfo.toDetailCar(
-                                snapshot.id,
+                                carSnapshot.id,
                                 ownerInfo.toProfile(carInfo.ownerId)
                             )
                         )
