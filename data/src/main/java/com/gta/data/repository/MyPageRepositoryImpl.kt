@@ -12,16 +12,16 @@ class MyPageRepositoryImpl @Inject constructor(
     private val myPageDataSource: MyPageDataSource,
     private val storageDataSource: StorageDataSource
 ) : MyPageRepository {
-    override fun setThumbnail(uid: String, uri: String): Flow<String?> = callbackFlow {
+    override fun setThumbnail(uid: String, uri: String): Flow<String> = callbackFlow {
         storageDataSource.uploadThumbnail(uri).addOnCompleteListener {
             if (it.isSuccessful) {
                 myPageDataSource.setThumbnail(uid, it.result.toString()).addOnSuccessListener {
                     trySend(uri)
                 }.addOnFailureListener {
-                    trySend(null)
+                    trySend("")
                 }
             } else {
-                trySend(null)
+                trySend("")
             }
         }
         awaitClose()
