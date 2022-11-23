@@ -18,6 +18,9 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -27,6 +30,7 @@ import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
@@ -107,8 +111,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                             map = naverMap
 
                             setOnClickListener {
-                                viewModel.setSelected(car)
                                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                                naverMap.moveCamera(CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing))
+                                viewModel.setSelected(car)
                                 true
                             }
                         }
@@ -122,10 +127,26 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithBottomSheet() {
         binding.bottomSheet.setOnTouchListener { _, _ ->
-            val navAction = MapFragmentDirections.actionMapFragmentToCarDetailFragment(viewModel.selectCar.value.id)
+            val navAction =
+                MapFragmentDirections.actionMapFragmentToCarDetailFragment(viewModel.selectCar.value.id)
             findNavController().navigate(navAction)
             false
         }
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {}
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                naverMap.setContentPadding(
+                    0,
+                    0,
+                    0,
+                    (binding.bottomSheet.height * (slideOffset + 1)).toInt()
+                )
+            }
+
+        })
     }
 
     override fun onAttach(context: Context) {
