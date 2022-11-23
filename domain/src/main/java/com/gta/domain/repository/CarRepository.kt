@@ -11,5 +11,6 @@ interface CarRepository {
     fun getCarData(carId: String): Flow<CarDetail>
     fun getCarRentInfo(carId: String): Flow<CarRentInfo>
     fun getSimpleCarList(ownerId: String): Flow<List<SimpleCar>>
+    fun getAllCars(): Flow<List<SimpleCar>>
     fun removeCar(userId: String, carId: String): Flow<Boolean>
 }

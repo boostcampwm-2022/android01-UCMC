@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.map.MapFragment">
 
+    <data>
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.map.MapViewModel" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -91,7 +97,7 @@
                     android:id="@+id/iv_car"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_bottom_nav_car"
+                    android:src="@{vm.selectCar.image}"
                     app:tint="@color/primaryColor"
                     app:layout_constraintDimensionRatio="H,1:1"
                     app:layout_constraintTop_toTopOf="parent"
@@ -101,7 +107,7 @@
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="주영이 포르쉐"
+                    android:text="@{vm.selectCar.model}"
                     android:textSize="@dimen/font_title_large"
                     android:textStyle="bold"
                     android:layout_marginStart="@dimen/padding_medium"
@@ -114,12 +120,11 @@
                     android:id="@+id/tv_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text = "금액 : 1000원"
+                    android:text = "@{Integer.toString(vm.selectCar.price)}"
                     android:textSize="@dimen/font_body_large"
                     app:layout_constraintTop_toBottomOf="@id/tv_title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@id/tv_title"/>
-                <!-- android:text="@{@string/car_detail_day_price(vm.car.price)}" -->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </FrameLayout>

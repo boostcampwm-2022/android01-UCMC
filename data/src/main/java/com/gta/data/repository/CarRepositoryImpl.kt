@@ -88,6 +88,18 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
+    override fun getAllCars(): Flow<List<SimpleCar>> = callbackFlow {
+        carDataSource.getAllCars().addOnSuccessListener { query ->
+            val list = mutableListOf<SimpleCar>()
+            query.forEach { car ->
+                list.add(car.toObject(Car::class.java).toSimple(car.id))
+            }
+            trySend(list)
+        }.addOnFailureListener {
+            trySend(emptyList())
+        }
+        awaitClose()
+    }
     override fun removeCar(userId: String, carId: String): Flow<Boolean> = callbackFlow {
         carDataSource.removeCar(carId).addOnSuccessListener {
             userDataSource.getUser(userId).addOnSuccessListener { snapshot ->

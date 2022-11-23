@@ -8,6 +8,10 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.gta.presentation.R
@@ -21,6 +25,8 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
@@ -28,6 +34,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private lateinit var locationSource: FusedLocationSource
     private lateinit var backPressedCallback: OnBackPressedCallback
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
+
+    private val viewModel: MapViewModel by viewModels()
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -86,15 +94,26 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     @SuppressLint("ResourceAsColor")
     private fun setupWithMarker() {
-        val marker = Marker().apply { // 변수를 없애지 않은 이유는 나중에 Firebase에서 들고와야 하니까,, 일단 냅두겠습니다
-            icon = MarkerIcons.BLACK
-            iconTintColor = requireContext().getColor(R.color.primaryColor)
-            position = LatLng(37.36, 127.1052)
-            map = naverMap
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getAllCars()
+                viewModel.cars.first() {
+                    it.forEach { car ->
+                        Marker().apply {
+                            icon = MarkerIcons.BLACK
+                            iconTintColor = requireContext().getColor(R.color.primaryColor)
+                            position = LatLng(car.coordinate.x, car.coordinate.y)
+                            map = naverMap
 
-            setOnClickListener {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                true
+                            setOnClickListener {
+                                viewModel.emitSelected(car)
+                                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                                true
+                            }
+                        }
+                    }
+                    true
+                }
             }
         }
     }
@@ -102,7 +121,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithBottomSheet() {
         binding.bottomSheet.setOnTouchListener { _, _ ->
-            val navAction = MapFragmentDirections.actionMapFragmentToCarDetailFragment("test")
+            val navAction = MapFragmentDirections.actionMapFragmentToCarDetailFragment(viewModel.selectCar.value.id)
             findNavController().navigate(navAction)
             false
         }
