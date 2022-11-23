@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReviewBinding
+import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -23,6 +24,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.review_toolbar)
         binding.vm = viewModel
         initCollector()
     }

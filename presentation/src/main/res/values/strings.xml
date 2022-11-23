@@ -91,6 +91,7 @@
     <string name="nickname_error_symbols">한글, 영어, 숫자만 입력해주세요</string>
     <string name="nickname_btn_apply">적용하기</string>
 
+    <string name="review_toolbar">리뷰 남기기</string>
     <string name="review_nickname_for_lender">%1s님의</string>
     <string name="review_nickname_for_owner">%1s님이 대여한</string>
     <string name="review_input_label">솔직한 리뷰를 남겨주세요!</string>
