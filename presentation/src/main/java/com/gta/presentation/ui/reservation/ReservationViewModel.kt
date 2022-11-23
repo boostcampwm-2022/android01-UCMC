@@ -33,6 +33,8 @@ class ReservationViewModel @Inject constructor(
     private val createReservationUseCase: CreateReservationUseCase,
     private val auth: FirebaseAuth
 ) : ViewModel() {
+    private val carId by lazy { args.get<String>("carId") }
+
     private val _reservationDate = MutableLiveData<AvailableDate>()
     val reservationDate: LiveData<AvailableDate> get() = _reservationDate
 
@@ -42,7 +44,7 @@ class ReservationViewModel @Inject constructor(
     private val _totalPrice = MediatorLiveData<Int>()
     val totalPrice: LiveData<Int> get() = _totalPrice
 
-    val car: StateFlow<CarRentInfo>? = args.get<String>("carId")?.let { carId ->
+    val car: StateFlow<CarRentInfo>? = carId?.let { carId ->
         getCarRentInfoUseCase(carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -91,7 +93,7 @@ class ReservationViewModel @Inject constructor(
         val price = totalPrice.value ?: return
         val option = insuranceOption.value ?: return
 
-        args.get<String>("carId")?.let {
+        carId?.let {
             viewModelScope.launch {
                 _createReservationEvent.emit(
                     createReservationUseCase(
