@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,7 +20,6 @@ import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
-import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
@@ -30,7 +30,6 @@ import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
@@ -38,7 +37,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private lateinit var locationSource: FusedLocationSource
     private lateinit var backPressedCallback: OnBackPressedCallback
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
-
+    private var mapMode = LocationTrackingMode.None
     private val viewModel: MapViewModel by viewModels()
 
     private val activityResultLauncher =
@@ -58,6 +57,19 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
+
+    private val bottomSheetCallback = object :
+        BottomSheetBehavior.BottomSheetCallback() {
+        override fun onStateChanged(bottomSheet: View, newState: Int) {}
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            naverMap.setContentPadding(
+                0,
+                0,
+                0,
+                (binding.bottomSheet.height * (slideOffset + 1)).toInt()
+            )
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,13 +93,16 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithMap() {
         naverMap.locationSource = locationSource
+        naverMap.locationTrackingMode = mapMode
         naverMap.uiSettings.apply {
             isCompassEnabled = true
             isScaleBarEnabled = true
             isLocationButtonEnabled = true
         }
 
-        binding.mapView.setOnTouchListener { v, event ->
+        binding.mapView.setOnTouchListener { _, event ->
+            hideKeyboard()
+            binding.etSearch.clearFocus()
             if (event.y >= binding.bottomSheet.top && event.y <= binding.bottomSheet.bottom) {
                 true
             } else {
@@ -112,7 +127,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
                             setOnClickListener {
                                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                                naverMap.moveCamera(CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing))
+                                naverMap.moveCamera(
+                                    CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
+                                )
                                 viewModel.setSelected(car)
                                 true
                             }
@@ -127,26 +144,13 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithBottomSheet() {
         binding.bottomSheet.setOnTouchListener { _, _ ->
+            bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
             val navAction =
                 MapFragmentDirections.actionMapFragmentToCarDetailFragment(viewModel.selectCar.value.id)
             findNavController().navigate(navAction)
             false
         }
-
-        bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {}
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                naverMap.setContentPadding(
-                    0,
-                    0,
-                    0,
-                    (binding.bottomSheet.height * (slideOffset + 1)).toInt()
-                )
-            }
-
-        })
+        bottomSheetBehavior.addBottomSheetCallback(bottomSheetCallback)
     }
 
     override fun onAttach(context: Context) {
@@ -169,6 +173,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onPause() {
+        mapMode = naverMap.locationTrackingMode
         binding.mapView.onPause()
         super.onPause()
     }
@@ -187,6 +192,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         if (super.isBindingNotNull()) {
             binding.mapView.onSaveInstanceState(outState)
         }
+
         super.onSaveInstanceState(outState)
     }
 
@@ -205,7 +211,20 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         super.onLowMemory()
     }
 
+    private fun hideKeyboard() {
+        val activity = requireActivity()
+        if (activity.currentFocus != null) {
+            val inputManager: InputMethodManager =
+                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(
+                activity.currentFocus!!.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
+    }
+
     companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 100
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+        private const val MODE_KEY = "MAP_MODE"
     }
 }
