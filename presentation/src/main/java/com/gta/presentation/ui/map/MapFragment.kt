@@ -81,6 +81,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.addBottomSheetCallback(bottomSheetCallback)
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -145,13 +146,12 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithBottomSheet() {
         binding.bottomSheet.setOnTouchListener { _, _ ->
-            bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
+
             val navAction =
                 MapFragmentDirections.actionMapFragmentToCarDetailFragment(viewModel.selectCar.value.id)
             findNavController().navigate(navAction)
             false
         }
-        bottomSheetBehavior.addBottomSheetCallback(bottomSheetCallback)
     }
 
     override fun onAttach(context: Context) {
@@ -198,6 +198,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onDestroyView() {
+        bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
         binding.mapView.onDestroy()
         super.onDestroyView()
     }
