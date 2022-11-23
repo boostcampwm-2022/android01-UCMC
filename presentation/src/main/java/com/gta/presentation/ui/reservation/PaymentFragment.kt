@@ -15,7 +15,7 @@ class PaymentFragment : BaseFragment<FragmentPaymentBinding>(R.layout.fragment_p
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycleScope.launch {
             delay(2000)
-            findNavController().navigateUp()
+            findNavController().navigate(PaymentFragmentDirections.actionPaymentFragmentToChattingFragment())
         }
     }
 

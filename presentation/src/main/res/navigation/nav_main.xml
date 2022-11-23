@@ -19,7 +19,11 @@
         android:id="@+id/chattingFragment"
         android:name="com.gta.presentation.ui.chatting.ChattingFragment"
         android:label="@string/chatting"
-        tools:layout="@layout/fragment_chatting" />
+        tools:layout="@layout/fragment_chatting">
+        <action
+            android:id="@+id/action_chattingFragment_to_reservationFragment"
+            app:destination="@id/reservationFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/myPageFragment"
@@ -119,7 +123,12 @@
         android:id="@+id/paymentFragment"
         android:name="com.gta.presentation.ui.reservation.PaymentFragment"
         android:label="fragment_payment"
-        tools:layout="@layout/fragment_payment" />
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment"
+            app:popUpTo="@id/chattingFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/ownerProfileFragment"
