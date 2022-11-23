@@ -28,8 +28,8 @@ class MyPageViewModel @Inject constructor(
     private val _userProfile = MutableStateFlow(UserProfile())
     val userProfile: StateFlow<UserProfile> get() = _userProfile
 
-    private val _thumbnailUpdateEvent = MutableSharedFlow<String?>()
-    val thumbnailUpdateEvent: SharedFlow<String?> get() = _thumbnailUpdateEvent
+    private val _thumbnailUpdateEvent = MutableSharedFlow<String>()
+    val thumbnailUpdateEvent: SharedFlow<String> get() = _thumbnailUpdateEvent
 
     private val _nicknameEditEvent = MutableSharedFlow<String>()
     val nicknameEditEvent: SharedFlow<String> get() = _nicknameEditEvent
@@ -38,8 +38,8 @@ class MyPageViewModel @Inject constructor(
         getUserProfile()
     }
 
-    fun changeThumbnail(uri: String?) {
-        val previousImage = userProfile.value.image ?: ""
+    fun changeThumbnail(uri: String) {
+        val previousImage = userProfile.value.image
         viewModelScope.launch {
             if (previousImage.isNotEmpty()) {
                 deleteThumbnailUseCase(previousImage).first()
@@ -62,7 +62,7 @@ class MyPageViewModel @Inject constructor(
 
     fun navigateNicknameEdit() {
         viewModelScope.launch {
-            _nicknameEditEvent.emit(userProfile.value.image ?: "")
+            _nicknameEditEvent.emit(userProfile.value.image)
         }
     }
 
