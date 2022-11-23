@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/mapFragment">
+    app:startDestination="@id/reviewFragment">
 
     <fragment
         android:id="@+id/mapFragment"
@@ -133,5 +133,9 @@
             app:popUpTo="@id/myPageFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.gta.presentation.ui.review.ReviewFragment"
+        android:label="ReviewFragment" />
 
 </navigation>

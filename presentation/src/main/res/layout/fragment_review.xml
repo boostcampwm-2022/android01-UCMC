@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.gta.domain.model.ReviewType"/>
         <variable
             name="vm"
             type="com.gta.presentation.ui.review.ReviewViewModel" />
@@ -15,9 +16,11 @@
 
         <ImageView
             android:id="@+id/iv_review_car"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_marginTop="32dp"
+            android:scaleType="centerCrop"
+            app:image_uri="@{vm.reviewDTO.carImage}"
             app:layout_constraintBottom_toTopOf="@id/tv_review_nickname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,8 +33,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
+            android:text="@{vm.reviewDTO.reviewType == ReviewType.LENDER_TO_OWNER ? @string/review_nickname_for_lender(vm.reviewDTO.opponent.name) : @string/review_nickname_for_owner(vm.reviewDTO.opponent.name)}"
             android:textColor="@color/black"
-            android:textSize="@dimen/font_label_medium"
+            android:textSize="@dimen/font_title_small"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toTopOf="@id/tv_review_car_model"
             app:layout_constraintEnd_toEndOf="@+id/iv_review_car"
@@ -44,9 +48,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:text="@{vm.reviewDTO.carModel}"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="@dimen/font_label_large"
+            android:textSize="@dimen/font_title_medium"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toTopOf="@id/rb_review_star"
             app:layout_constraintEnd_toEndOf="@+id/tv_review_nickname"
@@ -108,8 +113,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="top"
-                android:text="@={vm.review}"
+                android:text="@={vm.comment}"
                 android:textSize="@dimen/font_body_medium"
+                android:maxLength="300"
                 tools:hint="@string/review_input_hint_for_owner"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -120,6 +126,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/review_btn_apply"
+            android:onClick="@{() -> vm.addReview()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

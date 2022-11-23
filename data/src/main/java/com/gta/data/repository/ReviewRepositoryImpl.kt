@@ -9,6 +9,7 @@ import com.gta.data.source.ReviewDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.model.Reservation
 import com.gta.domain.model.ReviewDTO
+import com.gta.domain.model.ReviewType
 import com.gta.domain.model.UserProfile
 import com.gta.domain.model.UserReview
 import com.gta.domain.repository.ReviewRepository
@@ -44,14 +45,16 @@ class ReviewRepositoryImpl @Inject constructor(
          */
         reservationDataSource.getReservation(reservationId).addOnSuccessListener { reservationSnapshot ->
             val reservation = reservationSnapshot.toObject(Reservation::class.java) ?: Reservation()
+            val reviewType = if (reservation.userId == uid) ReviewType.LENDER_TO_OWNER else ReviewType.OWNER_TO_LENDER
             carDataSource.getCar(reservation.carId).addOnSuccessListener { carSnapshot ->
                 val car = carSnapshot.toObject(Car::class.java) ?: Car()
                 val carImage = if (car.images.isNotEmpty()) car.images[0] else ""
-                val opponentId = if (reservation.userId == uid) car.ownerId else reservation.userId
+                val opponentId = if (reviewType == ReviewType.LENDER_TO_OWNER) car.ownerId else reservation.userId
                 userDataSource.getUser(opponentId).addOnSuccessListener { userSnapshot ->
                     val profile = userSnapshot?.toObject(UserInfo::class.java)?.toProfile(opponentId) ?: UserProfile()
                     trySend(
                         ReviewDTO(
+                            reviewType = reviewType,
                             opponent = profile,
                             carImage = carImage,
                             carModel = car.pinkSlip.model
@@ -66,5 +69,6 @@ class ReviewRepositoryImpl @Inject constructor(
         }.addOnFailureListener {
             trySend(ReviewDTO())
         }
+        awaitClose()
     }
 }
