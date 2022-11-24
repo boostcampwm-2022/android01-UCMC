@@ -34,9 +34,9 @@ class CarEditImagesAdapter : ListAdapter<String, ImageViewHolder>(ImagesDiffCall
             }
         }
 
-        fun bind(item: String) {
+        fun bind(img: String) {
             GlideApp.with(binding.ivCar.context)
-                .load(item)
+                .load(img)
                 .into(binding.ivCar)
         }
     }

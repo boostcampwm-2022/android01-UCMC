@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.snackbar.Snackbar
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailEditBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -26,6 +27,14 @@ class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
 
     private val viewModel: CarDetailEditViewModel by viewModels()
     private val imagesAdapter by lazy { CarEditImagesAdapter() }
+
+    private val maxImagesMsg by lazy {
+        Snackbar.make(
+            binding.btnDone,
+            "이미지는 최대 10장까지 선택 할 수 있어요.",
+            Snackbar.LENGTH_SHORT
+        )
+    }
 
     private val imageResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -55,13 +64,18 @@ class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnAddImage.setOnClickListener {
-            addImageAtGallery()
+            if (viewModel.images.value.size < 10) {
+                addImageAtGallery()
+            } else {
+                maxImagesMsg.show()
+            }
         }
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.images.collectLatest {
                     imagesAdapter.submitList(it)
+                    binding.rvImages.scrollToPosition(0)
                 }
             }
         }
