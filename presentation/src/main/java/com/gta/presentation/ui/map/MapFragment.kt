@@ -5,7 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,9 +16,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.gta.domain.model.LocationInfo
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.ui.mypage.mycars.OnItemClickListener
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
@@ -38,9 +40,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private lateinit var locationSource: FusedLocationSource
     private lateinit var backPressedCallback: OnBackPressedCallback
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
-    private lateinit var menuAdapter: ArrayAdapter<String>
+    private lateinit var menuAdapter: AutoCompleteAdapter
 
     private val viewModel: MapViewModel by viewModels()
+    private lateinit var inputManager: InputMethodManager
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -68,8 +71,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-        menuAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line)
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -134,28 +135,30 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     private fun setupWithSearch() {
+        menuAdapter = AutoCompleteAdapter(requireContext(), emptyList())
+        menuAdapter.setOnItemClickListener(object : OnItemClickListener<LocationInfo> {
+            override fun onClick(value: LocationInfo) {
+                binding.etSearch.setText(value.address)
+                naverMap.moveCamera(
+                    CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude)).animate(CameraAnimation.Easing)
+                )
+                hideKeyboard()
+                binding.etSearch.clearFocus()
+            }
+
+            override fun onLongClick(v: View, value: LocationInfo) {}
+        })
         binding.etSearch.setAdapter(menuAdapter)
         binding.etSearch.doOnTextChanged { text, _, _, _ ->
-            viewModel.queryFlow.tryEmit(text.toString()).also {
-            }
+            viewModel.queryFlow.tryEmit(text.toString())
         }
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchStringResult.collectLatest { list ->
-                    menuAdapter.clear()
-                    menuAdapter.addAll(list)
-                    menuAdapter.notifyDataSetChanged()
+                viewModel.searchResult.collectLatest { list ->
+                    menuAdapter.replace(list)
                 }
             }
-        }
-
-        binding.etSearch.setOnItemClickListener { _, _, position, _ ->
-            val selected = viewModel.searchResult.value[position]
-            binding.etSearch.setText(selected.address)
-            naverMap.moveCamera(
-                CameraUpdate.scrollTo(LatLng(selected.latitude, selected.longitude)).animate(CameraAnimation.Easing)
-            )
         }
     }
 
@@ -213,6 +216,21 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     override fun onLowMemory() {
         binding.mapView.onLowMemory()
         super.onLowMemory()
+    }
+
+    private fun hideKeyboard() {
+        requireActivity().also { activity ->
+            if (activity.currentFocus != null) {
+                inputManager =
+                    activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                activity.currentFocus?.let { view ->
+                    inputManager.hideSoftInputFromWindow(
+                        view.windowToken,
+                        InputMethodManager.HIDE_NOT_ALWAYS
+                    )
+                }
+            }
+        }
     }
 
     companion object {
