@@ -25,11 +25,16 @@ class CarDataSource @Inject constructor(
     fun getOwnerCars(cars: List<String>): Flow<List<Car>> = callbackFlow {
         fireStore
             .collection("cars")
-            .whereIn(FieldPath.documentId(), cars)
             .get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    trySend(it.result.map { snapshot -> snapshot.toObject(Car::class.java) })
+                    it.result.filter { document ->
+                        cars.contains(document.id)
+                    }.map { snapshot ->
+                        snapshot.toObject(Car::class.java)
+                    }.also { result ->
+                        trySend(result)
+                    }
                 } else {
                     trySend(emptyList())
                 }
@@ -37,16 +42,17 @@ class CarDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun updateCarReservations(carId: String, reservations: List<Any?>): Flow<Boolean> = callbackFlow {
-        fireStore
-            .collection("cars")
-            .document(carId)
-            .update("reservations", reservations)
-            .addOnCompleteListener {
-                trySend(it.isSuccessful)
-            }
-        awaitClose()
-    }
+    fun updateCarReservations(carId: String, reservations: List<Any?>): Flow<Boolean> =
+        callbackFlow {
+            fireStore
+                .collection("cars")
+                .document(carId)
+                .update("reservations", reservations)
+                .addOnCompleteListener {
+                    trySend(it.isSuccessful)
+                }
+            awaitClose()
+        }
 
     fun getAllCars(): Flow<List<Car>> = callbackFlow {
         fireStore.collection("cars").get().addOnCompleteListener {
