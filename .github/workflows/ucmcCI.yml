@@ -26,6 +26,8 @@ jobs:
         run: mkdir ./presentation/src/main/java/com/gta/presentation/secret
       - name: Create Secrets
         run: echo '${{ secrets.CONSTANTS }}' > ./presentation/src/main/java/com/gta/presentation/secret/Secrets.kt
+      - name: Create Kakao Secrets
+        run: echo '${{ secrets.KAKAO }}' > ./data/src/main/java/com/gta/data/secret/Secrets.kt
       - name: Build with Gradle
         run: ./gradlew build
       - name: Build Signed APK
