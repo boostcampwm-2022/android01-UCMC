@@ -7,9 +7,9 @@ import com.gta.domain.model.SimpleCar
 import com.gta.domain.usecase.cardetail.GetOwnerCarsUseCase
 import com.gta.domain.usecase.cardetail.RemoveCarUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,20 +20,20 @@ class MyCarsViewModel @Inject constructor(
     private val removeCarUseCase: RemoveCarUseCase
 ) :
     ViewModel() {
-    private val _userCarList = MutableSharedFlow<List<SimpleCar>?>()
-    val userCarList: SharedFlow<List<SimpleCar>?> get() = _userCarList
-
-    private val _carRemoved = MutableSharedFlow<Boolean>()
-    val carRemoved: SharedFlow<Boolean> get() = _carRemoved
+    private val _userCarList = MutableStateFlow<List<SimpleCar>>(emptyList())
+    val userCarList: StateFlow<List<SimpleCar>> get() = _userCarList
 
     private val uid = auth.currentUser?.uid
 
-    fun getCarList() {
+    init {
+        getCarList()
+    }
+
+    private fun getCarList() {
         uid ?: return
         viewModelScope.launch {
-            getOwnerCarsUseCase(uid).first() {
+            getOwnerCarsUseCase(uid).collectLatest {
                 _userCarList.emit(it)
-                true
             }
         }
     }
@@ -41,10 +41,8 @@ class MyCarsViewModel @Inject constructor(
     fun deleteCar(carId: String) {
         uid ?: return
         viewModelScope.launch {
-            removeCarUseCase(uid, carId).first() {
-                _carRemoved.emit(it)
+            removeCarUseCase(uid, carId).collectLatest {
                 getCarList()
-                true
             }
         }
     }

@@ -52,7 +52,12 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                     )
                 }
                 UseState.USER -> {
-                    // TODO 예약 페이지
+                    findNavController().navigate(
+                        CarDetailFragmentDirections
+                            .actionCarDetailFragmentToReservationFragment(
+                                viewModel.carInfo.value.id
+                            )
+                    )
                 }
                 UseState.NOW_RENT_USER -> {
                     // TODO 반납하기 페이지

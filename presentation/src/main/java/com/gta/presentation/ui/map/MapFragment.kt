@@ -9,15 +9,18 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.gta.domain.model.LocationInfo
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.ui.mypage.mycars.OnItemClickListener
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
@@ -28,7 +31,7 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -37,6 +40,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private lateinit var locationSource: FusedLocationSource
     private lateinit var backPressedCallback: OnBackPressedCallback
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
+    private lateinit var menuAdapter: AutoCompleteAdapter
     private var mapMode = LocationTrackingMode.None
     private val viewModel: MapViewModel by viewModels()
     private lateinit var inputManager: InputMethodManager
@@ -90,6 +94,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         setupWithMap()
         setupWithMarker()
         setupWithBottomSheet()
+        setupWithSearch()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -118,8 +123,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private fun setupWithMarker() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getAllCars()
-                viewModel.cars.first() {
+                viewModel.cars.collectLatest {
                     it.forEach { car ->
                         Marker().apply {
                             icon = MarkerIcons.BLACK
@@ -137,7 +141,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                             }
                         }
                     }
-                    true
                 }
             }
         }
@@ -146,11 +149,39 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithBottomSheet() {
         binding.bottomSheet.setOnTouchListener { _, _ ->
-
             val navAction =
                 MapFragmentDirections.actionMapFragmentToCarDetailFragment(viewModel.selectCar.value.id)
             findNavController().navigate(navAction)
             false
+        }
+    }
+
+    private fun setupWithSearch() {
+        menuAdapter = AutoCompleteAdapter(requireContext(), emptyList())
+        menuAdapter.setOnItemClickListener(object : OnItemClickListener<LocationInfo> {
+            override fun onClick(value: LocationInfo) {
+                binding.etSearch.setText(value.address)
+                naverMap.moveCamera(
+                    CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude))
+                        .animate(CameraAnimation.Easing)
+                )
+                hideKeyboard()
+                binding.etSearch.clearFocus()
+            }
+
+            override fun onLongClick(v: View, value: LocationInfo) {}
+        })
+        binding.etSearch.setAdapter(menuAdapter)
+        binding.etSearch.doOnTextChanged { text, _, _, _ ->
+            viewModel.setQuery(text.toString())
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchResult.collectLatest { list ->
+                    menuAdapter.replace(list)
+                }
+            }
         }
     }
 

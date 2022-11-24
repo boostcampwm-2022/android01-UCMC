@@ -20,16 +20,13 @@
         android:name="com.gta.presentation.ui.chatting.ChattingFragment"
         android:label="@string/chatting"
         tools:layout="@layout/fragment_chatting">
-        <action
-            android:id="@+id/action_chattingFragment_to_reservationFragment"
-            app:destination="@id/reservationFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
         android:label="@string/my_page"
-        tools:layout="@layout/fragment_mypage">
+        tools:layout="@layout/fragment_mypage" >
         <action
             android:id="@+id/action_myPageFragment_to_nicknameFragment"
             app:destination="@id/nicknameFragment" />
@@ -45,10 +42,10 @@
         tools:layout="@layout/fragment_my_cars">
         <action
             android:id="@+id/action_myPageCarListFragment_to_pinkSlipGuideFragment"
-            app:destination="@id/pinkSlipGuideFragment" />
+            app:destination="@id/pinkSlipGuideFragment"/>
         <action
             android:id="@+id/action_myPageCarListFragment_to_carDetailFragment"
-            app:destination="@id/carDetailFragment" />
+            app:destination="@id/carDetailFragment"/>
     </fragment>
 
     <fragment
@@ -65,12 +62,16 @@
         <action
             android:id="@+id/action_carDetailFragment_to_carDetailEditFragment"
             app:destination="@id/carDetailEditFragment" />
+        <action
+            android:id="@+id/action_carDetailFragment_to_reservationFragment"
+            app:destination="@id/reservationFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/licenseGuideFragment"
         android:name="com.gta.presentation.ui.license.guide.LicenseGuideFragment"
-        android:label="LicenseGuideFragment">
+        android:label="LicenseGuideFragment"
+        tools:layout="@layout/fragment_camera_guide">
         <action
             android:id="@+id/action_licenseGuideFragment_to_licenseRegistrationFragment"
             app:destination="@id/licenseRegistrationFragment" />
@@ -79,10 +80,15 @@
     <fragment
         android:id="@+id/licenseRegistrationFragment"
         android:name="com.gta.presentation.ui.license.registration.LicenseRegistrationFragment"
-        android:label="LicenseRegistrationFragment">
+        android:label="LicenseRegistrationFragment"
+        tools:layout="@layout/fragment_license_registration">
         <argument
             android:name="uri"
             app:argType="string" />
+        <action
+            android:id="@+id/action_licenseRegistrationFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment"
+            app:popUpTo="@id/myPageFragment" />
     </fragment>
 
     <fragment
@@ -106,7 +112,8 @@
         <action
             android:id="@+id/action_pinkSlipRegistrationFragment_to_myPageCarListFragment"
             app:destination="@id/myPageCarListFragment"
-            app:popUpTo="@id/myPageCarListFragment" />
+            app:popUpTo="@id/myPageCarListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -126,7 +133,7 @@
         android:id="@+id/paymentFragment"
         android:name="com.gta.presentation.ui.reservation.PaymentFragment"
         android:label="fragment_payment"
-        tools:layout="@layout/fragment_payment">
+        tools:layout="@layout/fragment_payment" >
         <action
             android:id="@+id/action_paymentFragment_to_chattingFragment"
             app:destination="@id/chattingFragment"
@@ -148,7 +155,8 @@
     <fragment
         android:id="@+id/nicknameFragment"
         android:name="com.gta.presentation.ui.nickname.NicknameFragment"
-        android:label="NicknameFragment">
+        android:label="NicknameFragment"
+        tools:layout="@layout/fragment_nickname">
         <argument
             android:name="thumb"
             app:argType="string" />
@@ -162,7 +170,8 @@
     <fragment
         android:id="@+id/reviewFragment"
         android:name="com.gta.presentation.ui.review.ReviewFragment"
-        android:label="@string/review_toolbar" />
+        android:label="@string/review_toolbar"
+        tools:layout="@layout/fragment_review"/>
 
     <fragment
         android:id="@+id/carDetailEditFragment"

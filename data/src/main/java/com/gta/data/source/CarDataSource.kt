@@ -1,6 +1,5 @@
 package com.gta.data.source
 
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.model.Car
 import kotlinx.coroutines.channels.awaitClose
@@ -25,11 +24,16 @@ class CarDataSource @Inject constructor(
     fun getOwnerCars(cars: List<String>): Flow<List<Car>> = callbackFlow {
         fireStore
             .collection("cars")
-            .whereIn(FieldPath.documentId(), cars)
             .get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    trySend(it.result.map { snapshot -> snapshot.toObject(Car::class.java) })
+                    it.result.filter { document ->
+                        cars.contains(document.id)
+                    }.map { snapshot ->
+                        snapshot.toObject(Car::class.java)
+                    }.also { result ->
+                        trySend(result)
+                    }
                 } else {
                     trySend(emptyList())
                 }
