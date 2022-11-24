@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Filter
 import com.gta.domain.model.LocationInfo
 import com.gta.presentation.databinding.ItemMapSearchBinding
 import com.gta.presentation.ui.mypage.mycars.OnItemClickListener
@@ -18,7 +17,6 @@ class AutoCompleteAdapter(
 ) :
     ArrayAdapter<LocationInfo>(context, 0, list) {
     private val searchList: MutableList<LocationInfo> = ArrayList(list)
-    private var allLocationInfo: List<LocationInfo> = ArrayList(list)
     private var listener: OnItemClickListener<LocationInfo>? = null
 
     override fun getCount(): Int {
@@ -81,50 +79,5 @@ class AutoCompleteAdapter(
         searchList.clear()
         searchList.addAll(collection)
         notifyDataSetChanged()
-    }
-
-    override fun getFilter(): Filter {
-        return searchFilter
-    }
-
-    private val searchFilter = object : Filter() {
-        override fun convertResultToString(resultValue: Any): String {
-            return (resultValue as LocationInfo).address
-        }
-
-        override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val filterResults = FilterResults()
-            if (constraint != null) {
-                val searchSuggestion: MutableList<LocationInfo> = ArrayList()
-                for (search in allLocationInfo) {
-                    if (search.address.lowercase()
-                        .startsWith(constraint.toString().lowercase(Locale.ROOT))
-                    ) {
-                        searchSuggestion.add(search)
-                    }
-                }
-                filterResults.values = searchSuggestion
-                filterResults.count = searchSuggestion.size
-            }
-            return filterResults
-        }
-
-        override fun publishResults(
-            constraint: CharSequence?,
-            results: FilterResults
-        ) {
-            searchList.clear()
-            if (results.count > 0) {
-                for (result in results.values as List<*>) {
-                    if (result is LocationInfo) {
-                        searchList.add(result)
-                    }
-                }
-                notifyDataSetChanged()
-            } else if (constraint == null) {
-                searchList.addAll(allLocationInfo)
-                notifyDataSetInvalidated()
-            }
-        }
     }
 }
