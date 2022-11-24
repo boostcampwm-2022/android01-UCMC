@@ -41,8 +41,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_mypage_edit_nickname"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginStart="@dimen/padding_small"
                 android:src="@drawable/ic_mypage_edit"
                 android:background="@color/neutral80"
@@ -67,8 +67,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_mypage_edit_thumb"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginStart="@dimen/padding_small"
                 android:src="@drawable/ic_mypage_thumb"
                 android:background="@color/neutral80"
