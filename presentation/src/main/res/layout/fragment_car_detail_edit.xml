@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.cardetail.CarDetailEditFragment">
 
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -44,6 +43,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_images"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/padding_medium"
