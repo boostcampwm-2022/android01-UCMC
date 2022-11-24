@@ -1,6 +1,5 @@
 package com.gta.data.source
 
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.model.Car
 import kotlinx.coroutines.channels.awaitClose
