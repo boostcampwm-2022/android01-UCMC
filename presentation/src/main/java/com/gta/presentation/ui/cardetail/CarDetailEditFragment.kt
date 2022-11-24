@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailEditBinding
@@ -28,12 +29,19 @@ class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
     private val viewModel: CarDetailEditViewModel by viewModels()
     private val imagesAdapter by lazy { CarEditImagesAdapter() }
 
-    private val maxImagesMsg by lazy {
+    private val maxImagesMsg: Snackbar by lazy {
         Snackbar.make(
             binding.btnDone,
             "이미지는 최대 10장까지 선택 할 수 있어요.",
             Snackbar.LENGTH_SHORT
         )
+    }
+
+    private val datePicker by lazy {
+        MaterialDatePicker.Builder
+            .dateRangePicker()
+            .setTheme(R.style.Theme_UCMC_DatePicker)
+            .build()
     }
 
     private val imageResult = registerForActivityResult(
@@ -57,6 +65,11 @@ class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
                 }
             })
         }
+
+        datePicker.addOnPositiveButtonClickListener {
+            viewModel.setAvailableDate(it.first, it.second)
+        }
+
         return binding.root
     }
 
@@ -69,6 +82,10 @@ class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
             } else {
                 maxImagesMsg.show()
             }
+        }
+
+        binding.ivDayEdit.setOnClickListener {
+            datePicker.show(childFragmentManager, null)
         }
 
         lifecycleScope.launch {
