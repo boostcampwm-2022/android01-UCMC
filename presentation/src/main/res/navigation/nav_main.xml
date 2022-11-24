@@ -67,7 +67,8 @@
     <fragment
         android:id="@+id/licenseGuideFragment"
         android:name="com.gta.presentation.ui.license.guide.LicenseGuideFragment"
-        android:label="LicenseGuideFragment">
+        android:label="LicenseGuideFragment"
+        tools:layout="@layout/fragment_camera_guide">
         <action
             android:id="@+id/action_licenseGuideFragment_to_licenseRegistrationFragment"
             app:destination="@id/licenseRegistrationFragment" />
@@ -76,10 +77,15 @@
     <fragment
         android:id="@+id/licenseRegistrationFragment"
         android:name="com.gta.presentation.ui.license.registration.LicenseRegistrationFragment"
-        android:label="LicenseRegistrationFragment">
+        android:label="LicenseRegistrationFragment"
+        tools:layout="@layout/fragment_license_registration">
         <argument
             android:name="uri"
             app:argType="string" />
+        <action
+            android:id="@+id/action_licenseRegistrationFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment"
+            app:popUpTo="@id/myPageFragment" />
     </fragment>
 
     <fragment
@@ -145,7 +151,8 @@
     <fragment
         android:id="@+id/nicknameFragment"
         android:name="com.gta.presentation.ui.nickname.NicknameFragment"
-        android:label="NicknameFragment" >
+        android:label="NicknameFragment"
+        tools:layout="@layout/fragment_nickname">
         <argument
             android:name="thumb"
             app:argType="string" />
@@ -158,6 +165,7 @@
     <fragment
         android:id="@+id/reviewFragment"
         android:name="com.gta.presentation.ui.review.ReviewFragment"
-        android:label="@string/review_toolbar" />
+        android:label="@string/review_toolbar"
+        tools:layout="@layout/fragment_review"/>
 
 </navigation>
