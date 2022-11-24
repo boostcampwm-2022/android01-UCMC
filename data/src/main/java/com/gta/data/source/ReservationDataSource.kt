@@ -51,6 +51,8 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
                     car.reservations.contains(document.id)
                 }.map { snapshot ->
                     snapshot.toObject(Reservation::class.java).reservationDate
+                }.also { result ->
+                    trySend(result)
                 }
             } else {
                 trySend(emptyList())

@@ -20,9 +20,6 @@
         android:name="com.gta.presentation.ui.chatting.ChattingFragment"
         android:label="@string/chatting"
         tools:layout="@layout/fragment_chatting">
-        <action
-            android:id="@+id/action_chattingFragment_to_reservationFragment"
-            app:destination="@id/reservationFragment" />
     </fragment>
 
     <fragment
@@ -62,6 +59,9 @@
         <action
             android:id="@+id/action_carDetailFragment_to_ownerProfileFragment"
             app:destination="@id/ownerProfileFragment" />
+        <action
+            android:id="@+id/action_carDetailFragment_to_reservationFragment"
+            app:destination="@id/reservationFragment" />
     </fragment>
 
     <fragment

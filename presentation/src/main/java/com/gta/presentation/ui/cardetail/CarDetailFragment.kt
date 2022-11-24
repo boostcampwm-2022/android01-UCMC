@@ -39,5 +39,14 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                     )
             )
         }
+
+        binding.btnNext.setOnClickListener {
+            findNavController().navigate(
+                CarDetailFragmentDirections
+                    .actionCarDetailFragmentToReservationFragment(
+                        viewModel.carInfo.value.id
+                    )
+            )
+        }
     }
 }
