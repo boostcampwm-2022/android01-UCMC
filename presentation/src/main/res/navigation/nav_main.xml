@@ -109,7 +109,8 @@
         <action
             android:id="@+id/action_pinkSlipRegistrationFragment_to_myPageCarListFragment"
             app:destination="@id/myPageCarListFragment"
-            app:popUpTo="@id/myPageCarListFragment" />
+            app:popUpTo="@id/myPageCarListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
