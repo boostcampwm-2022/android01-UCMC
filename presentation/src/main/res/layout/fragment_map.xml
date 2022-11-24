@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/coordinator"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -25,7 +26,7 @@
                 android:theme="@style/Theme.UCMC"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <EditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/et_search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -48,35 +49,6 @@
                 app:navermap_latitude="37.3588798"
                 app:navermap_longitude="127.1051933"/>
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_type"
-                    android:text="@string/filter_car_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_day"
-                    android:text="@string/filter_day"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/padding_small"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_cost"
-                    android:text="@string/filter_cost"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            </com.google.android.material.chip.ChipGroup>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
@@ -97,30 +69,33 @@
                     android:id="@+id/iv_car"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:src="@{vm.selectCar.image}"
-                    app:tint="@color/primaryColor"
+                    app:image_uri="@{vm.selectCar.image}"
+                    app:tint="@color/neutral80"
                     app:layout_constraintDimensionRatio="H,1:1"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.selectCar.model}"
+                    app:car_title="@{vm.selectCar.model}"
+                    app:car_year="@{vm.selectCar.year}"
+                    app:car_type="@{vm.selectCar.carType}"
                     android:textSize="@dimen/font_title_large"
                     android:textStyle="bold"
                     android:layout_marginStart="@dimen/padding_medium"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/tv_price"
-                    app:layout_constraintVertical_chainStyle="spread"
-                    app:layout_constraintStart_toEndOf="@id/iv_car"/>
+                    app:layout_constraintStart_toEndOf="@id/iv_car"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintVertical_chainStyle="spread"/>
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text = "@{Integer.toString(vm.selectCar.price)}"
+                    android:text="@{@string/car_detail_day_price(vm.selectCar.price)}"
                     android:textSize="@dimen/font_body_large"
                     app:layout_constraintTop_toBottomOf="@id/tv_title"
                     app:layout_constraintBottom_toBottomOf="parent"
