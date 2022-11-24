@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.cardetail.CarDetailEditFragment">
+    tools:context=".ui.cardetail.edit.CarEditFragment">
 
     <data>
 
         <variable
             name="vm"
-            type="com.gta.presentation.ui.cardetail.CarDetailEditViewModel" />
+            type="com.gta.presentation.ui.cardetail.edit.CarEditViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView

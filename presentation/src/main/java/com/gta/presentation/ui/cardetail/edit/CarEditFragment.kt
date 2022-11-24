@@ -1,4 +1,4 @@
-package com.gta.presentation.ui.cardetail
+package com.gta.presentation.ui.cardetail.edit
 
 import android.app.Activity
 import android.content.Intent
@@ -15,18 +15,18 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.gta.presentation.R
-import com.gta.presentation.databinding.FragmentCarDetailEditBinding
+import com.gta.presentation.databinding.FragmentCarEditBinding
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
-    R.layout.fragment_car_detail_edit
+class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
+    R.layout.fragment_car_edit
 ) {
 
-    private val viewModel: CarDetailEditViewModel by viewModels()
+    private val viewModel: CarEditViewModel by viewModels()
     private val imagesAdapter by lazy { CarEditImagesAdapter() }
 
     private val maxImagesMsg: Snackbar by lazy {

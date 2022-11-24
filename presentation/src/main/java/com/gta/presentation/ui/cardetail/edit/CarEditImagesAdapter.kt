@@ -1,4 +1,4 @@
-package com.gta.presentation.ui.cardetail
+package com.gta.presentation.ui.cardetail.edit
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ItemCarDetailEditImageBinding
 import com.gta.presentation.ui.GlideApp
-import com.gta.presentation.ui.cardetail.CarEditImagesAdapter.ImageViewHolder
+import com.gta.presentation.ui.cardetail.edit.CarEditImagesAdapter.ImageViewHolder
 
 class CarEditImagesAdapter : ListAdapter<String, ImageViewHolder>(ImagesDiffCallback()) {
 

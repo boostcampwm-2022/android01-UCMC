@@ -166,9 +166,9 @@
 
     <fragment
         android:id="@+id/carDetailEditFragment"
-        android:name="com.gta.presentation.ui.cardetail.CarDetailEditFragment"
+        android:name="com.gta.presentation.ui.cardetail.edit.CarEditFragment"
         android:label="@string/car_edit_label"
-        tools:layout="@layout/fragment_car_detail_edit">
+        tools:layout="@layout/fragment_car_edit">
         <argument
             android:name="CAR_ID"
             app:argType="string" />

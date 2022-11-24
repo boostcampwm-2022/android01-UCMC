@@ -1,11 +1,11 @@
-package com.gta.presentation.ui.cardetail
+package com.gta.presentation.ui.cardetail.edit
 
 import androidx.lifecycle.ViewModel
 import com.gta.domain.model.AvailableDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class CarDetailEditViewModel : ViewModel() {
+class CarEditViewModel : ViewModel() {
     private val _images = MutableStateFlow<List<String>>(emptyList())
     val images: StateFlow<List<String>>
         get() = _images
