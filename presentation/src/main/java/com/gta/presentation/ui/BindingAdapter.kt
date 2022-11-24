@@ -4,7 +4,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R

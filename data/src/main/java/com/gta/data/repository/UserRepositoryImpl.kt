@@ -8,8 +8,8 @@ import com.gta.domain.repository.UserRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -17,18 +17,8 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     override fun getUserProfile(uid: String): Flow<UserProfile> = callbackFlow {
-        userDataSource.getUser(uid).addOnSuccessListener {
-            if (it.exists()) {
-                trySend(
-                    it.toObject(UserInfo::class.java)?.toProfile(it.id) ?: UserProfile()
-                )
-            } else {
-                trySend(UserProfile())
-            }
-        }.addOnFailureListener {
-            Timber.d("실패")
-            trySend(UserProfile())
-        }
+        val profile = userDataSource.getUser(uid).first()?.toProfile(uid) ?: UserProfile()
+        trySend(profile)
         awaitClose()
     }
 
@@ -39,13 +29,8 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     private fun getUser(uid: String): Flow<UserInfo> = callbackFlow {
-        userDataSource.getUser(uid).addOnSuccessListener { snapshot ->
-            snapshot?.toObject(UserInfo::class.java)?.let {
-                trySend(it)
-            } ?: trySend(UserInfo())
-        }.addOnFailureListener {
-            trySend(UserInfo())
-        }
+        val userInfo = userDataSource.getUser(uid).first() ?: UserInfo()
+        trySend(userInfo)
         awaitClose()
     }
 }
