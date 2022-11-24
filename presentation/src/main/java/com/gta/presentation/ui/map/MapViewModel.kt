@@ -38,7 +38,7 @@ class MapViewModel @Inject constructor(
     private var _selectCar = MutableStateFlow(SimpleCar())
     val selectCar: StateFlow<SimpleCar> get() = _selectCar
 
-    val queryFlow = MutableSharedFlow<String>(
+    private val queryFlow = MutableSharedFlow<String>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
@@ -69,6 +69,12 @@ class MapViewModel @Inject constructor(
     fun setSelected(car: SimpleCar) {
         viewModelScope.launch {
             _selectCar.emit(car)
+        }
+    }
+
+    fun setQuery(query: String) {
+        viewModelScope.launch {
+            queryFlow.tryEmit(query)
         }
     }
 }

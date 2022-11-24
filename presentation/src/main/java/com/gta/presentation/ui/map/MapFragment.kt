@@ -173,7 +173,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         })
         binding.etSearch.setAdapter(menuAdapter)
         binding.etSearch.doOnTextChanged { text, _, _, _ ->
-            viewModel.queryFlow.tryEmit(text.toString())
+            viewModel.setQuery(text.toString())
         }
 
         lifecycleScope.launch {
