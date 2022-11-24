@@ -128,7 +128,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithBottomSheet() {
         binding.bottomSheet.setOnTouchListener { _, _ ->
-            val navAction = MapFragmentDirections.actionMapFragmentToCarDetailFragment(viewModel.selectCar.value.id)
+            val navAction =
+                MapFragmentDirections.actionMapFragmentToCarDetailFragment(viewModel.selectCar.value.id)
             findNavController().navigate(navAction)
             false
         }
@@ -140,7 +141,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             override fun onClick(value: LocationInfo) {
                 binding.etSearch.setText(value.address)
                 naverMap.moveCamera(
-                    CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude)).animate(CameraAnimation.Easing)
+                    CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude))
+                        .animate(CameraAnimation.Easing)
                 )
                 hideKeyboard()
                 binding.etSearch.clearFocus()
