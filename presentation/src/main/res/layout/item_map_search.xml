@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="data"
+            type="com.gta.domain.model.LocationInfo" />
+    </data>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@{data.address}"
+        android:textSize="@dimen/font_body_large"
+        android:padding="@dimen/padding_medium"/>
+</layout>
