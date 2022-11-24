@@ -41,7 +41,13 @@ class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding.rvImages.adapter = imagesAdapter
+        binding.rvImages.adapter = imagesAdapter.apply {
+            setItemClickListener(object : CarEditImagesAdapter.OnItemClickListener {
+                override fun onClick(position: Int) {
+                    viewModel.deleteImage(position)
+                }
+            })
+        }
         return binding.root
     }
 

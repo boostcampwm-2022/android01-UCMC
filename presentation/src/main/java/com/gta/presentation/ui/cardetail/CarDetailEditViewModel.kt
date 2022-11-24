@@ -12,4 +12,8 @@ class CarDetailEditViewModel : ViewModel() {
     fun updateImage(img: String) {
         _images.value = listOf(img) + _images.value
     }
+
+    fun deleteImage(position: Int) {
+        _images.value = _images.value.filterIndexed { index, _ -> index != position }
+    }
 }

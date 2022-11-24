@@ -16,7 +16,7 @@ class CarEditImagesAdapter : ListAdapter<String, ImageViewHolder>(ImagesDiffCall
     private var itemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onClick(id: String)
+        fun onClick(position: Int)
     }
 
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -30,7 +30,7 @@ class CarEditImagesAdapter : ListAdapter<String, ImageViewHolder>(ImagesDiffCall
 
         init {
             binding.ivDelete.setOnClickListener {
-                // TODO 이미지 지우기
+                itemClickListener?.onClick(bindingAdapterPosition)
             }
         }
 
