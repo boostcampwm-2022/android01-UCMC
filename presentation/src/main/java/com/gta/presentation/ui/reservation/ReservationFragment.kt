@@ -42,7 +42,9 @@ class ReservationFragment :
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.createReservationEvent.collectLatest { state ->
-                    findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToPaymentFragment())
+                    if (state) {
+                        findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToPaymentFragment())
+                    }
                 }
             }
         }
@@ -73,7 +75,7 @@ class ReservationFragment :
     }
 
     private fun setUpRadioGroup() {
-        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { group, checkedId ->
+        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rg_reservation_insurance_option_1 -> {
                     viewModel.setInsuranceOption(InsuranceOption.LOW)
