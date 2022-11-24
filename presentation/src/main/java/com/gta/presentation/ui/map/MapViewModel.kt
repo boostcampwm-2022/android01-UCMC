@@ -14,7 +14,6 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
@@ -46,9 +45,6 @@ class MapViewModel @Inject constructor(
     private var _searchResult = MutableStateFlow<List<LocationInfo>>(emptyList())
     val searchResult: StateFlow<List<LocationInfo>> get() = _searchResult
 
-    private var _searchStringResult = MutableStateFlow<List<String>>(emptyList())
-    val searchStringResult: StateFlow<List<String>> get() = _searchStringResult
-
     init {
         getAllCars()
 
@@ -59,22 +55,15 @@ class MapViewModel @Inject constructor(
             }
             .flowOn(Dispatchers.IO)
             .onEach { rawList ->
-                _searchResult.emit(rawList)
-                rawList.map { info ->
-                    info.address
-                }.also { mappedList ->
-                    _searchStringResult.emit(mappedList)
-                }
+                _searchResult.emit(rawList.toMutableList())
             }
             .launchIn(viewModelScope)
     }
 
     private fun getAllCars() {
-        viewModelScope.launch {
-            getAllCarsUseCase().collectLatest {
-                _cars.emit(it)
-            }
-        }
+        getAllCarsUseCase().onEach {
+            _cars.emit(it)
+        }.launchIn(viewModelScope)
     }
 
     fun emitSelected(car: SimpleCar) {
