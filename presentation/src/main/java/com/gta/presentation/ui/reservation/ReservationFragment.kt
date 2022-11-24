@@ -86,9 +86,5 @@ class ReservationFragment :
                 }
             }
         }
-
-        binding.rgReservationPaymentOptions.setOnCheckedChangeListener { group, checkedId ->
-            viewModel.setIsPaymentOptionChecked(true)
-        }
     }
 }
