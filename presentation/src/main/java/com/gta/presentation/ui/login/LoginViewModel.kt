@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.gta.domain.usecase.login.CheckCurrentUserUseCase
+import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,9 +36,10 @@ class LoginViewModel @Inject constructor(
     }
 
     fun checkCurrentUser() {
-        val uid = auth.currentUser?.uid ?: return
+        val user = auth.currentUser ?: return
+        FirebaseUtil.setUid(user)
         viewModelScope.launch {
-            _loginEvent.emit(useCase(uid).first())
+            _loginEvent.emit(useCase(FirebaseUtil.uid).first())
         }
     }
 }

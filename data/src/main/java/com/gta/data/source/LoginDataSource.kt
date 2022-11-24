@@ -1,19 +1,23 @@
 package com.gta.data.source
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.model.UserInfo
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class LoginDataSource @Inject constructor(
-    databaseReference: DatabaseReference
+    private val fireStore: FirebaseFirestore
 ) {
-
-    private val userDatabaseReference: DatabaseReference = databaseReference.child("users")
-
-    fun getUser(uid: String): Task<DataSnapshot> = userDatabaseReference.child(uid).get()
-
-    fun createUser(uid: String): Task<Void> =
-        userDatabaseReference.child(uid).setValue(UserInfo(chatId = uid.hashCode().toLong()))
+    fun createUser(uid: String): Flow<Boolean> = callbackFlow {
+        fireStore
+            .collection("users")
+            .document(uid)
+            .set(UserInfo(chatId = uid.hashCode().toLong()))
+            .addOnCompleteListener {
+                trySend(it.isSuccessful)
+            }
+        awaitClose()
+    }
 }

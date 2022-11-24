@@ -1,13 +1,19 @@
 package com.gta.data.source
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.domain.model.DrivingLicense
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class LicenseDataSource @Inject constructor(
-    private val databaseReference: DatabaseReference
+    private val fireStore: FirebaseFirestore
 ) {
-    fun registerLicense(uid: String, license: DrivingLicense): Task<Void> =
-        databaseReference.child("users").child(uid).child("license").setValue(license)
+    fun registerLicense(uid: String, license: DrivingLicense): Flow<Boolean> = callbackFlow {
+        fireStore.collection("users").document(uid).update("license", license).addOnCompleteListener {
+            trySend(it.isSuccessful)
+        }
+        awaitClose()
+    }
 }

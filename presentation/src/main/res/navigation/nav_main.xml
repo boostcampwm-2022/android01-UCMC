@@ -19,64 +19,154 @@
         android:id="@+id/chattingFragment"
         android:name="com.gta.presentation.ui.chatting.ChattingFragment"
         android:label="@string/chatting"
-        tools:layout="@layout/fragment_chatting" />
+        tools:layout="@layout/fragment_chatting">
+    </fragment>
 
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
         android:label="@string/my_page"
-        tools:layout="@layout/fragment_mypage" />
+        tools:layout="@layout/fragment_mypage" >
+        <action
+            android:id="@+id/action_myPageFragment_to_nicknameFragment"
+            app:destination="@id/nicknameFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_myPageCarListFragment"
+            app:destination="@id/myPageCarListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myPageCarListFragment"
+        android:name="com.gta.presentation.ui.mypage.mycars.MyCarsFragment"
+        android:label="@string/mypage_carlist"
+        tools:layout="@layout/fragment_my_cars">
+        <action
+            android:id="@+id/action_myPageCarListFragment_to_pinkSlipGuideFragment"
+            app:destination="@id/pinkSlipGuideFragment"/>
+        <action
+            android:id="@+id/action_myPageCarListFragment_to_carDetailFragment"
+            app:destination="@id/carDetailFragment"/>
+    </fragment>
+
     <fragment
         android:id="@+id/carDetailFragment"
         android:name="com.gta.presentation.ui.cardetail.CarDetailFragment"
-        android:label="fragment_car_detail"
-        tools:layout="@layout/fragment_car_detail" >
+        android:label="@string/car_detail_page"
+        tools:layout="@layout/fragment_car_detail">
         <argument
             android:name="CAR_ID"
             app:argType="string" />
+        <action
+            android:id="@+id/action_carDetailFragment_to_ownerProfileFragment"
+            app:destination="@id/ownerProfileFragment" />
+        <action
+            android:id="@+id/action_carDetailFragment_to_reservationFragment"
+            app:destination="@id/reservationFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/licenseGuideFragment"
         android:name="com.gta.presentation.ui.license.guide.LicenseGuideFragment"
-        android:label="LicenseGuideFragment" >
+        android:label="LicenseGuideFragment"
+        tools:layout="@layout/fragment_camera_guide">
         <action
             android:id="@+id/action_licenseGuideFragment_to_licenseRegistrationFragment"
             app:destination="@id/licenseRegistrationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/licenseRegistrationFragment"
         android:name="com.gta.presentation.ui.license.registration.LicenseRegistrationFragment"
-        android:label="LicenseRegistrationFragment" >
+        android:label="LicenseRegistrationFragment"
+        tools:layout="@layout/fragment_license_registration">
         <argument
             android:name="uri"
             app:argType="string" />
+        <action
+            android:id="@+id/action_licenseRegistrationFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment"
+            app:popUpTo="@id/myPageFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/pinkSlipGuideFragment"
         android:name="com.gta.presentation.ui.pinkslip.guide.PinkSlipGuideFragment"
-        android:label="PinkSlipGuideFragment" >
+        android:label="PinkSlipGuideFragment"
+        tools:layout="@layout/fragment_camera_guide">
         <action
             android:id="@+id/action_pinkSlipGuideFragment_to_pinkSlipRegistrationFragment"
             app:destination="@id/pinkSlipRegistrationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/pinkSlipRegistrationFragment"
         android:name="com.gta.presentation.ui.pinkslip.registration.PinkSlipRegistrationFragment"
-        android:label="PinkSlipRegistrationFragment" >
+        android:label="PinkSlipRegistrationFragment"
+        tools:layout="@layout/fragment_pink_slip_registration">
         <argument
             android:name="uri"
             app:argType="string" />
+        <action
+            android:id="@+id/action_pinkSlipRegistrationFragment_to_myPageCarListFragment"
+            app:destination="@id/myPageCarListFragment"
+            app:popUpTo="@id/myPageCarListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/reservationFragment"
         android:name="com.gta.presentation.ui.reservation.ReservationFragment"
         android:label="@string/reservation"
-        tools:layout="@layout/fragment_reservation" >
+        tools:layout="@layout/fragment_reservation">
         <argument
-            android:name="carInfo"
-            app:argType="com.gta.presentation.ui.reservation.TmpCarInfo" />
+            android:name="carId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_reservationFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.gta.presentation.ui.reservation.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment"
+            app:popUpTo="@id/chattingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ownerProfileFragment"
+        android:name="com.gta.presentation.ui.cardetail.OwnerProfileFragment"
+        android:label="@string/car_owner_profile"
+        tools:layout="@layout/fragment_owner_profile">
+        <action
+            android:id="@+id/action_ownerProfileFragment_to_carDetailFragment"
+            app:destination="@id/carDetailFragment" />
+        <argument
+            android:name="OWNER_ID"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/nicknameFragment"
+        android:name="com.gta.presentation.ui.nickname.NicknameFragment"
+        android:label="NicknameFragment"
+        tools:layout="@layout/fragment_nickname">
+        <argument
+            android:name="thumb"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nicknameFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment"
+            app:popUpTo="@id/myPageFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.gta.presentation.ui.review.ReviewFragment"
+        android:label="@string/review_toolbar"
+        tools:layout="@layout/fragment_review"/>
 
 </navigation>

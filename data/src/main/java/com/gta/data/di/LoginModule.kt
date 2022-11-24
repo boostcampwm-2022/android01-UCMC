@@ -1,8 +1,9 @@
 package com.gta.data.di
 
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.repository.LoginRepositoryImpl
 import com.gta.data.source.LoginDataSource
+import com.gta.data.source.UserDataSource
 import com.gta.domain.repository.LoginRepository
 import dagger.Module
 import dagger.Provides
@@ -16,11 +17,13 @@ object LoginModule {
 
     @Singleton
     @Provides
-    fun provideLoginDataSource(databaseReference: DatabaseReference): LoginDataSource =
-        LoginDataSource(databaseReference)
+    fun provideLoginDataSource(fireStore: FirebaseFirestore): LoginDataSource =
+        LoginDataSource(fireStore)
 
     @Singleton
     @Provides
-    fun provideLoginRepository(dataSource: LoginDataSource): LoginRepository =
-        LoginRepositoryImpl(dataSource)
+    fun provideLoginRepository(
+        userDataSource: UserDataSource,
+        loginDataSource: LoginDataSource
+    ): LoginRepository = LoginRepositoryImpl(userDataSource, loginDataSource)
 }

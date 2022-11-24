@@ -1,60 +1,60 @@
 package com.gta.presentation.ui.reservation
 
 import android.os.Bundle
-import android.os.Parcelable
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.gta.domain.model.AvailableDate
+import com.gta.domain.model.InsuranceOption
+import com.gta.domain.model.toPair
+import com.gta.domain.model.toPairList
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
-import com.gta.presentation.model.ReservationDate
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateValidator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ReservationFragment :
     BaseFragment<FragmentReservationBinding>(R.layout.fragment_reservation) {
-    private val args: ReservationFragmentArgs by navArgs()
-    private val carInfo by lazy { args.carInfo }
+    private val viewModel: ReservationViewModel by viewModels()
 
-    @Inject
-    lateinit var viewModelFactory: ReservationViewModel.AssistedFactory
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.vm = viewModel
 
-    private val viewModel: ReservationViewModel by viewModels {
-        ReservationViewModel.provideFactory(
-            assistedFactory = viewModelFactory,
-            carInfo = carInfo
-        )
-    }
+        setUpRadioGroup()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.car?.collectLatest { car ->
+                    setupDatePicker(car.availableDate, car.reservationDates)
+                }
+            }
+        }
 
-        setupDatePicker()
-
-        return binding.run {
-            vm = viewModel
-            carInfo = this@ReservationFragment.carInfo
-            root
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.createReservationEvent.collectLatest { state ->
+                    findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToPaymentFragment())
+                }
+            }
         }
     }
 
-    private fun setupDatePicker() {
+    private fun setupDatePicker(availableDate: AvailableDate, reservationDates: List<AvailableDate>) {
+        val (startDate, endDate) = availableDate
+
         val constraints = CalendarConstraints.Builder()
-            .setValidator(DateValidator(carInfo.reservationDate, null))
-            .setStart(carInfo.reservationDate.first)
-            .setEnd(carInfo.reservationDate.second)
+            .setValidator(DateValidator(availableDate.toPair(), reservationDates.toPairList()))
+            .setStart(startDate)
+            .setEnd(endDate)
             .build()
 
         val datePicker = MaterialDatePicker.Builder
@@ -64,24 +64,27 @@ class ReservationFragment :
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.setReservationDate(ReservationDate(it.first, it.second))
+            viewModel.setReservationDate(AvailableDate(it.first, it.second))
         }
 
         binding.ivReservationNext.setOnClickListener {
             datePicker.show(childFragmentManager, null)
         }
     }
-}
 
-// 임시 자동차 객체
-@Parcelize
-data class TmpCarInfo(
-    val id: String,
-    val title: String,
-    val location: String,
-    val carType: String,
-    val price: Int,
-    val comment: String,
-    val images: List<String>,
-    val reservationDate: Pair<Long, Long>
-) : Parcelable
+    private fun setUpRadioGroup() {
+        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.rg_reservation_insurance_option_1 -> {
+                    viewModel.setInsuranceOption(InsuranceOption.LOW)
+                }
+                R.id.rg_reservation_insurance_option_2 -> {
+                    viewModel.setInsuranceOption(InsuranceOption.MEDIUM)
+                }
+                R.id.rg_reservation_insurance_option_3 -> {
+                    viewModel.setInsuranceOption(InsuranceOption.HIGH)
+                }
+            }
+        }
+    }
+}

@@ -5,15 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
@@ -35,12 +31,22 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.car.collectLatest {
-                    viewModel.getPageState()
-                }
-            }
+        binding.cvOwner.setOnClickListener {
+            findNavController().navigate(
+                CarDetailFragmentDirections
+                    .actionCarDetailFragmentToOwnerProfileFragment(
+                        viewModel.carInfo.value.owner.id
+                    )
+            )
+        }
+
+        binding.btnNext.setOnClickListener {
+            findNavController().navigate(
+                CarDetailFragmentDirections
+                    .actionCarDetailFragmentToReservationFragment(
+                        viewModel.carInfo.value.id
+                    )
+            )
         }
     }
 }

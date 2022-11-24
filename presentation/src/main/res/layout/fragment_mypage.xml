@@ -4,19 +4,236 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.mypage.MyPageFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.mypage.MyPageViewModel" />
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="mypage fragment"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_mypage_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_begin="@dimen/padding_medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_mypage_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_end="@dimen/padding_medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_mypage_edit_nickname"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/padding_small"
+                android:src="@drawable/ic_mypage_edit"
+                android:background="@color/neutral80"
+                android:scaleType="center"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:layout_constraintTop_toTopOf="@id/tv_mypage_nickname"
+                app:layout_constraintBottom_toBottomOf="@id/tv_mypage_nickname"
+                app:layout_constraintStart_toEndOf="@id/tv_mypage_nickname" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_mypage_thumb"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/padding_large"
+                android:layout_marginEnd="@dimen/padding_medium"
+                android:scaleType="centerCrop"
+                app:image_uri="@{vm.userProfile.image}"
+                app:layout_constraintEnd_toStartOf="@+id/gl_mypage_end"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_mypage_edit_thumb"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/padding_small"
+                android:src="@drawable/ic_mypage_thumb"
+                android:background="@color/neutral80"
+                android:scaleType="center"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:layout_constraintEnd_toEndOf="@id/iv_mypage_thumb"
+                app:layout_constraintBottom_toBottomOf="@id/iv_mypage_thumb"/>
+
+            <TextView
+                android:id="@+id/tv_mypage_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{@string/mypage_nickname(vm.userProfile.name)}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_title_medium"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/tv_mypage_temperature"
+                app:layout_constraintEnd_toStartOf="@+id/iv_mypage_thumb"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
+                app:layout_constraintTop_toTopOf="@+id/iv_mypage_thumb"
+                tools:text="이동훈 님" />
+
+            <TextView
+                android:id="@+id/tv_mypage_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(vm.userProfile.temp)}"
+                android:textSize="@dimen/font_title_small"
+                app:layout_constraintTop_toBottomOf="@id/tv_mypage_nickname"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_mypage_thumb"
+                app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
+                tools:text="양심 36.5도"/>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/div_mypage_level1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_large"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/iv_mypage_thumb" />
+
+            <TextView
+                android:id="@+id/tv_mypage_title_payment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_large"
+                android:text="@string/mypage_title_payment"
+                android:textSize="@dimen/font_title_medium"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@+id/div_mypage_level1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mypage_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/mypageButton"
+                android:text="@string/mypage_btn_payment"
+                app:icon="@drawable/ic_mypage_payment"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/tv_mypage_title_payment" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/div_mypage_level2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/btn_mypage_payment" />
+
+            <TextView
+                android:id="@+id/tv_mypage_title_transaction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_large"
+                android:text="@string/mypage_title_transaction"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_title_medium"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@+id/div_mypage_level2" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mypage_car"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/mypageButton"
+                android:text="@string/mypage_btn_car"
+                app:icon="@drawable/ic_mypage_car"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/tv_mypage_title_transaction" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mypage_transaction_history"
+                style="@style/mypageButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/mypage_btn_transaction"
+                app:icon="@drawable/ic_mypage_deal"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/btn_mypage_car" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mypage_fine"
+                style="@style/mypageButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/mypage_btn_fine"
+                app:icon="@drawable/ic_mypage_fine"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/btn_mypage_transaction_history" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/div_mypage_level3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/btn_mypage_fine" />
+
+            <TextView
+                android:id="@+id/tv_mypage_title_other"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_large"
+                android:text="@string/mypage_title_other"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_title_medium"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@+id/div_mypage_level3" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mypage_terms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/mypageButton"
+                android:text="@string/mypage_btn_terms"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/tv_mypage_title_other" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mypage_sign_out"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/mypageButton"
+                android:text="@string/mypage_btn_sign_out"
+                android:textColor="@color/design_default_color_error"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/btn_mypage_terms" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </layout>
