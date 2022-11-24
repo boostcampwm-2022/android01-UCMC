@@ -6,9 +6,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.gta.domain.model.AvailableDate
+import com.gta.domain.model.InsuranceOption
+import com.gta.domain.model.toPair
+import com.gta.domain.model.toPairList
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -25,10 +29,12 @@ class ReservationFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
 
+        setUpRadioGroup()
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.car?.collectLatest { car ->
-                    car?.let { setupDatePicker(it.availableDate) }
+                    setupDatePicker(car.availableDate, car.reservationDates)
                 }
             }
         }
@@ -36,19 +42,17 @@ class ReservationFragment :
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.createReservationEvent.collectLatest { state ->
-                    if (state) {
-                        // 결제하기
-                    }
+                    findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToPaymentFragment())
                 }
             }
         }
     }
 
-    private fun setupDatePicker(availableDate: AvailableDate) {
+    private fun setupDatePicker(availableDate: AvailableDate, reservationDates: List<AvailableDate>) {
         val (startDate, endDate) = availableDate
 
         val constraints = CalendarConstraints.Builder()
-            .setValidator(DateValidator(startDate to endDate, null))
+            .setValidator(DateValidator(availableDate.toPair(), reservationDates.toPairList()))
             .setStart(startDate)
             .setEnd(endDate)
             .build()
@@ -65,6 +69,22 @@ class ReservationFragment :
 
         binding.ivReservationNext.setOnClickListener {
             datePicker.show(childFragmentManager, null)
+        }
+    }
+
+    private fun setUpRadioGroup() {
+        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.rg_reservation_insurance_option_1 -> {
+                    viewModel.setInsuranceOption(InsuranceOption.LOW)
+                }
+                R.id.rg_reservation_insurance_option_2 -> {
+                    viewModel.setInsuranceOption(InsuranceOption.MEDIUM)
+                }
+                R.id.rg_reservation_insurance_option_3 -> {
+                    viewModel.setInsuranceOption(InsuranceOption.HIGH)
+                }
+            }
         }
     }
 }

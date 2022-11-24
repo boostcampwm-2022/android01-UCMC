@@ -41,7 +41,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private lateinit var backPressedCallback: OnBackPressedCallback
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
     private lateinit var menuAdapter: AutoCompleteAdapter
-
+    private var mapMode = LocationTrackingMode.None
     private val viewModel: MapViewModel by viewModels()
     private lateinit var inputManager: InputMethodManager
 
@@ -63,14 +63,29 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
+    private val bottomSheetCallback = object :
+        BottomSheetBehavior.BottomSheetCallback() {
+        override fun onStateChanged(bottomSheet: View, newState: Int) {}
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            naverMap.setContentPadding(
+                0,
+                0,
+                0,
+                (binding.bottomSheet.height * (slideOffset + 1)).toInt()
+            )
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.vm = viewModel
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.addBottomSheetCallback(bottomSheetCallback)
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -85,13 +100,16 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithMap() {
         naverMap.locationSource = locationSource
+        naverMap.locationTrackingMode = mapMode
         naverMap.uiSettings.apply {
             isCompassEnabled = true
             isScaleBarEnabled = true
             isLocationButtonEnabled = true
         }
 
-        binding.mapView.setOnTouchListener { v, event ->
+        binding.mapView.setOnTouchListener { _, event ->
+            hideKeyboard()
+            binding.etSearch.clearFocus()
             if (event.y >= binding.bottomSheet.top && event.y <= binding.bottomSheet.bottom) {
                 true
             } else {
@@ -114,8 +132,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                             map = naverMap
 
                             setOnClickListener {
-                                viewModel.emitSelected(car)
                                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                                naverMap.moveCamera(
+                                    CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
+                                )
+                                viewModel.setSelected(car)
                                 true
                             }
                         }
@@ -184,6 +205,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onPause() {
+        mapMode = naverMap.locationTrackingMode
         binding.mapView.onPause()
         super.onPause()
     }
@@ -202,10 +224,12 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         if (super.isBindingNotNull()) {
             binding.mapView.onSaveInstanceState(outState)
         }
+
         super.onSaveInstanceState(outState)
     }
 
     override fun onDestroyView() {
+        bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
         binding.mapView.onDestroy()
         super.onDestroyView()
     }
@@ -236,6 +260,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 100
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 }

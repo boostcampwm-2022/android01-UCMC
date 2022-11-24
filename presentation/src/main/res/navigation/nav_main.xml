@@ -19,7 +19,11 @@
         android:id="@+id/chattingFragment"
         android:name="com.gta.presentation.ui.chatting.ChattingFragment"
         android:label="@string/chatting"
-        tools:layout="@layout/fragment_chatting" />
+        tools:layout="@layout/fragment_chatting">
+        <action
+            android:id="@+id/action_chattingFragment_to_reservationFragment"
+            app:destination="@id/reservationFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/myPageFragment"
@@ -68,6 +72,7 @@
             android:id="@+id/action_licenseGuideFragment_to_licenseRegistrationFragment"
             app:destination="@id/licenseRegistrationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/licenseRegistrationFragment"
         android:name="com.gta.presentation.ui.license.registration.LicenseRegistrationFragment"
@@ -76,6 +81,7 @@
             android:name="uri"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/pinkSlipGuideFragment"
         android:name="com.gta.presentation.ui.pinkslip.guide.PinkSlipGuideFragment"
@@ -85,6 +91,7 @@
             android:id="@+id/action_pinkSlipGuideFragment_to_pinkSlipRegistrationFragment"
             app:destination="@id/pinkSlipRegistrationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/pinkSlipRegistrationFragment"
         android:name="com.gta.presentation.ui.pinkslip.registration.PinkSlipRegistrationFragment"
@@ -107,7 +114,22 @@
         <argument
             android:name="carId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_reservationFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.gta.presentation.ui.reservation.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment"
+            app:popUpTo="@id/chattingFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/ownerProfileFragment"
         android:name="com.gta.presentation.ui.cardetail.OwnerProfileFragment"
@@ -133,5 +155,9 @@
             app:popUpTo="@id/myPageFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.gta.presentation.ui.review.ReviewFragment"
+        android:label="@string/review_toolbar" />
 
 </navigation>

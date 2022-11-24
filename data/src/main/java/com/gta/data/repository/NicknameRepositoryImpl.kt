@@ -6,6 +6,7 @@ import com.gta.domain.repository.NicknameRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class NicknameRepositoryImpl @Inject constructor(
@@ -19,9 +20,7 @@ class NicknameRepositoryImpl @Inject constructor(
         }
 
     override fun updateNickname(uid: String, nickname: String): Flow<Boolean> = callbackFlow {
-        dataSource.updateNickname(uid, nickname).addOnCompleteListener {
-            trySend(it.isSuccessful)
-        }
+        trySend(dataSource.updateNickname(uid, nickname).first())
         awaitClose()
     }
 

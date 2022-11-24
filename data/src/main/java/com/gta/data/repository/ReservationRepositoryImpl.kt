@@ -1,6 +1,5 @@
 package com.gta.data.repository
 
-import com.google.firebase.firestore.DocumentSnapshot
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.ReservationDataSource
 import com.gta.domain.model.Reservation
@@ -8,6 +7,7 @@ import com.gta.domain.repository.ReservationRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -22,39 +22,23 @@ class ReservationRepositoryImpl @Inject constructor(
             3. 에약 리스트 추가
          */
         val reservationId = "${System.currentTimeMillis()}${reservation.carId}"
-
-        carDataSource.getCar(reservation.carId).addOnSuccessListener { snapshot ->
-            val updateReservations = getUpdatedReservations(snapshot, reservationId)
-            carDataSource.updateCarReservations(reservation.carId, updateReservations)
-                .addOnSuccessListener {
-                    reservationDataSource.createReservation(reservation, reservationId)
-                        .addOnCompleteListener {
-                            trySend(it.isSuccessful)
-                        }
-                }.addOnFailureListener {
-                    trySend(false)
-                }
-        }.addOnFailureListener {
-            trySend(false)
-        }
+        carDataSource.getCar(reservation.carId).first()?.let { car ->
+            val updateReservations = car.reservations.plus(reservationId)
+            val updateResult = carDataSource.updateCarReservations(reservation.carId, updateReservations).first()
+            val createResult = reservationDataSource.createReservation(reservation, reservationId).first()
+            trySend(updateResult && createResult)
+        } ?: trySend(false)
         awaitClose()
     }
 
     override fun getReservationInfo(reservationId: String): Flow<Reservation> = callbackFlow {
-        reservationDataSource.getReservation(reservationId).addOnSuccessListener { snapshot ->
-            snapshot?.toObject(Reservation::class.java)?.let {
-                trySend(it)
-            } ?: trySend(Reservation())
-        }.addOnFailureListener {
-            trySend(Reservation())
-        }
+        reservationDataSource.getReservation(reservationId).first()?.let { reservation ->
+            trySend(reservation)
+        } ?: trySend(Reservation())
         awaitClose()
     }
 
     override fun getReservationCar(reservationId: String): Flow<String> {
         return getReservationInfo(reservationId).map { it.carId }
     }
-
-    private fun getUpdatedReservations(snapshot: DocumentSnapshot, reservationId: String) =
-        (snapshot["reservations"] as? List<*>)?.plus(reservationId) ?: listOf(reservationId)
 }

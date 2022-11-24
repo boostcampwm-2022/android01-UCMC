@@ -1,16 +1,23 @@
 package com.gta.data.source
 
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.model.UserInfo
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class LoginDataSource @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) {
-    fun createUser(uid: String): Task<Void> =
+    fun createUser(uid: String): Flow<Boolean> = callbackFlow {
         fireStore
             .collection("users")
             .document(uid)
             .set(UserInfo(chatId = uid.hashCode().toLong()))
+            .addOnCompleteListener {
+                trySend(it.isSuccessful)
+            }
+        awaitClose()
+    }
 }

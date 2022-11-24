@@ -12,9 +12,11 @@ import com.gta.presentation.util.DateUtil
 
 @BindingAdapter("image_uri")
 fun bindImageUri(view: ImageView, uri: String?) {
-    uri ?: return
     GlideApp.with(view.context)
         .load(uri)
+        .placeholder(R.color.neutral80)
+        .error(R.drawable.ic_broken_image)
+        .fallback(R.drawable.ic_logo)
         .into(view)
 }
 
