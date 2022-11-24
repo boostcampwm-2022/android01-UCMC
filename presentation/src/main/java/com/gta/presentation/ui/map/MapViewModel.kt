@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.LocationInfo
 import com.gta.domain.model.SimpleCar
-import com.gta.domain.usecase.map.GetAllCarsUseCase
 import com.gta.domain.usecase.map.GetNearCarsUseCase
 import com.gta.domain.usecase.map.GetSearchAddressUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
