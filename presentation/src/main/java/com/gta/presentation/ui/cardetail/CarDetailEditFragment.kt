@@ -49,6 +49,7 @@ class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             viewModel.updateImage(result.data?.data.toString())
+            binding.rvImages.scrollToPosition(0)
         }
     }
 
@@ -92,7 +93,6 @@ class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.images.collectLatest {
                     imagesAdapter.submitList(it)
-                    binding.rvImages.scrollToPosition(0)
 
                     binding.btnAddImage.text =
                         String.format(
