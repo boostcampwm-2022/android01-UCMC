@@ -49,7 +49,6 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
         binding.rvCarList.adapter = adapter
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getCarList()
                 viewModel.userCarList.collectLatest {
                     adapter.submitList(it)
                 }
@@ -58,14 +57,14 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
     }
 
     private fun setupWithAdapterClickListener() {
-        adapter.setOnItemClickListener(object : OnItemClickListener {
-            override fun onClick(carId: String) {
+        adapter.setOnItemClickListener(object : OnItemClickListener<String> {
+            override fun onClick(value: String) {
                 val navAction =
-                    MyCarsFragmentDirections.actionMyPageCarListFragmentToCarDetailFragment(carId)
+                    MyCarsFragmentDirections.actionMyPageCarListFragmentToCarDetailFragment(value)
                 findNavController().navigate(navAction)
             }
 
-            override fun onLongClick(v: View, carId: String) {
+            override fun onLongClick(v: View, value: String) {
                 val popup = PopupMenu(requireContext(), v)
                 requireActivity().menuInflater.inflate(R.menu.menu_mycars_item_click, popup.menu)
 
@@ -74,17 +73,16 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
                         R.id.popup_detail -> {
                             val navAction =
                                 MyCarsFragmentDirections.actionMyPageCarListFragmentToCarDetailFragment(
-                                    carId
+                                    value
                                 )
                             findNavController().navigate(navAction)
                         }
                         R.id.popup_delete -> {
-                            viewModel.deleteCar(carId)
+                            viewModel.deleteCar(value)
                         }
                     }
                     return@setOnMenuItemClickListener false
                 }
-
                 popup.show()
             }
         })

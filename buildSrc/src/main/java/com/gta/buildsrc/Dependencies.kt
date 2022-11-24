@@ -40,6 +40,9 @@ object Dependencies {
         const val FIREBASE = "31.1.0"
         const val CRASHLYTICS = "2.9.2"
 
+        // REST API
+        const val RETROFIT = "2.9.0"
+
         // Test
         const val JUNIT = "4.13.2"
         const val JUNIT_EXT = "1.1.4"
@@ -158,6 +161,16 @@ object Dependencies {
             }
         }
 
+        object Retrofit {
+            const val RETROFIT = "com.squareup.retrofit2:retrofit:${Versions.RETROFIT}"
+            const val CONVERTER = "com.squareup.retrofit2:converter-gson:${Versions.RETROFIT}"
+            const val GSON = "com.google.code.gson:gson:${Versions.RETROFIT}"
+
+            fun getAll(): ArrayList<String> {
+                return arrayListOf(RETROFIT, CONVERTER, GSON)
+            }
+        }
+
         const val VIEW_PAGER_2 = "androidx.viewpager2:viewpager2:${Versions.VIEW_PAGER}"
 
         const val NAVER_MAP = "com.naver.maps:map-sdk:${Versions.NAVER_MAPS}"
@@ -197,6 +210,7 @@ object Dependencies {
             addAll(Coroutine.getAll())
             addAll(Room.getAll())
             add(TIMBER)
+            addAll(Retrofit.getAll())
         }
 
         val dataKaptLibraries = arrayListOf<String>().apply {
