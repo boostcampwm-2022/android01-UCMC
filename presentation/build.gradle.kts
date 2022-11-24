@@ -53,6 +53,7 @@ dependencies {
     implementation(Dependencies.Libraries.presentationLibraries)
     kapt(Dependencies.Libraries.presentationKaptLibraries)
 
+    testImplementation(Dependencies.Libraries.Test.JUNIT)
     androidTestImplementation(Dependencies.Libraries.Test.EXT)
     androidTestImplementation(Dependencies.Libraries.AndroidTest.ESPRESSO_CORE)
 }
