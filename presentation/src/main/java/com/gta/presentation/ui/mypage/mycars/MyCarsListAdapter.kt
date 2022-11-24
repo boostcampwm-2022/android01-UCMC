@@ -10,7 +10,10 @@ import com.gta.presentation.databinding.ItemMypageCarlistBinding
 
 class MyCarsListAdapter :
     ListAdapter<SimpleCar, MyCarsListAdapter.CarViewHolder>(diffUtil) {
-    inner class CarViewHolder(private val binding: ItemMypageCarlistBinding) :
+    class CarViewHolder(
+        private val binding: ItemMypageCarlistBinding,
+        private val listener: OnItemClickListener<String>?
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(info: SimpleCar) {
             binding.data = info
@@ -28,16 +31,16 @@ class MyCarsListAdapter :
         }
     }
 
-    private var listener: OnItemClickListener? = null
+    private var listener: OnItemClickListener<String>? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClickListener<String>) {
         this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
         val binding =
             ItemMypageCarlistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CarViewHolder(binding)
+        return CarViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(holder: CarViewHolder, position: Int) {
