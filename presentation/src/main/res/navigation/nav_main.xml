@@ -163,11 +163,11 @@
         android:id="@+id/reviewFragment"
         android:name="com.gta.presentation.ui.review.ReviewFragment"
         android:label="@string/review_toolbar" />
-    
+
     <fragment
         android:id="@+id/carDetailEditFragment"
         android:name="com.gta.presentation.ui.cardetail.CarDetailEditFragment"
-        android:label="fragment_car_detail_edit"
+        android:label="@string/car_edit_label"
         tools:layout="@layout/fragment_car_detail_edit">
         <argument
             android:name="CAR_ID"

@@ -93,6 +93,12 @@ class CarDetailEditFragment : BaseFragment<FragmentCarDetailEditBinding>(
                 viewModel.images.collectLatest {
                     imagesAdapter.submitList(it)
                     binding.rvImages.scrollToPosition(0)
+
+                    binding.btnAddImage.text =
+                        String.format(
+                            resources.getString(R.string.car_edit_images_count),
+                            it.size
+                        )
                 }
             }
         }

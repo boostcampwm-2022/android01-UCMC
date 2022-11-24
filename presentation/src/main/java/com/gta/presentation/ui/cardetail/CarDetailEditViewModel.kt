@@ -10,8 +10,8 @@ class CarDetailEditViewModel : ViewModel() {
     val images: StateFlow<List<String>>
         get() = _images
 
-    private val _availableDate = MutableStateFlow(AvailableDate())
-    val availableDate: StateFlow<AvailableDate>
+    private val _availableDate = MutableStateFlow<AvailableDate?>(AvailableDate())
+    val availableDate: StateFlow<AvailableDate?>
         get() = _availableDate
 
     fun updateImage(img: String) {

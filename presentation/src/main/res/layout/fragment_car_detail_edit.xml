@@ -4,6 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.cardetail.CarDetailEditFragment">
 
+    <data>
+
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.cardetail.CarDetailEditViewModel" />
+    </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -69,7 +76,7 @@
                 android:id="@+id/tv_price_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="금액 1일"
+                android:text="@string/car_edit_price_label"
                 android:textSize="@dimen/font_title_medium"
                 app:layout_constraintBaseline_toBaselineOf="@+id/et_price"
                 app:layout_constraintEnd_toStartOf="@+id/et_price"
@@ -94,7 +101,7 @@
                 android:id="@+id/tv_price_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="원"
+                android:text="@string/car_edit_price_format"
                 android:textSize="@dimen/font_title_medium"
                 app:layout_constraintBaseline_toBaselineOf="@+id/et_price"
                 app:layout_constraintEnd_toEndOf="@id/gl_end" />
@@ -153,7 +160,7 @@
                 android:id="@+id/tv_day_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="대여 가능 날짜 선택"
+                android:text="@string/car_edit_day_label"
                 android:textSize="@dimen/font_title_medium"
                 app:layout_constraintBottom_toBottomOf="@id/tv_day"
                 app:layout_constraintEnd_toStartOf="@+id/tv_day"
@@ -168,12 +175,13 @@
                 android:layout_marginHorizontal="@dimen/padding_medium"
                 android:layout_marginTop="@dimen/padding_medium"
                 android:gravity="end"
-                android:text="언제부터 언제"
                 android:textSize="@dimen/font_title_medium"
                 app:layout_constraintBottom_toTopOf="@+id/tv_location"
                 app:layout_constraintEnd_toStartOf="@+id/iv_day_edit"
                 app:layout_constraintStart_toEndOf="@+id/tv_day_label"
-                app:layout_constraintTop_toBottomOf="@+id/div_comment_bottom" />
+                app:layout_constraintTop_toBottomOf="@+id/div_comment_bottom"
+                app:text_AvailableDate="@{vm.availableDate}"
+                tools:text="@string/no_information" />
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_day_edit"
@@ -192,7 +200,7 @@
                 android:id="@+id/tv_location_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="위치 선택"
+                android:text="@string/car_edit_location_label"
                 android:textSize="@dimen/font_title_medium"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_location"
                 app:layout_constraintEnd_toStartOf="@id/tv_location"
@@ -207,12 +215,12 @@
                 android:layout_marginHorizontal="@dimen/padding_medium"
                 android:layout_marginVertical="@dimen/padding_medium"
                 android:gravity="end"
+                android:text="@string/no_information"
                 android:textSize="@dimen/font_title_medium"
                 app:layout_constraintBottom_toTopOf="@+id/btn_done"
                 app:layout_constraintEnd_toStartOf="@+id/iv_location_edit"
                 app:layout_constraintStart_toEndOf="@+id/tv_location_label"
-                app:layout_constraintTop_toBottomOf="@+id/tv_day"
-                tools:text="오른쪽으로 틀어서 왼쪽" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_day" />
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_location_edit"
