@@ -6,6 +6,7 @@ import com.gta.domain.repository.LicenseRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import java.nio.ByteBuffer
 import javax.inject.Inject
 
@@ -29,9 +30,7 @@ class LicenseRepositoryImpl @Inject constructor(
     }
 
     override fun setLicense(uid: String, license: DrivingLicense): Flow<Boolean> = callbackFlow {
-        dataSource.registerLicense(uid, license).addOnCompleteListener { result ->
-            trySend(result.isSuccessful)
-        }
+        trySend(dataSource.registerLicense(uid, license).first())
         awaitClose()
     }
 }

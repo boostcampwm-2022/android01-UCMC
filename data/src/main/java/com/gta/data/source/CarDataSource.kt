@@ -1,27 +1,68 @@
 package com.gta.data.source
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import com.gta.data.model.Car
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class CarDataSource @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) {
-    fun getCar(carId: String): Task<DocumentSnapshot> =
-        fireStore.collection("cars").document(carId).get()
+    fun getCar(carId: String): Flow<Car?> = callbackFlow {
+        fireStore.collection("cars").document(carId).get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                trySend(it.result.toObject(Car::class.java))
+            } else {
+                trySend(null)
+            }
+        }
+        awaitClose()
+    }
 
-    fun getOwnerCars(cars: List<String>): Task<QuerySnapshot> =
-        fireStore.collection("cars").whereIn(FieldPath.documentId(), cars).get()
+    fun getOwnerCars(cars: List<String>): Flow<List<Car>> = callbackFlow {
+        fireStore
+            .collection("cars")
+            .whereIn(FieldPath.documentId(), cars)
+            .get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    trySend(it.result.map { snapshot -> snapshot.toObject(Car::class.java) })
+                } else {
+                    trySend(emptyList())
+                }
+            }
+        awaitClose()
+    }
 
-    fun updateCarReservations(carId: String, reservations: List<Any?>): Task<Void> =
-        fireStore.collection("cars").document(carId).update("reservations", reservations)
+    fun updateCarReservations(carId: String, reservations: List<Any?>): Flow<Boolean> = callbackFlow {
+        fireStore
+            .collection("cars")
+            .document(carId)
+            .update("reservations", reservations)
+            .addOnCompleteListener {
+                trySend(it.isSuccessful)
+            }
+        awaitClose()
+    }
 
-    fun getAllCars(): Task<QuerySnapshot> =
-        fireStore.collection("cars").get()
+    fun getAllCars(): Flow<List<Car>> = callbackFlow {
+        fireStore.collection("cars").get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                trySend(it.result.map { snapshot -> snapshot.toObject(Car::class.java) })
+            } else {
+                trySend(emptyList())
+            }
+        }
+        awaitClose()
+    }
 
-    fun removeCar(carId: String): Task<Void> =
-        fireStore.collection("cars").document(carId).delete()
+    fun removeCar(carId: String): Flow<Boolean> = callbackFlow {
+        fireStore.collection("cars").document(carId).delete().addOnCompleteListener {
+            trySend(it.isSuccessful)
+        }
+        awaitClose()
+    }
 }
