@@ -1,5 +1,6 @@
 package com.gta.data.model
 
+import com.google.gson.annotations.SerializedName
 import com.gta.domain.model.LocationInfo
 
 data class SearchResult(
@@ -8,17 +9,17 @@ data class SearchResult(
 )
 
 data class Meta(
-    var total_count: Int,
-    var pageable_count: Int,
-    var is_end: Boolean
+    @SerializedName("total_count") var totalCount: Int,
+    @SerializedName("pageable_count") var pageableCount: Int,
+    @SerializedName("is_end") var isEnd: Boolean
 )
 
 data class Place(
-    var address_name: String,
+    @SerializedName("address_name") var addressName: String,
     var x: String,
     var y: String
 )
 
 fun Place.toLocationInfo(): LocationInfo {
-    return LocationInfo(this.address_name, this.y.toDouble(), this.x.toDouble())
+    return LocationInfo(this.addressName, this.y.toDouble(), this.x.toDouble())
 }
