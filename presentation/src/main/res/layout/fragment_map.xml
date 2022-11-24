@@ -35,6 +35,7 @@
                     android:layout_marginEnd="@dimen/padding_medium"
                     android:hint="@string/search_hint"
                     android:inputType="text"
+                    android:completionThreshold="1"
                     android:background="@drawable/edittext_style"
                     android:drawableStart="@drawable/ic_search"
                     android:drawableTint="?attr/colorOnSurface" />

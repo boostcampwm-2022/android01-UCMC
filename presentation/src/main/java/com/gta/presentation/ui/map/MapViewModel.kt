@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
@@ -30,7 +31,7 @@ class MapViewModel @Inject constructor(
     private val searchAddressUseCase: GetSearchAddressUseCase
 ) :
     ViewModel() {
-    private val SEARCH_TIMEOUT = 1000L
+    private val SEARCH_TIMEOUT = 500L
 
     private var _cars = MutableStateFlow<List<SimpleCar>>(emptyList())
     val cars: StateFlow<List<SimpleCar>> get() = _cars
@@ -57,8 +58,7 @@ class MapViewModel @Inject constructor(
             .flowOn(Dispatchers.IO)
             .onEach { rawList ->
                 _searchResult.emit(rawList)
-            }
-            .launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     private fun getAllCars() {
