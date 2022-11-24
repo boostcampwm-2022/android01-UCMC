@@ -6,5 +6,5 @@ data class CarRentInfo(
     val price: Int = 10000,
     val comment: String = "차였어요",
     val availableDate: AvailableDate = AvailableDate(),
-    val reservations: List<String> = emptyList()
+    val reservationDates: List<AvailableDate> = emptyList()
 )

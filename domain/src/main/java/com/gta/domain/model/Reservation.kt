@@ -9,5 +9,6 @@ data class Reservation(
     val userId: String = "",
     val state: String = ReservationState.PENDING.string,
     val reservationDate: AvailableDate = AvailableDate(),
-    val price: Int = 0
+    val price: Int = 0,
+    val insuranceOption: String = InsuranceOption.LOW.name
 )

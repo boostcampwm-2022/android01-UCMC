@@ -1,5 +1,6 @@
 package com.gta.data.repository
 
+import com.google.firebase.firestore.QuerySnapshot
 import com.gta.data.model.Car
 import com.gta.data.model.UserInfo
 import com.gta.data.model.toCarRentInfo
@@ -7,10 +8,13 @@ import com.gta.data.model.toDetailCar
 import com.gta.data.model.toProfile
 import com.gta.data.model.toSimple
 import com.gta.data.source.CarDataSource
+import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.UserDataSource
+import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.RentState
+import com.gta.domain.model.Reservation
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
@@ -22,7 +26,8 @@ import javax.inject.Inject
 
 class CarRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
-    private val carDataSource: CarDataSource
+    private val carDataSource: CarDataSource,
+    private val reservationDataSource: ReservationDataSource
 ) : CarRepository {
     override fun getOwnerId(carId: String): Flow<String> {
         return getCar(carId).map { it.ownerId }
@@ -54,9 +59,26 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getCarRentInfo(carId: String): Flow<CarRentInfo> {
-        return getCar(carId).map {
-            it.toCarRentInfo()
+    override fun getCarRentInfo(carId: String): Flow<CarRentInfo> = callbackFlow {
+        carDataSource.getCar(carId).addOnSuccessListener { carSnapshot ->
+            carSnapshot?.toObject(Car::class.java)?.let { car ->
+                reservationDataSource.getAllReservations().addOnSuccessListener { collection ->
+                    getCarReservationDates(collection, car).also { reservationDates ->
+                        trySend(car.toCarRentInfo(reservationDates))
+                    }
+                }
+            }
+        }.addOnFailureListener {
+            trySend(CarRentInfo())
+        }
+        awaitClose()
+    }
+
+    private fun getCarReservationDates(collection: QuerySnapshot, car: Car): List<AvailableDate> {
+        return collection.filter { document ->
+            car.reservations.contains(document.id)
+        }.map { document ->
+            document.toObject(Reservation::class.java).reservationDate
         }
     }
 
@@ -107,6 +129,7 @@ class CarRepositoryImpl @Inject constructor(
         }
         awaitClose()
     }
+
     override fun removeCar(userId: String, carId: String): Flow<Boolean> = callbackFlow {
         carDataSource.removeCar(carId).addOnSuccessListener {
             userDataSource.getUser(userId).addOnSuccessListener { snapshot ->

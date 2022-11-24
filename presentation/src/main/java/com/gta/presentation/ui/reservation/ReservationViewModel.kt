@@ -10,14 +10,14 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.CarRentInfo
+import com.gta.domain.model.InsuranceOption
 import com.gta.domain.model.Reservation
 import com.gta.domain.usecase.reservation.CreateReservationUseCase
 import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
-import com.gta.presentation.R
-import com.gta.presentation.model.InsuranceLevel
 import com.gta.presentation.util.DateUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -33,15 +33,18 @@ class ReservationViewModel @Inject constructor(
     private val createReservationUseCase: CreateReservationUseCase,
     private val auth: FirebaseAuth
 ) : ViewModel() {
-    private val _reservationDate = MutableLiveData<AvailableDate>()
-    val reservationDate: LiveData<AvailableDate> = _reservationDate
+    private val carId by lazy { args.get<String>("carId") }
 
-    val selectedInsuranceOption = MutableLiveData<Int>()
+    private val _reservationDate = MutableLiveData<AvailableDate>()
+    val reservationDate: LiveData<AvailableDate> get() = _reservationDate
+
+    private val _insuranceOption = MutableLiveData<InsuranceOption>()
+    val insuranceOption: LiveData<InsuranceOption> get() = _insuranceOption
 
     private val _totalPrice = MediatorLiveData<Int>()
-    val totalPrice: LiveData<Int> = _totalPrice
+    val totalPrice: LiveData<Int> get() = _totalPrice
 
-    val car: StateFlow<CarRentInfo?>? = args.get<String>("carId")?.let { carId ->
+    val car: StateFlow<CarRentInfo>? = carId?.let { carId ->
         getCarRentInfoUseCase(carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -57,30 +60,18 @@ class ReservationViewModel @Inject constructor(
         DateUtil.getDateCount(it.start, it.end) * carPrice
     }
 
+    private val _isPaymentOptionChecked = MutableStateFlow(false)
+    val isPaymentOptionChecked: StateFlow<Boolean> get() = _isPaymentOptionChecked
+
     init {
         _totalPrice.addSource(basePrice) { basePrice ->
-            val insurancePrice = selectedInsuranceOption.value?.let { getOptionPrice(it) } ?: 0
+            val insurancePrice = insuranceOption.value?.price ?: 0
             _totalPrice.value = basePrice.plus(insurancePrice)
         }
 
-        _totalPrice.addSource(selectedInsuranceOption) { option ->
+        _totalPrice.addSource(insuranceOption) { option ->
             val price = basePrice.value ?: 0
-            _totalPrice.value = price.plus(getOptionPrice(option))
-        }
-    }
-
-    private fun getOptionPrice(option: Int): Int {
-        return when (option) {
-            R.id.rg_reservation_insurance_option_1 -> {
-                InsuranceLevel.LOW.price
-            }
-            R.id.rg_reservation_insurance_option_2 -> {
-                InsuranceLevel.MEDIUM.price
-            }
-            R.id.rg_reservation_insurance_option_3 -> {
-                InsuranceLevel.HIGH.price
-            }
-            else -> 0
+            _totalPrice.value = price.plus(option.price)
         }
     }
 
@@ -88,14 +79,33 @@ class ReservationViewModel @Inject constructor(
         _reservationDate.value = selected
     }
 
+    fun setInsuranceOption(option: InsuranceOption) {
+        _insuranceOption.value = option
+    }
+
+    fun setIsPaymentOptionChecked(isChecked: Boolean) {
+        _isPaymentOptionChecked.value = isChecked
+    }
+
     fun createReservation() {
         val userId = auth.currentUser?.uid ?: return
         val date = reservationDate.value ?: return
         val price = totalPrice.value ?: return
+        val option = insuranceOption.value ?: return
 
-        args.get<String>("carId")?.let {
+        carId?.let {
             viewModelScope.launch {
-                _createReservationEvent.emit(createReservationUseCase(Reservation(carId = it, userId = userId, reservationDate = date, price = price)).first())
+                _createReservationEvent.emit(
+                    createReservationUseCase(
+                        Reservation(
+                            carId = it,
+                            userId = userId,
+                            reservationDate = date,
+                            price = price,
+                            insuranceOption = option.name
+                        )
+                    ).first()
+                )
             }
         }
     }

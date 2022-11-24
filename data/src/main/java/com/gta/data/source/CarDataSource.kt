@@ -21,7 +21,7 @@ class CarDataSource @Inject constructor(
 
     fun getAllCars(): Task<QuerySnapshot> =
         fireStore.collection("cars").get()
-        
+
     fun removeCar(carId: String): Task<Void> =
         fireStore.collection("cars").document(carId).delete()
 }
