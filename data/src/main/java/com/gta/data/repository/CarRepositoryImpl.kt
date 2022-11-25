@@ -10,6 +10,7 @@ import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
+import com.gta.domain.model.Coordinate
 import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UserProfile
@@ -78,6 +79,12 @@ class CarRepositoryImpl @Inject constructor(
 
     override fun getAllCars(): Flow<List<SimpleCar>> = callbackFlow {
         val cars = carDataSource.getAllCars().first()
+        trySend(cars.map { it.toSimple(it.pinkSlip.informationNumber) })
+        awaitClose()
+    }
+
+    override fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<SimpleCar>> = callbackFlow {
+        val cars = carDataSource.getNearCars(min, max).first()
         trySend(cars.map { it.toSimple(it.pinkSlip.informationNumber) })
         awaitClose()
     }

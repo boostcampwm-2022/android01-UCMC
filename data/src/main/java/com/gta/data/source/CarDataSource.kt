@@ -2,6 +2,7 @@ package com.gta.data.source
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.model.Car
+import com.gta.domain.model.Coordinate
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -61,6 +62,25 @@ class CarDataSource @Inject constructor(
                 trySend(emptyList())
             }
         }
+        awaitClose()
+    }
+
+    fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<Car>> = callbackFlow {
+        fireStore.collection("cars").whereGreaterThan("coordinate.y", min.y)
+            .whereLessThan("coordinate.y", max.y).get().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    it.result.filter { document ->
+                        val tmp = document.toObject(Car::class.java)
+                        tmp.coordinate.x >= min.x && tmp.coordinate.x <= max.x
+                    }.map { snapshot ->
+                        snapshot.toObject(Car::class.java)
+                    }.also { result ->
+                        trySend(result)
+                    }
+                } else {
+                    trySend(emptyList())
+                }
+            }
         awaitClose()
     }
 

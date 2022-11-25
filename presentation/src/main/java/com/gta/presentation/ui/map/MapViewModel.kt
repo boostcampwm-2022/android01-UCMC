@@ -2,9 +2,10 @@ package com.gta.presentation.ui.map
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gta.domain.model.Coordinate
 import com.gta.domain.model.LocationInfo
 import com.gta.domain.model.SimpleCar
-import com.gta.domain.usecase.map.GetAllCarsUseCase
+import com.gta.domain.usecase.map.GetNearCarsUseCase
 import com.gta.domain.usecase.map.GetSearchAddressUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,44 +27,57 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val getAllCarsUseCase: GetAllCarsUseCase,
+    private val getNearCarsUseCase: GetNearCarsUseCase,
     private val searchAddressUseCase: GetSearchAddressUseCase
 ) :
     ViewModel() {
     private val SEARCH_TIMEOUT = 500L
 
-    private var _cars = MutableStateFlow<List<SimpleCar>>(emptyList())
-    val cars: StateFlow<List<SimpleCar>> get() = _cars
+    private var _carsRequest = MutableSharedFlow<Pair<Coordinate, Coordinate>>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val carsRequest: SharedFlow<Pair<Coordinate, Coordinate>> get() = _carsRequest
+
+    private var _carsResponse = MutableSharedFlow<List<SimpleCar>>()
+    val carsResponse: SharedFlow<List<SimpleCar>> get() = _carsResponse
 
     private var _selectCar = MutableStateFlow(SimpleCar())
     val selectCar: StateFlow<SimpleCar> get() = _selectCar
 
-    private val queryFlow = MutableSharedFlow<String>(
+    private var _searchRequest = MutableSharedFlow<String>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
+    private val searchRequest: SharedFlow<String> get() = _searchRequest
 
-    private var _searchResult = MutableSharedFlow<List<LocationInfo>>()
-    val searchResult: SharedFlow<List<LocationInfo>> get() = _searchResult
+    private var _searchResponse = MutableSharedFlow<List<LocationInfo>>()
+    val searchResponse: SharedFlow<List<LocationInfo>> get() = _searchResponse
 
     init {
-        getAllCars()
-
-        queryFlow
+        searchRequest
             .debounce(SEARCH_TIMEOUT)
             .flatMapLatest { query ->
                 searchAddressUseCase(query)
-            }
-            .flowOn(Dispatchers.IO)
+            }.flowOn(Dispatchers.IO)
             .onEach { rawList ->
-                _searchResult.emit(rawList)
+                _searchResponse.emit(rawList)
+            }.launchIn(viewModelScope)
+
+        carsRequest
+            .debounce(SEARCH_TIMEOUT)
+            .flatMapLatest { (min, max) ->
+                getNearCarsUseCase(min, max)
+            }.flowOn(Dispatchers.IO)
+            .onEach { list ->
+                _carsResponse.emit(list)
             }.launchIn(viewModelScope)
     }
 
-    private fun getAllCars() {
-        getAllCarsUseCase().onEach {
-            _cars.emit(it)
-        }.launchIn(viewModelScope)
+    fun setPosition(min: Coordinate, max: Coordinate) {
+        viewModelScope.launch {
+            _carsRequest.tryEmit(Pair(min, max))
+        }
     }
 
     fun setSelected(car: SimpleCar) {
@@ -74,7 +88,7 @@ class MapViewModel @Inject constructor(
 
     fun setQuery(query: String) {
         viewModelScope.launch {
-            queryFlow.tryEmit(query)
+            _searchRequest.tryEmit(query)
         }
     }
 }

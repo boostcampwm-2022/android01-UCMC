@@ -3,6 +3,7 @@ package com.gta.presentation.ui.map
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PointF
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -16,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.gta.domain.model.Coordinate
 import com.gta.domain.model.LocationInfo
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
@@ -44,6 +46,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private var mapMode = LocationTrackingMode.None
     private val viewModel: MapViewModel by viewModels()
     private lateinit var inputManager: InputMethodManager
+
+    private val markerList = mutableListOf<Marker>()
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -106,6 +110,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             isScaleBarEnabled = true
             isLocationButtonEnabled = true
         }
+        getNearCars()
 
         binding.mapView.setOnTouchListener { _, event ->
             hideKeyboard()
@@ -114,6 +119,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                 true
             } else {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                getNearCars()
                 binding.mapView.onTouchEvent(event)
             }
         }
@@ -123,23 +129,27 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private fun setupWithMarker() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.cars.collectLatest {
+                viewModel.carsResponse.collectLatest {
+                    resetMarkers()
                     it.forEach { car ->
-                        Marker().apply {
-                            icon = MarkerIcons.BLACK
-                            iconTintColor = requireContext().getColor(R.color.primaryColor)
-                            position = LatLng(car.coordinate.x, car.coordinate.y)
-                            map = naverMap
+                        markerList.add(
+                            Marker().apply {
+                                icon = MarkerIcons.BLACK
+                                iconTintColor = requireContext().getColor(R.color.primaryColor)
+                                position = LatLng(car.coordinate.x, car.coordinate.y)
+                                map = naverMap
 
-                            setOnClickListener {
-                                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                                naverMap.moveCamera(
-                                    CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
-                                )
-                                viewModel.setSelected(car)
-                                true
+                                setOnClickListener {
+                                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                                    naverMap.moveCamera(
+                                        CameraUpdate.scrollTo(position)
+                                            .animate(CameraAnimation.Easing)
+                                    )
+                                    viewModel.setSelected(car)
+                                    true
+                                }
                             }
-                        }
+                        )
                     }
                 }
             }
@@ -167,6 +177,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                 )
                 hideKeyboard()
                 binding.etSearch.clearFocus()
+                getNearCars()
             }
 
             override fun onLongClick(v: View, value: LocationInfo) {}
@@ -178,11 +189,57 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchResult.collectLatest { list ->
+                viewModel.searchResponse.collectLatest { list ->
                     menuAdapter.replace(list)
                 }
             }
         }
+    }
+
+    private fun getNearCars() {
+        val minLocation =
+            naverMap.projection.fromScreenLocation(
+                PointF(
+                    binding.mapView.right.toFloat(),
+                    binding.mapView.top.toFloat()
+                )
+            )
+        val maxLocation = naverMap.projection.fromScreenLocation(
+            PointF(
+                binding.mapView.left.toFloat(),
+                binding.mapView.bottom.toFloat()
+            )
+        )
+
+        val minX: Double
+        val maxX: Double
+        val minY: Double
+        val maxY: Double
+
+        if (minLocation.latitude < maxLocation.latitude) {
+            minX = minLocation.latitude
+            maxX = maxLocation.latitude
+        } else {
+            minX = maxLocation.latitude
+            maxX = minLocation.latitude
+        }
+
+        if (minLocation.longitude < maxLocation.longitude) {
+            minY = minLocation.longitude
+            maxY = maxLocation.longitude
+        } else {
+            minY = maxLocation.longitude
+            maxY = minLocation.longitude
+        }
+
+        viewModel.setPosition(Coordinate(minX, minY), Coordinate(maxX, maxY))
+    }
+
+    private fun resetMarkers() {
+        markerList.forEach {
+            it.map = null
+        }
+        markerList.clear()
     }
 
     override fun onAttach(context: Context) {
@@ -261,5 +318,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+
+        fun LatLng.toCoordinate(): Coordinate {
+            return Coordinate(this.latitude, this.longitude)
+        }
     }
 }

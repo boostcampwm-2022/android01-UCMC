@@ -33,7 +33,9 @@ class PinkSlipRegistrationFragment : BaseFragment<FragmentPinkSlipRegistrationBi
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.registerEvent.collectLatest { state ->
-                    findNavController().navigate(R.id.action_pinkSlipRegistrationFragment_to_myPageCarListFragment)
+                    if (state) {
+                        findNavController().navigate(R.id.action_pinkSlipRegistrationFragment_to_myPageCarListFragment)
+                    }
                 }
             }
         }
