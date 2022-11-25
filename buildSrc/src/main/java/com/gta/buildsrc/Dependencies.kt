@@ -103,11 +103,11 @@ object Dependencies {
                 "com.shobhitpuri.custombuttons:google-signin:${Versions.GOOGLE_SIGNIN_BUTTON}"
 
             fun getDataAll(): ArrayList<String> {
-                return arrayListOf(ANALYTICS, CRASHLYTICS, DATABASE, STORAGE, MESSAGING, FIRESTORE)
+                return arrayListOf(ANALYTICS, CRASHLYTICS, DATABASE, STORAGE, FIRESTORE)
             }
 
             fun getPresentationAll(): ArrayList<String> {
-                return arrayListOf(AUTH, GOOGLE_SIGNIN_BUTTON)
+                return arrayListOf(AUTH, GOOGLE_SIGNIN_BUTTON, MESSAGING)
             }
         }
 
