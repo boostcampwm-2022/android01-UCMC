@@ -129,7 +129,7 @@
                 app:counterMaxLength="500"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@null"
-                app:helperText="차 상세 페이지에 올릴 내용을 작성해 주세요"
+                app:helperText="@string/car_edit_comment_helper_message"
                 app:layout_constraintBottom_toTopOf="@+id/div_comment_bottom"
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
                 app:layout_constraintHeight_min="230dp"
