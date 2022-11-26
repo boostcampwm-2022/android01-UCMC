@@ -17,7 +17,7 @@ class PinkSlipRepositoryImpl @Inject constructor(
 ) : PinkSlipRepository {
 
     override fun getPinkSlip(buffer: ByteBuffer): Flow<PinkSlip?> = callbackFlow {
-        trySend(pinkSlipDataSource.matizOrPorsche())
+        trySend(pinkSlipDataSource.getRandomPinkSlip())
         awaitClose()
     }
 
