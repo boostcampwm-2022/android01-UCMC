@@ -9,6 +9,7 @@ object Dependencies {
         const val MATERIAL = "1.7.0"
         const val CONSTRAINT_LAYOUT = "2.1.4"
         const val STARTUP = "1.2.0-alpha01"
+        const val DATASTORE = "1.0.0"
 
         // KTX
         const val KOTLIN = "1.7.10"
@@ -182,6 +183,8 @@ object Dependencies {
 
         const val INJECT = "javax.inject:javax.inject:${Versions.INJECT}"
 
+        const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
+
         object Test {
             const val EXT = "androidx.test.ext:junit:${Versions.JUNIT_EXT}"
             const val JUNIT = "junit:junit:${Versions.JUNIT}"
@@ -211,6 +214,7 @@ object Dependencies {
             addAll(Room.getAll())
             add(TIMBER)
             addAll(Retrofit.getAll())
+            add(DATASTORE)
         }
 
         val dataKaptLibraries = arrayListOf<String>().apply {
