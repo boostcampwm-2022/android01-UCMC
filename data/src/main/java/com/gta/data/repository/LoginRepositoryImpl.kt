@@ -1,6 +1,7 @@
 package com.gta.data.repository
 
 import com.gta.data.source.LoginDataSource
+import com.gta.data.source.MessageTokenDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.repository.LoginRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -11,7 +12,8 @@ import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
-    private val loginDataSource: LoginDataSource
+    private val loginDataSource: LoginDataSource,
+    private val messageTokenDataSource: MessageTokenDataSource
 ) : LoginRepository {
     override fun checkCurrentUser(
         uid: String
@@ -20,7 +22,8 @@ class LoginRepositoryImpl @Inject constructor(
         if (userInfo != null) {
             trySend(true)
         } else {
-            trySend(loginDataSource.createUser(uid).first())
+            val messageToken = messageTokenDataSource.getMessageToken().first()
+            trySend(loginDataSource.createUser(uid, messageToken).first())
         }
         awaitClose()
     }
