@@ -12,36 +12,28 @@ import kotlin.random.Random
 class PinkSlipDataSource @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) {
+    private val rand = Random(System.currentTimeMillis())
+
     private val charset = "ABCDEFGHIJKLMNOPQRSTUVWXTZ0123456789"
 
     private val cars = listOf(
-        PinkSlip(
-            id = "12서 5678",
-            informationNumber = "ABCDEF12345W12345",
-            owner = "이동훈",
-            type = "경형 승용",
-            model = "올 뉴 마티즈",
-            year = 2007
-        ),
-        PinkSlip(
-            id = "123서 5678",
-            informationNumber = "ABCDEF12345W12345",
-            owner = "이동훈",
-            type = "대형 승용",
-            model = "포르쉐 911",
-            year = 2022
-        )
+        Triple("올 뉴 마티즈", "경형 승용", 2007),
+        Triple("포르쉐 911", "대형 승용", 2022),
+        Triple("BMW 730Ld xDrive", "대형 승용", 2018),
+        Triple("마이바흐 62s", "대형 승용", 2008),
+        Triple("페라리 458 Italy", "대형 승용", 2014),
+        Triple("아반떼", "중형 승용", 2012),
+        Triple("GV80", "대형 승용", 2022),
+        Triple("싼타페", "중형 승용", 2013),
+        Triple("그랜저", "중형 승용", 2020),
+        Triple("벤틀리 플라잉스퍼", "대형 승용", 2020),
+        Triple("C220d", "중형 승용", 2019),
+        Triple("티코", "경형 승용", 1994),
+        Triple("르망", "소형 승용", 1993),
+        Triple("MINI Cooper S", "소형 승용", 2012)
     )
 
-    private fun getRandomInformationNumber(): String {
-        val rand = Random(System.currentTimeMillis())
-        return (1..INFORMATION_NUMBER_LENGTH).map { charset.random(rand) }.joinToString("")
-    }
-
-    // 가짜 자동차 등록증 데이터를 반환 합니다.
-    fun matizOrPorsche(): PinkSlip = cars
-        .random(Random(System.currentTimeMillis()))
-        .copy(informationNumber = getRandomInformationNumber())
+    private val carIds = listOf("가", "나", "다", "라", "마")
 
     fun updateCars(uid: String, cars: List<Any?>): Flow<Boolean> = callbackFlow {
         fireStore.collection("users").document(uid).update("myCars", cars).addOnCompleteListener {
@@ -60,6 +52,24 @@ class PinkSlipDataSource @Inject constructor(
             }
         awaitClose()
     }
+
+    fun getRandomPinkSlip(): PinkSlip {
+        val (model, type, year) = cars.random(rand)
+        return PinkSlip(
+            id = getRandomCarId(),
+            informationNumber = getRandomInformationNumber(),
+            owner = "이동훈",
+            type = type,
+            model = model,
+            year = year
+        )
+    }
+
+    private fun getRandomInformationNumber() =
+        (1..INFORMATION_NUMBER_LENGTH).map { charset.random(rand) }.joinToString("")
+
+    private fun getRandomCarId() =
+        "${rand.nextInt(100, 699)}${carIds.random(rand)}${rand.nextInt(9999).toString().padStart(4, '0')}"
 
     companion object {
         private const val INFORMATION_NUMBER_LENGTH = 17
