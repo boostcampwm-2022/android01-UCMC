@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -41,12 +42,28 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
         }
 
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(
-                CarDetailFragmentDirections
-                    .actionCarDetailFragmentToReservationFragment(
-                        viewModel.carInfo.value.id
+            when (viewModel.useState.value) {
+                UseState.OWNER -> {
+                    findNavController().navigate(
+                        CarDetailFragmentDirections
+                            .actionCarDetailFragmentToCarDetailEditFragment(
+                                viewModel.carInfo.value.id
+                            )
                     )
-            )
+                }
+                UseState.USER -> {
+                    findNavController().navigate(
+                        CarDetailFragmentDirections
+                            .actionCarDetailFragmentToReservationFragment(
+                                viewModel.carInfo.value.id
+                            )
+                    )
+                }
+                UseState.NOW_RENT_USER -> {
+                    // TODO 반납하기 페이지
+                }
+                else -> {}
+            }
         }
     }
 }
