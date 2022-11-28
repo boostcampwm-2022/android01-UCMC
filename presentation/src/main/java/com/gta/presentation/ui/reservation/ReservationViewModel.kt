@@ -33,7 +33,7 @@ class ReservationViewModel @Inject constructor(
     private val createReservationUseCase: CreateReservationUseCase,
     private val auth: FirebaseAuth
 ) : ViewModel() {
-    private val carId by lazy { args.get<String>("carId") }
+    private val carId by lazy { args.get<String>("CAR_ID") }
 
     private val _reservationDate = MutableLiveData<AvailableDate>()
     val reservationDate: LiveData<AvailableDate> get() = _reservationDate
