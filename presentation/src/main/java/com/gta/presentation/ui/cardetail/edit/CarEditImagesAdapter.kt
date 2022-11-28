@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ItemCarEditImageBinding
-import com.gta.presentation.ui.GlideApp
 import com.gta.presentation.ui.cardetail.edit.CarEditImagesAdapter.ImageViewHolder
 
 class CarEditImagesAdapter : ListAdapter<String, ImageViewHolder>(ImagesDiffCallback()) {
@@ -35,9 +34,7 @@ class CarEditImagesAdapter : ListAdapter<String, ImageViewHolder>(ImagesDiffCall
         }
 
         fun bind(img: String) {
-            GlideApp.with(binding.ivCar.context)
-                .load(img)
-                .into(binding.ivCar)
+            binding.img = img
         }
     }
 
