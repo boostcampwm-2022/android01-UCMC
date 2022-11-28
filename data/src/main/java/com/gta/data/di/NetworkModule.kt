@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.gta.data.secret.CLOUD_MESSAGE_SERVER_KEY
 import com.gta.data.secret.KAKAO_REST_API_KEY
 import com.gta.data.service.AddressSearchService
+import com.gta.data.service.CloudMessageService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -121,4 +122,9 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(CLOUD_MESSAGE_BASE_URL)
         .build()
+
+    @Singleton
+    @Provides
+    fun provideCloudMessageService(@CloudMessageRetrofit retrofit: Retrofit): CloudMessageService =
+        retrofit.create(CloudMessageService::class.java)
 }
