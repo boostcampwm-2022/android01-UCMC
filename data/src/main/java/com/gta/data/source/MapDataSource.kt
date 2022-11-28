@@ -6,6 +6,10 @@ import javax.inject.Inject
 
 class MapDataSource @Inject constructor(private val service: AddressSearchService) {
     suspend fun getSearchAddressList(query: String): SearchResult {
-        return service.requestAddressList(query = query)
+        return service.requestAddressList(query)
+    }
+
+    suspend fun getSearchKeywordList(query: String): SearchResult {
+        return service.requestKeywordList(query)
     }
 }

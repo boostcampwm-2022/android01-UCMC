@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="data"
             type="com.gta.domain.model.LocationInfo" />
     </data>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_address"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{data.address}"
-        android:textSize="@dimen/font_body_large"
-        android:padding="@dimen/padding_medium"/>
+        android:paddingVertical="@dimen/padding_small"
+        android:paddingHorizontal="@dimen/padding_medium">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{data.name == null ? data.address : data.name}"
+            android:textSize="@dimen/font_body_large"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="네이버 1784"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{data.name == null ? `` : data.address}"
+            android:textSize="@dimen/font_body_medium"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            tools:text="경기 성남시 분당구 정자동 178-4"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

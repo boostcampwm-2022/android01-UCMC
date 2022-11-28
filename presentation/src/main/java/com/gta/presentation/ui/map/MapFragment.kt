@@ -138,7 +138,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                             Marker().apply {
                                 icon = MarkerIcons.BLACK
                                 iconTintColor = requireContext().getColor(R.color.primaryColor)
-                                position = LatLng(car.coordinate.x, car.coordinate.y)
+                                position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
                                 map = naverMap
 
                                 setOnClickListener {
@@ -172,7 +172,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         menuAdapter = AutoCompleteAdapter(requireContext(), emptyList())
         menuAdapter.setOnItemClickListener(object : OnItemClickListener<LocationInfo> {
             override fun onClick(value: LocationInfo) {
-                binding.etSearch.setText(value.address)
+                binding.etSearch.setText(value.name ?: value.address)
                 naverMap.moveCamera(
                     CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude))
                         .animate(CameraAnimation.Easing)
@@ -187,6 +187,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         binding.etSearch.setAdapter(menuAdapter)
         binding.etSearch.doOnTextChanged { text, _, _, _ ->
             viewModel.setQuery(text.toString())
+        }
+
+        binding.btnDeleteSearch.setOnClickListener {
+            binding.etSearch.setText("")
         }
 
         lifecycleScope.launch {
@@ -213,28 +217,28 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             )
         )
 
-        val minX: Double
-        val maxX: Double
-        val minY: Double
-        val maxY: Double
+        val minLat: Double
+        val maxLat: Double
+        val minLng: Double
+        val maxLng: Double
 
         if (minLocation.latitude < maxLocation.latitude) {
-            minX = minLocation.latitude
-            maxX = maxLocation.latitude
+            minLat = minLocation.latitude
+            maxLat = maxLocation.latitude
         } else {
-            minX = maxLocation.latitude
-            maxX = minLocation.latitude
+            minLat = maxLocation.latitude
+            maxLat = minLocation.latitude
         }
 
         if (minLocation.longitude < maxLocation.longitude) {
-            minY = minLocation.longitude
-            maxY = maxLocation.longitude
+            minLng = minLocation.longitude
+            maxLng = maxLocation.longitude
         } else {
-            minY = maxLocation.longitude
-            maxY = minLocation.longitude
+            minLng = maxLocation.longitude
+            maxLng = minLocation.longitude
         }
 
-        viewModel.setPosition(Coordinate(minX, minY), Coordinate(maxX, maxY))
+        viewModel.setPosition(Coordinate(minLat, minLng), Coordinate(maxLat, maxLng))
     }
 
     private fun resetMarkers() {
