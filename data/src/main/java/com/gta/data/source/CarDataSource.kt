@@ -42,18 +42,6 @@ class CarDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun updateCarReservations(carId: String, reservations: List<Any?>): Flow<Boolean> =
-        callbackFlow {
-            fireStore
-                .collection("cars")
-                .document(carId)
-                .update("reservations", reservations)
-                .addOnCompleteListener {
-                    trySend(it.isSuccessful)
-                }
-            awaitClose()
-        }
-
     fun getAllCars(): Flow<List<Car>> = callbackFlow {
         fireStore.collection("cars").get().addOnCompleteListener {
             if (it.isSuccessful) {

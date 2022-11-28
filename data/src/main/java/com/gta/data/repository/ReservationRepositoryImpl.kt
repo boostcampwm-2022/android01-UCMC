@@ -16,17 +16,9 @@ class ReservationRepositoryImpl @Inject constructor(
     private val carDataSource: CarDataSource
 ) : ReservationRepository {
     override fun createReservation(reservation: Reservation): Flow<String> = callbackFlow {
-        /*
-            1. 차 정보 가져오기
-            2. 차 예약 리스트 뒤에 새로운 예약 ID 붙이고 업데이트
-            3. 에약 리스트 추가
-         */
         val reservationId = "${System.currentTimeMillis()}${reservation.carId}"
         carDataSource.getCar(reservation.carId).first()?.let { car ->
-            val updateReservations = car.reservations.plus(reservationId)
-            val updateResult = carDataSource.updateCarReservations(reservation.carId, updateReservations).first()
-            val createResult = reservationDataSource.createReservation(reservation, reservationId).first()
-            if (updateResult && createResult) {
+            if (reservationDataSource.createReservation(reservation, reservationId).first()) {
                 trySend(reservationId)
             } else {
                 trySend("")
@@ -35,14 +27,14 @@ class ReservationRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getReservationInfo(reservationId: String): Flow<Reservation> = callbackFlow {
-        reservationDataSource.getReservation(reservationId).first()?.let { reservation ->
+    override fun getReservationInfo(reservationId: String, carId: String): Flow<Reservation> = callbackFlow {
+        reservationDataSource.getReservation(reservationId, carId).first()?.let { reservation ->
             trySend(reservation)
         } ?: trySend(Reservation())
         awaitClose()
     }
 
-    override fun getReservationCar(reservationId: String): Flow<String> {
-        return getReservationInfo(reservationId).map { it.carId }
+    override fun getReservationCar(reservationId: String, carId: String): Flow<String> {
+        return getReservationInfo(reservationId, carId).map { it.carId }
     }
 }

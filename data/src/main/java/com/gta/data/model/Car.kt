@@ -18,7 +18,6 @@ data class Car(
     val rentState: String = RentState.UNAVAILABLE.string,
     val comment: String = "차였어요",
     val availableDate: AvailableDate = AvailableDate(),
-    val reservations: List<String> = emptyList(),
     val ownerId: String = ""
 )
 

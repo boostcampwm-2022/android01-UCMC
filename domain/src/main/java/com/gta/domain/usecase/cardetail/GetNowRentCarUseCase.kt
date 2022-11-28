@@ -13,9 +13,9 @@ class GetNowRentCarUseCase @Inject constructor(
     private val reservationRepository: ReservationRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(uid: String): Flow<String?> {
+    operator fun invoke(uid: String, carId: String): Flow<String?> {
         return userRepository.getNowReservation(uid).flatMapLatest { reservation ->
-            reservation?.let { reservationRepository.getReservationCar(it) } ?: flowOf(null)
+            reservation?.let { reservationRepository.getReservationCar(it, carId) } ?: flowOf(null)
         }
     }
 }
