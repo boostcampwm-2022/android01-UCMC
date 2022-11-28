@@ -20,7 +20,8 @@ class CreateReservationUseCase @Inject constructor(
                 message = RESERVATION_REQUEST_MESSAGE,
                 reservationId = reservationId,
                 fromId = reservation.userId
-            ), ownerId
+            ),
+            ownerId
         )
         return reservationId.isNotEmpty() && notificationResult
     }

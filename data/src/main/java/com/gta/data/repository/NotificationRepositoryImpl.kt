@@ -7,7 +7,7 @@ import com.gta.domain.repository.NotificationRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class NotificationRepositoryImpl @Inject constructor(private val notificationDataSource: NotificationDataSource, private val userDataSource: UserDataSource): NotificationRepository {
+class NotificationRepositoryImpl @Inject constructor(private val notificationDataSource: NotificationDataSource, private val userDataSource: UserDataSource) : NotificationRepository {
     override suspend fun sendNotification(notification: Notification, receiverId: String): Boolean {
         val receiverToken = userDataSource.getUser(receiverId).first()?.messageToken ?: ""
         // 지금 아무도 토큰 없으므로 일단 내 것

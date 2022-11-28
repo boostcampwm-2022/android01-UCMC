@@ -13,7 +13,7 @@ data class UserInfo(
     val myCars: List<String> = emptyList(),
     val transactionHistory: List<String> = emptyList(),
     val reportCount: Int = 0,
-    val messageToken: String = "",
+    val messageToken: String = ""
 )
 
 fun UserInfo.toProfile(id: String): UserProfile = UserProfile(

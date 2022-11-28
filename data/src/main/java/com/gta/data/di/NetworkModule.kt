@@ -91,7 +91,7 @@ object NetworkModule {
     @CloudMessageOkHttpClient
     @Singleton
     @Provides
-    fun provideCloudMessageOkHttpClient(@CloudMessageInterceptor interceptor: Interceptor): OkHttpClient  {
+    fun provideCloudMessageOkHttpClient(@CloudMessageInterceptor interceptor: Interceptor): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }

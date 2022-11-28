@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -104,7 +103,8 @@ class ReservationViewModel @Inject constructor(
                             reservationDate = date,
                             price = price,
                             insuranceOption = option.name
-                        ), ownerId
+                        ),
+                        ownerId
                     )
                 )
             }
