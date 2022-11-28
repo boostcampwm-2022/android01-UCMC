@@ -11,7 +11,7 @@ import com.gta.presentation.model.DateType
 import com.gta.presentation.util.DateUtil
 
 @BindingAdapter("image_uri")
-fun bindImageUri(view: ImageView, uri: String) {
+fun bindImageUri(view: ImageView, uri: String?) {
     GlideApp.with(view.context)
         .load(uri)
         .placeholder(R.color.neutral80)
