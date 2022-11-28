@@ -9,7 +9,9 @@ import com.gta.domain.model.RentState
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UpdateCarDetailDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -35,6 +37,10 @@ class CarEditViewModel @Inject constructor(
     private val _availableDate = MutableStateFlow<AvailableDate>(AvailableDate())
     val availableDate: StateFlow<AvailableDate>
         get() = _availableDate
+
+    private val _updateState = MutableSharedFlow<Boolean>(replay = 0)
+    val updateState: SharedFlow<Boolean>
+        get() = _updateState
 
     init {
         carId = args.get<String>("CAR_ID") ?: "정보 없음"
@@ -70,16 +76,18 @@ class CarEditViewModel @Inject constructor(
         // TODO 예외처리
         // TODO 대여반납 위치 update 하기
         viewModelScope.launch {
-            updateCarDetailDataUseCase(
-                carId,
-                images.value,
-                price.value.toInt(),
-                comment.value,
-                if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
-                availableDate.value,
-                "수정된 위치",
-                Coordinate(37.3588798, 127.1051933)
-            ).first()
+            _updateState.emit(
+                updateCarDetailDataUseCase(
+                    carId,
+                    images.value,
+                    price.value.toInt(),
+                    comment.value,
+                    if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
+                    availableDate.value,
+                    "수정된 위치",
+                    Coordinate(37.3588798, 127.1051933)
+                ).first()
+            )
         }
     }
 }

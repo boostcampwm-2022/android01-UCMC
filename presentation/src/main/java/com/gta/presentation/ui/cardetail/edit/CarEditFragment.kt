@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.gta.presentation.R
@@ -20,6 +21,7 @@ import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
@@ -34,9 +36,21 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
     private val maxImagesMsg: Snackbar by lazy {
         Snackbar.make(
             binding.btnDone,
-            "이미지는 최대 10장까지 선택 할 수 있어요.",
+            resources.getString(R.string.car_edit_max_image),
             Snackbar.LENGTH_SHORT
-        )
+        ).apply {
+            anchorView = binding.btnDone
+        }
+    }
+
+    private val finishUpdateMsg: Snackbar by lazy {
+        Snackbar.make(
+            binding.btnDone,
+            resources.getString(R.string.car_edit_finish_update),
+            Snackbar.LENGTH_SHORT
+        ).apply {
+            anchorView = binding.btnDone
+        }
     }
 
     private val datePicker by lazy {
@@ -107,6 +121,19 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                             resources.getString(R.string.car_edit_images_count),
                             it.size
                         )
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.updateState.collectLatest { result ->
+                    if (result) {
+                        finishUpdateMsg.show()
+                        findNavController().navigateUp()
+                    } else {
+                        Timber.d("차 상세 데이터 update 실패")
+                    }
                 }
             }
         }

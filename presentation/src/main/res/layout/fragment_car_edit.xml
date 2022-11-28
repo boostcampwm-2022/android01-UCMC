@@ -174,7 +174,7 @@
                 android:id="@+id/tv_day_able_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="예약 가능 여부"
+                android:text="@string/car_edit_day_able"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/sw_day_able"
