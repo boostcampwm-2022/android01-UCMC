@@ -92,6 +92,7 @@ class ReservationViewModel @Inject constructor(
         val date = reservationDate.value ?: return
         val price = totalPrice.value ?: return
         val option = insuranceOption.value ?: return
+        val ownerId = car?.value?.ownerId ?: ""
 
         carId?.let {
             viewModelScope.launch {
@@ -103,8 +104,8 @@ class ReservationViewModel @Inject constructor(
                             reservationDate = date,
                             price = price,
                             insuranceOption = option.name
-                        )
-                    ).first()
+                        ), ownerId
+                    )
                 )
             }
         }

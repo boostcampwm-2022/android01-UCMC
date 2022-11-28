@@ -118,4 +118,5 @@
     
     <string name="default_notification_channel_id">ucmc_notifications</string>
     <string name="default_notification_name">자동차 예약, 반납 알림</string>
+    <string name="reservation_request_msg">자동차 대여 예약 요청이 도착했습니다.</string>
 </resources>
