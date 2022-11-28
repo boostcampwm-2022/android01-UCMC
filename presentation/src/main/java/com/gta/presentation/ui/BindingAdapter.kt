@@ -14,7 +14,7 @@ import java.text.DecimalFormat
 private val dec = DecimalFormat("#,###")
 
 @BindingAdapter("image_uri")
-fun bindImageUri(view: ImageView, uri: String) {
+fun bindImageUri(view: ImageView, uri: String?) {
     GlideApp.with(view.context)
         .load(uri)
         .placeholder(R.color.neutral80)
