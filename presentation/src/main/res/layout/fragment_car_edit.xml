@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.gta.presentation.ui.cardetail.edit.CarEditViewModel" />
@@ -36,6 +38,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_image"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/padding_small"
@@ -92,6 +95,7 @@
                 android:gravity="end"
                 android:inputType="number"
                 android:maxLength="9"
+                android:text="@={vm.price}"
                 app:layout_constraintEnd_toStartOf="@+id/tv_price_unit"
                 app:layout_constraintStart_toEndOf="@+id/tv_price_label"
                 app:layout_constraintTop_toBottomOf="@+id/div_price_top"
@@ -142,6 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:gravity="top"
+                    android:text="@={vm.comment}"
                     android:textSize="@dimen/font_body_medium"
                     tools:ignore="SpeakableTextPresentCheck" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -155,6 +160,36 @@
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
                 app:layout_constraintStart_toStartOf="@id/gl_start"
                 app:layout_constraintTop_toBottomOf="@+id/tl_comment_input" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/colorSecondary"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_day_able_label"
+                app:layout_constraintEnd_toEndOf="@+id/sw_day_able"
+                app:layout_constraintStart_toStartOf="@+id/tv_day_able_label"
+                app:layout_constraintTop_toTopOf="@+id/tv_day_able_label" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_day_able_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="예약 가능 여부"
+                android:textSize="@dimen/font_title_medium"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/sw_day_able"
+                app:layout_constraintEnd_toStartOf="@+id/sw_day_able"
+                app:layout_constraintStart_toStartOf="@id/gl_start"
+                app:layout_constraintTop_toTopOf="@+id/sw_day_able" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/sw_day_able"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@={vm.rentState}"
+                app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintStart_toEndOf="@+id/tv_day_able_label"
+                app:layout_constraintTop_toBottomOf="@+id/div_comment_bottom" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_day_label"
@@ -173,13 +208,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/padding_medium"
-                android:layout_marginTop="@dimen/padding_medium"
                 android:gravity="end"
                 android:textSize="@dimen/font_title_medium"
                 app:layout_constraintBottom_toTopOf="@+id/tv_location"
                 app:layout_constraintEnd_toStartOf="@+id/iv_day_edit"
                 app:layout_constraintStart_toEndOf="@+id/tv_day_label"
-                app:layout_constraintTop_toBottomOf="@+id/div_comment_bottom"
+                app:layout_constraintTop_toBottomOf="@+id/sw_day_able"
                 app:text_AvailableDate="@{vm.availableDate}"
                 tools:text="@string/no_information" />
 
@@ -234,6 +268,19 @@
                 app:layout_constraintStart_toEndOf="@+id/tv_location"
                 app:layout_constraintTop_toTopOf="@+id/tv_location"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:alpha="0.3"
+                android:background="?attr/colorOnSurface"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="@{vm.rentState ? View.GONE : View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_location"
+                app:layout_constraintEnd_toEndOf="@+id/iv_location_edit"
+                app:layout_constraintStart_toStartOf="@+id/tv_day_label"
+                app:layout_constraintTop_toTopOf="@+id/tv_day" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_done"

@@ -61,6 +61,7 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
+        binding.vm = viewModel
         binding.rvImages.adapter = imagesAdapter.apply {
             setItemClickListener(object : CarEditImagesAdapter.OnItemClickListener {
                 override fun onClick(position: Int) {
@@ -89,6 +90,11 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
 
         binding.ivDayEdit.setOnClickListener {
             datePicker.show(childFragmentManager, null)
+        }
+
+        binding.btnDone.setOnClickListener {
+            // TODO 확인 작업
+            viewModel.updateData()
         }
 
         lifecycleScope.launch {
