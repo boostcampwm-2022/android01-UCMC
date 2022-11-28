@@ -15,7 +15,7 @@ class ReservationRepositoryImpl @Inject constructor(
     private val reservationDataSource: ReservationDataSource,
     private val carDataSource: CarDataSource
 ) : ReservationRepository {
-    override fun createReservation(reservation: Reservation): Flow<Boolean> = callbackFlow {
+    override fun createReservation(reservation: Reservation): Flow<String> = callbackFlow {
         /*
             1. 차 정보 가져오기
             2. 차 예약 리스트 뒤에 새로운 예약 ID 붙이고 업데이트
@@ -26,8 +26,12 @@ class ReservationRepositoryImpl @Inject constructor(
             val updateReservations = car.reservations.plus(reservationId)
             val updateResult = carDataSource.updateCarReservations(reservation.carId, updateReservations).first()
             val createResult = reservationDataSource.createReservation(reservation, reservationId).first()
-            trySend(updateResult && createResult)
-        } ?: trySend(false)
+            if (updateResult && createResult) {
+                trySend(reservationId)
+            } else {
+                trySend("")
+            }
+        } ?: trySend("")
         awaitClose()
     }
 
