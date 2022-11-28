@@ -2,21 +2,53 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.chatting.ChattingFragment">
+    tools:context=".ui.chatting.chat.ChattingFragment">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.chatting.chat.ChattingViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/btn"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/in_chatting_car_summary"
+            layout="@layout/include_car_summary"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="chatting fragment"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:car="@{vm.car}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/div_chatting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/in_chatting_car_summary"/>
+
+        <io.getstream.chat.android.ui.message.list.MessageListView
+            android:id="@+id/ml_chatting"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/mi_chatting"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/div_chatting" />
+
+        <io.getstream.chat.android.ui.message.input.MessageInputView
+            android:id="@+id/mi_chatting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ml_chatting" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -103,4 +103,6 @@
     <string name="review_input_hint_for_lender">차주의 매너, 차 상태 등 서비스에 대한 리뷰를 남겨주세요. 감사 인사도 좋아요 :)</string>
     <string name="review_input_hint_for_owner">대여자의 매너, 대여 후 차 상태 등 리뷰를 남겨주세요. 감사 인사도 좋아요 :)</string>
     <string name="review_btn_apply">리뷰완료</string>
+
+    <string name="chatting_toolbar">채팅</string>
 </resources>
