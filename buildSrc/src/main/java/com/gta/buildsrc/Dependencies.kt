@@ -43,6 +43,7 @@ object Dependencies {
 
         // REST API
         const val RETROFIT = "2.9.0"
+        const val LOGGING_INTERCEPTER = "5.0.0-alpha.6"
 
         // Test
         const val JUNIT = "4.13.2"
@@ -172,6 +173,8 @@ object Dependencies {
             }
         }
 
+        const val LOGGING_INTERCEPTER = "com.squareup.okhttp3:logging-interceptor:${Versions.LOGGING_INTERCEPTER}"
+
         const val VIEW_PAGER_2 = "androidx.viewpager2:viewpager2:${Versions.VIEW_PAGER}"
 
         const val NAVER_MAP = "com.naver.maps:map-sdk:${Versions.NAVER_MAPS}"
@@ -215,6 +218,7 @@ object Dependencies {
             add(TIMBER)
             addAll(Retrofit.getAll())
             add(DATASTORE)
+            add(LOGGING_INTERCEPTER)
         }
 
         val dataKaptLibraries = arrayListOf<String>().apply {

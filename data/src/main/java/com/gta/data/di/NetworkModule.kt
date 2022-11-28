@@ -11,6 +11,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Qualifier
@@ -89,9 +90,15 @@ object NetworkModule {
     @CloudMessageOkHttpClient
     @Singleton
     @Provides
-    fun provideCloudMessageOkHttpClient(@CloudMessageInterceptor interceptor: Interceptor): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(interceptor)
-        .build()
+    fun provideCloudMessageOkHttpClient(@CloudMessageInterceptor interceptor: Interceptor): OkHttpClient  {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            setLevel(HttpLoggingInterceptor.Level.BODY)
+        }
+        return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
 
     @CloudMessageInterceptor
     @Singleton
@@ -100,8 +107,7 @@ object NetworkModule {
         with(chain) {
             val request = request()
                 .newBuilder()
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", CLOUD_MESSAGE_SERVER_KEY)
+                .addHeader("Authorization", "key=$CLOUD_MESSAGE_SERVER_KEY")
                 .build()
             proceed(request)
         }
