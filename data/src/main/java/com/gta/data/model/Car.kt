@@ -38,7 +38,8 @@ fun Car.toCarRentInfo(reservationDates: List<AvailableDate>): CarRentInfo = CarR
     price = price,
     comment = comment,
     availableDate = availableDate,
-    reservationDates = reservationDates
+    reservationDates = reservationDates,
+    ownerId = ownerId
 )
 
 fun Car.toDetailCar(id: String, owner: UserProfile): CarDetail = CarDetail(
