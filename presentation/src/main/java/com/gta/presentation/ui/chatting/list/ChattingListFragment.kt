@@ -10,6 +10,7 @@ import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.AndroidEntryPoint
 import io.getstream.chat.android.client.ChatClient
+import io.getstream.chat.android.client.api.models.QueryChannelRequest
 import io.getstream.chat.android.client.models.User
 import io.getstream.chat.android.ui.channel.list.viewmodel.ChannelListViewModel
 import io.getstream.chat.android.ui.channel.list.viewmodel.bindView
@@ -59,7 +60,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding>(
                 Timber.tag("chatting").i(result.error().message)
             }
         }
-
         // 채팅방이 선택 됐을 때 호출되는 리쓰너에요
         // 해당 채팅방의 id를 들고 채팅 화면으로 넘어갑니다.
         binding.clChattingList.setChannelItemClickListener { channel ->
@@ -73,7 +73,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding>(
     // 이 화면에서는 필요하지 않지만 예약 완료 화면에서 이 메쏘드를 참고해 채팅방을 생성해야 하기 때문에 냅뒀어요
     // channelId는 대여자uid-차id 에요
     // 채널을 만들기 전에 중복 확인을 위한 queryChannel을 먼저 돌릴 필요가 있어요
-    // 고것은 내일할게요
     private fun createChannel() {
         chatClient.createChannel(
             channelType = "messaging",
@@ -82,6 +81,26 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding>(
             extraData = emptyMap()
         ).enqueue() { result ->
             if (result.isError) {
+                Timber.tag("chatting").i(result.error().message)
+            }
+        }
+    }
+
+    // 채널을 만들기 전에 중복 확인을 위한 queryChannel을 먼저 돌릴 필요가 있어요
+    // 이미 채팅방이 있다면 만들어선 안되겠죠..?!
+    private fun checkChannel() {
+        chatClient.queryChannel(
+            "messaging",
+            "${user.id}-차id",
+            QueryChannelRequest()
+        ).enqueue { result ->
+            if (result.isSuccess) {
+                // 쿼리에 성공했다면 채널id를 받을 수 있어요
+                // 이 채널id를 들고 채팅 화면으로 넘어가면 돼요
+                Timber.tag("chatting").i(result.data().cid)
+            } else {
+                // 채널이 없다면 여기로 와요
+                // 이럴 땐 쿼리에 쓴 채널Id로 새로운 채널을 만들어 봐요
                 Timber.tag("chatting").i(result.error().message)
             }
         }
