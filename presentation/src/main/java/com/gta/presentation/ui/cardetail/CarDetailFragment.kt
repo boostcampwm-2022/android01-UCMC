@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
+import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -42,6 +43,7 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.carInfo.collectLatest {
+                    (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
                     pagerAdapter.submitList(it.images)
                 }
             }
