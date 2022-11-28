@@ -29,6 +29,8 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
     private val viewModel: CarEditViewModel by viewModels()
     private val imagesAdapter by lazy { CarEditImagesAdapter() }
 
+    private val MAX_IMAGE = 10
+
     private val maxImagesMsg: Snackbar by lazy {
         Snackbar.make(
             binding.btnDone,
@@ -78,7 +80,7 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnAddImage.setOnClickListener {
-            if (viewModel.images.value.size < 10) {
+            if (viewModel.images.value.size < MAX_IMAGE) {
                 addImageAtGallery()
             } else {
                 maxImagesMsg.show()
