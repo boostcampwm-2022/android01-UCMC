@@ -9,4 +9,9 @@ interface AddressSearchService {
     suspend fun requestAddressList(
         @Query("query") query: String
     ): SearchResult
+
+    @GET("v2/local/search/keyword.json")
+    suspend fun requestKeywordList(
+        @Query("query") query: String
+    ): SearchResult
 }
