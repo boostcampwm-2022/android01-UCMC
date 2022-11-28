@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/neutral99"
+        android:paddingHorizontal="@dimen/padding_medium">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title_services"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tos_title_service"
+            android:textSize="@dimen/font_headline_medium"
+            android:layout_marginTop="@dimen/padding_medium"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_description_services"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:textSize="@dimen/font_body_medium"
+            android:scrollbars="vertical"
+            android:layout_marginVertical="@dimen/padding_medium"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_services"
+            app:layout_constraintBottom_toTopOf="@id/tv_title_privacy"
+            app:layout_constraintVertical_weight="1" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title_privacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tos_title_privacy"
+            android:textSize="@dimen/font_headline_medium"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_services"
+            app:layout_constraintBottom_toTopOf="@id/guideline_bottom" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_description_privacy"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:textSize="@dimen/font_body_medium"
+            android:scrollbars="vertical"
+            android:layout_marginTop="@dimen/padding_medium"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_privacy"
+            app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+            app:layout_constraintVertical_weight="1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintGuide_percent="0.95" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

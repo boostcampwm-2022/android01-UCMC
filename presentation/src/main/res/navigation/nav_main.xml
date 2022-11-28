@@ -31,7 +31,13 @@
             app:destination="@id/nicknameFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_myPageCarListFragment"
-            app:destination="@id/myPageCarListFragment" />
+            app:destination="@id/myPageCarListFragment"
+            app:popUpTo="@id/myPageFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_myPageFragment_to_myPageTermsFragment"
+            app:destination="@id/myPageTermsFragment"
+            app:popUpTo="@id/myPageFragment"/>
     </fragment>
 
     <fragment
@@ -181,5 +187,10 @@
             android:name="CAR_ID"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/myPageTermsFragment"
+        android:name="com.gta.presentation.ui.mypage.MyPageTermsFragment"
+        android:label="@string/mypage_btn_terms"
+        tools:layout="@layout/fragment_mypage_terms"/>
 
 </navigation>

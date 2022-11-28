@@ -52,6 +52,9 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
         binding.btnMypageCar.setOnClickListener {
             findNavController().navigate(R.id.action_myPageFragment_to_myPageCarListFragment)
         }
+        binding.btnMypageTerms.setOnClickListener {
+            findNavController().navigate(R.id.action_myPageFragment_to_myPageTermsFragment)
+        }
     }
 
     private fun initCollector() {
