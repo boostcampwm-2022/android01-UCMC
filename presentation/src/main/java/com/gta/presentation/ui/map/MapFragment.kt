@@ -82,7 +82,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.vm = viewModel
+        binding.vm = viewModel.apply {
+            this.startCollect()
+        }
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
 
@@ -286,6 +288,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onDestroyView() {
+        viewModel.stopCollect()
         bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
         binding.mapView.onDestroy()
         super.onDestroyView()
@@ -318,9 +321,5 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-
-        fun LatLng.toCoordinate(): Coordinate {
-            return Coordinate(this.latitude, this.longitude)
-        }
     }
 }
