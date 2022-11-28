@@ -77,8 +77,8 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding>(
     private fun createChannel() {
         chatClient.createChannel(
             channelType = "messaging",
-            channelId = "${user.id}-6MFZG2656SJPK110Q",
-            memberIds = listOf(user.id, "K0Teu94oivNsYbUh9Wc9qEknrVO2"),
+            channelId = "${user.id}-차id",
+            memberIds = listOf(user.id, "상대방uid"),
             extraData = emptyMap()
         ).enqueue() { result ->
             if (result.isError) {
