@@ -8,9 +8,11 @@ import com.gta.domain.model.SimpleCar
 import com.gta.domain.usecase.map.GetNearCarsUseCase
 import com.gta.domain.usecase.map.GetSearchAddressUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
@@ -31,7 +34,7 @@ class MapViewModel @Inject constructor(
     private val searchAddressUseCase: GetSearchAddressUseCase
 ) :
     ViewModel() {
-    private val SEARCH_TIMEOUT = 500L
+    private val SEARCH_TIMEOUT = 5000L
 
     private var _carsRequest = MutableSharedFlow<Pair<Coordinate, Coordinate>>(
         extraBufferCapacity = 1,
@@ -54,7 +57,11 @@ class MapViewModel @Inject constructor(
     private var _searchResponse = MutableSharedFlow<List<LocationInfo>>()
     val searchResponse: SharedFlow<List<LocationInfo>> get() = _searchResponse
 
-    init {
+    private lateinit var collectJob: CompletableJob
+
+    fun startCollect() {
+        collectJob = SupervisorJob()
+
         searchRequest
             .debounce(SEARCH_TIMEOUT)
             .flatMapLatest { query ->
@@ -62,7 +69,7 @@ class MapViewModel @Inject constructor(
             }.flowOn(Dispatchers.IO)
             .onEach { rawList ->
                 _searchResponse.emit(rawList)
-            }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope + collectJob)
 
         carsRequest
             .debounce(SEARCH_TIMEOUT)
@@ -71,12 +78,16 @@ class MapViewModel @Inject constructor(
             }.flowOn(Dispatchers.IO)
             .onEach { list ->
                 _carsResponse.emit(list)
-            }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope + collectJob)
+    }
+
+    fun stopCollect() {
+        collectJob.cancel()
     }
 
     fun setPosition(min: Coordinate, max: Coordinate) {
         viewModelScope.launch {
-            _carsRequest.tryEmit(Pair(min, max))
+            _carsRequest.emit(Pair(min, max))
         }
     }
 
@@ -88,7 +99,7 @@ class MapViewModel @Inject constructor(
 
     fun setQuery(query: String) {
         viewModelScope.launch {
-            _searchRequest.tryEmit(query)
+            _searchRequest.emit(query)
         }
     }
 }
