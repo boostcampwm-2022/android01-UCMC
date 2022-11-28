@@ -29,7 +29,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         if (it.resultCode == RESULT_OK) {
             val authIntent = it.data ?: return@registerForActivityResult
             val account = Auth.GoogleSignInApi.getSignInResultFromIntent(authIntent)?.signInAccount
-            viewModel.signinWithToken(account?.idToken)
+            viewModel.signInWithToken(account?.idToken)
         }
     }
 

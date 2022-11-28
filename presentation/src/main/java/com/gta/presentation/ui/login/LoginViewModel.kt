@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(
     private val _loginEvent = MutableSharedFlow<Boolean>()
     val loginEvent: SharedFlow<Boolean> get() = _loginEvent
 
-    fun signinWithToken(token: String?) {
+    fun signInWithToken(token: String?) {
         token ?: return
         val credential = GoogleAuthProvider.getCredential(token, null)
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
