@@ -21,12 +21,17 @@ class LoginRepositoryImpl @Inject constructor(
         if (userInfo != null) {
             trySend(LoginResult.SUCCESS)
         } else {
-            val created = loginDataSource.createUser(uid).first()
-            if (created) {
-                trySend(LoginResult.NEWUSER)
-            } else {
-                trySend(LoginResult.FAILURE)
-            }
+            trySend(LoginResult.NEWUSER)
+        }
+        awaitClose()
+    }
+
+    override fun signUp(uid: String) = callbackFlow {
+        val created = loginDataSource.createUser(uid).first()
+        if (created) {
+            trySend(LoginResult.SUCCESS)
+        } else {
+            trySend(LoginResult.FAILURE)
         }
         awaitClose()
     }
