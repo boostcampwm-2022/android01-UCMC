@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.gta.domain.model.LoginResult
 import com.gta.presentation.databinding.ActivityLoginBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseActivity
@@ -24,14 +25,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
     lateinit var googleSignInClient: GoogleSignInClient
 
     private val viewModel: LoginViewModel by viewModels()
+    private val dialog = TosDialogFragment()
 
-    private val requestActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == RESULT_OK) {
-            val authIntent = it.data ?: return@registerForActivityResult
-            val account = Auth.GoogleSignInApi.getSignInResultFromIntent(authIntent)?.signInAccount
-            viewModel.signInWithToken(account?.idToken)
+    private val requestActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val authIntent = it.data ?: return@registerForActivityResult
+                val account =
+                    Auth.GoogleSignInApi.getSignInResultFromIntent(authIntent)?.signInAccount
+                viewModel.signInWithToken(account?.idToken)
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +54,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loginEvent.collectLatest { state ->
-                    if (state) {
+                    when (state) {
+                        LoginResult.SUCCESS -> startMainActivity()
+                        LoginResult.FAILURE -> {}
+                        LoginResult.NEWUSER -> {
+                            dialog.show(supportFragmentManager, dialog.tag)
+                        }
+                    }
+                }
+
+                viewModel.termsEvent.collectLatest { result ->
+                    if (result) {
                         startMainActivity()
                     }
                 }
