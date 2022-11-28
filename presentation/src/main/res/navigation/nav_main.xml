@@ -33,7 +33,7 @@
         android:id="@+id/myPageFragment"
         android:name="com.gta.presentation.ui.mypage.MyPageFragment"
         android:label="@string/my_page"
-        tools:layout="@layout/fragment_mypage" >
+        tools:layout="@layout/fragment_mypage">
         <action
             android:id="@+id/action_myPageFragment_to_nicknameFragment"
             app:destination="@id/nicknameFragment" />
@@ -49,10 +49,10 @@
         tools:layout="@layout/fragment_my_cars">
         <action
             android:id="@+id/action_myPageCarListFragment_to_pinkSlipGuideFragment"
-            app:destination="@id/pinkSlipGuideFragment"/>
+            app:destination="@id/pinkSlipGuideFragment" />
         <action
             android:id="@+id/action_myPageCarListFragment_to_carDetailFragment"
-            app:destination="@id/carDetailFragment"/>
+            app:destination="@id/carDetailFragment" />
     </fragment>
 
     <fragment
@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_carDetailFragment_to_ownerProfileFragment"
             app:destination="@id/ownerProfileFragment" />
+        <action
+            android:id="@+id/action_carDetailFragment_to_carDetailEditFragment"
+            app:destination="@id/carDetailEditFragment" />
         <action
             android:id="@+id/action_carDetailFragment_to_reservationFragment"
             app:destination="@id/reservationFragment" />
@@ -137,7 +140,7 @@
         android:id="@+id/paymentFragment"
         android:name="com.gta.presentation.ui.reservation.PaymentFragment"
         android:label="fragment_payment"
-        tools:layout="@layout/fragment_payment" >
+        tools:layout="@layout/fragment_payment">
         <action
             android:id="@+id/action_paymentFragment_to_chattingFragment"
             app:destination="@id/chattingFragment"
@@ -170,6 +173,7 @@
             app:popUpTo="@id/myPageFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/reviewFragment"
         android:name="com.gta.presentation.ui.review.ReviewFragment"
@@ -183,6 +187,16 @@
         <action
             android:id="@+id/action_chattingListFragment_to_chattingFragment"
             app:destination="@id/chattingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/carDetailEditFragment"
+        android:name="com.gta.presentation.ui.cardetail.edit.CarEditFragment"
+        android:label="@string/car_edit_label"
+        tools:layout="@layout/fragment_car_edit">
+        <argument
+            android:name="CAR_ID"
+            app:argType="string" />
     </fragment>
 
 </navigation>
