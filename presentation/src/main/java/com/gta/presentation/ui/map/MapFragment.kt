@@ -275,6 +275,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onStop() {
+        viewModel.stopCollect()
         binding.mapView.onStop()
         super.onStop()
     }
@@ -288,7 +289,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onDestroyView() {
-        viewModel.stopCollect()
         bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
         binding.mapView.onDestroy()
         super.onDestroyView()

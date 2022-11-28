@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import timber.log.Timber
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
@@ -66,11 +65,9 @@ class MapViewModel @Inject constructor(
         searchRequest
             .debounce(SEARCH_TIMEOUT)
             .flatMapLatest { query ->
-                Timber.d("collect? 1")
                 searchAddressUseCase(query)
             }.flowOn(Dispatchers.IO)
             .onEach { rawList ->
-                Timber.d("collect? 2")
                 _searchResponse.emit(rawList)
             }.launchIn(viewModelScope + collectJob)
 
