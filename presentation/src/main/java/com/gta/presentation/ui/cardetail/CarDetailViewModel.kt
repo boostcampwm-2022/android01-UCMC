@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.CarDetail
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.GetUseStateAboutCarUseCase
-import com.gta.domain.usecase.cardetail.SetStateAtCarDetailUseCase
 import com.gta.domain.usecase.cardetail.UseState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +20,6 @@ class CarDetailViewModel @Inject constructor(
     args: SavedStateHandle,
     auth: FirebaseAuth,
     getCarDetailDataUseCase: GetCarDetailDataUseCase,
-    setStateAtCarDetailUseCase: SetStateAtCarDetailUseCase,
     getUseStateAboutCarUseCase: GetUseStateAboutCarUseCase
 ) : ViewModel() {
 
