@@ -60,7 +60,7 @@
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
                 app:layout_constraintStart_toEndOf="@+id/btn_add_image"
                 app:layout_constraintTop_toTopOf="@+id/btn_add_image"
-                tools:listitem="@layout/item_car_detail_edit_image" />
+                tools:listitem="@layout/item_car_edit_image" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/div_price_top"

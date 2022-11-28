@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.gta.presentation.R
-import com.gta.presentation.databinding.ItemCarDetailEditImageBinding
+import com.gta.presentation.databinding.ItemCarEditImageBinding
 import com.gta.presentation.ui.GlideApp
 import com.gta.presentation.ui.cardetail.edit.CarEditImagesAdapter.ImageViewHolder
 
@@ -24,7 +24,7 @@ class CarEditImagesAdapter : ListAdapter<String, ImageViewHolder>(ImagesDiffCall
     }
 
     class ImageViewHolder(
-        private val binding: ItemCarDetailEditImageBinding,
+        private val binding: ItemCarEditImageBinding,
         itemClickListener: OnItemClickListener?
     ) : ViewHolder(binding.root) {
 
@@ -45,7 +45,7 @@ class CarEditImagesAdapter : ListAdapter<String, ImageViewHolder>(ImagesDiffCall
         return ImageViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_car_detail_edit_image,
+                R.layout.item_car_edit_image,
                 parent,
                 false
             ),
