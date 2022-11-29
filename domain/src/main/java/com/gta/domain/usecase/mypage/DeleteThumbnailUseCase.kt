@@ -7,6 +7,6 @@ import javax.inject.Inject
 class DeleteThumbnailUseCase @Inject constructor(
     private val repository: MyPageRepository
 ) {
-    operator fun invoke(path: String): Flow<Boolean> =
-        repository.deleteThumbnail(path)
+    operator fun invoke(uid: String, path: String): Flow<Boolean> =
+        repository.deleteThumbnail(uid, path)
 }
