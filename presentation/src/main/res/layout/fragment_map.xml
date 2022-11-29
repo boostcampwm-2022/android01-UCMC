@@ -92,7 +92,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:image_uri="@{vm.selectCar.image}"
-                    app:tint="@color/neutral80"
                     app:layout_constraintDimensionRatio="H,1:1"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
