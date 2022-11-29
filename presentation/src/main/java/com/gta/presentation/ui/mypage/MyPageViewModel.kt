@@ -9,6 +9,8 @@ import com.gta.domain.usecase.mypage.SetThumbnailUseCase
 import com.gta.domain.usecase.user.GetUserProfileUseCase
 import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.getstream.chat.android.client.ChatClient
+import io.getstream.chat.android.client.models.User
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val auth: FirebaseAuth,
+    private val chatClient: ChatClient,
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val setThumbnailUseCase: SetThumbnailUseCase,
     private val deleteThumbnailUseCase: DeleteThumbnailUseCase
@@ -56,7 +59,11 @@ class MyPageViewModel @Inject constructor(
 
     fun updateThumbnail(uri: String) {
         viewModelScope.launch {
-            _thumbnailUpdateEvent.emit(setThumbnailUseCase(FirebaseUtil.uid, uri).first())
+            val updatedUri = setThumbnailUseCase(FirebaseUtil.uid, uri).first()
+            if (updatedUri.isNotEmpty()) {
+                updateChatThumbnail(updatedUri)
+            }
+            _thumbnailUpdateEvent.emit(updatedUri)
         }
     }
 
@@ -68,5 +75,15 @@ class MyPageViewModel @Inject constructor(
 
     fun signOut() {
         auth.signOut()
+    }
+
+    private fun updateChatThumbnail(uri: String) {
+        val currentUser = chatClient.getCurrentUser() ?: return
+        val updatedUser = User(
+            id = currentUser.id,
+            name = currentUser.name,
+            image = uri
+        )
+        chatClient.updateUser(updatedUser).enqueue()
     }
 }
