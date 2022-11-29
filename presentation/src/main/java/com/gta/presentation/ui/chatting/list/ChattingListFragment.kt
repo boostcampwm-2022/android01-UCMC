@@ -22,17 +22,20 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding>(
     @Inject
     lateinit var chatClient: ChatClient
 
-    private val channelListViewModel: ChannelListViewModel by viewModels {
-        ChannelListViewModelFactory()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val channelListViewModel: ChannelListViewModel by viewModels {
+            ChannelListViewModelFactory()
+        }
         channelListViewModel.bindView(binding.clChattingList, viewLifecycleOwner)
         binding.clChattingList.setChannelItemClickListener { channel ->
             findNavController().navigate(
                 ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(channel.cid)
             )
+        }
+        binding.clChattingList.setChannelLongClickListener { channel ->
+            chatClient.deleteChannel(channel.type, channel.id).enqueue()
+            true
         }
     }
 }
