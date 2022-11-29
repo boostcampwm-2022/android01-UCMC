@@ -28,12 +28,12 @@ class NicknameFragment : BaseFragment<FragmentNicknameBinding>(
     }
 
     private fun initCollector() {
-        repeatOnStarted {
+        repeatOnStarted(viewLifecycleOwner) {
             viewModel.nicknameState.collectLatest { state ->
                 handleNicknameState(state)
             }
         }
-        repeatOnStarted {
+        repeatOnStarted(viewLifecycleOwner) {
             viewModel.nicknameChangeEvent.collectLatest { state ->
                 if (state) {
                     findNavController().navigate(R.id.action_nicknameFragment_to_myPageFragment)

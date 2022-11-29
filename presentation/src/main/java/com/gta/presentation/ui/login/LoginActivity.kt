@@ -59,7 +59,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
     }
 
     private fun initCollector() {
-        repeatOnStarted {
+        repeatOnStarted(this) {
             viewModel.loginEvent.collectLatest { state ->
                 when (state) {
                     LoginResult.SUCCESS -> startMainActivity()

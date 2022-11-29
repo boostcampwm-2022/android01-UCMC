@@ -38,7 +38,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun initCollector() {
-        repeatOnStarted {
+        repeatOnStarted(this) {
             viewModel.changeAuthStateEvent.collectLatest { state ->
                 if (state) {
                     startLoginActivity()
