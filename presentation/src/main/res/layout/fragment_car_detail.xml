@@ -6,6 +6,7 @@
     tools:context=".ui.cardetail.CarDetailFragment">
 
     <data>
+
         <variable
             name="vm"
             type="com.gta.presentation.ui.cardetail.CarDetailViewModel" />
@@ -40,18 +41,29 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_end="@dimen/padding_medium" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/iv_car"
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vp_images"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="300dp"
                     android:layout_marginTop="@dimen/padding_large"
-                    android:adjustViewBounds="true"
-                    android:elevation="1dp"
-                    android:src="@drawable/ic_logo"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@+id/gl_start"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize5Percent" />
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+                    android:id="@+id/indicator_images"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:dotsColor="?attr/colorSecondary"
+                    app:dotsStrokeColor="?attr/colorPrimary"
+                    app:dotsSize="@dimen/padding_small"
+                    app:dotsSpacing="4dp"
+                    app:dotsStrokeWidth="2dp"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    app:layout_constraintStart_toStartOf="@+id/vp_images"
+                    app:layout_constraintEnd_toEndOf="@+id/vp_images"
+                    app:layout_constraintBottom_toBottomOf="@+id/vp_images"
+                    />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title"
@@ -63,11 +75,11 @@
                     android:textSize="@dimen/font_headline_medium"
                     android:textStyle="bold"
                     app:car_title="@{vm.carInfo.model}"
-                    app:car_year="@{vm.carInfo.year}"
                     app:car_type="@{vm.carInfo.carType}"
+                    app:car_year="@{vm.carInfo.year}"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_car"
+                    app:layout_constraintTop_toBottomOf="@+id/vp_images"
                     tools:text="[차 종류] 이름 뭐시기" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -100,14 +112,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_extra_large"
+                    android:text="@{@string/car_detail_licensePlate(vm.carInfo.licensePlate)}"
                     android:textSize="@dimen/font_body_large"
                     android:textStyle="bold"
-                    android:text="@{@string/car_detail_licensePlate(vm.carInfo.licensePlate)}"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@+id/gl_start"
                     app:layout_constraintTop_toBottomOf="@+id/tv_location"
                     tools:text="번호판 : 12가2345" />
-
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_report_post"
