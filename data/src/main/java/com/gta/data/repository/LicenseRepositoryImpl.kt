@@ -29,6 +29,11 @@ class LicenseRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
+    override fun getLicenseFromDatabase(uid: String): Flow<DrivingLicense?> = callbackFlow {
+        trySend(dataSource.getLicense(uid).first())
+        awaitClose()
+    }
+
     override fun setLicense(uid: String, license: DrivingLicense): Flow<Boolean> = callbackFlow {
         trySend(dataSource.registerLicense(uid, license).first())
         awaitClose()

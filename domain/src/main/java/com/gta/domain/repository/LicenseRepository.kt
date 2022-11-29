@@ -6,5 +6,6 @@ import java.nio.ByteBuffer
 
 interface LicenseRepository {
     fun getLicenseFromImage(buffer: ByteBuffer): Flow<DrivingLicense?>
+    fun getLicenseFromDatabase(uid: String): Flow<DrivingLicense?>
     fun setLicense(uid: String, license: DrivingLicense): Flow<Boolean>
 }
