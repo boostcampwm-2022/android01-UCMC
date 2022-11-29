@@ -48,6 +48,9 @@ object Dependencies {
         const val JUNIT = "4.13.2"
         const val JUNIT_EXT = "1.1.4"
         const val ESPRESSO_CORE = "3.5.0"
+
+        //Github open Library
+        const val INDICATOR = "4.3"
     }
 
     object Classpaths {
@@ -173,6 +176,8 @@ object Dependencies {
             }
         }
 
+        const val INDICATOR = "com.tbuonomo:dotsindicator:${Versions.INDICATOR}"
+
         const val VIEW_PAGER_2 = "androidx.viewpager2:viewpager2:${Versions.VIEW_PAGER}"
 
         const val NAVER_MAP = "com.naver.maps:map-sdk:${Versions.NAVER_MAPS}"
@@ -240,6 +245,7 @@ object Dependencies {
             add(STREAM_CHAT)
             add(TIMBER)
             add(AndroidX.SPLASH)
+            add(INDICATOR)
         }
 
         val presentationKaptLibraries = arrayListOf<String>().apply {

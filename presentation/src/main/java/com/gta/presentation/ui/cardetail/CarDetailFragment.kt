@@ -5,12 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
+import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
@@ -18,6 +24,7 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
 ) {
 
     private val viewModel: CarDetailViewModel by viewModels()
+    private val pagerAdapter by lazy { CarImagePagerAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,11 +33,22 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.vm = viewModel
+        binding.vpImages.adapter = pagerAdapter
+        binding.indicatorImages.attachTo(binding.vpImages)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.carInfo.collectLatest {
+                    (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
+                    pagerAdapter.submitList(it.images)
+                }
+            }
+        }
 
         binding.cvOwner.setOnClickListener {
             findNavController().navigate(
