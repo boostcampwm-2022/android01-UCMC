@@ -4,9 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -17,10 +14,10 @@ import com.gta.presentation.databinding.ActivityMainBinding
 import com.gta.presentation.secret.NAVER_MAP_CLIENT_ID
 import com.gta.presentation.ui.base.BaseActivity
 import com.gta.presentation.ui.login.LoginActivity
+import com.gta.presentation.util.repeatOnStarted
 import com.naver.maps.map.NaverMapSdk
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -41,12 +38,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun initCollector() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.changeAuthStateEvent.collectLatest { state ->
-                    if (state) {
-                        startLoginActivity()
-                    }
+        repeatOnStarted {
+            viewModel.changeAuthStateEvent.collectLatest { state ->
+                if (state) {
+                    startLoginActivity()
                 }
             }
         }

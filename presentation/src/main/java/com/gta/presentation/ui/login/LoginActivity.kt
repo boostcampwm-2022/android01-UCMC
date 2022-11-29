@@ -9,9 +9,6 @@ import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -19,9 +16,9 @@ import com.gta.domain.model.LoginResult
 import com.gta.presentation.databinding.ActivityLoginBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseActivity
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -62,15 +59,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
     }
 
     private fun initCollector() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loginEvent.collectLatest { state ->
-                    when (state) {
-                        LoginResult.SUCCESS -> startMainActivity()
-                        LoginResult.FAILURE -> {}
-                        LoginResult.NEWUSER -> {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        }
+        repeatOnStarted {
+            viewModel.loginEvent.collectLatest { state ->
+                when (state) {
+                    LoginResult.SUCCESS -> startMainActivity()
+                    LoginResult.FAILURE -> {}
+                    LoginResult.NEWUSER -> {
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
             }
