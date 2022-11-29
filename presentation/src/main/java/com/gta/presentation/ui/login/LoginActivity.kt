@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStream
 import java.io.InputStreamReader
 import javax.inject.Inject
 
@@ -74,12 +73,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
                         }
                     }
                 }
-
-                viewModel.termsEvent.collectLatest { result ->
-                    if (result) {
-                        startMainActivity()
-                    }
-                }
             }
         }
     }
@@ -109,11 +102,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         binding.btnAccept.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             viewModel.signUp()
-            viewModel.checkTermsAccepted(true)
         }
         binding.btnCancel.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            viewModel.checkTermsAccepted(false)
         }
     }
 
@@ -128,17 +119,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
     }
 
     private fun getAssetData(fileName: String): String {
-        val inputStream: InputStream?
         var result: String
         try {
-            inputStream = resources.assets.open(fileName, AssetManager.ACCESS_BUFFER)
+            val inputStream = resources.assets.open(fileName, AssetManager.ACCESS_BUFFER)
             val reader = BufferedReader(InputStreamReader(inputStream))
             result = reader.readLines().joinToString("\n")
             inputStream.close()
         } catch (e: IOException) {
             result = ""
         }
-
         return result
     }
 }
