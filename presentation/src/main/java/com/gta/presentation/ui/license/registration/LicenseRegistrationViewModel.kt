@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.DrivingLicense
-import com.gta.domain.usecase.license.GetLicenseUseCase
+import com.gta.domain.usecase.license.GetLicenseFromImageUseCase
 import com.gta.domain.usecase.license.SetLicenseUseCase
 import com.gta.presentation.util.ImageUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class LicenseRegistrationViewModel @Inject constructor(
     private val imageUtil: ImageUtil,
     private val auth: FirebaseAuth,
-    private val getLicenseUseCase: GetLicenseUseCase,
+    private val getLicenseFromImageUseCase: GetLicenseFromImageUseCase,
     private val setLicenseUseCase: SetLicenseUseCase,
     args: SavedStateHandle
 ) : ViewModel() {
@@ -47,7 +47,7 @@ class LicenseRegistrationViewModel @Inject constructor(
     private fun getLicense(uri: String) {
         val buffer = imageUtil.getByteBuffer(uri) ?: return
         viewModelScope.launch {
-            _drivingLicense.emit(getLicenseUseCase(buffer).first())
+            _drivingLicense.emit(getLicenseFromImageUseCase(buffer).first())
         }
     }
 

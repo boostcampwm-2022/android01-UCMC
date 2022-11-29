@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 import java.nio.ByteBuffer
 import javax.inject.Inject
 
-class GetLicenseUseCase @Inject constructor(
+class GetLicenseFromImageUseCase @Inject constructor(
     private val repository: LicenseRepository
 ) {
-    operator fun invoke(buffer: ByteBuffer): Flow<DrivingLicense?> = repository.getLicense(buffer)
+    operator fun invoke(buffer: ByteBuffer): Flow<DrivingLicense?> = repository.getLicenseFromImage(buffer)
 }
