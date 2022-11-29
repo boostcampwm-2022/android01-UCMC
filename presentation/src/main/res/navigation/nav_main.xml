@@ -81,6 +81,9 @@
         <action
             android:id="@+id/action_carDetailFragment_to_reservationFragment"
             app:destination="@id/reservationFragment" />
+        <action
+            android:id="@+id/action_carDetailFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment" />
     </fragment>
 
     <fragment
