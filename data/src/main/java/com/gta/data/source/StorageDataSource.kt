@@ -28,6 +28,25 @@ class StorageDataSource @Inject constructor(
         awaitClose()
     }
 
+    fun saveCarImage(carId: String, uri: String): Flow<String?> = callbackFlow {
+        val image = Uri.parse(uri)
+        val name = image.path?.substringAfterLast("/") ?: ""
+        val ref = storageReference
+            .child("car")
+            .child(carId)
+            .child("${System.currentTimeMillis()}$name")
+        ref.putFile(image).continueWithTask {
+            ref.downloadUrl
+        }.addOnCompleteListener {
+            if (it.isSuccessful) {
+                trySend(it.result.toString())
+            } else {
+                trySend(null)
+            }
+        }
+        awaitClose()
+    }
+
     fun deleteThumbnail(path: String): Flow<Boolean> = callbackFlow {
         storageReference.storage.getReferenceFromUrl(path).delete().addOnCompleteListener {
             trySend(it.isSuccessful)

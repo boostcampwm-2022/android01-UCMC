@@ -59,7 +59,6 @@ fun Car.toDetailCar(id: String, owner: UserProfile): CarDetail = CarDetail(
 
 fun Car.update(update: UpdateCar): Car = Car(
     pinkSlip = pinkSlip,
-    reservations = reservations,
     ownerId = ownerId,
     images = update.images,
     price = update.price,

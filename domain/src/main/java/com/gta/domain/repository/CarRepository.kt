@@ -19,4 +19,6 @@ interface CarRepository {
     fun getAllCars(): Flow<List<SimpleCar>>
     fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<SimpleCar>>
     fun removeCar(userId: String, carId: String): Flow<Boolean>
+    fun setCarImagesStorage(carId: String, images: List<String>): Flow<List<String>>
+    fun deleteImagesStorage(images: List<String>): Flow<Boolean>
 }

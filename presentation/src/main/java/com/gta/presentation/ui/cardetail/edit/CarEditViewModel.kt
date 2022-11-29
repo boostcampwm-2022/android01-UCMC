@@ -8,6 +8,7 @@ import com.gta.domain.model.Coordinate
 import com.gta.domain.model.RentState
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UpdateCarDetailDataUseCase
+import com.gta.domain.usecase.cardetail.edit.UploadCarImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class CarEditViewModel @Inject constructor(
     args: SavedStateHandle,
     getCarDetailDataUseCase: GetCarDetailDataUseCase,
+    private val uploadCarImagesUseCase: UploadCarImagesUseCase,
     private val updateCarDetailDataUseCase: UpdateCarDetailDataUseCase
 ) : ViewModel() {
 
@@ -42,12 +44,16 @@ class CarEditViewModel @Inject constructor(
     val updateState: SharedFlow<Boolean>
         get() = _updateState
 
+    // 초기 이미지
+    private var initImage: List<String> = emptyList()
+
     init {
         carId = args.get<String>("CAR_ID") ?: "정보 없음"
 
         viewModelScope.launch {
             val carInfo = getCarDetailDataUseCase(carId).first()
             _images.value = carInfo.images
+            initImage = carInfo.images
 
             price.value = carInfo.price.toString()
             comment.value = carInfo.comment
@@ -75,11 +81,13 @@ class CarEditViewModel @Inject constructor(
     fun updateData() {
         // TODO 예외처리
         // TODO 대여반납 위치 update 하기
+
+        // TODO 프로그레스바
         viewModelScope.launch {
             _updateState.emit(
                 updateCarDetailDataUseCase(
                     carId,
-                    images.value,
+                    uploadCarImagesUseCase(carId, initImage, images.value).first(),
                     price.value.toInt(),
                     comment.value,
                     if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,

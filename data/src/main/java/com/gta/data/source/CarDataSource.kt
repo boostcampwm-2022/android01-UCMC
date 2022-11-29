@@ -68,7 +68,7 @@ class CarDataSource @Inject constructor(
                 }
             awaitClose()
         }
-    
+
     fun getAllCars(): Flow<List<Car>> = callbackFlow {
         fireStore.collection("cars").get().addOnCompleteListener {
             if (it.isSuccessful) {

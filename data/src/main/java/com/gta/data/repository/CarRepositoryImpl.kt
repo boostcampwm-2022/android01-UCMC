@@ -8,6 +8,7 @@ import com.gta.data.model.toSimple
 import com.gta.data.model.update
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.ReservationDataSource
+import com.gta.data.source.StorageDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
@@ -27,7 +28,8 @@ import javax.inject.Inject
 class CarRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
     private val carDataSource: CarDataSource,
-    private val reservationDataSource: ReservationDataSource
+    private val reservationDataSource: ReservationDataSource,
+    private val storageDataSource: StorageDataSource
 ) : CarRepository {
     override fun getOwnerId(carId: String): Flow<String> {
         return getCar(carId).map { it.ownerId }
@@ -113,6 +115,27 @@ class CarRepositoryImpl @Inject constructor(
         } else {
             trySend(false)
         }
+        awaitClose()
+    }
+
+    override fun setCarImagesStorage(carId: String, images: List<String>): Flow<List<String>> =
+        callbackFlow {
+            val imageUri = mutableListOf<String>()
+            images.forEach { img ->
+                storageDataSource.saveCarImage(carId, img).first()?.let { uri ->
+                    imageUri.add(uri)
+                }
+            }
+            trySend(imageUri)
+            awaitClose()
+        }
+
+    override fun deleteImagesStorage(images: List<String>): Flow<Boolean> = callbackFlow {
+        val result = mutableListOf<Boolean>()
+        images.forEach { img ->
+            result.add(storageDataSource.deleteThumbnail(img).first())
+        }
+        trySend(!result.contains(false))
         awaitClose()
     }
 }
