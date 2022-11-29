@@ -34,7 +34,7 @@ class MapViewModel @Inject constructor(
     private val searchAddressUseCase: GetSearchAddressUseCase
 ) :
     ViewModel() {
-    private val SEARCH_TIMEOUT = 5000L
+    private val SEARCH_TIMEOUT = 500L
 
     private var _carsRequest = MutableSharedFlow<Pair<Coordinate, Coordinate>>(
         extraBufferCapacity = 1,
