@@ -46,7 +46,6 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                 viewModel.carInfo.collectLatest {
                     (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
                     pagerAdapter.submitList(it.images)
-                    binding.indicatorImages.attachTo(binding.vpImages)
                 }
             }
         }
