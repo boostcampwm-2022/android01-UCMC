@@ -10,13 +10,15 @@ import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UpdateCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UploadCarImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+enum class UpdateState {
+    NOMAL, LOAD, SUCCESS, FAIL
+}
 
 @HiltViewModel
 class CarEditViewModel @Inject constructor(
@@ -40,8 +42,8 @@ class CarEditViewModel @Inject constructor(
     val availableDate: StateFlow<AvailableDate>
         get() = _availableDate
 
-    private val _updateState = MutableSharedFlow<Boolean>(replay = 0)
-    val updateState: SharedFlow<Boolean>
+    private val _updateState = MutableStateFlow<UpdateState>(UpdateState.NOMAL)
+    val updateState: StateFlow<UpdateState>
         get() = _updateState
 
     // 초기 이미지
@@ -79,23 +81,23 @@ class CarEditViewModel @Inject constructor(
     }
 
     fun updateData() {
-        // TODO 예외처리
         // TODO 대여반납 위치 update 하기
+        _updateState.value = UpdateState.LOAD
 
-        // TODO 프로그레스바
         viewModelScope.launch {
-            _updateState.emit(
-                updateCarDetailDataUseCase(
-                    carId,
-                    uploadCarImagesUseCase(carId, initImage, images.value).first(),
-                    price.value.toInt(),
-                    comment.value,
-                    if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
-                    availableDate.value,
-                    "수정된 위치",
-                    Coordinate(37.3588798, 127.1051933)
-                ).first()
-            )
+            _updateState.value =
+                if (
+                    updateCarDetailDataUseCase(
+                        carId,
+                        uploadCarImagesUseCase(carId, initImage, images.value).first(),
+                        price.value.toInt(),
+                        comment.value,
+                        if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
+                        availableDate.value,
+                        "수정된 위치",
+                        Coordinate(37.3588798, 127.1051933)
+                    ).first()
+                ) UpdateState.SUCCESS else UpdateState.FAIL
         }
     }
 }

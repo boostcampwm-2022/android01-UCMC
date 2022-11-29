@@ -33,6 +33,8 @@
     <string name="car_edit_price_format">원</string>
     <string name="car_edit_rent_available_day_format">%s ~ %s</string>
 
+    <string name="car_edit_wait_loading_text">변경사항을 업로드 중입니다.\n잠시만 기다려 주세요..</string>
+
     <string name="car_detail_day_price">금액 : 1일 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>
     <string name="temperature_type">%.1f℃</string>

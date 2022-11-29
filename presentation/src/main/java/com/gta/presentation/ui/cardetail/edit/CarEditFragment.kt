@@ -149,12 +149,23 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.updateState.collectLatest { result ->
-                    if (result) {
-                        finishUpdateMsg.show()
-                        findNavController().navigateUp()
-                    } else {
-                        Timber.d("차 상세 데이터 update 실패")
+                    when(result) {
+                        UpdateState.NOMAL -> {
+                            binding.icLoading.root.visibility = View.GONE
+                        }
+                        UpdateState.LOAD -> {
+                            binding.icLoading.root.visibility = View.VISIBLE
+                        }
+                        UpdateState.SUCCESS -> {
+                            //TODO 완료 sanckbar가 too much 인지 생각
+                            finishUpdateMsg.show()
+                            findNavController().navigateUp()
+                        }
+                        else -> {
+                            Timber.d("차 상세 데이터 update 실패")
+                        }
                     }
+
                 }
             }
         }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.cardetail.edit.CarEditFragment">
 
@@ -13,301 +14,317 @@
             type="com.gta.presentation.ui.cardetail.edit.CarEditViewModel" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gl_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/padding_medium" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gl_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/padding_medium" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/gl_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/padding_medium" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_add_image"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/padding_small"
-                android:orientation="vertical"
-                android:paddingVertical="@dimen/padding_medium"
-                android:text="0/10"
-                app:cornerRadius="@dimen/padding_small"
-                app:icon="@drawable/ic_camera"
-                app:iconGravity="top"
-                app:layout_constraintBottom_toTopOf="@+id/et_price"
-                app:layout_constraintStart_toStartOf="@id/gl_start"
-                app:layout_constraintTop_toTopOf="parent" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/gl_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/padding_medium" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_images"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/padding_medium"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_add_image"
-                app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintStart_toEndOf="@+id/btn_add_image"
-                app:layout_constraintTop_toTopOf="@+id/btn_add_image"
-                tools:listitem="@layout/item_car_edit_image" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_image"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/padding_small"
+                    android:orientation="vertical"
+                    android:paddingVertical="@dimen/padding_medium"
+                    android:text="0/10"
+                    app:cornerRadius="@dimen/padding_small"
+                    app:icon="@drawable/ic_camera"
+                    app:iconGravity="top"
+                    app:layout_constraintBottom_toTopOf="@+id/et_price"
+                    app:layout_constraintStart_toStartOf="@id/gl_start"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/div_price_top"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"
-                app:layout_constraintBottom_toTopOf="@+id/et_price"
-                app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintStart_toStartOf="@id/gl_start"
-                app:layout_constraintTop_toBottomOf="@+id/btn_add_image" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_images"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/padding_medium"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_add_image"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@+id/btn_add_image"
+                    app:layout_constraintTop_toTopOf="@+id/btn_add_image"
+                    tools:listitem="@layout/item_car_edit_image" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_price_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/car_edit_price_label"
-                android:textSize="@dimen/font_title_medium"
-                app:layout_constraintBaseline_toBaselineOf="@+id/et_price"
-                app:layout_constraintEnd_toStartOf="@+id/et_price"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="@id/gl_start" />
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/div_price_top"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    app:layout_constraintBottom_toTopOf="@+id/et_price"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toStartOf="@id/gl_start"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_add_image" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/padding_small"
-                android:layout_marginTop="@dimen/padding_medium"
-                android:gravity="end"
-                android:inputType="number"
-                android:maxLength="9"
-                android:text="@={vm.price}"
-                app:layout_constraintEnd_toStartOf="@+id/tv_price_unit"
-                app:layout_constraintStart_toEndOf="@+id/tv_price_label"
-                app:layout_constraintTop_toBottomOf="@+id/div_price_top"
-                tools:text="1000" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_price"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="?attr/colorSurface"
-                android:gravity="end|center_vertical"
-                android:textSize="@dimen/font_body_large"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/et_price"
-                app:layout_constraintEnd_toEndOf="@+id/et_price"
-                app:layout_constraintStart_toStartOf="@+id/et_price"
-                app:layout_constraintTop_toTopOf="@+id/et_price"
-                tools:text="1,000" />
-
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_price_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/car_edit_price_format"
-                android:textSize="@dimen/font_title_medium"
-                app:layout_constraintBaseline_toBaselineOf="@+id/et_price"
-                app:layout_constraintEnd_toEndOf="@id/gl_end" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_comment_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"
-                android:gravity="start"
-                android:text="@string/car_detail_comment_label"
-                android:textSize="@dimen/font_title_medium"
-                app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintStart_toStartOf="@id/gl_start"
-                app:layout_constraintTop_toBottomOf="@+id/et_price" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tl_comment_input"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:boxStrokeColor="?attr/colorPrimary"
-                app:boxStrokeErrorColor="@android:color/holo_red_dark"
-                app:counterEnabled="true"
-                app:counterMaxLength="500"
-                app:errorEnabled="true"
-                app:errorIconDrawable="@null"
-                app:helperText="@string/car_edit_comment_helper_message"
-                app:layout_constraintBottom_toTopOf="@+id/div_comment_bottom"
-                app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintHeight_min="230dp"
-                app:layout_constraintStart_toStartOf="@id/gl_start"
-                app:layout_constraintTop_toBottomOf="@+id/tv_comment_label"
-                app:layout_constraintVertical_bias="0.0">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_price_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_edit_price_label"
+                    android:textSize="@dimen/font_title_medium"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/et_price"
+                    app:layout_constraintEnd_toStartOf="@+id/et_price"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="@id/gl_start" />
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_comment_input"
+                    android:id="@+id/et_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/padding_small"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:gravity="end"
+                    android:inputType="number"
+                    android:maxLength="9"
+                    android:text="@={vm.price}"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_price_unit"
+                    app:layout_constraintStart_toEndOf="@+id/tv_price_label"
+                    app:layout_constraintTop_toBottomOf="@+id/div_price_top"
+                    tools:text="1000" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/colorSurface"
+                    android:gravity="end|center_vertical"
+                    android:textSize="@dimen/font_body_large"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_price"
+                    app:layout_constraintEnd_toEndOf="@+id/et_price"
+                    app:layout_constraintStart_toStartOf="@+id/et_price"
+                    app:layout_constraintTop_toTopOf="@+id/et_price"
+                    tools:text="1,000" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_price_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_edit_price_format"
+                    android:textSize="@dimen/font_title_medium"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/et_price"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_comment_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:gravity="start"
+                    android:text="@string/car_detail_comment_label"
+                    android:textSize="@dimen/font_title_medium"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toStartOf="@id/gl_start"
+                    app:layout_constraintTop_toBottomOf="@+id/et_price" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tl_comment_input"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:boxStrokeColor="?attr/colorPrimary"
+                    app:boxStrokeErrorColor="@android:color/holo_red_dark"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="500"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@null"
+                    app:helperText="@string/car_edit_comment_helper_message"
+                    app:layout_constraintBottom_toTopOf="@+id/div_comment_bottom"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintHeight_min="230dp"
+                    app:layout_constraintStart_toStartOf="@id/gl_start"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_comment_label"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_comment_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:gravity="top"
+                        android:text="@={vm.comment}"
+                        android:textSize="@dimen/font_body_medium"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/div_comment_bottom"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_day"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toStartOf="@id/gl_start"
+                    app:layout_constraintTop_toBottomOf="@+id/tl_comment_input" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/colorSecondary"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_day_able_label"
+                    app:layout_constraintEnd_toEndOf="@+id/sw_day_able"
+                    app:layout_constraintStart_toStartOf="@+id/tv_day_able_label"
+                    app:layout_constraintTop_toTopOf="@+id/tv_day_able_label" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_day_able_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_edit_day_able"
+                    android:textSize="@dimen/font_title_medium"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/sw_day_able"
+                    app:layout_constraintEnd_toStartOf="@+id/sw_day_able"
+                    app:layout_constraintStart_toStartOf="@id/gl_start"
+                    app:layout_constraintTop_toTopOf="@+id/sw_day_able" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/sw_day_able"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={vm.rentState}"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@+id/tv_day_able_label"
+                    app:layout_constraintTop_toBottomOf="@+id/div_comment_bottom" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_day_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_edit_day_label"
+                    android:textSize="@dimen/font_title_medium"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_day"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_day"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="@id/gl_start"
+                    app:layout_constraintTop_toTopOf="@+id/tv_day" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_day"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/padding_medium"
+                    android:gravity="end"
+                    android:textSize="@dimen/font_title_medium"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_location"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_day_edit"
+                    app:layout_constraintStart_toEndOf="@+id/tv_day_label"
+                    app:layout_constraintTop_toBottomOf="@+id/sw_day_able"
+                    app:text_AvailableDate="@{vm.availableDate}"
+                    tools:text="@string/no_information" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/iv_day_edit"
+                    android:layout_width="@dimen/padding_large"
+                    android:layout_height="@dimen/padding_large"
+                    android:background="@color/neutral80"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_mypage_edit"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_day"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@+id/tv_day"
+                    app:layout_constraintTop_toTopOf="@+id/tv_day"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_location_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_edit_location_label"
+                    android:textSize="@dimen/font_title_medium"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_location"
+                    app:layout_constraintEnd_toStartOf="@id/tv_location"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="@id/gl_start"
+                    app:layout_constraintTop_toTopOf="@id/tv_location" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/padding_medium"
+                    android:layout_marginVertical="@dimen/padding_medium"
+                    android:gravity="end"
+                    android:text="@string/no_information"
+                    android:textSize="@dimen/font_title_medium"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_done"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_location_edit"
+                    app:layout_constraintStart_toEndOf="@+id/tv_location_label"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_day" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/iv_location_edit"
+                    android:layout_width="@dimen/padding_large"
+                    android:layout_height="@dimen/padding_large"
+                    android:background="@color/neutral80"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_mypage_edit"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_location"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@+id/tv_location"
+                    app:layout_constraintTop_toTopOf="@+id/tv_location"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:alpha="0.3"
+                    android:background="?attr/colorOnSurface"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="@{vm.rentState ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_location"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_location_edit"
+                    app:layout_constraintStart_toStartOf="@+id/tv_day_label"
+                    app:layout_constraintTop_toTopOf="@+id/tv_day" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_done"
+                    style="@style/Theme.UCMC.BottomButton"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:gravity="top"
-                    android:text="@={vm.comment}"
-                    android:textSize="@dimen/font_body_medium"
-                    tools:ignore="SpeakableTextPresentCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:text="@string/correction"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/div_comment_bottom"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"
-                app:layout_constraintBottom_toTopOf="@+id/tv_day"
-                app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintStart_toStartOf="@id/gl_start"
-                app:layout_constraintTop_toBottomOf="@+id/tl_comment_input" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="?attr/colorSecondary"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_day_able_label"
-                app:layout_constraintEnd_toEndOf="@+id/sw_day_able"
-                app:layout_constraintStart_toStartOf="@+id/tv_day_able_label"
-                app:layout_constraintTop_toTopOf="@+id/tv_day_able_label" />
+        </androidx.core.widget.NestedScrollView>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_day_able_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/car_edit_day_able"
-                android:textSize="@dimen/font_title_medium"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/sw_day_able"
-                app:layout_constraintEnd_toStartOf="@+id/sw_day_able"
-                app:layout_constraintStart_toStartOf="@id/gl_start"
-                app:layout_constraintTop_toTopOf="@+id/sw_day_able" />
+        <include
+            android:id="@+id/ic_loading"
+            layout="@layout/include_wait_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone"
+            bind:message="@{@string/car_edit_wait_loading_text}" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/sw_day_able"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@={vm.rentState}"
-                app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintStart_toEndOf="@+id/tv_day_able_label"
-                app:layout_constraintTop_toBottomOf="@+id/div_comment_bottom" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_day_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/car_edit_day_label"
-                android:textSize="@dimen/font_title_medium"
-                app:layout_constraintBottom_toBottomOf="@id/tv_day"
-                app:layout_constraintEnd_toStartOf="@+id/tv_day"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="@id/gl_start"
-                app:layout_constraintTop_toTopOf="@+id/tv_day" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_day"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/padding_medium"
-                android:gravity="end"
-                android:textSize="@dimen/font_title_medium"
-                app:layout_constraintBottom_toTopOf="@+id/tv_location"
-                app:layout_constraintEnd_toStartOf="@+id/iv_day_edit"
-                app:layout_constraintStart_toEndOf="@+id/tv_day_label"
-                app:layout_constraintTop_toBottomOf="@+id/sw_day_able"
-                app:text_AvailableDate="@{vm.availableDate}"
-                tools:text="@string/no_information" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_day_edit"
-                android:layout_width="@dimen/padding_large"
-                android:layout_height="@dimen/padding_large"
-                android:background="@color/neutral80"
-                android:scaleType="center"
-                android:src="@drawable/ic_mypage_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_day"
-                app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintStart_toEndOf="@+id/tv_day"
-                app:layout_constraintTop_toTopOf="@+id/tv_day"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_location_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/car_edit_location_label"
-                android:textSize="@dimen/font_title_medium"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_location"
-                app:layout_constraintEnd_toStartOf="@id/tv_location"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="@id/gl_start"
-                app:layout_constraintTop_toTopOf="@id/tv_location" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/padding_medium"
-                android:layout_marginVertical="@dimen/padding_medium"
-                android:gravity="end"
-                android:text="@string/no_information"
-                android:textSize="@dimen/font_title_medium"
-                app:layout_constraintBottom_toTopOf="@+id/btn_done"
-                app:layout_constraintEnd_toStartOf="@+id/iv_location_edit"
-                app:layout_constraintStart_toEndOf="@+id/tv_location_label"
-                app:layout_constraintTop_toBottomOf="@+id/tv_day" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_location_edit"
-                android:layout_width="@dimen/padding_large"
-                android:layout_height="@dimen/padding_large"
-                android:background="@color/neutral80"
-                android:scaleType="center"
-                android:src="@drawable/ic_mypage_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_location"
-                app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintStart_toEndOf="@+id/tv_location"
-                app:layout_constraintTop_toTopOf="@+id/tv_location"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:alpha="0.3"
-                android:background="?attr/colorOnSurface"
-                android:clickable="true"
-                android:focusable="true"
-                android:visibility="@{vm.rentState ? View.GONE : View.VISIBLE}"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_location"
-                app:layout_constraintEnd_toEndOf="@+id/iv_location_edit"
-                app:layout_constraintStart_toStartOf="@+id/tv_day_label"
-                app:layout_constraintTop_toTopOf="@+id/tv_day" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_done"
-                style="@style/Theme.UCMC.BottomButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/correction"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
 
 </layout>
