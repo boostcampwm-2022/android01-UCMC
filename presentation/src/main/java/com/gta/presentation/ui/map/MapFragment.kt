@@ -105,12 +105,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private fun setupWithMap() {
         naverMap?.locationSource = locationSource
         naverMap?.locationTrackingMode = mapMode
-        naverMap?.uiSettings.apply {
-            this?.let {
-                isCompassEnabled = true
-                isScaleBarEnabled = true
-                isLocationButtonEnabled = true
-            }
+        naverMap?.uiSettings?.run {
+            isCompassEnabled = true
+            isScaleBarEnabled = true
+            isLocationButtonEnabled = true
         }
         getNearCars()
 
