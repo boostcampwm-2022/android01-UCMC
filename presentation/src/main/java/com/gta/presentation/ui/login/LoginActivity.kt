@@ -130,17 +130,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         val inputStream: InputStream?
         return try {
             inputStream = resources.assets.open(fileName, AssetManager.ACCESS_BUFFER)
-
             val reader = BufferedReader(InputStreamReader(inputStream))
-
-            var strResult = ""
-            var line: String?
-            while (true) {
-                line = reader.readLine()
-                if (line == null) break
-                strResult += line + "\n"
-            }
-            strResult
+            reader.readLines().joinToString("\n")
         } catch (e: Exception) {
             ""
         }
