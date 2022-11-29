@@ -103,9 +103,10 @@
             android:name="uri"
             app:argType="string" />
         <action
-            android:id="@+id/action_licenseRegistrationFragment_to_myPageFragment"
-            app:destination="@id/myPageFragment"
-            app:popUpTo="@id/myPageFragment" />
+            android:id="@+id/action_licenseRegistrationFragment_to_myPageLicenseFragment"
+            app:destination="@id/myPageLicenseFragment"
+            app:popUpTo="@id/myPageLicenseFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
