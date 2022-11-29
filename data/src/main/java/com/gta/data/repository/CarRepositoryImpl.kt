@@ -51,7 +51,7 @@ class CarRepositoryImpl @Inject constructor(
 
     override fun getCarRentInfo(carId: String): Flow<CarRentInfo> = callbackFlow {
         carDataSource.getCar(carId).first()?.let { car ->
-            trySend(car.toCarRentInfo(reservationDataSource.getCarReservationDates(car).first()))
+            trySend(car.toCarRentInfo(reservationDataSource.getCarReservationDates(carId).first()))
         } ?: trySend(CarRentInfo())
         awaitClose()
     }

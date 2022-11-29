@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,7 +32,7 @@ class ReservationViewModel @Inject constructor(
     private val createReservationUseCase: CreateReservationUseCase,
     private val auth: FirebaseAuth
 ) : ViewModel() {
-    private val carId by lazy { args.get<String>("carId") }
+    private val carId by lazy { args.get<String>("CAR_ID") }
 
     private val _reservationDate = MutableLiveData<AvailableDate>()
     val reservationDate: LiveData<AvailableDate> get() = _reservationDate
@@ -92,6 +91,7 @@ class ReservationViewModel @Inject constructor(
         val date = reservationDate.value ?: return
         val price = totalPrice.value ?: return
         val option = insuranceOption.value ?: return
+        val ownerId = car?.value?.ownerId ?: ""
 
         carId?.let {
             viewModelScope.launch {
@@ -103,8 +103,9 @@ class ReservationViewModel @Inject constructor(
                             reservationDate = date,
                             price = price,
                             insuranceOption = option.name
-                        )
-                    ).first()
+                        ),
+                        ownerId
+                    )
                 )
             }
         }

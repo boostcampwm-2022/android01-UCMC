@@ -42,18 +42,6 @@ class CarDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun updateCarReservations(carId: String, reservations: List<Any?>): Flow<Boolean> =
-        callbackFlow {
-            fireStore
-                .collection("cars")
-                .document(carId)
-                .update("reservations", reservations)
-                .addOnCompleteListener {
-                    trySend(it.isSuccessful)
-                }
-            awaitClose()
-        }
-
     fun getAllCars(): Flow<List<Car>> = callbackFlow {
         fireStore.collection("cars").get().addOnCompleteListener {
             if (it.isSuccessful) {
@@ -66,12 +54,12 @@ class CarDataSource @Inject constructor(
     }
 
     fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<Car>> = callbackFlow {
-        fireStore.collection("cars").whereGreaterThan("coordinate.y", min.y)
-            .whereLessThan("coordinate.y", max.y).get().addOnCompleteListener {
+        fireStore.collection("cars").whereGreaterThan("coordinate.y", min.latitude)
+            .whereLessThan("coordinate.y", max.latitude).get().addOnCompleteListener {
                 if (it.isSuccessful) {
                     it.result.filter { document ->
                         val tmp = document.toObject(Car::class.java)
-                        tmp.coordinate.x >= min.x && tmp.coordinate.x <= max.x
+                        tmp.coordinate.longitude >= min.longitude && tmp.coordinate.longitude <= max.longitude
                     }.map { snapshot ->
                         snapshot.toObject(Car::class.java)
                     }.also { result ->

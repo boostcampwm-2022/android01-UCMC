@@ -135,7 +135,7 @@
         android:label="@string/reservation"
         tools:layout="@layout/fragment_reservation">
         <argument
-            android:name="carId"
+            android:name="CAR_ID"
             app:argType="string" />
         <action
             android:id="@+id/action_reservationFragment_to_paymentFragment"
@@ -148,9 +148,9 @@
         android:label="fragment_payment"
         tools:layout="@layout/fragment_payment">
         <action
-            android:id="@+id/action_paymentFragment_to_chattingFragment"
-            app:destination="@id/chattingFragment"
-            app:popUpTo="@id/chattingFragment" />
+            android:id="@+id/action_paymentFragment_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/mapFragment"/>
     </fragment>
 
     <fragment

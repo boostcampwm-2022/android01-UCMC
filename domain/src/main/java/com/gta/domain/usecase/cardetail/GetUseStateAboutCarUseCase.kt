@@ -16,7 +16,7 @@ class GetUseStateAboutCarUseCase @Inject constructor(
     private val getNowRentCarUseCase: GetNowRentCarUseCase
 ) {
     operator fun invoke(uid: String, carId: String): Flow<UseState> {
-        return getNowRentCarUseCase(uid).combine(carRepository.getCarRentState(carId)) { nowRentCar, carRentState ->
+        return getNowRentCarUseCase(uid, carId).combine(carRepository.getCarRentState(carId)) { nowRentCar, carRentState ->
             when {
                 uid == carRepository.getOwnerId(carId).first() -> {
                     UseState.OWNER

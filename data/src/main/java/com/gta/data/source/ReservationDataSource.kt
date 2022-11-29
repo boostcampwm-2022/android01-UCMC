@@ -1,7 +1,6 @@
 package com.gta.data.source
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.gta.data.model.Car
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.Reservation
 import kotlinx.coroutines.channels.awaitClose
@@ -12,6 +11,8 @@ import javax.inject.Inject
 class ReservationDataSource @Inject constructor(private val fireStore: FirebaseFirestore) {
     fun createReservation(reservation: Reservation, reservationId: String): Flow<Boolean> = callbackFlow {
         fireStore
+            .collection("cars")
+            .document(reservation.carId)
             .collection("reservations")
             .document(reservationId)
             .set(reservation)
@@ -22,8 +23,8 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
     }
 
     // TODO addSnapshotListener
-    fun getReservation(reservationId: String): Flow<Reservation?> = callbackFlow {
-        fireStore.collection("reservations").document(reservationId).get().addOnCompleteListener {
+    fun getReservation(reservationId: String, carId: String): Flow<Reservation?> = callbackFlow {
+        fireStore.collection("cars").document(carId).collection("reservations").document(reservationId).get().addOnCompleteListener {
             if (it.isSuccessful) {
                 trySend(it.result.toObject(Reservation::class.java))
             } else {
@@ -33,23 +34,10 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
         awaitClose()
     }
 
-    fun getAllReservations(): Flow<List<Reservation>> = callbackFlow {
-        fireStore.collection("reservations").get().addOnCompleteListener {
+    fun getCarReservationDates(carId: String): Flow<List<AvailableDate>> = callbackFlow {
+        fireStore.collection("cars").document(carId).collection("reservations").get().addOnCompleteListener {
             if (it.isSuccessful) {
-                trySend(it.result.map { snapshot -> snapshot.toObject(Reservation::class.java) })
-            } else {
-                trySend(emptyList())
-            }
-        }
-        awaitClose()
-    }
-
-    fun getCarReservationDates(car: Car): Flow<List<AvailableDate>> = callbackFlow {
-        fireStore.collection("reservations").get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                it.result.filter { document ->
-                    car.reservations.contains(document.id)
-                }.map { snapshot ->
+                it.result.map { snapshot ->
                     snapshot.toObject(Reservation::class.java).reservationDate
                 }.also { result ->
                     trySend(result)

@@ -43,7 +43,7 @@ class ReviewRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getReviewDTO(uid: String, reservationId: String): Flow<ReviewDTO> = callbackFlow {
+    override fun getReviewDTO(uid: String, reservationId: String, carId: String): Flow<ReviewDTO> = callbackFlow {
         /*
             1. 예약 id로 예약을 불러온다.
             2. 예약에 있는 차 아이디로 차 정보를 불러온다. (carId, carModel 얻기)
@@ -51,9 +51,9 @@ class ReviewRepositoryImpl @Inject constructor(
             3-1. 같으면 대여자 -> 차주에게 리뷰를 보내는 케이스 (차 정보의 ownerId에서 UserProfile 얻기)
             3-2. 다르면 차주 -> 대여자에게 리뷰를 보내는 케이스 (예약의 userId에서 UserProfile 얻기)
          */
-        reservationDataSource.getReservation(reservationId).first()?.let { reservation ->
+        reservationDataSource.getReservation(reservationId, carId).first()?.let { reservation ->
             val reviewType = if (reservation.userId == uid) ReviewType.LENDER_TO_OWNER else ReviewType.OWNER_TO_LENDER
-            carDataSource.getCar(reservation.carId).first()?.let { car ->
+            carDataSource.getCar(carId).first()?.let { car ->
                 val carImage = if (car.images.isNotEmpty()) car.images[0] else ""
                 val opponentId = if (reviewType == ReviewType.LENDER_TO_OWNER) car.ownerId else reservation.userId
                 userDataSource.getUser(opponentId).first()?.let { userInfo ->
