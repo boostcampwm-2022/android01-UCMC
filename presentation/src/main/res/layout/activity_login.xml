@@ -1,45 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/iv_login_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
-        app:srcCompat="@drawable/ic_logo"
-        tools:ignore="ContentDescription" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.login.LoginActivity">
 
-    <TextView
-        android:id="@+id/tv_login_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/app_name"
-        android:textColor="@color/primaryColor"
-        android:textSize="@dimen/font_display_small"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/iv_login_logo"
-        app:layout_constraintStart_toStartOf="@+id/iv_login_logo"
-        app:layout_constraintTop_toBottomOf="@+id/iv_login_logo" />
+        <ImageView
+            android:id="@+id/iv_login_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
+            app:srcCompat="@drawable/ic_logo"
+            tools:ignore="ContentDescription" />
 
-    <com.shobhitpuri.custombuttons.GoogleSignInButton
-        android:id="@+id/btn_login_google"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/padding_extra_large"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_login_logo" />
+        <TextView
+            android:id="@+id/tv_login_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/app_name"
+            android:textColor="@color/primaryColor"
+            android:textSize="@dimen/font_display_small"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/iv_login_logo"
+            app:layout_constraintStart_toStartOf="@+id/iv_login_logo"
+            app:layout_constraintTop_toBottomOf="@+id/iv_login_logo" />
 
+        <com.shobhitpuri.custombuttons.GoogleSignInButton
+            android:id="@+id/btn_login_google"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/padding_extra_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_login_logo" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/neutral99"
+            android:paddingHorizontal="@dimen/padding_medium">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/terms_cancel"
+                android:textSize="@dimen/font_body_large"
+                android:layout_marginTop="@dimen/padding_medium"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_accept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/terms_accept"
+                android:textSize="@dimen/font_body_large"
+                app:layout_constraintTop_toTopOf="@id/btn_cancel"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_title_services"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/terms_title_service"
+                android:textSize="@dimen/font_headline_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                app:layout_constraintTop_toBottomOf="@id/btn_cancel"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_description_services"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="@dimen/font_body_medium"
+                android:scrollbars="vertical"
+                android:layout_marginVertical="@dimen/padding_medium"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_services"
+                app:layout_constraintBottom_toTopOf="@id/tv_title_privacy"
+                app:layout_constraintVertical_weight="1"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_title_privacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/terms_title_privacy"
+                android:textSize="@dimen/font_headline_medium"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_services"
+                app:layout_constraintBottom_toTopOf="@id/guideline_bottom"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_description_privacy"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="@dimen/font_body_medium"
+                android:scrollbars="vertical"
+                android:layout_marginTop="@dimen/padding_medium"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_privacy"
+                app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+                app:layout_constraintVertical_weight="1"/>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintGuide_percent="0.95"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

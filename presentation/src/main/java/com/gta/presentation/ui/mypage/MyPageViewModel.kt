@@ -35,7 +35,7 @@ class MyPageViewModel @Inject constructor(
     val nicknameEditEvent: SharedFlow<String> get() = _nicknameEditEvent
 
     init {
-        getUserProfile()
+        requestUserProfile()
     }
 
     fun changeThumbnail(uri: String) {
@@ -48,7 +48,7 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    private fun getUserProfile() {
+    private fun requestUserProfile() {
         viewModelScope.launch {
             _userProfile.emit(getUserProfileUseCase(FirebaseUtil.uid).first())
         }

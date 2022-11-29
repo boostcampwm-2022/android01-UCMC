@@ -17,15 +17,18 @@
     <string name="car_detail_car_owner_label">차주 정보</string>
     <string name="registered_vehicle">등록한 차량</string>
     <string name="car_detail_info_label">세부 정보</string>
-    
+
     <string name="no_information">정보 없음</string>
 
     <string name="car_edit_label">내 차 수정하기</string>
     <string name="car_edit_price_label">금액 1일</string>
     <string name="car_edit_day_label">대여 가능 날짜</string>
+    <string name="car_edit_day_able">예약 가능 여부</string>
     <string name="car_edit_location_label">대여/반납 위치</string>
     <string name="car_edit_rent_unavailable">대여 불가능</string>
     <string name="car_edit_comment_helper_message">차 상세 페이지에 올릴 내용을 작성해 주세요</string>
+    <string name="car_edit_max_image">이미지는 최대 10장까지 선택할 수 있습니다.</string>
+    <string name="car_edit_finish_update">수정이 완료되었습니다.</string>
     <string name="car_edit_images_count">%d/10</string>
     <string name="car_edit_price_format">원</string>
     <string name="car_edit_rent_available_day_format">%s ~ %s</string>
@@ -49,9 +52,9 @@
     <string name="price_format">%,2d 원</string>
     <string name="more">더보기</string>
     <string name="insurance_fee">보험료</string>
-    <string name="insurance_option_1">자차 면책 보험료 5만원 (+6,310)</string>
-    <string name="insurance_option_2">자차 면책 보험료 30만원 (+5,210)</string>
-    <string name="insurance_option_3">자차 면책 보험료 70만원 (+3,870)</string>
+    <string name="insurance_option_1">자차 면책 보험료 5만원</string>
+    <string name="insurance_option_2">자차 면책 보험료 30만원</string>
+    <string name="insurance_option_3">자차 면책 보험료 70만원</string>
     <string name="action_pay">결제하기</string>
     <string name="placeholder_date_count">총 -일</string>
     <string name="placeholder_date_range">시작일 ~ 종료일</string>
@@ -100,7 +103,7 @@
     <string name="mypage_btn_sign_out">로그아웃</string>
 
     <string name="mypage_carlist">내 차 목록</string>
-  
+
     <string name="nickname_toolbar">닉네임 변경</string>
     <string name="nickname_input_text">닉네임</string>
     <string name="nickname_condition">한글, 영어, 숫자만 사용 가능해요 (2~10자)</string>
@@ -115,6 +118,15 @@
     <string name="review_input_hint_for_lender">차주의 매너, 차 상태 등 서비스에 대한 리뷰를 남겨주세요. 감사 인사도 좋아요 :)</string>
     <string name="review_input_hint_for_owner">대여자의 매너, 대여 후 차 상태 등 리뷰를 남겨주세요. 감사 인사도 좋아요 :)</string>
     <string name="review_btn_apply">리뷰완료</string>
+
+    <string name="default_notification_channel_id">ucmc_notifications</string>
+    <string name="default_notification_name">자동차 예약, 반납 알림</string>
+    <string name="reservation_request_msg">자동차 대여 예약 요청이 도착했습니다.</string>
+
+    <string name="terms_cancel">취소</string>
+    <string name="terms_accept">확인</string>
+    <string name="terms_title_service">서비스 이용약관</string>
+    <string name="terms_title_privacy">개인정보 이용약관</string>
 
     <string name="chatting_toolbar">채팅</string>
 </resources>

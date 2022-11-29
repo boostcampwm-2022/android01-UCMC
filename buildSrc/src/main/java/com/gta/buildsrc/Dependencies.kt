@@ -9,6 +9,7 @@ object Dependencies {
         const val MATERIAL = "1.7.0"
         const val CONSTRAINT_LAYOUT = "2.1.4"
         const val STARTUP = "1.2.0-alpha01"
+        const val SPLASH = "1.0.0"
 
         // KTX
         const val KOTLIN = "1.7.10"
@@ -66,6 +67,7 @@ object Dependencies {
             const val APP_COMPAT = "androidx.appcompat:appcompat:${Versions.APP_COMPAT}"
             const val CORE = "androidx.core:core-ktx:${Versions.CORE}"
             const val STARTUP = "androidx.startup:startup-runtime:${Versions.STARTUP}"
+            const val SPLASH = "androidx.core:core-splashscreen:${Versions.SPLASH}"
 
             fun getAll(): ArrayList<String> {
                 return arrayListOf(APP_COMPAT, CORE)
@@ -242,6 +244,7 @@ object Dependencies {
             add(NAVER_MAP)
             add(STREAM_CHAT)
             add(TIMBER)
+            add(AndroidX.SPLASH)
             add(INDICATOR)
         }
 

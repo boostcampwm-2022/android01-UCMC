@@ -2,6 +2,7 @@ package com.gta.data.repository
 
 import com.gta.data.source.LoginDataSource
 import com.gta.data.source.UserDataSource
+import com.gta.domain.model.LoginResult
 import com.gta.domain.repository.LoginRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -15,12 +16,22 @@ class LoginRepositoryImpl @Inject constructor(
 ) : LoginRepository {
     override fun checkCurrentUser(
         uid: String
-    ): Flow<Boolean> = callbackFlow {
+    ): Flow<LoginResult> = callbackFlow {
         val userInfo = userDataSource.getUser(uid).first()
         if (userInfo != null) {
-            trySend(true)
+            trySend(LoginResult.SUCCESS)
         } else {
-            trySend(loginDataSource.createUser(uid).first())
+            trySend(LoginResult.NEWUSER)
+        }
+        awaitClose()
+    }
+
+    override fun signUp(uid: String) = callbackFlow {
+        val created = loginDataSource.createUser(uid).first()
+        if (created) {
+            trySend(LoginResult.SUCCESS)
+        } else {
+            trySend(LoginResult.FAILURE)
         }
         awaitClose()
     }

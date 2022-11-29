@@ -39,7 +39,12 @@
             app:destination="@id/nicknameFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_myPageCarListFragment"
-            app:destination="@id/myPageCarListFragment" />
+            app:destination="@id/myPageCarListFragment"
+            app:popUpTo="@id/myPageFragment"/>
+        <action
+            android:id="@+id/action_myPageFragment_to_myPageTermsFragment"
+            app:destination="@id/myPageTermsFragment"
+            app:popUpTo="@id/myPageFragment"/>
     </fragment>
 
     <fragment
@@ -49,7 +54,8 @@
         tools:layout="@layout/fragment_my_cars">
         <action
             android:id="@+id/action_myPageCarListFragment_to_pinkSlipGuideFragment"
-            app:destination="@id/pinkSlipGuideFragment" />
+            app:destination="@id/pinkSlipGuideFragment"
+            app:popUpTo="@id/myPageCarListFragment" />
         <action
             android:id="@+id/action_myPageCarListFragment_to_carDetailFragment"
             app:destination="@id/carDetailFragment" />
@@ -198,5 +204,10 @@
             android:name="CAR_ID"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/myPageTermsFragment"
+        android:name="com.gta.presentation.ui.mypage.MyPageTermsFragment"
+        android:label="@string/mypage_btn_terms"
+        tools:layout="@layout/fragment_mypage_terms"/>
 
 </navigation>
