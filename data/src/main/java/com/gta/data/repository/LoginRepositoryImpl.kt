@@ -38,4 +38,9 @@ class LoginRepositoryImpl @Inject constructor(
         }
         awaitClose()
     }
+
+    override suspend fun updateUserMessageToken(uid: String): Boolean {
+        val messageToken = messageTokenDataSource.getMessageToken().first()
+        return userDataSource.updateUserMessageToken(uid, messageToken).first()
+    }
 }
