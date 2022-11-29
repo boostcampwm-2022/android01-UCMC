@@ -55,7 +55,7 @@ class LicenseRegistrationViewModel @Inject constructor(
         val license = drivingLicense.value ?: return
         val uid = auth.currentUser?.uid ?: return
         viewModelScope.launch {
-            _registerEvent.emit(setLicenseUseCase(uid, license).first())
+            _registerEvent.emit(setLicenseUseCase(uid, license, licensePicture.value).first())
         }
     }
 }

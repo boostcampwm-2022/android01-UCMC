@@ -1,6 +1,7 @@
 package com.gta.data.repository
 
 import com.gta.data.source.LicenseDataSource
+import com.gta.data.source.StorageDataSource
 import com.gta.domain.model.DrivingLicense
 import com.gta.domain.repository.LicenseRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -11,7 +12,8 @@ import java.nio.ByteBuffer
 import javax.inject.Inject
 
 class LicenseRepositoryImpl @Inject constructor(
-    private val dataSource: LicenseDataSource
+    private val licenseDataSource: LicenseDataSource,
+    private val storageDataSource: StorageDataSource
 ) : LicenseRepository {
     override fun getLicenseFromImage(buffer: ByteBuffer): Flow<DrivingLicense?> = callbackFlow {
         // 그냥 객체를 바로 리턴 받을 수 있지만
@@ -30,12 +32,18 @@ class LicenseRepositoryImpl @Inject constructor(
     }
 
     override fun getLicenseFromDatabase(uid: String): Flow<DrivingLicense?> = callbackFlow {
-        trySend(dataSource.getLicense(uid).first())
+        trySend(licenseDataSource.getLicense(uid).first())
         awaitClose()
     }
 
-    override fun setLicense(uid: String, license: DrivingLicense): Flow<Boolean> = callbackFlow {
-        trySend(dataSource.registerLicense(uid, license).first())
-        awaitClose()
-    }
+    override fun setLicense(uid: String, license: DrivingLicense, uri: String): Flow<Boolean> =
+        callbackFlow {
+            val result = storageDataSource.uploadLicense(uid, uri).first() ?: ""
+            if (result.isNotEmpty()) {
+                trySend(licenseDataSource.registerLicense(uid, license.copy(uri = result)).first())
+            } else {
+                trySend(false)
+            }
+            awaitClose()
+        }
 }
