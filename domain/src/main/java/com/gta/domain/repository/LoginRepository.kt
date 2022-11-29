@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface LoginRepository {
     fun checkCurrentUser(uid: String): Flow<LoginResult>
     fun signUp(uid: String): Flow<LoginResult>
+    suspend fun updateUserMessageToken(uid: String): Boolean
 }

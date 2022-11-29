@@ -6,7 +6,13 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CheckCurrentUserUseCase @Inject constructor(
-    private val repository: LoginRepository
+    private val repository: LoginRepository,
+    private val updateUserMessageTokenUseCase: UpdateUserMessageTokenUseCase
 ) {
-    operator fun invoke(uid: String): Flow<LoginResult> = repository.checkCurrentUser(uid)
+    suspend operator fun invoke(uid: String, shouldUpdateMessageToken: Boolean = false): Flow<LoginResult> {
+        if (shouldUpdateMessageToken) {
+            updateUserMessageTokenUseCase(uid)
+        }
+        return repository.checkCurrentUser(uid)
+    }
 }
