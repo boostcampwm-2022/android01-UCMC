@@ -33,8 +33,11 @@ class MyPageLicenseFragment :
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.drivingLicense.collectLatest {
-                    if (it == null) binding.tvEmpty.visibility = View.VISIBLE
-                    else binding.tvEmpty.visibility = View.GONE
+                    if (it == null) {
+                        binding.tvEmpty.visibility = View.VISIBLE
+                    } else {
+                        binding.tvEmpty.visibility = View.GONE
+                    }
                 }
             }
         }
