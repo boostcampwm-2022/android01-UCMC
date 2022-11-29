@@ -51,8 +51,9 @@ object Dependencies {
         const val JUNIT_EXT = "1.1.4"
         const val ESPRESSO_CORE = "3.5.0"
 
-        //Github open Library
+        // Github open Library
         const val INDICATOR = "4.3"
+        const val LOTTIE = "5.0.1"
     }
 
     object Classpaths {
@@ -179,8 +180,10 @@ object Dependencies {
         }
 
         const val INDICATOR = "com.tbuonomo:dotsindicator:${Versions.INDICATOR}"
+        const val LOTTIE = "com.airbnb.android:lottie:${Versions.LOTTIE}"
 
-        const val LOGGING_INTERCEPTER = "com.squareup.okhttp3:logging-interceptor:${Versions.LOGGING_INTERCEPTER}"
+        const val LOGGING_INTERCEPTER =
+            "com.squareup.okhttp3:logging-interceptor:${Versions.LOGGING_INTERCEPTER}"
 
         const val VIEW_PAGER_2 = "androidx.viewpager2:viewpager2:${Versions.VIEW_PAGER}"
 
@@ -254,6 +257,7 @@ object Dependencies {
             add(TIMBER)
             add(AndroidX.SPLASH)
             add(INDICATOR)
+            add(LOTTIE)
         }
 
         val presentationKaptLibraries = arrayListOf<String>().apply {
