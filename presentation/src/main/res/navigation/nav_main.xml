@@ -230,7 +230,7 @@
     <fragment
         android:id="@+id/returnCarFragment"
         android:name="com.gta.presentation.ui.returncar.ReturnCarFragment"
-        android:label="fragment_return_car"
+        android:label="@string/return_car"
         tools:layout="@layout/fragment_return_car">
         <argument
             android:name="carId"
