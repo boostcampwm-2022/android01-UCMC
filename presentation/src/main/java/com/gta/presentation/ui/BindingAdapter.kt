@@ -9,9 +9,6 @@ import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
 import com.gta.presentation.util.DateUtil
-import java.text.DecimalFormat
-
-private val dec = DecimalFormat("#,###")
 
 @BindingAdapter("image_uri")
 fun bindImageUri(view: ImageView, uri: String?) {
@@ -21,11 +18,6 @@ fun bindImageUri(view: ImageView, uri: String?) {
         .error(R.drawable.ic_broken_image)
         .fallback(R.drawable.ic_logo)
         .into(view)
-}
-
-@BindingAdapter("price")
-fun price(textView: TextView, price: Int) {
-    textView.text = textView.context.getString(R.string.price, dec.format(price))
 }
 
 @BindingAdapter("car_type", "car_year", "car_title")
