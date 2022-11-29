@@ -54,8 +54,8 @@ class CarDataSource @Inject constructor(
     }
 
     fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<Car>> = callbackFlow {
-        fireStore.collection("cars").whereGreaterThan("coordinate.y", min.latitude)
-            .whereLessThan("coordinate.y", max.latitude).get().addOnCompleteListener {
+        fireStore.collection("cars").whereGreaterThan("coordinate.latitude", min.latitude)
+            .whereLessThan("coordinate.latitude", max.latitude).get().addOnCompleteListener {
                 if (it.isSuccessful) {
                     it.result.filter { document ->
                         val tmp = document.toObject(Car::class.java)
