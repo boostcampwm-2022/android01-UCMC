@@ -21,8 +21,9 @@ class NotificationService : FirebaseMessagingService() {
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    private val notificationManager: NotificationManager =
+    private val notificationManager: NotificationManager by lazy {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
 
     override fun onNewToken(token: String) {
         scope.launch {
