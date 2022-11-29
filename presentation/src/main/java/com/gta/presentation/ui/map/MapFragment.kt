@@ -35,6 +35,7 @@ import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
@@ -82,9 +83,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.vm = viewModel.apply {
-            this.startCollect()
-        }
+        binding.vm = viewModel
+
+        viewModel.startCollect()
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
 
@@ -218,28 +219,27 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                 )
             )
 
-            val minX: Double
-            val maxX: Double
-            val minY: Double
-            val maxY: Double
+            val minLat: Double
+            val maxLat: Double
+            val minLng: Double
+            val maxLng: Double
 
             if (minLocation.latitude < maxLocation.latitude) {
-                minX = minLocation.latitude
-                maxX = maxLocation.latitude
+                minLat = minLocation.latitude
+                maxLat = maxLocation.latitude
             } else {
-                minX = maxLocation.latitude
-                maxX = minLocation.latitude
+                minLat = maxLocation.latitude
+                maxLat = minLocation.latitude
             }
 
             if (minLocation.longitude < maxLocation.longitude) {
-                minY = minLocation.longitude
-                maxY = maxLocation.longitude
+                minLng = minLocation.longitude
+                maxLng = maxLocation.longitude
             } else {
-                minY = maxLocation.longitude
-                maxY = minLocation.longitude
+                minLng = maxLocation.longitude
+                maxLng = minLocation.longitude
             }
-
-            viewModel.setPosition(Coordinate(minX, minY), Coordinate(maxX, maxY))
+            viewModel.setPosition(Coordinate(minLat, minLng), Coordinate(maxLat, maxLng))
         }
     }
 
