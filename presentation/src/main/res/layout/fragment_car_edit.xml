@@ -102,6 +102,22 @@
                 tools:text="1000" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_price"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/colorSurface"
+                android:gravity="end|center_vertical"
+                android:textSize="@dimen/font_body_large"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/et_price"
+                app:layout_constraintEnd_toEndOf="@+id/et_price"
+                app:layout_constraintStart_toStartOf="@+id/et_price"
+                app:layout_constraintTop_toTopOf="@+id/et_price"
+                tools:text="1,000" />
+
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_price_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

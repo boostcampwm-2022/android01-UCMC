@@ -24,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.text.DecimalFormat
 
 @AndroidEntryPoint
 class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
@@ -33,6 +34,7 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
     private val viewModel: CarEditViewModel by viewModels()
     private val imagesAdapter by lazy { CarEditImagesAdapter() }
 
+    val decimalFormat = DecimalFormat("#,###")
     private val MAX_IMAGE = 10
 
     private val maxImagesMsg: Snackbar by lazy {
@@ -134,6 +136,16 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             }
         }
 
+        binding.etPrice.setOnFocusChangeListener { view, boolean ->
+            with(binding.tvPrice) {
+                if (boolean) {
+                    visibility = View.GONE
+                } else {
+                    text = decimalFormat.format(viewModel.price.value.toInt())
+                    visibility = View.VISIBLE
+                }
+            }
+        }
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.updateState.collectLatest { result ->
