@@ -81,6 +81,8 @@ class CarDetailViewModel @Inject constructor(
             extraData = emptyMap()
         ).enqueue() { result ->
             if (result.isSuccess) {
+                val str = result.data().members.joinToString("\n")
+                Timber.tag("chatting").i(str)
                 viewModelScope.launch {
                     _navigateChattingEvent.emit(result.data().cid)
                 }
