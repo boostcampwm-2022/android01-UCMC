@@ -16,7 +16,7 @@
             android:id="@+id/tv_title_services"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tos_title_service"
+            android:text="@string/terms_title_service"
             android:textSize="@dimen/font_headline_medium"
             android:layout_marginTop="@dimen/padding_medium"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
             android:id="@+id/tv_title_privacy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tos_title_privacy"
+            android:text="@string/terms_title_privacy"
             android:textSize="@dimen/font_headline_medium"
             app:layout_constraintTop_toBottomOf="@id/tv_title_services"
             app:layout_constraintBottom_toTopOf="@id/guideline_bottom" />

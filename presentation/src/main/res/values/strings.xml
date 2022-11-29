@@ -123,9 +123,9 @@
     <string name="default_notification_name">자동차 예약, 반납 알림</string>
     <string name="reservation_request_msg">자동차 대여 예약 요청이 도착했습니다.</string>
 
-    <string name="tos_cancel">취소</string>
-    <string name="tos_accept">확인</string>
-    <string name="tos_title_service">서비스 이용약관</string>
-    <string name="tos_title_privacy">개인정보 이용약관</string>
+    <string name="terms_cancel">취소</string>
+    <string name="terms_accept">확인</string>
+    <string name="terms_title_service">서비스 이용약관</string>
+    <string name="terms_title_privacy">개인정보 이용약관</string>
 
 </resources>
