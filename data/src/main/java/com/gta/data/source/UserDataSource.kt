@@ -27,4 +27,11 @@ class UserDataSource @Inject constructor(
         }
         awaitClose()
     }
+
+    fun updateUserMessageToken(uid: String, token: String) = callbackFlow {
+        fireStore.collection("users").document(uid).update("messageToken", token).addOnCompleteListener {
+            trySend(it.isSuccessful)
+        }
+        awaitClose()
+    }
 }
