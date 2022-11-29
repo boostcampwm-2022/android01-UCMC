@@ -19,18 +19,18 @@ import javax.inject.Inject
 class NotificationService : FirebaseMessagingService() {
     @Inject lateinit var setMessageTokenUseCase: SetMessageTokenUseCase
 
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.IO)
+
+    private val notificationManager: NotificationManager =
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     override fun onNewToken(token: String) {
-        coroutineScope.launch {
+        scope.launch {
             setMessageTokenUseCase(token)
         }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        val notificationManager: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 getString(R.string.default_notification_channel_id),
@@ -50,7 +50,7 @@ class NotificationService : FirebaseMessagingService() {
     }
 
     override fun onDestroy() {
-        coroutineScope.cancel()
+        scope.cancel()
         super.onDestroy()
     }
 }
