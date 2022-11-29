@@ -8,6 +8,7 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMypageTermsBinding
 import com.gta.presentation.ui.base.BaseFragment
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 
@@ -25,12 +26,16 @@ class MyPageTermsFragment :
 
     private fun getAssetData(fileName: String): String {
         val inputStream: InputStream?
-        return try {
+        var result: String
+        try {
             inputStream = resources.assets.open(fileName, AssetManager.ACCESS_BUFFER)
             val reader = BufferedReader(InputStreamReader(inputStream))
-            reader.readLines().joinToString("\n")
-        } catch (e: Exception) {
-            ""
+            result = reader.readLines().joinToString("\n")
+            inputStream.close()
+        } catch (e: IOException) {
+            result = ""
         }
+
+        return result
     }
 }

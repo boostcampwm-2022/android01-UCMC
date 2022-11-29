@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import javax.inject.Inject
@@ -128,12 +129,16 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
     private fun getAssetData(fileName: String): String {
         val inputStream: InputStream?
-        return try {
+        var result: String
+        try {
             inputStream = resources.assets.open(fileName, AssetManager.ACCESS_BUFFER)
             val reader = BufferedReader(InputStreamReader(inputStream))
-            reader.readLines().joinToString("\n")
-        } catch (e: Exception) {
-            ""
+            result = reader.readLines().joinToString("\n")
+            inputStream.close()
+        } catch (e: IOException) {
+            result = ""
         }
+
+        return result
     }
 }
