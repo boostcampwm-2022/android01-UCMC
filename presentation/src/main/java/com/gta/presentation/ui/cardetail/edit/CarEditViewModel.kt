@@ -97,7 +97,11 @@ class CarEditViewModel @Inject constructor(
                         "수정된 위치",
                         Coordinate(37.3588798, 127.1051933)
                     ).first()
-                ) UpdateState.SUCCESS else UpdateState.FAIL
+                ) {
+                    UpdateState.SUCCESS
+                } else {
+                    UpdateState.FAIL
+                }
         }
     }
 }
