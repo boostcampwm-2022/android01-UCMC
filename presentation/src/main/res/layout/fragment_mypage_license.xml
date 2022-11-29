@@ -19,7 +19,7 @@
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            app:image_uri="@{vm.licensePicture}"
+            app:image_uri="@{vm.drivingLicense.uri}"
             app:layout_constraintBottom_toTopOf="@+id/tv_title_license_registration_id"
             app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
             app:layout_constraintHeight_percent="0.25"
@@ -56,7 +56,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/mypage_re_register"
-            android:onClick="@{() -> vm.registerLicense()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -228,6 +227,18 @@
             app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
             app:layout_constraintStart_toEndOf="@+id/tv_license_registration_resident_aptitude"
             app:layout_constraintTop_toTopOf="@+id/tv_license_registration_resident_aptitude"/>
+
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="@string/mypage_no_license"
+            android:textSize="@dimen/font_title_large"
+            android:gravity="center"
+            android:visibility="visible"
+            android:background="?android:attr/colorBackground"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_license_registration"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
