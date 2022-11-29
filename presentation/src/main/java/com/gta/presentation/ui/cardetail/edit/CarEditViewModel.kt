@@ -4,21 +4,26 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.AvailableDate
+import com.gta.domain.model.Coordinate
 import com.gta.domain.model.RentState
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
+import com.gta.domain.usecase.cardetail.edit.UpdateCarDetailDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class CarEditViewModel @Inject constructor(
     args: SavedStateHandle,
-    getCarDetailDataUseCase: GetCarDetailDataUseCase
+    getCarDetailDataUseCase: GetCarDetailDataUseCase,
+    private val updateCarDetailDataUseCase: UpdateCarDetailDataUseCase
 ) : ViewModel() {
+
+    private val carId: String
+
     private val _images = MutableStateFlow<List<String>>(emptyList())
     val images: StateFlow<List<String>>
         get() = _images
@@ -27,18 +32,17 @@ class CarEditViewModel @Inject constructor(
     val comment = MutableStateFlow("")
     val rentState = MutableStateFlow(false)
 
-    private val _availableDate = MutableStateFlow<AvailableDate?>(AvailableDate())
-    val availableDate: StateFlow<AvailableDate?>
+    private val _availableDate = MutableStateFlow<AvailableDate>(AvailableDate())
+    val availableDate: StateFlow<AvailableDate>
         get() = _availableDate
 
     init {
-        val carId = args.get<String>("CAR_ID") ?: "정보 없음"
+        carId = args.get<String>("CAR_ID") ?: "정보 없음"
 
         viewModelScope.launch {
             val carInfo = getCarDetailDataUseCase(carId).first()
             _images.value = carInfo.images
 
-            Timber.d("carInfo.price ${carInfo.price}")
             price.value = carInfo.price.toString()
             comment.value = carInfo.comment
 
@@ -63,15 +67,19 @@ class CarEditViewModel @Inject constructor(
     }
 
     fun updateData() {
-        // 이미지
-        // 가격
-        // 코멘트
-        // 대여 가능 날짜(가능/불가능도 체크)
-        // 대여 반납 위치(적용안됨)
-        Timber.d("image ${images.value}")
-        Timber.d("price ${price.value}")
-        Timber.d("comment ${comment.value}")
-        Timber.d("able  ${rentState.value}")
-        Timber.d("날짜  ${availableDate.value}")
+        // TODO 예외처리
+        // TODO 대여반납 위치 update 하기
+        viewModelScope.launch {
+            updateCarDetailDataUseCase(
+                carId,
+                images.value,
+                price.value.toInt(),
+                comment.value,
+                if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
+                availableDate.value,
+                "수정된 위치",
+                Coordinate(37.3588798, 127.1051933)
+            ).first()
+        }
     }
 }

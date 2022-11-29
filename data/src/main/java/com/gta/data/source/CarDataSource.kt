@@ -42,6 +42,33 @@ class CarDataSource @Inject constructor(
         awaitClose()
     }
 
+    fun updateCarReservations(carId: String, reservations: List<Any?>): Flow<Boolean> =
+        callbackFlow {
+            fireStore
+                .collection("cars")
+                .document(carId)
+                .update("reservations", reservations)
+                .addOnCompleteListener {
+                    trySend(it.isSuccessful)
+                }
+            awaitClose()
+        }
+
+    /*
+        PinkSlipDataSource의 createCar와 동일한 코드
+     */
+    fun createCar(carId: String, car: Car): Flow<Boolean> =
+        callbackFlow {
+            fireStore
+                .collection("cars")
+                .document(carId)
+                .set(car)
+                .addOnCompleteListener {
+                    trySend(it.isSuccessful)
+                }
+            awaitClose()
+        }
+    
     fun getAllCars(): Flow<List<Car>> = callbackFlow {
         fireStore.collection("cars").get().addOnCompleteListener {
             if (it.isSuccessful) {

@@ -5,6 +5,7 @@ import com.gta.data.model.toCarRentInfo
 import com.gta.data.model.toDetailCar
 import com.gta.data.model.toProfile
 import com.gta.data.model.toSimple
+import com.gta.data.model.update
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.UserDataSource
@@ -13,6 +14,7 @@ import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
+import com.gta.domain.model.UpdateCar
 import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -46,6 +48,11 @@ class CarRepositoryImpl @Inject constructor(
                 )
             } ?: trySend(CarDetail())
         } ?: trySend(CarDetail())
+        awaitClose()
+    }
+
+    override fun updateCarDetail(carId: String, update: UpdateCar): Flow<Boolean> = callbackFlow {
+        trySend(carDataSource.createCar(carId, getCar(carId).first().update(update)).first())
         awaitClose()
     }
 
@@ -90,11 +97,12 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<SimpleCar>> = callbackFlow {
-        val cars = carDataSource.getNearCars(min, max).first()
-        trySend(cars.map { it.toSimple(it.pinkSlip.informationNumber) })
-        awaitClose()
-    }
+    override fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<SimpleCar>> =
+        callbackFlow {
+            val cars = carDataSource.getNearCars(min, max).first()
+            trySend(cars.map { it.toSimple(it.pinkSlip.informationNumber) })
+            awaitClose()
+        }
 
     override fun removeCar(userId: String, carId: String): Flow<Boolean> = callbackFlow {
         if (carDataSource.removeCar(carId).first()) {
