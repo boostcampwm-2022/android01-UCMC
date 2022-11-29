@@ -35,8 +35,10 @@ class MyPageLicenseFragment :
                 viewModel.drivingLicense.collectLatest {
                     if (it == null) {
                         binding.tvEmpty.visibility = View.VISIBLE
+                        binding.btnLicenseRegistration.text = resources.getString(R.string.license_registration_button)
                     } else {
                         binding.tvEmpty.visibility = View.GONE
+                        binding.btnLicenseRegistration.text = resources.getString(R.string.mypage_re_register)
                     }
                 }
             }

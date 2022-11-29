@@ -21,13 +21,14 @@ class LicenseDataSource @Inject constructor(
 
     fun getLicense(uid: String): Flow<DrivingLicense?> = callbackFlow {
         fireStore.collection("users").document(uid).get()
-            .addOnSuccessListener {
-                val userInfo = it.toObject(UserInfo::class.java)
-                trySend(userInfo?.license)
-            }.addOnFailureListener {
-                trySend(null)
-            }.addOnCanceledListener {
-                trySend(null)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val userInfo = it.result.toObject(UserInfo::class.java)
+                    trySend(userInfo?.license)
+                }
+                else {
+                    trySend(null)
+                }
             }
         awaitClose()
     }
