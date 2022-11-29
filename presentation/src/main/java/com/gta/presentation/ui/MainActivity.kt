@@ -33,7 +33,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private val navHostFragment by lazy { supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment }
     private val navController by lazy { navHostFragment.navController }
-    private val appBarConfiguration = AppBarConfiguration(setOf(R.id.mapFragment, R.id.chattingFragment, R.id.myPageFragment))
+    private val appBarConfiguration = AppBarConfiguration(setOf(R.id.mapFragment, R.id.chattingListFragment, R.id.myPageFragment))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     supportActionBar?.hide()
                     showBottomNav()
                 }
-                R.id.chattingFragment, R.id.myPageFragment -> {
+                R.id.chattingListFragment, R.id.myPageFragment -> {
                     supportActionBar?.show()
                     showBottomNav()
                 }

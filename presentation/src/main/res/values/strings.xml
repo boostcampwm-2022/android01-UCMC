@@ -128,4 +128,5 @@
     <string name="terms_title_service">서비스 이용약관</string>
     <string name="terms_title_privacy">개인정보 이용약관</string>
 
+    <string name="chatting_toolbar">채팅</string>
 </resources>

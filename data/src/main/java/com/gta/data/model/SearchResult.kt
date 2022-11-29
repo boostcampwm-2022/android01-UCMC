@@ -16,10 +16,11 @@ data class Meta(
 
 data class Place(
     @SerializedName("address_name") var addressName: String,
-    var x: String,
-    var y: String
+    @SerializedName("place_name") var placeName: String?,
+    @SerializedName("x") var longitude: String,
+    @SerializedName("y") var latitude: String
 )
 
 fun Place.toLocationInfo(): LocationInfo {
-    return LocationInfo(this.addressName, this.y.toDouble(), this.x.toDouble())
+    return LocationInfo(this.addressName, this.placeName, this.latitude.toDouble(), this.longitude.toDouble())
 }

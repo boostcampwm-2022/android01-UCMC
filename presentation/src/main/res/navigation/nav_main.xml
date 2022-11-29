@@ -13,13 +13,21 @@
         <action
             android:id="@+id/action_mapFragment_to_carDetailFragment"
             app:destination="@id/carDetailFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_chattingListFragment"
+            app:destination="@id/chattingListFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/chattingFragment"
-        android:name="com.gta.presentation.ui.chatting.ChattingFragment"
-        android:label="@string/chatting"
-        tools:layout="@layout/fragment_chatting"></fragment>
+        android:name="com.gta.presentation.ui.chatting.chat.ChattingFragment"
+        android:label="@string/chatting_toolbar"
+        tools:layout="@layout/fragment_chatting">
+        <argument
+            android:name="cid"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
 
     <fragment
         android:id="@+id/myPageFragment"
@@ -176,7 +184,16 @@
         android:id="@+id/reviewFragment"
         android:name="com.gta.presentation.ui.review.ReviewFragment"
         android:label="@string/review_toolbar"
-        tools:layout="@layout/fragment_review" />
+        tools:layout="@layout/fragment_review"/>
+    <fragment
+        android:id="@+id/chattingListFragment"
+        android:name="com.gta.presentation.ui.chatting.list.ChattingListFragment"
+        android:label="@string/chatting_toolbar"
+        tools:layout="@layout/fragment_chatting_list">
+        <action
+            android:id="@+id/action_chattingListFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/carDetailEditFragment"

@@ -56,6 +56,13 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
+    override fun getSimpleCar(carId: String): Flow<SimpleCar> = callbackFlow {
+        carDataSource.getCar(carId).first()?.let { car ->
+            trySend(car.toSimple(carId))
+        } ?: trySend(SimpleCar())
+        awaitClose()
+    }
+
     private fun getCar(carId: String): Flow<Car> = callbackFlow {
         val car = carDataSource.getCar(carId).first() ?: Car()
         trySend(car)

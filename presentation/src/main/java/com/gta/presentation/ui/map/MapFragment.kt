@@ -82,7 +82,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.vm = viewModel
+        binding.vm = viewModel.apply {
+            this.startCollect()
+        }
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
 
@@ -136,7 +138,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                             Marker().apply {
                                 icon = MarkerIcons.BLACK
                                 iconTintColor = requireContext().getColor(R.color.primaryColor)
-                                position = LatLng(car.coordinate.x, car.coordinate.y)
+                                position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
                                 map = naverMap
 
                                 setOnClickListener {
@@ -170,8 +172,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         menuAdapter = AutoCompleteAdapter(requireContext(), emptyList())
         menuAdapter.setOnItemClickListener(object : OnItemClickListener<LocationInfo> {
             override fun onClick(value: LocationInfo) {
-                binding.etSearch.setText(value.address)
-                naverMap?.moveCamera(
+                binding.etSearch.setText(value.name ?: value.address)
+                naverMap.moveCamera(
                     CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude))
                         .animate(CameraAnimation.Easing)
                 )
@@ -185,6 +187,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         binding.etSearch.setAdapter(menuAdapter)
         binding.etSearch.doOnTextChanged { text, _, _, _ ->
             viewModel.setQuery(text.toString())
+        }
+
+        binding.btnDeleteSearch.setOnClickListener {
+            binding.etSearch.setText("")
         }
 
         lifecycleScope.launch {
@@ -277,6 +283,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onStop() {
+        viewModel.stopCollect()
         binding.mapView.onStop()
         super.onStop()
     }
@@ -322,9 +329,5 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-
-        fun LatLng.toCoordinate(): Coordinate {
-            return Coordinate(this.latitude, this.longitude)
-        }
     }
 }

@@ -12,13 +12,24 @@ class MapRepositoryImpl @Inject constructor(private val mapDataSource: MapDataSo
     MapRepository {
     override fun getSearchAddressList(query: String): Flow<List<LocationInfo>> = flow {
         try {
-            val result = mapDataSource.getSearchAddressList(query)
-            result.documents
+            val addressResult = mapDataSource.getSearchAddressList(query)
+            val keywordResult = mapDataSource.getSearchKeywordList(query)
+            val result = mutableListOf<LocationInfo>()
+
+            addressResult.documents
                 .map {
                     it.toLocationInfo()
                 }.also {
-                    emit(it)
+                    result.addAll(it)
                 }
+
+            keywordResult.documents
+                .map {
+                    it.toLocationInfo()
+                }.also {
+                    result.addAll(it)
+                }
+            emit(result)
         } catch (e: Exception) {
             emit(emptyList())
         }
