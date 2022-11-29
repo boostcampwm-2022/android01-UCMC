@@ -23,7 +23,7 @@ data class Car(
 
 fun Car.toSimple(id: String): SimpleCar = SimpleCar(
     id = id,
-    image = if (images.size > 1) images[0] else "",
+    image = if (images.isNotEmpty()) images[0] else "",
     carType = pinkSlip.type,
     model = pinkSlip.model,
     year = pinkSlip.year,

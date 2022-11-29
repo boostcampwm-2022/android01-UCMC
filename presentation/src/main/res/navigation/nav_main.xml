@@ -13,13 +13,21 @@
         <action
             android:id="@+id/action_mapFragment_to_carDetailFragment"
             app:destination="@id/carDetailFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_chattingListFragment"
+            app:destination="@id/chattingListFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/chattingFragment"
-        android:name="com.gta.presentation.ui.chatting.ChattingFragment"
-        android:label="@string/chatting"
-        tools:layout="@layout/fragment_chatting"></fragment>
+        android:name="com.gta.presentation.ui.chatting.chat.ChattingFragment"
+        android:label="@string/chatting_toolbar"
+        tools:layout="@layout/fragment_chatting">
+        <argument
+            android:name="cid"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
 
     <fragment
         android:id="@+id/myPageFragment"
@@ -31,7 +39,12 @@
             app:destination="@id/nicknameFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_myPageCarListFragment"
-            app:destination="@id/myPageCarListFragment" />
+            app:destination="@id/myPageCarListFragment"
+            app:popUpTo="@id/myPageFragment"/>
+        <action
+            android:id="@+id/action_myPageFragment_to_myPageTermsFragment"
+            app:destination="@id/myPageTermsFragment"
+            app:popUpTo="@id/myPageFragment"/>
     </fragment>
 
     <fragment
@@ -41,7 +54,8 @@
         tools:layout="@layout/fragment_my_cars">
         <action
             android:id="@+id/action_myPageCarListFragment_to_pinkSlipGuideFragment"
-            app:destination="@id/pinkSlipGuideFragment" />
+            app:destination="@id/pinkSlipGuideFragment"
+            app:popUpTo="@id/myPageCarListFragment" />
         <action
             android:id="@+id/action_myPageCarListFragment_to_carDetailFragment"
             app:destination="@id/carDetailFragment" />
@@ -170,7 +184,16 @@
         android:id="@+id/reviewFragment"
         android:name="com.gta.presentation.ui.review.ReviewFragment"
         android:label="@string/review_toolbar"
-        tools:layout="@layout/fragment_review" />
+        tools:layout="@layout/fragment_review"/>
+    <fragment
+        android:id="@+id/chattingListFragment"
+        android:name="com.gta.presentation.ui.chatting.list.ChattingListFragment"
+        android:label="@string/chatting_toolbar"
+        tools:layout="@layout/fragment_chatting_list">
+        <action
+            android:id="@+id/action_chattingListFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/carDetailEditFragment"
@@ -181,5 +204,10 @@
             android:name="CAR_ID"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/myPageTermsFragment"
+        android:name="com.gta.presentation.ui.mypage.MyPageTermsFragment"
+        android:label="@string/mypage_btn_terms"
+        tools:layout="@layout/fragment_mypage_terms"/>
 
 </navigation>

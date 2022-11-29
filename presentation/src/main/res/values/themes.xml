@@ -21,5 +21,16 @@
         <item name="radioButtonStyle">@style/Theme.UCMC.RadioButton</item>
         <item name="materialDividerStyle">@style/Theme.UCMC.Divider</item>
     </style>
+
+    <style name="Theme.UCMC.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.UCMC</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>
 

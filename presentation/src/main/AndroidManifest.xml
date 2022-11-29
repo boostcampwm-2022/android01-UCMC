@@ -17,6 +17,7 @@
         </provider>
         <activity
             android:name=".ui.login.LoginActivity"
+            android:theme="@style/Theme.UCMC.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_bottom_nav_car"/>
 
     <item
-        android:id="@+id/chattingFragment"
+        android:id="@+id/chattingListFragment"
         android:title="@string/chatting"
         android:icon="@drawable/ic_bottom_nav_chatting"/>
 

@@ -9,6 +9,7 @@ object Dependencies {
         const val MATERIAL = "1.7.0"
         const val CONSTRAINT_LAYOUT = "2.1.4"
         const val STARTUP = "1.2.0-alpha01"
+        const val SPLASH = "1.0.0"
         const val DATASTORE = "1.0.0"
 
         // KTX
@@ -49,6 +50,9 @@ object Dependencies {
         const val JUNIT = "4.13.2"
         const val JUNIT_EXT = "1.1.4"
         const val ESPRESSO_CORE = "3.5.0"
+
+        //Github open Library
+        const val INDICATOR = "4.3"
     }
 
     object Classpaths {
@@ -65,6 +69,7 @@ object Dependencies {
             const val APP_COMPAT = "androidx.appcompat:appcompat:${Versions.APP_COMPAT}"
             const val CORE = "androidx.core:core-ktx:${Versions.CORE}"
             const val STARTUP = "androidx.startup:startup-runtime:${Versions.STARTUP}"
+            const val SPLASH = "androidx.core:core-splashscreen:${Versions.SPLASH}"
 
             fun getAll(): ArrayList<String> {
                 return arrayListOf(APP_COMPAT, CORE)
@@ -173,6 +178,8 @@ object Dependencies {
             }
         }
 
+        const val INDICATOR = "com.tbuonomo:dotsindicator:${Versions.INDICATOR}"
+
         const val LOGGING_INTERCEPTER = "com.squareup.okhttp3:logging-interceptor:${Versions.LOGGING_INTERCEPTER}"
 
         const val VIEW_PAGER_2 = "androidx.viewpager2:viewpager2:${Versions.VIEW_PAGER}"
@@ -245,6 +252,8 @@ object Dependencies {
             add(NAVER_MAP)
             add(STREAM_CHAT)
             add(TIMBER)
+            add(AndroidX.SPLASH)
+            add(INDICATOR)
         }
 
         val presentationKaptLibraries = arrayListOf<String>().apply {

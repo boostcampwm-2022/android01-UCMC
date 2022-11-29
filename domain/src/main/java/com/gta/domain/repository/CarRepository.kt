@@ -12,6 +12,7 @@ interface CarRepository {
     fun getCarRentState(carId: String): Flow<RentState>
     fun getCarData(carId: String): Flow<CarDetail>
     fun getCarRentInfo(carId: String): Flow<CarRentInfo>
+    fun getSimpleCar(carId: String): Flow<SimpleCar>
     fun getSimpleCarList(ownerId: String): Flow<List<SimpleCar>>
     fun getAllCars(): Flow<List<SimpleCar>>
     fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<SimpleCar>>
