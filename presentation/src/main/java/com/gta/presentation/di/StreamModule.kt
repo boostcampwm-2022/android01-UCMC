@@ -9,13 +9,22 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.logger.ChatLogLevel
+import io.getstream.chat.android.client.notifications.handler.NotificationConfig
 import io.getstream.chat.android.offline.plugin.configuration.Config
 import io.getstream.chat.android.offline.plugin.factory.StreamOfflinePluginFactory
+import io.getstream.chat.android.pushprovider.firebase.FirebasePushDeviceGenerator
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object StreamModule {
+
+    @Singleton
+    @Provides
+    fun provideNotificationConfig(): NotificationConfig = NotificationConfig(
+        pushDeviceGenerators = listOf(FirebasePushDeviceGenerator()),
+        pushNotificationsEnabled = true
+    )
 
     @Singleton
     @Provides
@@ -29,9 +38,11 @@ object StreamModule {
     @Provides
     fun provideChatClient(
         @ApplicationContext context: Context,
-        offlinePluginFactory: StreamOfflinePluginFactory
+        offlinePluginFactory: StreamOfflinePluginFactory,
+        notificationConfig: NotificationConfig
     ): ChatClient = ChatClient.Builder(STREAM_KEY, context)
         .withPlugin(offlinePluginFactory)
+        .notifications(notificationConfig)
         .logLevel(ChatLogLevel.ALL)
         .build()
 }

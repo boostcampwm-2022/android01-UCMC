@@ -189,6 +189,9 @@ object Dependencies {
         const val STREAM_CHAT =
             "io.getstream:stream-chat-android-ui-components:${Versions.STREAM_CHAT}"
 
+        const val STREAM_PUSH_PROVIDER =
+            "io.getstream:stream-chat-android-pushprovider-firebase:${Versions.STREAM_CHAT}"
+
         const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"
 
         const val INJECT = "javax.inject:javax.inject:${Versions.INJECT}"
@@ -251,6 +254,7 @@ object Dependencies {
             add(Hilt.HILT)
             add(NAVER_MAP)
             add(STREAM_CHAT)
+            add(STREAM_PUSH_PROVIDER)
             add(TIMBER)
             add(AndroidX.SPLASH)
             add(INDICATOR)
