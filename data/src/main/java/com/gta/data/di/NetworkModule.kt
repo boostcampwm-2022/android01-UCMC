@@ -15,7 +15,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -24,38 +23,14 @@ object NetworkModule {
     private const val BASE_URL = "https://dapi.kakao.com"
     private const val CLOUD_MESSAGE_BASE_URL = "https://fcm.googleapis.com"
 
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchRetrofit
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchOkHttpClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchInterceptor
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class CloudMessageRetrofit
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class CloudMessageOkHttpClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class CloudMessageInterceptor
-
-    @SearchOkHttpClient
+    @Qualifiers.SearchOkHttpClient
     @Singleton
     @Provides
-    fun provideOkHttpClient(@SearchInterceptor interceptor: Interceptor): OkHttpClient = OkHttpClient.Builder()
+    fun provideOkHttpClient(@Qualifiers.SearchInterceptor interceptor: Interceptor): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(interceptor)
         .build()
 
-    @SearchInterceptor
+    @Qualifiers.SearchInterceptor
     @Singleton
     @Provides
     fun provideInterceptor() = Interceptor { chain ->
@@ -74,10 +49,10 @@ object NetworkModule {
         .setLenient()
         .create()
 
-    @SearchRetrofit
+    @Qualifiers.SearchRetrofit
     @Singleton
     @Provides
-    fun provideRetrofit(@SearchOkHttpClient okHttpClient: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
+    fun provideRetrofit(@Qualifiers.SearchOkHttpClient okHttpClient: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(BASE_URL)
@@ -85,13 +60,13 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideAddressSearchService(@SearchRetrofit retrofit: Retrofit): AddressSearchService =
+    fun provideAddressSearchService(@Qualifiers.SearchRetrofit retrofit: Retrofit): AddressSearchService =
         retrofit.create(AddressSearchService::class.java)
 
-    @CloudMessageOkHttpClient
+    @Qualifiers.CloudMessageOkHttpClient
     @Singleton
     @Provides
-    fun provideCloudMessageOkHttpClient(@CloudMessageInterceptor interceptor: Interceptor): OkHttpClient {
+    fun provideCloudMessageOkHttpClient(@Qualifiers.CloudMessageInterceptor interceptor: Interceptor): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
@@ -101,7 +76,7 @@ object NetworkModule {
             .build()
     }
 
-    @CloudMessageInterceptor
+    @Qualifiers.CloudMessageInterceptor
     @Singleton
     @Provides
     fun provideCloudMessageInterceptor() = Interceptor { chain ->
@@ -114,10 +89,10 @@ object NetworkModule {
         }
     }
 
-    @CloudMessageRetrofit
+    @Qualifiers.CloudMessageRetrofit
     @Singleton
     @Provides
-    fun provideCloudMessageRetrofit(@CloudMessageOkHttpClient okHttpClient: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
+    fun provideCloudMessageRetrofit(@Qualifiers.CloudMessageOkHttpClient okHttpClient: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(CLOUD_MESSAGE_BASE_URL)
@@ -125,6 +100,6 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideCloudMessageService(@CloudMessageRetrofit retrofit: Retrofit): CloudMessageService =
+    fun provideCloudMessageService(@Qualifiers.CloudMessageRetrofit retrofit: Retrofit): CloudMessageService =
         retrofit.create(CloudMessageService::class.java)
 }
