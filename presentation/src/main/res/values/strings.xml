@@ -130,4 +130,5 @@
 
     <string name="chatting_toolbar">채팅</string>
     <string name="mypage_re_register">다시 등록하기</string>
+    <string name="mypage_no_license">등록된 면허가 없습니다.</string>
 </resources>
