@@ -25,8 +25,8 @@
         tools:layout="@layout/fragment_chatting">
         <argument
             android:name="cid"
-            app:argType="string"
-            android:defaultValue="" />
+            android:defaultValue=""
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -40,11 +40,11 @@
         <action
             android:id="@+id/action_myPageFragment_to_myPageCarListFragment"
             app:destination="@id/myPageCarListFragment"
-            app:popUpTo="@id/myPageFragment"/>
+            app:popUpTo="@id/myPageFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_myPageTermsFragment"
             app:destination="@id/myPageTermsFragment"
-            app:popUpTo="@id/myPageFragment"/>
+            app:popUpTo="@id/myPageFragment" />
     </fragment>
 
     <fragment
@@ -78,6 +78,9 @@
         <action
             android:id="@+id/action_carDetailFragment_to_reservationFragment"
             app:destination="@id/reservationFragment" />
+        <action
+            android:id="@+id/action_carDetailFragment_to_returnCarFragment"
+            app:destination="@id/returnCarFragment" />
     </fragment>
 
     <fragment
@@ -150,7 +153,7 @@
         <action
             android:id="@+id/action_paymentFragment_to_mapFragment"
             app:destination="@id/mapFragment"
-            app:popUpTo="@id/mapFragment"/>
+            app:popUpTo="@id/mapFragment" />
     </fragment>
 
     <fragment
@@ -184,7 +187,20 @@
         android:id="@+id/reviewFragment"
         android:name="com.gta.presentation.ui.review.ReviewFragment"
         android:label="@string/review_toolbar"
-        tools:layout="@layout/fragment_review"/>
+        tools:layout="@layout/fragment_review">
+        <argument
+            android:name="carId"
+            app:argType="string" />
+        <argument
+            android:name="reservationId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_reviewFragment_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/mapFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
     <fragment
         android:id="@+id/chattingListFragment"
         android:name="com.gta.presentation.ui.chatting.list.ChattingListFragment"
@@ -204,10 +220,24 @@
             android:name="CAR_ID"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/myPageTermsFragment"
         android:name="com.gta.presentation.ui.mypage.MyPageTermsFragment"
         android:label="@string/mypage_btn_terms"
-        tools:layout="@layout/fragment_mypage_terms"/>
+        tools:layout="@layout/fragment_mypage_terms" />
+
+    <fragment
+        android:id="@+id/returnCarFragment"
+        android:name="com.gta.presentation.ui.returncar.ReturnCarFragment"
+        android:label="fragment_return_car"
+        tools:layout="@layout/fragment_return_car">
+        <argument
+            android:name="carId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_returnCarFragment_to_reviewFragment"
+            app:destination="@id/reviewFragment" />
+    </fragment>
 
 </navigation>
