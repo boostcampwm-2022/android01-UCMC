@@ -4,6 +4,7 @@ data class Notification(
     val type: String = "",
     val message: String = "",
     val reservationId: String = "",
+    val carId: String = "",
     val fromId: String = ""
 )
 
