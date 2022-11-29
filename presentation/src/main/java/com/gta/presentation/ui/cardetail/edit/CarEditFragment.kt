@@ -13,6 +13,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.gta.presentation.R
@@ -53,10 +55,17 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
         }
     }
 
+    private val constraints: CalendarConstraints by lazy {
+        CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointForward.now())
+            .setEnd(MaterialDatePicker.thisMonthInUtcMilliseconds())
+            .build()
+    }
     private val datePicker by lazy {
         MaterialDatePicker.Builder
             .dateRangePicker()
             .setTheme(R.style.Theme_UCMC_DatePicker)
+            .setCalendarConstraints(constraints)
             .build()
     }
 
