@@ -27,6 +27,9 @@
             android:name="cid"
             app:argType="string"
             android:defaultValue="" />
+        <action
+            android:id="@+id/action_chattingFragment_to_carDetailFragment"
+            app:destination="@id/carDetailFragment" />
     </fragment>
 
     <fragment
