@@ -24,8 +24,6 @@ class LicenseRegistrationFragment : BaseFragment<FragmentLicenseRegistrationBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        (requireActivity() as MainActivity).supportActionBar?.title =
-            getString(R.string.license_registration_toolbar)
         initCollector()
     }
 
