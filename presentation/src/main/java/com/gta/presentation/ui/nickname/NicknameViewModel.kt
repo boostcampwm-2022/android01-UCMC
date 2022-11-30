@@ -8,6 +8,8 @@ import com.gta.domain.usecase.nickname.CheckNicknameStateUseCase
 import com.gta.domain.usecase.nickname.UpdateNicknameUseCase
 import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.getstream.chat.android.client.ChatClient
+import io.getstream.chat.android.client.models.User
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NicknameViewModel @Inject constructor(
     args: SavedStateHandle,
+    private val chatClient: ChatClient,
     private val checkNicknameStateUseCase: CheckNicknameStateUseCase,
     private val updateNicknameUseCase: UpdateNicknameUseCase
 ) : ViewModel() {
@@ -40,9 +43,24 @@ class NicknameViewModel @Inject constructor(
     }
 
     fun updateNickname() {
-        if (nicknameState.value == NicknameState.GREAT) {
+        if (nicknameState.value != NicknameState.GREAT) return
+        viewModelScope.launch {
+            if (updateNicknameUseCase(FirebaseUtil.uid, nickname.value).first()) {
+                updateChatName()
+            }
+        }
+    }
+
+    private fun updateChatName() {
+        val currentUser = chatClient.getCurrentUser() ?: return
+        val updatedUser = User(
+            id = currentUser.id,
+            name = nickname.value,
+            image = currentUser.image
+        )
+        chatClient.updateUser(updatedUser).enqueue { result ->
             viewModelScope.launch {
-                _nicknameChangeEvent.emit(updateNicknameUseCase(FirebaseUtil.uid, nickname.value).first())
+                _nicknameChangeEvent.emit(result.isSuccess)
             }
         }
     }

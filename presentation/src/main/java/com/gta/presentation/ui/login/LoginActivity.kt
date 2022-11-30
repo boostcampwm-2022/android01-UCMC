@@ -9,9 +9,6 @@ import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -19,12 +16,11 @@ import com.gta.domain.model.LoginResult
 import com.gta.presentation.databinding.ActivityLoginBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseActivity
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStream
 import java.io.InputStreamReader
 import javax.inject.Inject
 
@@ -63,21 +59,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
     }
 
     private fun initCollector() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loginEvent.collectLatest { state ->
-                    when (state) {
-                        LoginResult.SUCCESS -> startMainActivity()
-                        LoginResult.FAILURE -> {}
-                        LoginResult.NEWUSER -> {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        }
-                    }
-                }
-
-                viewModel.termsEvent.collectLatest { result ->
-                    if (result) {
-                        startMainActivity()
+        repeatOnStarted(this) {
+            viewModel.loginEvent.collectLatest { state ->
+                when (state) {
+                    LoginResult.SUCCESS -> startMainActivity()
+                    LoginResult.FAILURE -> {}
+                    LoginResult.NEWUSER -> {
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
             }
@@ -109,11 +97,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         binding.btnAccept.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             viewModel.signUp()
-            viewModel.checkTermsAccepted(true)
         }
         binding.btnCancel.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            viewModel.checkTermsAccepted(false)
         }
     }
 
@@ -128,17 +114,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
     }
 
     private fun getAssetData(fileName: String): String {
-        val inputStream: InputStream?
         var result: String
         try {
-            inputStream = resources.assets.open(fileName, AssetManager.ACCESS_BUFFER)
+            val inputStream = resources.assets.open(fileName, AssetManager.ACCESS_BUFFER)
             val reader = BufferedReader(InputStreamReader(inputStream))
             result = reader.readLines().joinToString("\n")
             inputStream.close()
         } catch (e: IOException) {
             result = ""
         }
-
         return result
     }
 }

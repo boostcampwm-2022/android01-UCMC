@@ -3,18 +3,15 @@ package com.gta.presentation.ui.nickname
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.NicknameState
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentNicknameBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NicknameFragment : BaseFragment<FragmentNicknameBinding>(
@@ -31,19 +28,15 @@ class NicknameFragment : BaseFragment<FragmentNicknameBinding>(
     }
 
     private fun initCollector() {
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.nicknameState.collectLatest { state ->
-                    handleNicknameState(state)
-                }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.nicknameState.collectLatest { state ->
+                handleNicknameState(state)
             }
         }
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.nicknameChangeEvent.collectLatest { state ->
-                    if (state) {
-                        findNavController().navigate(R.id.action_nicknameFragment_to_myPageFragment)
-                    }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.nicknameChangeEvent.collectLatest { state ->
+                if (state) {
+                    findNavController().navigate(R.id.action_nicknameFragment_to_myPageFragment)
                 }
             }
         }
