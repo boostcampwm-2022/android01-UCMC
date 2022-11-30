@@ -2,6 +2,7 @@ package com.gta.data.repository
 
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.ReservationDataSource
+import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.Reservation
 import com.gta.domain.repository.ReservationRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -36,5 +37,11 @@ class ReservationRepositoryImpl @Inject constructor(
 
     override fun getReservationCar(reservationId: String, carId: String): Flow<String> {
         return getReservationInfo(reservationId, carId).map { it.carId }
+    }
+
+    override fun getReservationDate(reservationId: String, carId: String): Flow<AvailableDate> {
+        return getReservationInfo(reservationId, carId).map {
+            it.reservationDate
+        }
     }
 }
