@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@drawable/ic_bottom_nav_my"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_notification_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_extra_large"
+            android:text="예약 요청이 왔습니다!"
+            android:textSize="@dimen/font_body_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/iv_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="예약 요청이 왔습니다!" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:text="요청자: 어쩌고 저쩌고"
+            android:textSize="@dimen/font_body_medium"
+            app:layout_constraintStart_toStartOf="@+id/tv_notification_type"
+            app:layout_constraintTop_toBottomOf="@+id/tv_notification_type"
+            tools:text="요청자: 어쩌고 저쩌고" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_target_car"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:text="차 정보: 말티즈 어쩌고 저쩌고"
+            android:textSize="@dimen/font_body_medium"
+            app:layout_constraintStart_toStartOf="@+id/tv_user_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
+            tools:text="차 정보: 말티즈 어쩌고 저쩌고" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_target_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:text="날짜: 언제 ~ 언제"
+            android:textSize="@dimen/font_body_medium"
+            app:layout_constraintStart_toStartOf="@+id/tv_user_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_target_car"
+            tools:text="날짜: 언제 ~ 언제" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
