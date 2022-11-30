@@ -13,15 +13,15 @@ enum class UseState {
 
 class GetUseStateAboutCarUseCase @Inject constructor(
     private val carRepository: CarRepository,
-    private val getNowRentCarUseCase: GetNowRentCarUseCase
+    private val isNowRentCarUseCase: IsNowRentCarUseCase
 ) {
     operator fun invoke(uid: String, carId: String): Flow<UseState> {
-        return getNowRentCarUseCase(uid, carId).combine(carRepository.getCarRentState(carId)) { nowRentCar, carRentState ->
+        return isNowRentCarUseCase(uid, carId).combine(carRepository.getCarRentState(carId)) { isNowRentCar, carRentState ->
             when {
                 uid == carRepository.getOwnerId(carId).first() -> {
                     UseState.OWNER
                 }
-                carId == nowRentCar -> {
+                isNowRentCar -> {
                     UseState.NOW_RENT_USER
                 }
                 RentState.UNAVAILABLE == carRentState -> {

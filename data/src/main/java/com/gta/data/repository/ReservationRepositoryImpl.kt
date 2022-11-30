@@ -8,7 +8,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ReservationRepositoryImpl @Inject constructor(
@@ -34,7 +33,7 @@ class ReservationRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getReservationCar(reservationId: String, carId: String): Flow<String> {
-        return getReservationInfo(reservationId, carId).map { it.carId }
+    override fun getCarReservationIds(carId: String): Flow<List<String>> {
+        return reservationDataSource.getCarReservationIds(carId)
     }
 }

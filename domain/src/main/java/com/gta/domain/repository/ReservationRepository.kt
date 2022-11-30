@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface ReservationRepository {
     fun createReservation(reservation: Reservation): Flow<String>
     fun getReservationInfo(reservationId: String, carId: String): Flow<Reservation>
-    fun getReservationCar(reservationId: String, carId: String): Flow<String>
+    fun getCarReservationIds(carId: String): Flow<List<String>>
 }

@@ -34,6 +34,21 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
         awaitClose()
     }
 
+    fun getCarReservationIds(carId: String): Flow<List<String>> = callbackFlow {
+        fireStore.collection("cars").document(carId).collection("reservations").get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                it.result.map { snapshot ->
+                    snapshot.id
+                }.also { result ->
+                    trySend(result)
+                }
+            } else {
+                trySend(emptyList())
+            }
+        }
+        awaitClose()
+    }
+
     fun getCarReservationDates(carId: String): Flow<List<AvailableDate>> = callbackFlow {
         fireStore.collection("cars").document(carId).collection("reservations").get().addOnCompleteListener {
             if (it.isSuccessful) {

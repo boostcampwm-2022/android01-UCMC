@@ -22,7 +22,7 @@ class UserRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getNowReservation(uid: String): Flow<String?> {
+    override fun getNowReservation(uid: String): Flow<List<String>> {
         return getUser(uid).map {
             it.rentedCar
         }
