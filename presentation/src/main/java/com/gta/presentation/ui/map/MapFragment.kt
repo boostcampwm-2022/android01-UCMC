@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
-    private var naverMap: NaverMap? = null
+    private lateinit var naverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
     private lateinit var backPressedCallback: OnBackPressedCallback
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
@@ -55,9 +55,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
             if (isAllGranted) {
                 if (!locationSource.isActivated) {
-                    naverMap?.locationTrackingMode = LocationTrackingMode.None
+                    naverMap.locationTrackingMode = LocationTrackingMode.None
                 } else {
-                    naverMap?.locationTrackingMode = LocationTrackingMode.Follow
+                    naverMap.locationTrackingMode = LocationTrackingMode.Follow
                 }
             }
         }
@@ -71,7 +71,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         BottomSheetBehavior.BottomSheetCallback() {
         override fun onStateChanged(bottomSheet: View, newState: Int) {}
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            naverMap?.setContentPadding(
+            naverMap.setContentPadding(
                 0,
                 0,
                 0,
@@ -105,9 +105,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupWithMap() {
-        naverMap?.locationSource = locationSource
-        naverMap?.locationTrackingMode = mapMode
-        naverMap?.uiSettings?.run {
+        naverMap.locationSource = locationSource
+        naverMap.locationTrackingMode = mapMode
+        naverMap.uiSettings.apply {
             isCompassEnabled = true
             isScaleBarEnabled = true
             isLocationButtonEnabled = true
@@ -143,7 +143,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
                                 setOnClickListener {
                                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                                    naverMap?.moveCamera(
+                                    naverMap.moveCamera(
                                         CameraUpdate.scrollTo(position)
                                             .animate(CameraAnimation.Easing)
                                     )
@@ -173,7 +173,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         menuAdapter.setOnItemClickListener(object : OnItemClickListener<LocationInfo> {
             override fun onClick(value: LocationInfo) {
                 binding.etSearch.setText(value.name ?: value.address)
-                naverMap?.moveCamera(
+                naverMap.moveCamera(
                     CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude))
                         .animate(CameraAnimation.Easing)
                 )
@@ -203,7 +203,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     private fun getNearCars() {
-        naverMap?.let { naverMap ->
+        naverMap.let { naverMap ->
             var minLat = 91.0
             var maxLat = -91.0
             var minLng = 181.0
@@ -262,9 +262,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onPause() {
-        naverMap?.let {
-            mapMode = it.locationTrackingMode
-        }
+        mapMode = naverMap.locationTrackingMode
         binding.mapView.onPause()
         super.onPause()
     }
