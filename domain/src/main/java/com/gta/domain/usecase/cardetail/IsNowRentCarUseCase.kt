@@ -18,8 +18,6 @@ class IsNowRentCarUseCase @Inject constructor(
          */
         return userRepository.getNowReservation(uid).combine(reservationRepository.getCarReservationIds(carId)) { nowReservationIds, carReservationIds ->
             val filterList = carReservationIds.filter { nowReservationIds.contains(it) }
-            println(carReservationIds.toString())
-            println(nowReservationIds.toString())
             filterList.isNotEmpty()
         }
     }
