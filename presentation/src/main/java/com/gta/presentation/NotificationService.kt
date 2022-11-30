@@ -2,12 +2,16 @@ package com.gta.presentation
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import androidx.core.app.NotificationCompat
+import androidx.navigation.NavDeepLinkBuilder
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.gta.domain.usecase.notification.SetMessageTokenUseCase
+import com.gta.presentation.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +21,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationService : FirebaseMessagingService() {
-    @Inject lateinit var setMessageTokenUseCase: SetMessageTokenUseCase
+    @Inject
+    lateinit var setMessageTokenUseCase: SetMessageTokenUseCase
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
@@ -41,13 +46,43 @@ class NotificationService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val builder = NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
-            .setSmallIcon(R.drawable.ic_logo)
-            .setContentTitle(message.data["type"])
-            .setContentText(message.data["message"])
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+        val intent = createPendingIntent(message)
+
+        val builder =
+            NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
+                .setSmallIcon(R.drawable.ic_logo)
+                .setContentTitle(message.data["type"])
+                .setContentText(message.data["message"])
+                .setContentIntent(intent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         notificationManager.notify(0, builder.build())
+    }
+
+    private fun createPendingIntent(message: RemoteMessage): PendingIntent {
+        val type = message.data["type"]
+        val carId = message.data["carId"]
+        val reservationId = message.data["reservationId"]
+
+        val arguments = Bundle().apply {
+            putString("CAR_ID", carId)
+            putString("RESERVATION_ID", reservationId)
+        }
+
+        val destinationId = when (type) {
+            "예약 요청" -> R.id.reservationRequestFragment
+            "예약 수락" -> R.id.notificationFragment
+            "예약 거절" -> R.id.notificationFragment
+            "차량 반납" -> R.id.mapFragment
+            else -> R.id.mapFragment
+        }
+
+        return NavDeepLinkBuilder(this)
+            .setComponentName(MainActivity::class.java)
+            .setGraph(R.navigation.nav_main)
+            .setDestination(destinationId)
+            .setArguments(arguments)
+            .createPendingIntent()
     }
 
     override fun onDestroy() {
