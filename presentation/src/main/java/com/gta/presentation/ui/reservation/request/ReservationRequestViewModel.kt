@@ -6,9 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.Reservation
 import com.gta.domain.model.ReservationState
+import com.gta.domain.model.UserProfile
 import com.gta.domain.usecase.reservation.FinishReservationUseCase
 import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.domain.usecase.reservation.GetReservationUseCase
+import com.gta.domain.usecase.user.GetUserProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class ReservationRequestViewModel @Inject constructor(
     private val args: SavedStateHandle,
     private val getCarRentInfoUseCase: GetCarRentInfoUseCase,
+    private val getUserProfileUseCase: GetUserProfileUseCase,
     private val finishReservationUseCase: FinishReservationUseCase,
     private val getReservationUseCase: GetReservationUseCase
 ) : ViewModel() {
@@ -44,6 +47,14 @@ class ReservationRequestViewModel @Inject constructor(
                 initialValue = Reservation()
             )
         }
+    }
+
+    val user: StateFlow<UserProfile>? = reservation?.value?.let { reservation ->
+        getUserProfileUseCase(reservation.userId).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UserProfile()
+        )
     }
 
     private val _createReservationEvent = MutableSharedFlow<Boolean>()
