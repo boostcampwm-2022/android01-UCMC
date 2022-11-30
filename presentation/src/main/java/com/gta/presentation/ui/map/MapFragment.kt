@@ -35,6 +35,7 @@ import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
@@ -204,40 +205,37 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     private fun getNearCars() {
         naverMap?.let { naverMap ->
-            val minLocation =
-                naverMap.projection.fromScreenLocation(
-                    PointF(
-                        binding.mapView.right.toFloat(),
-                        binding.mapView.top.toFloat()
-                    )
-                )
-            val maxLocation = naverMap.projection.fromScreenLocation(
-                PointF(
-                    binding.mapView.left.toFloat(),
-                    binding.mapView.bottom.toFloat()
-                )
-            )
+            var minLat = 91.0
+            var maxLat = -91.0
+            var minLng = 181.0
+            var maxLng = -181.0
 
-            val minLat: Double
-            val maxLat: Double
-            val minLng: Double
-            val maxLng: Double
+            Timber.d("start")
+            listOf(
+                PointF(binding.mapView.left.toFloat(), binding.mapView.top.toFloat()),
+                PointF(binding.mapView.left.toFloat(), binding.mapView.bottom.toFloat()),
+                PointF(binding.mapView.right.toFloat(), binding.mapView.top.toFloat()),
+                PointF(binding.mapView.right.toFloat(), binding.mapView.bottom.toFloat())
+            ).forEach { location ->
+                val tempLocation = naverMap.projection.fromScreenLocation(location)
+                Timber.d(tempLocation.latitude.toString() + " " + tempLocation.longitude.toString())
 
-            if (minLocation.latitude < maxLocation.latitude) {
-                minLat = minLocation.latitude
-                maxLat = maxLocation.latitude
-            } else {
-                minLat = maxLocation.latitude
-                maxLat = minLocation.latitude
+                if (tempLocation.latitude < minLat) {
+                    minLat = tempLocation.latitude
+                }
+                if (tempLocation.latitude > maxLat) {
+                    maxLat = tempLocation.latitude
+                }
+
+                if (tempLocation.longitude < minLng) {
+                    minLng = tempLocation.longitude
+                }
+                if (tempLocation.longitude > maxLng) {
+                    maxLng = tempLocation.longitude
+                }
             }
-
-            if (minLocation.longitude < maxLocation.longitude) {
-                minLng = minLocation.longitude
-                maxLng = maxLocation.longitude
-            } else {
-                minLng = maxLocation.longitude
-                maxLng = minLocation.longitude
-            }
+            Timber.d("$minLat $minLng $maxLat $maxLng")
+            Timber.d("end")
             viewModel.setPosition(Coordinate(minLat, minLng), Coordinate(maxLat, maxLng))
         }
     }
