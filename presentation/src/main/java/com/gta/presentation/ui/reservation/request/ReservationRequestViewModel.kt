@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.Reservation
 import com.gta.domain.model.ReservationState
-import com.gta.domain.usecase.reservation.CreateReservationUseCase
 import com.gta.domain.usecase.reservation.FinishReservationUseCase
 import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.domain.usecase.reservation.GetReservationUseCase
