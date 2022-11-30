@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="carImage"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <io.getstream.chat.android.ui.avatar.AvatarView
+            android:id="@+id/iv_channel_list_thumb"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            style="@style/StreamUi.ChannelList.Item.Avatar"
+            android:layout_marginVertical="@dimen/padding_medium"
+            android:layout_marginStart="@dimen/padding_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_channel_list_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="@style/StreamUiTextAppearance.BodyBold"
+            app:layout_constraintBottom_toTopOf="@id/tv_channel_list_message"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/iv_channel_list_thumb"
+            app:layout_constraintTop_toTopOf="@+id/iv_channel_list_thumb"
+            tools:text="지존동훈" />
+
+        <TextView
+            android:id="@+id/tv_channel_list_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_small"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="@style/StreamUiTextAppearance.Footnote"
+            app:layout_constraintTop_toTopOf="@id/tv_channel_list_name"
+            app:layout_constraintBottom_toBottomOf="@id/tv_channel_list_name"
+            app:layout_constraintStart_toEndOf="@id/tv_channel_list_name"
+            tools:text="방금 전" />
+
+        <TextView
+            android:id="@+id/tv_channel_list_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/StreamUiTextAppearance.Footnote"
+            android:layout_marginEnd="@dimen/padding_small"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_channel_list_thumb"
+            app:layout_constraintEnd_toStartOf="@+id/iv_channel_list_car"
+            app:layout_constraintStart_toStartOf="@+id/tv_channel_list_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_channel_list_name"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            tools:text="안녕" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_channel_list_car"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="@dimen/padding_medium"
+            android:scaleType="centerCrop"
+            app:image_uri="@{carImage}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize20Percent"
+            tools:src="@tools:sample/avatars" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
