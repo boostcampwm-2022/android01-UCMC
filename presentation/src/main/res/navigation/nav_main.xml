@@ -249,6 +249,16 @@
         android:id="@+id/reservationRequestFragment"
         android:name="com.gta.presentation.ui.reservation.request.ReservationRequestFragment"
         android:label="fragment_reservation_request"
-        tools:layout="@layout/fragment_reservation_request"/>
+        tools:layout="@layout/fragment_reservation_request">
+
+        <argument
+            android:name="CAR_ID"
+            app:argType="string" />
+        <argument
+            android:name="RESERVATION_ID"
+            app:argType="string" />
+        <deepLink app:uri="App://reservationRequestFragment?CAR_ID={CAR_ID}?RESERVATION_ID={RESERVATION_ID}" />
+
+    </fragment>
 
 </navigation>
