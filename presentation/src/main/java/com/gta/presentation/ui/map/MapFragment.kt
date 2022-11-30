@@ -35,7 +35,6 @@ import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
@@ -210,7 +209,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             var minLng = 181.0
             var maxLng = -181.0
 
-            Timber.d("start")
             listOf(
                 PointF(binding.mapView.left.toFloat(), binding.mapView.top.toFloat()),
                 PointF(binding.mapView.left.toFloat(), binding.mapView.bottom.toFloat()),
@@ -218,7 +216,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                 PointF(binding.mapView.right.toFloat(), binding.mapView.bottom.toFloat())
             ).forEach { location ->
                 val tempLocation = naverMap.projection.fromScreenLocation(location)
-                Timber.d(tempLocation.latitude.toString() + " " + tempLocation.longitude.toString())
 
                 if (tempLocation.latitude < minLat) {
                     minLat = tempLocation.latitude
@@ -234,8 +231,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                     maxLng = tempLocation.longitude
                 }
             }
-            Timber.d("$minLat $minLng $maxLat $maxLng")
-            Timber.d("end")
             viewModel.setPosition(Coordinate(minLat, minLng), Coordinate(maxLat, maxLng))
         }
     }
