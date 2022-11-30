@@ -37,7 +37,8 @@ object StreamModule {
                 val intents = NavDeepLinkBuilder(context)
                     .setComponentName(MainActivity::class.java)
                     .setGraph(R.navigation.nav_main)
-                    .setDestination(R.id.chattingFragment, bundle)
+                    .addDestination(R.id.chattingListFragment)
+                    .addDestination(R.id.chattingFragment, bundle)
                     .createTaskStackBuilder().intents
                 intents.last()
             }
