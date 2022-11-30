@@ -9,11 +9,24 @@ import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class ReservationDataSource @Inject constructor(private val fireStore: FirebaseFirestore) {
-    fun createReservation(reservation: Reservation, reservationId: String): Flow<Boolean> = callbackFlow {
+    fun createReservationInCar(reservation: Reservation, reservationId: String): Flow<Boolean> = callbackFlow {
         fireStore
             .collection("cars")
             .document(reservation.carId)
             .collection("reservations")
+            .document(reservationId)
+            .set(reservation)
+            .addOnCompleteListener {
+                trySend(it.isSuccessful)
+            }
+        awaitClose()
+    }
+
+    fun createReservationInUser(reservation: Reservation, reservationId: String): Flow<Boolean> = callbackFlow {
+        fireStore
+            .collection("users")
+            .document(reservation.userId)
+            .collection("transactions")
             .document(reservationId)
             .set(reservation)
             .addOnCompleteListener {
