@@ -14,7 +14,7 @@ class LoginDataSource @Inject constructor(
         fireStore
             .collection("users")
             .document(uid)
-            .set(UserInfo(chatId = uid.hashCode().toLong(), messageToken = messageToken))
+            .set(UserInfo(messageToken = messageToken))
             .addOnCompleteListener {
                 trySend(it.isSuccessful)
             }
