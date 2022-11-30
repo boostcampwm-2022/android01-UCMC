@@ -286,5 +286,10 @@
             android:name="RESERVATION_ID"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationListFragment"
+        android:name="com.gta.presentation.ui.notification.NotificationListFragment"
+        android:label="fragment_notification_list"
+        tools:layout="@layout/fragment_notification_list" />
 
 </navigation>

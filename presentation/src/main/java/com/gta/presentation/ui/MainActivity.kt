@@ -11,7 +11,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.snackbar.Snackbar
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ActivityMainBinding
 import com.gta.presentation.secret.NAVER_MAP_CLIENT_ID
@@ -59,16 +58,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_top_notification -> {
-                Snackbar.make(binding.bnvMain, "클릭", Snackbar.LENGTH_SHORT).show()
+                navController.navigate(R.id.notificationListFragment)
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        when (navController.currentDestination?.id) {
+            R.id.chattingListFragment, R.id.myPageFragment -> {
+                menu?.findItem(R.id.menu_top_notification)?.isVisible = true
+            }
+            else -> {
+                menu?.findItem(R.id.menu_top_notification)?.isVisible = false
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu)
     }
 
     private fun setupWithBottomNavigation() {
         binding.bnvMain.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            invalidateOptionsMenu()
             when (destination.id) {
                 R.id.mapFragment -> {
                     supportActionBar?.hide()
