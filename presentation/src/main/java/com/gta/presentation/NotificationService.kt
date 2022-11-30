@@ -61,20 +61,27 @@ class NotificationService : FirebaseMessagingService() {
 
     private fun createPendingIntent(message: RemoteMessage): PendingIntent {
         val type = message.data["type"]
-        val carId = message.data["carId"]
-        val reservationId = message.data["reservationId"]
+        val arguments = Bundle()
+        val destinationId: Int
 
-        val arguments = Bundle().apply {
-            putString("CAR_ID", carId)
-            putString("RESERVATION_ID", reservationId)
-        }
-
-        val destinationId = when (type) {
-            "예약 요청" -> R.id.reservationRequestFragment
-            "예약 수락" -> R.id.notificationFragment
-            "예약 거절" -> R.id.notificationFragment
-            "차량 반납" -> R.id.mapFragment
-            else -> R.id.mapFragment
+        when (type) {
+            "예약 요청" -> {
+                arguments.putString("CAR_ID", message.data["carId"])
+                arguments.putString("RESERVATION_ID", message.data["reservationId"])
+                destinationId = R.id.reservationRequestFragment
+            }
+            "예약 수락" -> {
+                destinationId = R.id.notificationFragment
+            }
+            "예약 거절" -> {
+                destinationId = R.id.notificationFragment
+            }
+            "차량 반납" -> {
+                destinationId = R.id.mapFragment // TODO returnFragment
+            }
+            else -> {
+                destinationId = R.id.mapFragment
+            }
         }
 
         return NavDeepLinkBuilder(this)
