@@ -1,7 +1,7 @@
 package com.gta.domain.model
 
 enum class ReservationState(val string: String) {
-    CANCEL("취소"), PENDING("보류중"), ACCEPT("허락")
+    DECLINE("취소"), PENDING("보류중"), ACCEPT("허락")
 }
 
 data class Reservation(
