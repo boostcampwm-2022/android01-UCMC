@@ -24,7 +24,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object StreamModule {
-    
     @Singleton
     @Provides
     fun provideNotificationHandler(@ApplicationContext context: Context): NotificationHandler =
@@ -43,7 +42,7 @@ object StreamModule {
                 intents.last()
             }
         )
-    
+
     @Singleton
     @Provides
     fun provideNotificationConfig(): NotificationConfig = NotificationConfig(

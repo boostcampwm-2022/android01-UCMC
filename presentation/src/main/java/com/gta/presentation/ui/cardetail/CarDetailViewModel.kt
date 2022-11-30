@@ -74,21 +74,19 @@ class CarDetailViewModel @Inject constructor(
     }
 
     private fun createChatChannel(cid: String) {
-        chatClient.createChannel(
+        val result = chatClient.createChannel(
             channelType = "messaging",
             channelId = cid,
             memberIds = listOf(FirebaseUtil.uid, carInfo.value.owner.id),
             extraData = emptyMap()
-        ).enqueue() { result ->
-            if (result.isSuccess) {
-                val str = result.data().members.joinToString("\n")
-                Timber.tag("chatting").i(str)
-                viewModelScope.launch {
-                    _navigateChattingEvent.emit(result.data().cid)
-                }
-            } else {
-                Timber.tag("chatting").i(result.error().message)
+        ).execute()
+
+        if (result.isSuccess) {
+            viewModelScope.launch {
+                _navigateChattingEvent.emit(result.data().cid)
             }
+        } else {
+            Timber.tag("chatting").i(result.error().message)
         }
     }
 

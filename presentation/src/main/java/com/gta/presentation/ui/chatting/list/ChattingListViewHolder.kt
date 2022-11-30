@@ -43,7 +43,7 @@ class ChattingListViewHolder(
         LayoutInflater.from(parent.context),
         parent,
         false
-    ),
+    )
 ) : BaseChannelListItemViewHolder(binding.root) {
 
     private lateinit var channel: Channel

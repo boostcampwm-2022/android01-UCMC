@@ -46,7 +46,7 @@ class NotificationService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         runCatching {
-            if(FirebaseMessagingDelegate.handleRemoteMessage(message).not()) {
+            if (FirebaseMessagingDelegate.handleRemoteMessage(message).not()) {
                 handleUCMCMessage(message)
             }
         }
