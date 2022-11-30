@@ -2,12 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.reservation.reservationFragment">
+    tools:context=".ui.reservation.request.reservationRequestFragment">
 
     <data>
-
         <import type="com.gta.presentation.model.DateType" />
-
         <variable
             name="vm"
             type="com.gta.presentation.ui.reservation.request.ReservationRequestViewModel" />
@@ -54,9 +52,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
-                android:text="@{vm.car.model}"
                 android:background="@drawable/bg_reservation_tag"
                 android:paddingHorizontal="@dimen/padding_small"
+                android:text="@{vm.car.model}"
                 android:textAppearance="@style/Body"
                 app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
@@ -82,7 +80,7 @@
                 app:date_type="@{DateType.RANGE}"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_time"
-                app:selection="@{vm.reservationDate}"
+                app:selection="@{vm.reservation.reservationDate}"
                 tools:text="22/11/01 ~ 22/11/02" />
 
             <TextView
@@ -92,18 +90,10 @@
                 android:layout_marginEnd="@dimen/padding_small"
                 android:textAppearance="@style/Body"
                 app:date_type="@{DateType.DAY_COUNT}"
-                app:layout_constraintEnd_toStartOf="@id/iv_reservation_next"
+                app:layout_constraintEnd_toStartOf="@id/gl_reservation_end"
                 app:layout_constraintTop_toTopOf="@id/tv_reservation_time"
-                app:selection="@{vm.reservationDate}"
+                app:selection="@{vm.reservation.reservationDate}"
                 tools:text="총 1일" />
-
-            <ImageView
-                android:id="@+id/iv_reservation_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_all_arrow_right"
-                app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
-                app:layout_constraintTop_toTopOf="@id/tv_reservation_time" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/view_reservation_divider"
@@ -123,35 +113,6 @@
                 app:layout_constraintTop_toBottomOf="@id/view_reservation_divider" />
 
             <TextView
-                android:id="@+id/tv_reservation_title_fee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"
-                android:text="@string/reservation_fee"
-                android:textAppearance="@style/Body"
-                app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
-                app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_payment_info" />
-
-            <TextView
-                android:id="@+id/tv_reservation_fee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{@string/price_format(vm.basePrice ?? 0)}"
-                android:textAppearance="@style/Body"
-                app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
-                app:layout_constraintTop_toTopOf="@id/tv_reservation_title_fee"
-                tools:text="88,860 원" />
-
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/view_reservation_sub_divider"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/padding_medium"
-                app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
-                app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
-                app:layout_constraintTop_toBottomOf="@id/tv_reservation_fee" />
-
-            <TextView
                 android:id="@+id/tv_reservation_title_insurance_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -159,7 +120,7 @@
                 android:text="@string/insurance_fee"
                 android:textAppearance="@style/Body"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
-                app:layout_constraintTop_toBottomOf="@id/view_reservation_sub_divider" />
+                app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_payment_info" />
 
             <RadioGroup
                 android:id="@+id/rg_reservation_insurance_options"
@@ -175,22 +136,22 @@
                     android:id="@+id/rg_reservation_insurance_option_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/insurance_option_1"
-                    android:enabled="false"/>
+                    android:enabled="false"
+                    android:text="@string/insurance_option_1" />
 
                 <RadioButton
                     android:id="@+id/rg_reservation_insurance_option_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/insurance_option_2"
-                    android:enabled="false"/>
+                    android:enabled="false"
+                    android:text="@string/insurance_option_2" />
 
                 <RadioButton
                     android:id="@+id/rg_reservation_insurance_option_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/insurance_option_3"
-                    android:enabled="false"/>
+                    android:enabled="false"
+                    android:text="@string/insurance_option_3" />
 
             </RadioGroup>
 
@@ -203,7 +164,7 @@
                 android:textColor="@color/neutral40"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/btn_reservation_paying"
+                app:layout_constraintBottom_toTopOf="@id/btn_reservation_accept"
                 app:layout_constraintStart_toStartOf="@id/gl_reservation_start"
                 app:layout_constraintTop_toBottomOf="@id/rg_reservation_insurance_options" />
 
@@ -211,7 +172,7 @@
                 android:id="@+id/tv_reservation_total_payment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/price_format(vm.totalPrice ?? 0)}"
+                android:text="@{@string/price_format(vm.reservation.price)}"
                 android:textAppearance="@style/Title"
                 android:textColor="@color/primaryColor"
                 app:layout_constraintBottom_toBottomOf="@id/tv_reservation_title_total_payment"
@@ -220,18 +181,31 @@
                 tools:text="114,430 원" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_reservation_paying"
+                android:id="@+id/btn_reservation_decline"
                 style="@style/Theme.UCMC.BottomButton"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
-                android:enabled="@{vm.reservationDate != null &amp;&amp; vm.insuranceOption != null &amp;&amp; vm.isPaymentOptionChecked}"
-                android:onClick="@{() -> vm.createReservation()}"
-                android:text="@string/action_pay"
-                app:layout_constraintTop_toBottomOf="@id/tv_reservation_total_payment"
+                android:backgroundTint="?attr/colorError"
+                android:onClick="@{() -> vm.createReservation(false)}"
+                android:text="@string/reservation_request_decline"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/gl_reservation_end"
-                app:layout_constraintStart_toStartOf="@id/gl_reservation_start"/>
+                app:layout_constraintEnd_toStartOf="@id/btn_reservation_accept"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_reservation_total_payment" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_reservation_accept"
+                style="@style/Theme.UCMC.BottomButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:onClick="@{() -> vm.createReservation(true)}"
+                android:text="@string/reservation_request_accept"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_reservation_decline"
+                app:layout_constraintTop_toBottomOf="@id/tv_reservation_total_payment" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
