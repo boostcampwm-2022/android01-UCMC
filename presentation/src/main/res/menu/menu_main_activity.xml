@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_top_notification"
+        android:icon="@drawable/ic_notification"
+        app:showAsAction="always"
+        android:title="알림" />
+</menu>
