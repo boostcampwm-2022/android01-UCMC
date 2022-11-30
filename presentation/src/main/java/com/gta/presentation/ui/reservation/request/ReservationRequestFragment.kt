@@ -34,7 +34,7 @@ class ReservationRequestFragment :
 
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.createReservationEvent.collect {
-                findNavController().popBackStack()
+                if (it) findNavController().popBackStack()
             }
         }
     }
