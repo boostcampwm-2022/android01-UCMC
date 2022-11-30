@@ -22,7 +22,7 @@ object StreamModule {
     @Singleton
     @Provides
     fun provideNotificationConfig(): NotificationConfig = NotificationConfig(
-        pushDeviceGenerators = listOf(FirebasePushDeviceGenerator()),
+        pushDeviceGenerators = listOf(FirebasePushDeviceGenerator(providerName = "ucmc")),
         pushNotificationsEnabled = true
     )
 
