@@ -257,8 +257,6 @@
         <argument
             android:name="RESERVATION_ID"
             app:argType="string" />
-        <deepLink app:uri="App://reservationRequestFragment?CAR_ID={CAR_ID}?RESERVATION_ID={RESERVATION_ID}" />
-
     </fragment>
 
 </navigation>
