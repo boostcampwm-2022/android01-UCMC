@@ -1,7 +1,11 @@
 package com.gta.presentation.ui.returncar
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +22,14 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ReturnCarFragment : BaseFragment<FragmentReturnCarBinding>(R.layout.fragment_return_car) {
     private val viewModel: ReturnCarViewModel by viewModels()
+
+    private val remainTimeMsgFormat by lazy { getString(R.string.return_car_title) }
+    private val primaryColor by lazy {
+        ContextCompat.getColor(
+            requireContext(),
+            R.color.primaryColor
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
@@ -44,6 +56,23 @@ class ReturnCarFragment : BaseFragment<FragmentReturnCarBinding>(R.layout.fragme
                     if (reservation != null) {
                         viewModel.emitRemainTime()
                     }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.remainTime.collectLatest { remainTime ->
+                    val text = String.format(remainTimeMsgFormat, remainTime)
+                    val spannable = SpannableString(text).apply {
+                        setSpan(
+                            ForegroundColorSpan(primaryColor),
+                            5,
+                            5 + remainTime.length,
+                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                        )
+                    }
+                    binding.tvReturnRemainTime.text = spannable
                 }
             }
         }

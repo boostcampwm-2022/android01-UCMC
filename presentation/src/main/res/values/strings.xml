@@ -133,4 +133,6 @@
     <string name="return_car">반납하기</string>
     <string name="return_car_msg">차주님과 사전 합의된 장소에 반납해주세요.\n위반시 추가 요금이 발생합니다.</string>
     <string name="return_car_title">반납까지 %s 남았습니다.\n차량을 반납할까요?</string>
+    <string name="hour_format">%d시간</string>
+    <string name="day_hour_format">%d일 %d시간</string>
 </resources>
