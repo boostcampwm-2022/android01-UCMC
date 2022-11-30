@@ -39,10 +39,11 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun changeThumbnail(uri: String) {
+        val uid = auth.uid ?: return
         val previousImage = userProfile.value.image
         viewModelScope.launch {
             if (previousImage.isNotEmpty()) {
-                deleteThumbnailUseCase(previousImage).first()
+                deleteThumbnailUseCase(uid, previousImage).first()
             }
             _userProfile.emit(userProfile.value.copy(image = uri))
         }

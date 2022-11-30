@@ -55,6 +55,9 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
         binding.btnMypageTerms.setOnClickListener {
             findNavController().navigate(R.id.action_myPageFragment_to_myPageTermsFragment)
         }
+        binding.btnMypageLicense.setOnClickListener {
+            findNavController().navigate(R.id.action_myPageFragment_to_myPageLicenseFragment)
+        }
     }
 
     private fun initCollector() {

@@ -10,12 +10,48 @@ import javax.inject.Inject
 class StorageDataSource @Inject constructor(
     private val storageReference: StorageReference
 ) {
-    fun uploadThumbnail(uri: String): Flow<String?> = callbackFlow {
+    fun uploadThumbnail(uid: String, uri: String): Flow<String?> = callbackFlow {
         val image = Uri.parse(uri)
-        val name = image.path?.substringAfterLast("/") ?: ""
         val ref = storageReference
-            .child("thumb")
-            .child("${System.currentTimeMillis()}$name")
+            .child("users")
+            .child(uid)
+            .child("thumbnail")
+        ref.putFile(image).continueWithTask {
+            ref.downloadUrl
+        }.addOnCompleteListener {
+            if (it.isSuccessful) {
+                trySend(it.result.toString())
+            } else {
+                trySend(null)
+            }
+        }
+        awaitClose()
+    }
+
+    fun uploadPinkSlip(uid: String, uri: String): Flow<String?> = callbackFlow {
+        val image = Uri.parse(uri)
+        val ref = storageReference
+            .child("users")
+            .child(uid)
+            .child("pinkslip")
+        ref.putFile(image).continueWithTask {
+            ref.downloadUrl
+        }.addOnCompleteListener {
+            if (it.isSuccessful) {
+                trySend(it.result.toString())
+            } else {
+                trySend(null)
+            }
+        }
+        awaitClose()
+    }
+
+    fun uploadLicense(uid: String, uri: String): Flow<String?> = callbackFlow {
+        val image = Uri.parse(uri)
+        val ref = storageReference
+            .child("users")
+            .child(uid)
+            .child("license")
         ref.putFile(image).continueWithTask {
             ref.downloadUrl
         }.addOnCompleteListener {

@@ -17,7 +17,7 @@ class ReservationRepositoryImpl @Inject constructor(
 ) : ReservationRepository {
     override fun createReservation(reservation: Reservation): Flow<String> = callbackFlow {
         val reservationId = "${System.currentTimeMillis()}${reservation.carId}"
-        carDataSource.getCar(reservation.carId).first()?.let { car ->
+        carDataSource.getCar(reservation.carId).first()?.let {
             if (reservationDataSource.createReservation(reservation, reservationId).first()) {
                 trySend(reservationId)
             } else {
