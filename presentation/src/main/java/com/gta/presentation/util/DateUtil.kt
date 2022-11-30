@@ -6,6 +6,7 @@ import kotlin.math.abs
 
 object DateUtil {
     private const val DAY_TIME_UNIT = 60 * 60 * 24 * 1000L
+    const val HOUR_UNIT = 60 * 60 * 1000L
 
     val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
 

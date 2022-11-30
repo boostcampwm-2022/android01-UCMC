@@ -4,6 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.returncar.ReturnCarFragment">
 
+    <data>
+
+        <variable
+            name="vm"
+            type="com.gta.presentation.ui.returncar.ReturnCarViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,18 +21,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_large"
+            android:text="@{@string/return_car_title(vm.remainTime)}"
             android:textColor="@color/black"
             android:textSize="@dimen/font_headline_small"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="반납까지 얼마 남았습니다.\n차량을 반납할까요?" />
+            tools:text="반납까지 - 남았습니다.\n차량을 반납할까요?" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_return_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_small"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="@dimen/padding_large"
             app:cardCornerRadius="10dp"
             app:cardElevation="@dimen/padding_small"
             app:layout_constraintStart_toStartOf="parent"
