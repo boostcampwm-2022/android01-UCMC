@@ -7,6 +7,7 @@ import com.gta.domain.model.Coordinate
 import com.gta.domain.model.PinkSlip
 import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
+import com.gta.domain.model.UpdateCar
 import com.gta.domain.model.UserProfile
 
 data class Car(
@@ -54,4 +55,16 @@ fun Car.toDetailCar(id: String, owner: UserProfile): CarDetail = CarDetail(
     availableDate = availableDate,
     images = images,
     owner = owner
+)
+
+fun Car.update(update: UpdateCar): Car = Car(
+    pinkSlip = pinkSlip,
+    ownerId = ownerId,
+    images = update.images,
+    price = update.price,
+    comment = update.comment,
+    rentState = update.rentState.string,
+    availableDate = update.availableDate,
+    location = update.location,
+    coordinate = update.coordinate
 )

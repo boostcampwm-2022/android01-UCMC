@@ -22,8 +22,8 @@
 
     <string name="car_edit_label">내 차 수정하기</string>
     <string name="car_edit_price_label">금액 1일</string>
-    <string name="car_edit_day_label">대여 가능 날짜</string>
     <string name="car_edit_day_able">예약 가능 여부</string>
+    <string name="car_edit_day_label">대여 가능 날짜</string>
     <string name="car_edit_location_label">대여/반납 위치</string>
     <string name="car_edit_rent_unavailable">대여 불가능</string>
     <string name="car_edit_comment_helper_message">차 상세 페이지에 올릴 내용을 작성해 주세요</string>
@@ -32,6 +32,8 @@
     <string name="car_edit_images_count">%d/10</string>
     <string name="car_edit_price_format">원</string>
     <string name="car_edit_rent_available_day_format">%s ~ %s</string>
+
+    <string name="car_edit_wait_loading_text">변경사항을 업로드 중입니다.\n잠시만 기다려 주세요..</string>
 
     <string name="car_detail_day_price">금액 : 1일 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>
