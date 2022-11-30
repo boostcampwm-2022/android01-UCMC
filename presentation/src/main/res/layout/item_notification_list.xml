@@ -8,62 +8,62 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_medium"
+            android:id="@+id/iv_thumbnail"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="@dimen/padding_large"
             android:src="@drawable/ic_bottom_nav_my"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_notification_type"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_extra_large"
-            android:text="예약 요청이 왔습니다!"
-            android:textSize="@dimen/font_body_large"
+            android:layout_marginStart="@dimen/padding_medium"
+            android:text="예약 요청"
+            android:textColor="?attr/colorOnBackground"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_title_medium"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toEndOf="@+id/iv_profile"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/iv_thumbnail"
+            app:layout_constraintTop_toTopOf="@id/iv_thumbnail"
             tools:text="예약 요청이 왔습니다!" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_user_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_body"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
             android:text="요청자: 어쩌고 저쩌고"
             android:textSize="@dimen/font_body_medium"
             app:layout_constraintStart_toStartOf="@+id/tv_notification_type"
             app:layout_constraintTop_toBottomOf="@+id/tv_notification_type"
-            tools:text="요청자: 어쩌고 저쩌고" />
+            app:layout_constraintBottom_toBottomOf="@+id/iv_thumbnail"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="이동훈님이 12가3254 차를 원해요!" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_target_car"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
-            android:text="차 정보: 말티즈 어쩌고 저쩌고"
-            android:textSize="@dimen/font_body_medium"
-            app:layout_constraintStart_toStartOf="@+id/tv_user_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
-            tools:text="차 정보: 말티즈 어쩌고 저쩌고" />
+            android:text="22/01/12"
+            android:textSize="@dimen/font_body_small"
+            app:layout_constraintStart_toStartOf="@+id/tv_body"
+            app:layout_constraintTop_toBottomOf="@+id/tv_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/padding_medium"
+            tools:text="22/01/12" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_target_day"
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_small"
-            android:text="날짜: 언제 ~ 언제"
-            android:textSize="@dimen/font_body_medium"
-            app:layout_constraintStart_toStartOf="@+id/tv_user_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_target_car"
-            tools:text="날짜: 언제 ~ 언제" />
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@+id/tv_notification_type"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
