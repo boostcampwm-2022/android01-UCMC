@@ -20,7 +20,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:image_uri="@{vm.licensePicture}"
-            app:layout_constraintBottom_toTopOf="@+id/tv_license_registration_id"
+            app:layout_constraintBottom_toTopOf="@+id/tv_title_license_registration_id"
             app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
             app:layout_constraintHeight_percent="0.25"
             app:layout_constraintStart_toStartOf="@id/gl_license_registration_start"
@@ -63,7 +63,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/tv_license_registration_id"
+            android:id="@+id/tv_title_license_registration_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_large"
@@ -72,24 +72,22 @@
             android:textSize="@dimen/font_title_small"
             android:textStyle="bold"
             app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
             app:layout_constraintTop_toBottomOf="@+id/iv_license_registration_result"
-            app:layout_constraintBottom_toTopOf="@id/tl_license_registration_id"/>
+            app:layout_constraintBottom_toTopOf="@id/tv_license_registration_id"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tl_license_registration_id"
+            android:id="@+id/tv_license_registration_id"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
             app:hintEnabled="false"
             app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintBottom_toTopOf="@id/tv_license_registration_resident"
+            app:layout_constraintBottom_toTopOf="@id/tv_title_license_registration_resident"
             app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
             app:layout_constraintStart_toStartOf="@id/gl_license_registration_start"
-            app:layout_constraintTop_toBottomOf="@id/tv_license_registration_id">
+            app:layout_constraintTop_toBottomOf="@id/tv_title_license_registration_id">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_license_registration_id"
@@ -106,7 +104,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/tv_license_registration_resident"
+            android:id="@+id/tv_title_license_registration_resident"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_medium"
@@ -115,14 +113,12 @@
             android:textSize="@dimen/font_title_small"
             android:textStyle="bold"
             app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintBottom_toTopOf="@id/tl_license_registration_resident_front"
+            app:layout_constraintBottom_toTopOf="@id/tv_license_registration_resident_front"
             app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
-            app:layout_constraintTop_toBottomOf="@+id/tl_license_registration_id" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_license_registration_id" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tl_license_registration_resident_front"
+            android:id="@+id/tv_license_registration_resident_front"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -130,10 +126,10 @@
             android:layout_marginEnd="@dimen/padding_small"
             app:hintEnabled="false"
             app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintBottom_toTopOf="@id/tv_license_registration_aptitude"
-            app:layout_constraintEnd_toStartOf="@+id/tl_license_registration_resident_back"
+            app:layout_constraintBottom_toTopOf="@id/tv_title_license_registration_aptitude"
+            app:layout_constraintEnd_toStartOf="@+id/tv_license_registration_resident_back"
             app:layout_constraintStart_toStartOf="@id/gl_license_registration_start"
-            app:layout_constraintTop_toBottomOf="@id/tv_license_registration_resident">
+            app:layout_constraintTop_toBottomOf="@id/tv_title_license_registration_resident">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_license_registration_resident_front"
@@ -149,17 +145,27 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textSize="@dimen/font_body_medium"
+            app:layout_constraintStart_toEndOf="@id/tv_license_registration_resident_front"
+            app:layout_constraintEnd_toStartOf="@id/tv_license_registration_resident_back"
+            app:layout_constraintTop_toTopOf="@id/tv_license_registration_resident_front"
+            app:layout_constraintBottom_toBottomOf="@id/tv_license_registration_resident_front"/>
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tl_license_registration_resident_back"
+            android:id="@+id/tv_license_registration_resident_back"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_small"
             app:hintEnabled="false"
-            app:layout_constraintBottom_toBottomOf="@+id/tl_license_registration_resident_front"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_license_registration_resident_front"
             app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
-            app:layout_constraintStart_toEndOf="@+id/tl_license_registration_resident_front"
-            app:layout_constraintTop_toTopOf="@+id/tl_license_registration_resident_front">
+            app:layout_constraintStart_toEndOf="@+id/tv_license_registration_resident_front"
+            app:layout_constraintTop_toTopOf="@+id/tv_license_registration_resident_front">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_license_registration_resident_back"
@@ -176,7 +182,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/tv_license_registration_aptitude"
+            android:id="@+id/tv_title_license_registration_aptitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_medium"
@@ -185,14 +191,12 @@
             android:textSize="@dimen/font_title_small"
             android:textStyle="bold"
             app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintBottom_toTopOf="@id/tl_license_registration_resident_aptitude"
+            app:layout_constraintBottom_toTopOf="@id/tv_license_registration_resident_aptitude"
             app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
-            app:layout_constraintTop_toBottomOf="@+id/tl_license_registration_resident_front" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_license_registration_resident_front" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tl_license_registration_resident_aptitude"
+            android:id="@+id/tv_license_registration_resident_aptitude"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -200,9 +204,9 @@
             android:layout_marginEnd="@dimen/padding_small"
             app:hintEnabled="false"
             app:layout_constraintBottom_toTopOf="@+id/btn_license_registration"
-            app:layout_constraintEnd_toStartOf="@+id/tl_license_registration_resident_expiration"
+            app:layout_constraintEnd_toStartOf="@+id/tv_license_registration_resident_expiration"
             app:layout_constraintStart_toStartOf="@+id/gl_license_registration_start"
-            app:layout_constraintTop_toBottomOf="@id/tv_license_registration_aptitude"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_license_registration_aptitude"
             app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -220,16 +224,16 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tl_license_registration_resident_expiration"
+            android:id="@+id/tv_license_registration_resident_expiration"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_small"
             app:hintEnabled="false"
-            app:layout_constraintBottom_toBottomOf="@+id/tl_license_registration_resident_aptitude"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_license_registration_resident_aptitude"
             app:layout_constraintEnd_toEndOf="@id/gl_license_registration_end"
-            app:layout_constraintStart_toEndOf="@+id/tl_license_registration_resident_aptitude"
-            app:layout_constraintTop_toTopOf="@+id/tl_license_registration_resident_aptitude">
+            app:layout_constraintStart_toEndOf="@+id/tv_license_registration_resident_aptitude"
+            app:layout_constraintTop_toTopOf="@+id/tv_license_registration_resident_aptitude">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_license_registration_resident_expiration"
@@ -246,18 +250,16 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/tv_license_registration_expiration"
+            android:id="@+id/tv_title_license_registration_expiration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/license_registration_expiration"
             android:textColor="@color/black"
             android:textSize="@dimen/font_title_small"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_license_registration_aptitude"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tl_license_registration_resident_expiration"
-            app:layout_constraintTop_toTopOf="@+id/tv_license_registration_aptitude" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title_license_registration_aptitude"
+            app:layout_constraintStart_toStartOf="@+id/tv_license_registration_resident_expiration"
+            app:layout_constraintTop_toTopOf="@+id/tv_title_license_registration_aptitude" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

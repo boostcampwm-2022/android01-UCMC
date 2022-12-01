@@ -8,6 +8,6 @@ import javax.inject.Inject
 class SetLicenseUseCase @Inject constructor(
     private val repository: LicenseRepository
 ) {
-    operator fun invoke(uid: String, license: DrivingLicense): Flow<Boolean> =
-        repository.setLicense(uid, license)
+    operator fun invoke(uid: String, license: DrivingLicense, uri: String): Flow<Boolean> =
+        repository.setLicense(uid, license, uri)
 }

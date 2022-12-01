@@ -1,30 +1,31 @@
 package com.gta.presentation.ui.login
 
+import android.Manifest
 import android.content.Intent
 import android.content.res.AssetManager
+import android.os.Build
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.PermissionChecker
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import com.gta.domain.model.LoginResult
+import com.gta.presentation.R
 import com.gta.presentation.databinding.ActivityLoginBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseActivity
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStream
 import java.io.InputStreamReader
 import javax.inject.Inject
 
@@ -36,6 +37,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
     private val viewModel: LoginViewModel by viewModels()
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
+
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted.not()) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.permission_post_notification_denied),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
 
     private val requestActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -50,6 +62,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        requestNotificationPermission()
         initCollector()
         setUpWithBottomSheet()
         binding.btnLoginGoogle.setOnClickListener {
@@ -62,22 +75,26 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         viewModel.checkCurrentUser()
     }
 
-    private fun initCollector() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loginEvent.collectLatest { state ->
-                    when (state) {
-                        LoginResult.SUCCESS -> startMainActivity()
-                        LoginResult.FAILURE -> {}
-                        LoginResult.NEWUSER -> {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        }
-                    }
-                }
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permissionCheck = PermissionChecker.checkCallingOrSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+            if (permissionCheck != PermissionChecker.PERMISSION_GRANTED) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
 
-                viewModel.termsEvent.collectLatest { result ->
-                    if (result) {
-                        startMainActivity()
+    private fun initCollector() {
+        repeatOnStarted(this) {
+            viewModel.loginEvent.collectLatest { state ->
+                when (state) {
+                    LoginResult.SUCCESS -> startMainActivity()
+                    LoginResult.FAILURE -> {}
+                    LoginResult.NEWUSER -> {
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
             }
@@ -109,11 +126,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         binding.btnAccept.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             viewModel.signUp()
-            viewModel.checkTermsAccepted(true)
         }
         binding.btnCancel.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            viewModel.checkTermsAccepted(false)
         }
     }
 
@@ -128,17 +143,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
     }
 
     private fun getAssetData(fileName: String): String {
-        val inputStream: InputStream?
         var result: String
         try {
-            inputStream = resources.assets.open(fileName, AssetManager.ACCESS_BUFFER)
+            val inputStream = resources.assets.open(fileName, AssetManager.ACCESS_BUFFER)
             val reader = BufferedReader(InputStreamReader(inputStream))
             result = reader.readLines().joinToString("\n")
             inputStream.close()
         } catch (e: IOException) {
             result = ""
         }
-
         return result
     }
 }

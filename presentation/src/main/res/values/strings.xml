@@ -22,8 +22,8 @@
 
     <string name="car_edit_label">내 차 수정하기</string>
     <string name="car_edit_price_label">금액 1일</string>
-    <string name="car_edit_day_label">대여 가능 날짜</string>
     <string name="car_edit_day_able">예약 가능 여부</string>
+    <string name="car_edit_day_label">대여 가능 날짜</string>
     <string name="car_edit_location_label">대여/반납 위치</string>
     <string name="car_edit_rent_unavailable">대여 불가능</string>
     <string name="car_edit_comment_helper_message">차 상세 페이지에 올릴 내용을 작성해 주세요</string>
@@ -32,6 +32,8 @@
     <string name="car_edit_images_count">%d/10</string>
     <string name="car_edit_price_format">원</string>
     <string name="car_edit_rent_available_day_format">%s ~ %s</string>
+
+    <string name="car_edit_wait_loading_text">변경사항을 업로드 중입니다.\n잠시만 기다려 주세요..</string>
 
     <string name="car_detail_day_price">금액 : 1일 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>
@@ -76,7 +78,7 @@
     <string name="license_registration_resident_back">%1$c******</string>
     <string name="license_registration_aptitude">적성검사</string>
     <string name="license_registration_expiration">만료일</string>
-    <string name="license_registration_button">신청하기</string>
+    <string name="license_registration_button">등록하기</string>
 
     <string name="pink_slip_guide_toolbar">자동차 등록</string>
     <string name="pink_slip_guide_title">자동차 등록증을 등록해주세요</string>
@@ -123,12 +125,17 @@
     <string name="default_notification_name">자동차 예약, 반납 알림</string>
     <string name="reservation_request_msg">자동차 대여 예약 요청이 도착했습니다.</string>
 
-    <string name="terms_cancel">취소</string>
-    <string name="terms_accept">확인</string>
+    <string name="terms_cancel">거부</string>
+    <string name="terms_accept">동의</string>
     <string name="terms_title_service">서비스 이용약관</string>
     <string name="terms_title_privacy">개인정보 이용약관</string>
 
     <string name="chatting_toolbar">채팅</string>
+    <string name="mypage_re_register">다시 등록하기</string>
+    <string name="mypage_no_license">등록된 면허가 없습니다.</string>
+
+    <string name="chatting_provider_name">ucmc</string>
+    <string name="permission_post_notification_denied">이 일을 기억할 것입니다.</string>
 
     <string name="return_car">반납하기</string>
     <string name="return_car_msg">차주님과 사전 합의된 장소에 반납해주세요.\n위반시 추가 요금이 발생합니다.</string>

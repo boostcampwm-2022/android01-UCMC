@@ -3,6 +3,7 @@ package com.gta.data.di
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.repository.LicenseRepositoryImpl
 import com.gta.data.source.LicenseDataSource
+import com.gta.data.source.StorageDataSource
 import com.gta.domain.repository.LicenseRepository
 import dagger.Module
 import dagger.Provides
@@ -20,6 +21,6 @@ object LicenseModule {
 
     @Singleton
     @Provides
-    fun provideLicenseRepository(dataSource: LicenseDataSource): LicenseRepository =
-        LicenseRepositoryImpl(dataSource)
+    fun provideLicenseRepository(licenseDataSource: LicenseDataSource, storageDataSource: StorageDataSource): LicenseRepository =
+        LicenseRepositoryImpl(licenseDataSource, storageDataSource)
 }

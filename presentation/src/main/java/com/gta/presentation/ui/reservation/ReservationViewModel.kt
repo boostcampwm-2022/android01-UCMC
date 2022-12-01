@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.InsuranceOption
@@ -15,6 +14,7 @@ import com.gta.domain.model.Reservation
 import com.gta.domain.usecase.reservation.CreateReservationUseCase
 import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.presentation.util.DateUtil
+import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,8 +29,7 @@ import javax.inject.Inject
 class ReservationViewModel @Inject constructor(
     private val args: SavedStateHandle,
     getCarRentInfoUseCase: GetCarRentInfoUseCase,
-    private val createReservationUseCase: CreateReservationUseCase,
-    private val auth: FirebaseAuth
+    private val createReservationUseCase: CreateReservationUseCase
 ) : ViewModel() {
     private val carId by lazy { args.get<String>("CAR_ID") }
 
@@ -87,7 +86,6 @@ class ReservationViewModel @Inject constructor(
     }
 
     fun createReservation() {
-        val userId = auth.currentUser?.uid ?: return
         val date = reservationDate.value ?: return
         val price = totalPrice.value ?: return
         val option = insuranceOption.value ?: return
@@ -99,12 +97,12 @@ class ReservationViewModel @Inject constructor(
                     createReservationUseCase(
                         Reservation(
                             carId = it,
-                            userId = userId,
+                            lenderId = FirebaseUtil.uid,
+                            ownerId = ownerId,
                             reservationDate = date,
                             price = price,
                             insuranceOption = option.name
-                        ),
-                        ownerId
+                        )
                     )
                 )
             }

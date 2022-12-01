@@ -176,6 +176,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_owner_label">
 
                     <include
+                        android:id="@+id/in_owner_profile"
                         layout="@layout/include_owner_profile"
                         bind:owner="@{vm.carInfo.owner}" />
 

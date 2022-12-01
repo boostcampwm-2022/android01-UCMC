@@ -25,8 +25,11 @@
         tools:layout="@layout/fragment_chatting">
         <argument
             android:name="cid"
-            android:defaultValue=""
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue="" />
+        <action
+            android:id="@+id/action_chattingFragment_to_carDetailFragment"
+            app:destination="@id/carDetailFragment" />
     </fragment>
 
     <fragment
@@ -44,7 +47,11 @@
         <action
             android:id="@+id/action_myPageFragment_to_myPageTermsFragment"
             app:destination="@id/myPageTermsFragment"
-            app:popUpTo="@id/myPageFragment" />
+            app:popUpTo="@id/myPageFragment"/>
+        <action
+            android:id="@+id/action_myPageFragment_to_myPageLicenseFragment"
+            app:destination="@id/myPageLicenseFragment"
+            app:popUpTo="@id/myPageFragment"/>
     </fragment>
 
     <fragment
@@ -79,6 +86,9 @@
             android:id="@+id/action_carDetailFragment_to_reservationFragment"
             app:destination="@id/reservationFragment" />
         <action
+            android:id="@+id/action_carDetailFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment" />
+        <action
             android:id="@+id/action_carDetailFragment_to_returnCarFragment"
             app:destination="@id/returnCarFragment" />
     </fragment>
@@ -86,7 +96,7 @@
     <fragment
         android:id="@+id/licenseGuideFragment"
         android:name="com.gta.presentation.ui.license.guide.LicenseGuideFragment"
-        android:label="LicenseGuideFragment"
+        android:label="@string/license_guide_toolbar"
         tools:layout="@layout/fragment_camera_guide">
         <action
             android:id="@+id/action_licenseGuideFragment_to_licenseRegistrationFragment"
@@ -96,15 +106,16 @@
     <fragment
         android:id="@+id/licenseRegistrationFragment"
         android:name="com.gta.presentation.ui.license.registration.LicenseRegistrationFragment"
-        android:label="LicenseRegistrationFragment"
+        android:label="@string/license_registration_toolbar"
         tools:layout="@layout/fragment_license_registration">
         <argument
             android:name="uri"
             app:argType="string" />
         <action
-            android:id="@+id/action_licenseRegistrationFragment_to_myPageFragment"
-            app:destination="@id/myPageFragment"
-            app:popUpTo="@id/myPageFragment" />
+            android:id="@+id/action_licenseRegistrationFragment_to_myPageLicenseFragment"
+            app:destination="@id/myPageLicenseFragment"
+            app:popUpTo="@id/myPageLicenseFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
@@ -226,6 +237,17 @@
         android:name="com.gta.presentation.ui.mypage.MyPageTermsFragment"
         android:label="@string/mypage_btn_terms"
         tools:layout="@layout/fragment_mypage_terms" />
+
+    <fragment
+        android:id="@+id/myPageLicenseFragment"
+        android:name="com.gta.presentation.ui.mypage.license.MyPageLicenseFragment"
+        android:label="@string/license_registration_toolbar"
+        tools:layout="@layout/fragment_mypage_license">
+        <action
+            android:id="@+id/action_myPageLicenseFragment_to_licenseGuideFragment"
+            app:destination="@id/licenseGuideFragment"
+            app:popUpTo="@id/myPageLicenseFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/returnCarFragment"

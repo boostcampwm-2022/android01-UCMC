@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import java.nio.ByteBuffer
 
 interface LicenseRepository {
-    fun getLicense(buffer: ByteBuffer): Flow<DrivingLicense?>
-    fun setLicense(uid: String, license: DrivingLicense): Flow<Boolean>
+    fun getLicenseFromImage(buffer: ByteBuffer): Flow<DrivingLicense?>
+    fun getLicenseFromDatabase(uid: String): Flow<DrivingLicense?>
+    fun setLicense(uid: String, license: DrivingLicense, uri: String): Flow<Boolean>
 }

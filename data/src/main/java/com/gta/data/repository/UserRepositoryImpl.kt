@@ -1,19 +1,20 @@
 package com.gta.data.repository
 
-import com.gta.data.model.UserInfo
 import com.gta.data.model.toProfile
+import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.UserDataSource
+import com.gta.domain.model.Reservation
 import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.UserRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val userDataSource: UserDataSource
+    private val userDataSource: UserDataSource,
+    private val reservationDataSource: ReservationDataSource
 ) : UserRepository {
 
     override fun getUserProfile(uid: String): Flow<UserProfile> = callbackFlow {
@@ -22,15 +23,11 @@ class UserRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getNowReservation(uid: String): Flow<String?> {
-        return getUser(uid).map {
-            it.rentedCar
+    override fun getNowReservation(uid: String, carId: String): Flow<Reservation?> = callbackFlow {
+        val reservation = reservationDataSource.getRentingStateReservations(uid).first().find { reservation ->
+            reservation.carId == carId
         }
-    }
-
-    private fun getUser(uid: String): Flow<UserInfo> = callbackFlow {
-        val userInfo = userDataSource.getUser(uid).first() ?: UserInfo()
-        trySend(userInfo)
+        trySend(reservation)
         awaitClose()
     }
 }

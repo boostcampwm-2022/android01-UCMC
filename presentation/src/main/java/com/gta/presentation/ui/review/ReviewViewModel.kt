@@ -25,7 +25,6 @@ class ReviewViewModel @Inject constructor(
     val comment = MutableStateFlow("")
     val rating = MutableStateFlow(5.0f)
 
-    private val carId = "HK05T6ZRODTUKVOEJ"
     private val reservationId = "16691845818537FFI7GI3KKW4RE73X"
 
     private val _reviewDTO = MutableStateFlow(ReviewDTO())
@@ -37,12 +36,12 @@ class ReviewViewModel @Inject constructor(
     init {
         // 예약 id로 이미 리뷰를 했는지 검사가 필요
         // safe arg로 예약 id를 받아와야 합니다.
-        getReviewDTO(reservationId, carId)
+        getReviewDTO(reservationId)
     }
 
-    private fun getReviewDTO(reservationId: String, carId: String) {
+    private fun getReviewDTO(reservationId: String) {
         viewModelScope.launch {
-            _reviewDTO.emit(getReviewDTOUseCase(FirebaseUtil.uid, reservationId, carId).first())
+            _reviewDTO.emit(getReviewDTOUseCase(FirebaseUtil.uid, reservationId).first())
         }
     }
 

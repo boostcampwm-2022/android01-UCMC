@@ -18,7 +18,7 @@ class ReservationRepositoryImpl @Inject constructor(
 ) : ReservationRepository {
     override fun createReservation(reservation: Reservation): Flow<String> = callbackFlow {
         val reservationId = "${System.currentTimeMillis()}${reservation.carId}"
-        carDataSource.getCar(reservation.carId).first()?.let { car ->
+        carDataSource.getCar(reservation.carId).first()?.let {
             if (reservationDataSource.createReservation(reservation, reservationId).first()) {
                 trySend(reservationId)
             } else {
@@ -28,15 +28,15 @@ class ReservationRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getReservationInfo(reservationId: String, carId: String): Flow<Reservation> = callbackFlow {
-        reservationDataSource.getReservation(reservationId, carId).first()?.let { reservation ->
+    override fun getReservationInfo(reservationId: String): Flow<Reservation> = callbackFlow {
+        reservationDataSource.getReservation(reservationId).first()?.let { reservation ->
             trySend(reservation)
         } ?: trySend(Reservation())
         awaitClose()
     }
 
-    override fun getReservationCar(reservationId: String, carId: String): Flow<String> {
-        return getReservationInfo(reservationId, carId).map { it.carId }
+    override fun getReservationCar(reservationId: String): Flow<String> {
+        return getReservationInfo(reservationId).map { it.carId }
     }
 
     override fun getReservationDate(reservationId: String, carId: String): Flow<AvailableDate> {
