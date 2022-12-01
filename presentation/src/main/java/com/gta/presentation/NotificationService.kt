@@ -61,35 +61,46 @@ class NotificationService : FirebaseMessagingService() {
 
     private fun createPendingIntent(message: RemoteMessage): PendingIntent {
         val type = message.data["type"]
-        val arguments = Bundle()
-        val destinationId: Int
+
+        val deepLinkBuilder = NavDeepLinkBuilder(this)
+            .setComponentName(MainActivity::class.java)
+            .setGraph(R.navigation.nav_main)
 
         when (type) {
             "예약 요청" -> {
-                arguments.putString("CAR_ID", message.data["carId"])
-                arguments.putString("RESERVATION_ID", message.data["reservationId"])
-                destinationId = R.id.reservationRequestFragment
+                val arguments = Bundle().apply {
+                    putString("CAR_ID", message.data["carId"])
+                    putString("RESERVATION_ID", message.data["reservationId"])
+                }
+                deepLinkBuilder.apply {
+                    setArguments(arguments)
+                    addDestination(R.id.notificationFragment)
+                    addDestination(R.id.reservationRequestFragment)
+                }
             }
             "예약 수락" -> {
-                destinationId = R.id.notificationFragment
+                deepLinkBuilder.apply {
+                    addDestination(R.id.notificationFragment)
+                }
             }
             "예약 거절" -> {
-                destinationId = R.id.notificationFragment
+                deepLinkBuilder.apply {
+                    addDestination(R.id.notificationFragment)
+                }
             }
             "차량 반납" -> {
-                destinationId = R.id.mapFragment // TODO returnFragment
+                deepLinkBuilder.apply {
+                    addDestination(R.id.mapFragment) // todo return fragment
+                }
             }
             else -> {
-                destinationId = R.id.mapFragment
+                deepLinkBuilder.apply {
+                    addDestination(R.id.mapFragment)
+                }
             }
         }
 
-        return NavDeepLinkBuilder(this)
-            .setComponentName(MainActivity::class.java)
-            .setGraph(R.navigation.nav_main)
-            .setDestination(destinationId)
-            .setArguments(arguments)
-            .createPendingIntent()
+        return deepLinkBuilder.createPendingIntent()
     }
 
     override fun onDestroy() {
