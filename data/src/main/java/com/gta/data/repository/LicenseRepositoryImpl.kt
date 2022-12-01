@@ -38,7 +38,7 @@ class LicenseRepositoryImpl @Inject constructor(
 
     override fun setLicense(uid: String, license: DrivingLicense, uri: String): Flow<Boolean> =
         callbackFlow {
-            val result = storageDataSource.uploadLicense(uid, uri).first() ?: ""
+            val result = storageDataSource.uploadPicture("users/$uid/license", uri).first() ?: ""
             if (result.isNotEmpty()) {
                 trySend(licenseDataSource.registerLicense(uid, license.copy(uri = result)).first())
             } else {

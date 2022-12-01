@@ -10,7 +10,6 @@ import javax.inject.Inject
 class StorageDataSource @Inject constructor(
     private val storageReference: StorageReference
 ) {
-
     fun uploadPicture(path: String, uri: String): Flow<String?> = callbackFlow {
         val image = Uri.parse(uri)
         val ref = storageReference.child(path)
@@ -26,80 +25,7 @@ class StorageDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun uploadThumbnail(uid: String, uri: String): Flow<String?> = callbackFlow {
-        val image = Uri.parse(uri)
-        val ref = storageReference
-            .child("users")
-            .child(uid)
-            .child("thumbnail")
-        ref.putFile(image).continueWithTask {
-            ref.downloadUrl
-        }.addOnCompleteListener {
-            if (it.isSuccessful) {
-                trySend(it.result.toString())
-            } else {
-                trySend(null)
-            }
-        }
-        awaitClose()
-    }
-
-    fun uploadPinkSlip(uid: String, uri: String): Flow<String?> = callbackFlow {
-        val image = Uri.parse(uri)
-        val ref = storageReference
-            .child("users")
-            .child(uid)
-            .child("pinkslip")
-        ref.putFile(image).continueWithTask {
-            ref.downloadUrl
-        }.addOnCompleteListener {
-            if (it.isSuccessful) {
-                trySend(it.result.toString())
-            } else {
-                trySend(null)
-            }
-        }
-        awaitClose()
-    }
-
-    fun uploadLicense(uid: String, uri: String): Flow<String?> = callbackFlow {
-        val image = Uri.parse(uri)
-        val ref = storageReference
-            .child("users")
-            .child(uid)
-            .child("license")
-        ref.putFile(image).continueWithTask {
-            ref.downloadUrl
-        }.addOnCompleteListener {
-            if (it.isSuccessful) {
-                trySend(it.result.toString())
-            } else {
-                trySend(null)
-            }
-        }
-        awaitClose()
-    }
-
-    fun saveCarImage(carId: String, uri: String): Flow<String?> = callbackFlow {
-        val image = Uri.parse(uri)
-        val name = image.path?.substringAfterLast("/") ?: ""
-        val ref = storageReference
-            .child("car")
-            .child(carId)
-            .child("${System.currentTimeMillis()}$name")
-        ref.putFile(image).continueWithTask {
-            ref.downloadUrl
-        }.addOnCompleteListener {
-            if (it.isSuccessful) {
-                trySend(it.result.toString())
-            } else {
-                trySend(null)
-            }
-        }
-        awaitClose()
-    }
-
-    fun deleteThumbnail(path: String): Flow<Boolean> = callbackFlow {
+    fun deletePicture(path: String): Flow<Boolean> = callbackFlow {
         storageReference.storage.getReferenceFromUrl(path).delete().addOnCompleteListener {
             trySend(it.isSuccessful)
         }
