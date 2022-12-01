@@ -137,5 +137,5 @@
     <string name="reservation_request_accept">수락하기</string>
     <string name="notification_toolbar">알림 목록</string>
     <string name="reservation_request_toolbar">예약 요청 확인</string>
-    <string name="reservation_renter">대여자 정보</string>
+    <string name="reservation_lender">대여자 정보</string>
 </resources>
