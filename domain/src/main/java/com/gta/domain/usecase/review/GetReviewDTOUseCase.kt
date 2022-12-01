@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetReviewDTOUseCase @Inject constructor(
     private val repository: ReviewRepository
 ) {
-    operator fun invoke(uid: String, reservationId: String, carId: String): Flow<ReviewDTO> =
-        repository.getReviewDTO(uid, reservationId, carId)
+    operator fun invoke(uid: String, reservationId: String): Flow<ReviewDTO> =
+        repository.getReviewDTO(uid, reservationId)
 }

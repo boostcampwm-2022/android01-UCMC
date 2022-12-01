@@ -1,21 +1,15 @@
 package com.gta.domain.usecase.cardetail
 
-import com.gta.domain.repository.ReservationRepository
+import com.gta.domain.model.Reservation
 import com.gta.domain.repository.UserRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
+// 확인 필요
 class GetNowRentCarUseCase @Inject constructor(
-    private val userRepository: UserRepository,
-    private val reservationRepository: ReservationRepository
+    private val userRepository: UserRepository
 ) {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(uid: String, carId: String): Flow<String?> {
-        return userRepository.getNowReservation(uid).flatMapLatest { reservation ->
-            reservation?.let { reservationRepository.getReservationCar(it, carId) } ?: flowOf(null)
-        }
+    operator fun invoke(uid: String, carId: String): Flow<Reservation?> {
+        return userRepository.getNowReservation(uid, carId)
     }
 }
