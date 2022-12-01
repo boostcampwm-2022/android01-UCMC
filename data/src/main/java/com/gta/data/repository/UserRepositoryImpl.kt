@@ -25,7 +25,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun getNowReservation(uid: String, carId: String): Flow<Reservation?> = callbackFlow {
         val reservation = reservationDataSource.getRentingStateReservations(uid).first().find { reservation ->
-            reservation.carId == uid
+            reservation.carId == carId
         }
         trySend(reservation)
         awaitClose()
