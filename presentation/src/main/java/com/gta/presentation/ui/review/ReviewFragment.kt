@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReviewBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -31,8 +32,9 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.addReviewEvent.collectLatest { state ->
-                    Timber.tag("review").i(state.toString())
-                    // findNavController().popBackStack()
+                    if (state) {
+                        findNavController().navigate(ReviewFragmentDirections.actionReviewFragmentToMapFragment())
+                    }
                 }
             }
         }
