@@ -12,12 +12,13 @@ import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.domain.usecase.reservation.GetReservationUseCase
 import com.gta.domain.usecase.user.GetUserProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -35,7 +36,7 @@ class ReservationRequestViewModel @Inject constructor(
     private val reservationId = args.get<String>("RESERVATION_ID") ?: ""
     val car: StateFlow<CarRentInfo>
     val reservation: StateFlow<Reservation>
-   // val user: StateFlow<UserProfile>
+    val user = MutableStateFlow(UserProfile())
 
     init {
         car =
@@ -50,14 +51,14 @@ class ReservationRequestViewModel @Inject constructor(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = Reservation()
-            ).also {
-                Timber.d("$reservationId $carId")
-            }
+            )
 
-//        @OptIn(ExperimentalCoroutinesApi::class)
-//        user = reservation.flatMapLatest {
-//            getUserProfileUseCase(it.userId)
-//        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserProfile())
+        reservation.onEach { reserve ->
+            Timber.d(reserve.userId)
+            getUserProfileUseCase(reserve.userId).onEach { profile ->
+                user.emit(profile)
+            }
+        }.launchIn(viewModelScope)
     }
 
     private val _createReservationEvent = MutableSharedFlow<Boolean>()
