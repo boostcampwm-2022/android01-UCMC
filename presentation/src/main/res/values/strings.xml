@@ -133,9 +133,13 @@
     <string name="chatting_toolbar">채팅</string>
     <string name="mypage_re_register">다시 등록하기</string>
     <string name="mypage_no_license">등록된 면허가 없습니다.</string>
+
     <string name="reservation_request_decline">거절하기</string>
     <string name="reservation_request_accept">수락하기</string>
     <string name="notification_toolbar">알림 목록</string>
     <string name="reservation_request_toolbar">예약 요청 확인</string>
     <string name="reservation_lender">대여자 정보</string>
+
+    <string name="chatting_provider_name">ucmc</string>
+    <string name="permission_post_notification_denied">이 일을 기억할 것입니다.</string>
 </resources>

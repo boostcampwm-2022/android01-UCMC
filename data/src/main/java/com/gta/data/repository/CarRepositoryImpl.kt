@@ -1,5 +1,6 @@
 package com.gta.data.repository
 
+import android.net.Uri
 import com.gta.data.model.Car
 import com.gta.data.model.toCarRentInfo
 import com.gta.data.model.toDetailCar
@@ -122,7 +123,9 @@ class CarRepositoryImpl @Inject constructor(
         callbackFlow {
             val imageUri = mutableListOf<String>()
             images.forEach { img ->
-                storageDataSource.saveCarImage(carId, img).first()?.let { uri ->
+                val image = Uri.parse(img)
+                val name = image.path?.substringAfterLast("/") ?: ""
+                storageDataSource.uploadPicture("car/$carId/${System.currentTimeMillis()}$name", img).first()?.let { uri ->
                     imageUri.add(uri)
                 }
             }
@@ -133,7 +136,7 @@ class CarRepositoryImpl @Inject constructor(
     override fun deleteImagesStorage(images: List<String>): Flow<Boolean> = callbackFlow {
         val result = mutableListOf<Boolean>()
         images.forEach { img ->
-            result.add(storageDataSource.deleteThumbnail(img).first())
+            result.add(storageDataSource.deletePicture(img).first())
         }
         trySend(!result.contains(false))
         awaitClose()

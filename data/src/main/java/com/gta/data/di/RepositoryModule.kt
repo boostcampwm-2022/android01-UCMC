@@ -23,8 +23,11 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(dataSource: UserDataSource): UserRepository {
-        return UserRepositoryImpl(dataSource)
+    fun provideUserRepository(
+        userDataSource: UserDataSource,
+        reservationDataSource: ReservationDataSource
+    ): UserRepository {
+        return UserRepositoryImpl(userDataSource, reservationDataSource)
     }
 
     @Provides

@@ -12,4 +12,9 @@ class NotificationRepositoryImpl @Inject constructor(private val notificationDat
         val receiverToken = userDataSource.getUser(receiverId).first()?.messageToken ?: return false
         return notificationDataSource.sendNotification(notification, receiverToken)
     }
+
+    override suspend fun saveNotification(notification: Notification, userId: String): Boolean {
+        val notificationId = "${System.currentTimeMillis()}-$userId"
+        return notificationDataSource.saveNotification(notification, userId, notificationId).first()
+    }
 }
