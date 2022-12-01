@@ -17,16 +17,12 @@ class CreateReservationUseCase @Inject constructor(
         val notificationResult = notificationUseCase(
             Notification(
                 type = NotificationType.REQUEST_RESERVATION.title,
-                message = RESERVATION_REQUEST_MESSAGE,
+                message = NotificationType.REQUEST_RESERVATION.msg,
                 reservationId = reservationId,
                 fromId = reservation.lenderId
             ),
             reservation.ownerId
         )
         return reservationId.isNotEmpty() && notificationResult
-    }
-
-    companion object {
-        private const val RESERVATION_REQUEST_MESSAGE = "자동차 대여 예약 요청이 도착했습니다."
     }
 }
