@@ -34,14 +34,11 @@ class ReturnCarFragment : BaseFragment<FragmentReturnCarBinding>(R.layout.fragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
 
-        val args: ReturnCarFragmentArgs by navArgs()
-
         binding.cvReturnBtn.setOnClickListener {
             val reservation = viewModel.simpleReservation.value ?: return@setOnClickListener
             findNavController().navigate(
                 ReturnCarFragmentDirections.actionReturnCarFragmentToReviewFragment(
-                    carId = args.carId,
-                    reservationId = reservation.id
+                    reservationId = reservation.reservationId
                 )
             )
         }

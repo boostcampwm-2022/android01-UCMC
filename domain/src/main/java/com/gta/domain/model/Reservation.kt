@@ -13,3 +13,9 @@ data class Reservation(
     val price: Int = 0,
     val insuranceOption: String = InsuranceOption.LOW.name
 )
+
+fun Reservation.toSimpleReservation(reservationId: String): SimpleReservation = SimpleReservation(
+    reservationId = reservationId,
+    carId = carId,
+    reservationDate = reservationDate
+)

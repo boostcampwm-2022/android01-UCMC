@@ -200,9 +200,6 @@
         android:label="@string/review_toolbar"
         tools:layout="@layout/fragment_review">
         <argument
-            android:name="carId"
-            app:argType="string" />
-        <argument
             android:name="reservationId"
             app:argType="string" />
         <action

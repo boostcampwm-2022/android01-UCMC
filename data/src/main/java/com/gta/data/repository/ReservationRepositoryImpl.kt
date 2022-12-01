@@ -38,10 +38,4 @@ class ReservationRepositoryImpl @Inject constructor(
     override fun getReservationCar(reservationId: String): Flow<String> {
         return getReservationInfo(reservationId).map { it.carId }
     }
-
-    override fun getReservationDate(reservationId: String, carId: String): Flow<AvailableDate> {
-        return getReservationInfo(reservationId, carId).map {
-            it.reservationDate
-        }
-    }
 }

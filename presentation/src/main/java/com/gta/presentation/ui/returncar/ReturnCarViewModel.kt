@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.SimpleReservation
-import com.gta.domain.usecase.returncar.GetNowSimpleReservationUseCase
+import com.gta.domain.usecase.cardetail.GetNowRentCarUseCase
 import com.gta.presentation.R
 import com.gta.presentation.util.DateUtil
 import com.gta.presentation.util.FirebaseUtil
@@ -23,12 +23,12 @@ import kotlin.math.abs
 class ReturnCarViewModel @Inject constructor(
     @ApplicationContext context: Context,
     args: SavedStateHandle,
-    getNowSimpleReservationUseCase: GetNowSimpleReservationUseCase
+    getNowRentCarUseCase: GetNowRentCarUseCase
 ) : ViewModel() {
     private val carId = args.get<String>("carId") ?: ""
 
     val simpleReservation: StateFlow<SimpleReservation?> =
-        getNowSimpleReservationUseCase(uid = FirebaseUtil.uid, carId = carId).stateIn(
+        getNowRentCarUseCase(uid = FirebaseUtil.uid, carId = carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = null

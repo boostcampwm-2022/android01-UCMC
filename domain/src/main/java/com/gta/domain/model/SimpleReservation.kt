@@ -1,6 +1,7 @@
 package com.gta.domain.model
 
 data class SimpleReservation(
-    val id: String = "",
+    val reservationId: String = "",
+    val carId: String = "",
     val reservationDate: AvailableDate = AvailableDate()
 )
