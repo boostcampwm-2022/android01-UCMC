@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.usecase.car.GetSimpleCarUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.getstream.chat.android.client.ChatClient
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChattingViewModel @Inject constructor(
     args: SavedStateHandle,
+    private val chatClient: ChatClient,
     private val getSimpleCarUseCase: GetSimpleCarUseCase
 ) : ViewModel() {
 
@@ -26,7 +28,8 @@ class ChattingViewModel @Inject constructor(
     private val _navigateCarDetailEvent = MutableSharedFlow<String>()
     val navigateCarDetailEvent: SharedFlow<String> get() = _navigateCarDetailEvent
 
-    private val carId = args.get<String>("cid")?.substringAfterLast("-") ?: ""
+    private val cid = args.get<String>("cid") ?: ""
+    private val carId = cid.substringAfterLast("-")
 
     init {
         // cid는 "ChannelType:ChannelId"이 저장되어 있어요
@@ -41,5 +44,19 @@ class ChattingViewModel @Inject constructor(
         viewModelScope.launch {
             _navigateCarDetailEvent.emit(carId)
         }
+    }
+
+    fun muteChannel() {
+        chatClient.muteChannel(
+            channelType = "messaging",
+            channelId = cid
+        ).execute()
+    }
+
+    fun unmuteChannel() {
+        chatClient.unmuteChannel(
+            channelType = "messaging",
+            channelId = cid
+        ).execute()
     }
 }
