@@ -17,7 +17,7 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     override fun getUserProfile(uid: String): Flow<UserProfile> = callbackFlow {
-        val profile = userDataSource.getUser(uid).first()?.toProfile(uid) ?: UserProfile()
+        val profile = userDataSource.getUser(uid).first().toProfile(uid)
         trySend(profile)
         awaitClose()
     }
@@ -29,7 +29,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     private fun getUser(uid: String): Flow<UserInfo> = callbackFlow {
-        val userInfo = userDataSource.getUser(uid).first() ?: UserInfo()
+        val userInfo = userDataSource.getUser(uid).first()
         trySend(userInfo)
         awaitClose()
     }

@@ -22,7 +22,7 @@ class ReservationRequestFragment :
         binding.vm = viewModel
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.reservation?.collect {
+            viewModel.reservation.collect {
                 when (it.insuranceOption) {
                     "LOW" -> binding.rgReservationInsuranceOption1.isChecked = true
                     "MEDIUM" -> binding.rgReservationInsuranceOption2.isChecked = true

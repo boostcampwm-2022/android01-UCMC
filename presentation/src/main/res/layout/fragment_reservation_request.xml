@@ -85,7 +85,7 @@
                 <include
                     android:id="@+id/in_owner_profile"
                     layout="@layout/include_owner_profile"
-                    bind:owner="@{vm.user}" />
+                    bind:owner="@{vm.car.owner}" />
 
             </androidx.cardview.widget.CardView>
 
