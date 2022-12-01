@@ -12,16 +12,16 @@ class CreateReservationUseCase @Inject constructor(
     private val repository: ReservationRepository,
     private val notificationUseCase: SendNotificationUseCase
 ) {
-    suspend operator fun invoke(reservation: Reservation, ownerId: String): Boolean {
+    suspend operator fun invoke(reservation: Reservation): Boolean {
         val reservationId = repository.createReservation(reservation).first()
         val notificationResult = notificationUseCase(
             Notification(
                 type = NotificationType.REQUEST_RESERVATION.title,
                 message = RESERVATION_REQUEST_MESSAGE,
                 reservationId = reservationId,
-                fromId = reservation.userId
+                fromId = reservation.lenderId
             ),
-            ownerId
+            reservation.ownerId
         )
         return reservationId.isNotEmpty() && notificationResult
     }

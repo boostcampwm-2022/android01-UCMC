@@ -10,6 +10,22 @@ import javax.inject.Inject
 class StorageDataSource @Inject constructor(
     private val storageReference: StorageReference
 ) {
+
+    fun uploadPicture(path: String, uri: String): Flow<String?> = callbackFlow {
+        val image = Uri.parse(uri)
+        val ref = storageReference.child(path)
+        ref.putFile(image).continueWithTask {
+            ref.downloadUrl
+        }.addOnCompleteListener {
+            if (it.isSuccessful) {
+                trySend(it.result.toString())
+            } else {
+                trySend(null)
+            }
+        }
+        awaitClose()
+    }
+
     fun uploadThumbnail(uid: String, uri: String): Flow<String?> = callbackFlow {
         val image = Uri.parse(uri)
         val ref = storageReference

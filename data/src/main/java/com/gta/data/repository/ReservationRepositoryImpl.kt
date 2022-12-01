@@ -27,14 +27,14 @@ class ReservationRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getReservationInfo(reservationId: String, carId: String): Flow<Reservation> = callbackFlow {
-        reservationDataSource.getReservation(reservationId, carId).first()?.let { reservation ->
+    override fun getReservationInfo(reservationId: String): Flow<Reservation> = callbackFlow {
+        reservationDataSource.getReservation(reservationId).first()?.let { reservation ->
             trySend(reservation)
         } ?: trySend(Reservation())
         awaitClose()
     }
 
-    override fun getReservationCar(reservationId: String, carId: String): Flow<String> {
-        return getReservationInfo(reservationId, carId).map { it.carId }
+    override fun getReservationCar(reservationId: String): Flow<String> {
+        return getReservationInfo(reservationId).map { it.carId }
     }
 }
