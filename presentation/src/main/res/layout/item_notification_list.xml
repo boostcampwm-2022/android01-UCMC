@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="notification"
+            type="com.gta.domain.model.NotificationInfo" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -13,6 +18,7 @@
             android:layout_height="50dp"
             android:layout_margin="@dimen/padding_large"
             android:src="@drawable/ic_bottom_nav_my"
+            app:image_uri="@{notification.carImage}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
@@ -22,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_medium"
-            android:text="예약 요청"
+            app:text_notification_list_title="@{notification.type}"
             android:textColor="?attr/colorOnBackground"
             android:textStyle="bold"
             android:textSize="@dimen/font_title_medium"
@@ -36,7 +42,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
-            android:text="요청자: 어쩌고 저쩌고"
+            app:text_notification_list_body_type="@{notification.type}"
+            app:text_notification_list_body_from="@{notification.fromNickName}"
+            app:text_notification_list_body_car="@{notification.licensePlate}"
             android:textSize="@dimen/font_body_medium"
             app:layout_constraintStart_toStartOf="@+id/tv_notification_type"
             app:layout_constraintTop_toBottomOf="@+id/tv_notification_type"
@@ -45,11 +53,11 @@
             tools:text="이동훈님이 12가3254 차를 원해요!" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_target_car"
+            android:id="@+id/tv_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
-            android:text="22/01/12"
+            android:text="@{notification.date}"
             android:textSize="@dimen/font_body_small"
             app:layout_constraintStart_toStartOf="@+id/tv_body"
             app:layout_constraintTop_toBottomOf="@+id/tv_body"
