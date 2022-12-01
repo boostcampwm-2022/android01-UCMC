@@ -25,8 +25,7 @@ class LicenseDataSource @Inject constructor(
                 if (it.isSuccessful) {
                     val userInfo = it.result.toObject(UserInfo::class.java)
                     trySend(userInfo?.license)
-                }
-                else {
+                } else {
                     trySend(null)
                 }
             }
