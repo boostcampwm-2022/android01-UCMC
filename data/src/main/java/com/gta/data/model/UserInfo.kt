@@ -9,9 +9,7 @@ data class UserInfo(
     val icon: String = "",
     val temperature: Float = 36.5f,
     val license: DrivingLicense? = null,
-    val rentedCar: String? = null,
     val myCars: List<String> = emptyList(),
-    val transactionHistory: List<String> = emptyList(),
     val reportCount: Int = 0,
     val messageToken: String = ""
 )
