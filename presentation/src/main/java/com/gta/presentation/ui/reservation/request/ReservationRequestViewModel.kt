@@ -45,7 +45,7 @@ class ReservationRequestViewModel @Inject constructor(
                 initialValue = CarDetail()
             )
 
-        reservation = getReservationUseCase(reservationId, carId)
+        reservation = getReservationUseCase(reservationId)
             .flowOn(Dispatchers.IO)
             .stateIn(
                 scope = viewModelScope,
@@ -57,7 +57,7 @@ class ReservationRequestViewModel @Inject constructor(
     fun createReservation(accepted: Boolean) {
         val reservation = reservation.value
         val ownerId = car.value.owner.id
-        val state = if (accepted) ReservationState.ACCEPT else ReservationState.DECLINE
+        val state = if (accepted) ReservationState.ACCEPT else ReservationState.CANCEL
 
         viewModelScope.launch {
             _createReservationEvent.emit(

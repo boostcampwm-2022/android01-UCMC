@@ -26,7 +26,7 @@ class FinishReservationUseCase @Inject constructor(
                 carId = reservation.carId,
                 fromId = ownerId
             ),
-            reservation.userId
+            reservation.lenderId
         )
         return reservationId.isNotEmpty() && notificationResult
     }

@@ -136,7 +136,7 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             }
         }
 
-        binding.etPrice.setOnFocusChangeListener { view, boolean ->
+        binding.etPrice.setOnFocusChangeListener { _, boolean ->
             with(binding.tvPrice) {
                 if (boolean) {
                     visibility = View.GONE

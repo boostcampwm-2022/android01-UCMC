@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetReservationUseCase @Inject constructor(
     private val repository: ReservationRepository
 ) {
-    operator fun invoke(reservationId: String, carId: String): Flow<Reservation> {
-        return repository.getReservationInfo(reservationId, carId)
+    operator fun invoke(reservationId: String): Flow<Reservation> {
+        return repository.getReservationInfo(reservationId)
     }
 }
