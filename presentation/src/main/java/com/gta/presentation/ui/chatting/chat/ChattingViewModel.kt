@@ -29,6 +29,7 @@ class ChattingViewModel @Inject constructor(
     val navigateCarDetailEvent: SharedFlow<String> get() = _navigateCarDetailEvent
 
     private val cid = args.get<String>("cid") ?: ""
+    private val channelId = cid.substringAfterLast(":")
     private val carId = cid.substringAfterLast("-")
 
     init {
@@ -49,14 +50,14 @@ class ChattingViewModel @Inject constructor(
     fun muteChannel() {
         chatClient.muteChannel(
             channelType = "messaging",
-            channelId = cid
+            channelId = channelId
         ).execute()
     }
 
     fun unmuteChannel() {
         chatClient.unmuteChannel(
             channelType = "messaging",
-            channelId = cid
+            channelId = channelId
         ).execute()
     }
 }

@@ -30,6 +30,12 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>(R.layout.fragment
         initListener()
         initCollector()
         initChatting(args.cid)
+        viewModel.muteChannel()
+    }
+
+    override fun onStop() {
+        viewModel.unmuteChannel()
+        super.onStop()
     }
 
     private fun initListener() {
