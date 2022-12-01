@@ -45,8 +45,10 @@ object StreamModule {
 
     @Singleton
     @Provides
-    fun provideNotificationConfig(): NotificationConfig = NotificationConfig(
-        pushDeviceGenerators = listOf(FirebasePushDeviceGenerator(providerName = "ucmc")),
+    fun provideNotificationConfig(@ApplicationContext context: Context): NotificationConfig = NotificationConfig(
+        pushDeviceGenerators = listOf(
+            FirebasePushDeviceGenerator(providerName = context.getString(R.string.chatting_provider_name))
+        ),
         pushNotificationsEnabled = true
     )
 

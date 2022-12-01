@@ -37,7 +37,7 @@ class NotificationService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         runCatching {
-            FirebaseMessagingDelegate.registerFirebaseToken(token, "ucmc")
+            FirebaseMessagingDelegate.registerFirebaseToken(token, getString(R.string.chatting_provider_name))
         }
         scope.launch {
             setMessageTokenUseCase(token)
