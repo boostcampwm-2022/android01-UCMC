@@ -69,4 +69,11 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
         }
         awaitClose()
     }
+
+    fun updateReservationState(reservationId: String, state: String) = callbackFlow {
+        fireStore.document("reservations/$reservationId").update("state", state).addOnCompleteListener {
+            trySend(it.isSuccessful)
+        }
+        awaitClose()
+    }
 }
