@@ -12,9 +12,9 @@ exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 0 * * *")
       const now = new Date(utc + (KR_TIME_DIFF)).getTime();
       const reservationRef = db.collection("reservations");
 
-      const query2 = reservationRef
+      const returnQuery = reservationRef
           .where("state", "==", "대여중");
-      await query2.get().then((snapshot) => {
+      await returnQuery.get().then((snapshot) => {
         snapshot.forEach((doc) => {
           if (doc.get("reservationDate.end") <= now) {
             doc.ref.update("state", "반납 완료");
@@ -22,8 +22,8 @@ exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 0 * * *")
         });
       });
 
-      const query1 = reservationRef.where("state", "==", "예약 완료");
-      await query1.get().then((snapshot) => {
+      const rentQuery = reservationRef.where("state", "==", "예약 완료");
+      await rentQuery.get().then((snapshot) => {
         snapshot.forEach((doc) => {
           if (doc.get("reservationDate.start") <= now &&
               doc.get("reservationDate.end") >= now) {
