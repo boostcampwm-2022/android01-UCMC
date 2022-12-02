@@ -25,8 +25,8 @@
         tools:layout="@layout/fragment_chatting">
         <argument
             android:name="cid"
-            app:argType="string"
-            android:defaultValue="" />
+            android:defaultValue=""
+            app:argType="string" />
         <action
             android:id="@+id/action_chattingFragment_to_carDetailFragment"
             app:destination="@id/carDetailFragment" />
@@ -47,11 +47,11 @@
         <action
             android:id="@+id/action_myPageFragment_to_myPageTermsFragment"
             app:destination="@id/myPageTermsFragment"
-            app:popUpTo="@id/myPageFragment"/>
+            app:popUpTo="@id/myPageFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_myPageLicenseFragment"
             app:destination="@id/myPageLicenseFragment"
-            app:popUpTo="@id/myPageFragment"/>
+            app:popUpTo="@id/myPageFragment" />
     </fragment>
 
     <fragment
@@ -115,7 +115,7 @@
             android:id="@+id/action_licenseRegistrationFragment_to_myPageLicenseFragment"
             app:destination="@id/myPageLicenseFragment"
             app:popUpTo="@id/myPageLicenseFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -243,7 +243,7 @@
         <action
             android:id="@+id/action_myPageLicenseFragment_to_licenseGuideFragment"
             app:destination="@id/licenseGuideFragment"
-            app:popUpTo="@id/myPageLicenseFragment"/>
+            app:popUpTo="@id/myPageLicenseFragment" />
     </fragment>
 
     <fragment
@@ -256,7 +256,9 @@
             app:argType="string" />
         <action
             android:id="@+id/action_returnCarFragment_to_reviewFragment"
-            app:destination="@id/reviewFragment" />
+            app:destination="@id/reviewFragment"
+            app:popUpTo="@id/carDetailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
