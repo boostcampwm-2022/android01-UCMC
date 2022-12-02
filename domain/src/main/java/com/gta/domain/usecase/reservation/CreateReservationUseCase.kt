@@ -19,7 +19,6 @@ class CreateReservationUseCase @Inject constructor(
                 type = NotificationType.REQUEST_RESERVATION.title,
                 message = NotificationType.REQUEST_RESERVATION.msg,
                 reservationId = reservationId,
-                carId = reservation.carId,
                 fromId = reservation.lenderId
             ),
             reservation.ownerId

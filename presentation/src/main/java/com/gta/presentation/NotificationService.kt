@@ -78,7 +78,6 @@ class NotificationService : FirebaseMessagingService() {
         when (type) {
             "예약 요청" -> {
                 val arguments = Bundle().apply {
-                    putString("CAR_ID", message.data["carId"])
                     putString("RESERVATION_ID", message.data["reservationId"])
                 }
                 deepLinkBuilder.apply {
