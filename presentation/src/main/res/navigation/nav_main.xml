@@ -249,7 +249,7 @@
 
     <fragment
         android:id="@+id/reservationRequestFragment"
-        android:name="com.gta.presentation.ui.reservation.request.ReservationRequestFragment"
+        android:name="com.gta.presentation.ui.reservation.check.ReservationCheckFragment"
         android:label="@string/reservation_request_toolbar"
         tools:layout="@layout/fragment_reservation_request">
 

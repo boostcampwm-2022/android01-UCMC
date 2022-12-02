@@ -1,4 +1,4 @@
-package com.gta.presentation.ui.reservation.request
+package com.gta.presentation.ui.reservation.check
 
 import android.os.Bundle
 import android.view.View
@@ -11,10 +11,10 @@ import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ReservationRequestFragment :
+class ReservationCheckFragment :
     BaseFragment<FragmentReservationRequestBinding>(R.layout.fragment_reservation_request) {
 
-    private val viewModel: ReservationRequestViewModel by viewModels()
+    private val viewModel: ReservationCheckViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

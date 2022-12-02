@@ -1,4 +1,4 @@
-package com.gta.presentation.ui.reservation.request
+package com.gta.presentation.ui.reservation.check
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -24,7 +24,7 @@ import kotlinx.coroutines.plus
 import javax.inject.Inject
 
 @HiltViewModel
-class ReservationRequestViewModel @Inject constructor(
+class ReservationCheckViewModel @Inject constructor(
     args: SavedStateHandle,
     private val finishReservationUseCase: FinishReservationUseCase,
     private val getReservationUseCase: GetReservationUseCase,

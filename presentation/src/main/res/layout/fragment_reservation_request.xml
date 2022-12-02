@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.reservation.request.reservationRequestFragment">
+    tools:context=".ui.reservation.check.reservationRequestFragment">
 
     <data>
         <import type="com.gta.presentation.model.DateType" />
         <variable
             name="vm"
-            type="com.gta.presentation.ui.reservation.request.ReservationRequestViewModel" />
+            type="com.gta.presentation.ui.reservation.check.ReservationCheckViewModel" />
     </data>
 
     <ScrollView
