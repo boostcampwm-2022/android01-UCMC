@@ -35,10 +35,8 @@ class ReturnCarFragment : BaseFragment<FragmentReturnCarBinding>(R.layout.fragme
 
     private fun initCollector() {
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.simpleReservation.collectLatest { reservation ->
-                if (reservation != null) {
-                    viewModel.emitRemainTime()
-                }
+            viewModel.simpleReservation.collectLatest {
+                viewModel.emitRemainTime()
             }
         }
 

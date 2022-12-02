@@ -2,7 +2,6 @@ package com.gta.data.repository
 
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.ReservationDataSource
-import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.Reservation
 import com.gta.domain.model.ReservationState
 import com.gta.domain.repository.ReservationRepository
@@ -46,6 +45,4 @@ class ReservationRepositoryImpl @Inject constructor(
     ): Boolean {
         return reservationDataSource.updateReservationState(reservationId, state.string).first()
     }
-
-
 }

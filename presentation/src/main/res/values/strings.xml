@@ -142,4 +142,5 @@
     <string name="return_car_title">반납까지 %s 남았습니다.\n차량을 반납할까요?</string>
     <string name="hour_format">%d시간</string>
     <string name="day_hour_format">%d일 %d시간</string>
+    <string name="minute_format">%d분</string>
 </resources>

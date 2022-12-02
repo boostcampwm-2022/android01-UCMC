@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     fun getUserProfile(uid: String): Flow<UserProfile>
-    fun getNowReservation(uid: String, carId: String): Flow<SimpleReservation?>
+    fun getNowReservation(uid: String, carId: String): Flow<SimpleReservation>
 }

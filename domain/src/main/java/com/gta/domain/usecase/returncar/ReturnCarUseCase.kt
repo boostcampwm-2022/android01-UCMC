@@ -28,4 +28,3 @@ class ReturnCarUseCase @Inject constructor(
         ) && sendNotificationUseCase(notification, ownerId)
     }
 }
-

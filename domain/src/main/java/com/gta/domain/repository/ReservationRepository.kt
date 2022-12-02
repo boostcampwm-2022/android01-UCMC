@@ -1,6 +1,5 @@
 package com.gta.domain.repository
 
-import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.Reservation
 import com.gta.domain.model.ReservationState
 import kotlinx.coroutines.flow.Flow
