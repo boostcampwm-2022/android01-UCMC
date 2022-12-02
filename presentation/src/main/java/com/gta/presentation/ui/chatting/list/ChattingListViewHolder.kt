@@ -29,7 +29,8 @@ class ChattingListItemViewHolderFactory(
             parentView,
             job,
             getSimpleCarUseCase,
-            listenerContainer.channelClickListener
+            listenerContainer.channelClickListener,
+            listenerContainer.channelLongClickListener
         )
     }
 }
@@ -39,6 +40,7 @@ class ChattingListViewHolder(
     private val job: CompletableJob,
     private val getSimpleCarUseCase: GetSimpleCarUseCase,
     private val channelClickListener: ChannelListView.ChannelClickListener,
+    private val channelLongClickListener: ChannelListView.ChannelLongClickListener,
     private val binding: ItemChattingListBinding = ItemChattingListBinding.inflate(
         LayoutInflater.from(parent.context),
         parent,
@@ -49,7 +51,10 @@ class ChattingListViewHolder(
     private lateinit var channel: Channel
 
     init {
-        binding.root.setOnClickListener { channelClickListener.onClick(channel) }
+        binding.root.run {
+            setOnClickListener { channelClickListener.onClick(channel) }
+            setOnLongClickListener { channelLongClickListener.onLongClick(channel) }
+        }
     }
 
     @OptIn(InternalStreamChatApi::class)

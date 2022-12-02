@@ -10,7 +10,6 @@ import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.getstream.chat.android.client.ChatClient
-import io.getstream.chat.android.client.api.models.QueryChannelRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,7 +36,6 @@ class CarDetailViewModel @Inject constructor(
     val navigateChattingEvent: SharedFlow<String> get() = _navigateChattingEvent
 
     init {
-
         carInfo = getCarDetailDataUseCase(carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -54,23 +52,7 @@ class CarDetailViewModel @Inject constructor(
     fun onChattingClick() {
         if (carId == "정보 없음" || useState.value == UseState.OWNER) return
         val cid = "${FirebaseUtil.uid}-$carId"
-        checkChatChannel(cid)
-    }
-
-    private fun checkChatChannel(cid: String) {
-        chatClient.queryChannel(
-            "messaging",
-            cid,
-            QueryChannelRequest()
-        ).enqueue { result ->
-            if (result.isSuccess) {
-                viewModelScope.launch {
-                    _navigateChattingEvent.emit(result.data().cid)
-                }
-            } else {
-                createChatChannel(cid)
-            }
-        }
+        createChatChannel(cid)
     }
 
     private fun createChatChannel(cid: String) {
