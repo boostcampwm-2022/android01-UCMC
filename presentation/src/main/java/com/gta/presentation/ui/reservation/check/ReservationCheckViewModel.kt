@@ -32,7 +32,7 @@ class ReservationCheckViewModel @Inject constructor(
     private val getReservationUseCase: GetReservationUseCase,
     private val getCarDetailDataUseCase: GetCarDetailDataUseCase
 ) : ViewModel() {
-    private val reservationId by lazy { args.get<String>("RESERVATION_ID") ?: "정보 없음" }
+    private val reservationId = args.get<String>("RESERVATION_ID") ?: "정보 없음"
 
     var car: StateFlow<CarDetail>? = null
     var reservation: StateFlow<Reservation>? = null
@@ -69,7 +69,7 @@ class ReservationCheckViewModel @Inject constructor(
         collectJob.cancel()
     }
 
-    fun createReservation(accepted: Boolean) {
+    fun finishReservation(accepted: Boolean) {
         val reservation = reservation?.value ?: return
         val ownerId = car?.value?.owner?.id ?: return
         val state = if (accepted) ReservationState.ACCEPT else ReservationState.CANCEL

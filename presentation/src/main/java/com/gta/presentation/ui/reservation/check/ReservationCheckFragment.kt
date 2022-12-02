@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.InsuranceOption
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationRequestBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -25,17 +26,15 @@ class ReservationCheckFragment :
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.reservation?.collect {
                 when (it.insuranceOption) {
-                    "LOW" -> binding.rgReservationInsuranceOption1.isChecked = true
-                    "MEDIUM" -> binding.rgReservationInsuranceOption2.isChecked = true
-                    "HIGH" -> binding.rgReservationInsuranceOption3.isChecked = true
-                    else -> {}
-                }
-                if (it.state == "보류중") {
-                    binding.btnReservationDecline.visibility = View.VISIBLE
-                    binding.btnReservationAccept.visibility = View.VISIBLE
-                } else {
-                    binding.btnReservationDecline.visibility = View.GONE
-                    binding.btnReservationAccept.visibility = View.GONE
+                    InsuranceOption.LOW.name -> binding.rgReservationInsuranceOption1
+                    InsuranceOption.MEDIUM.name -> binding.rgReservationInsuranceOption2
+                    InsuranceOption.HIGH.name -> binding.rgReservationInsuranceOption3
+                    else -> null
+                }?.isChecked = true
+
+                (if (it.state == "보류중") View.VISIBLE else View.GONE).also { visibility ->
+                    binding.btnReservationDecline.visibility = visibility
+                    binding.btnReservationAccept.visibility = visibility
                 }
             }
         }

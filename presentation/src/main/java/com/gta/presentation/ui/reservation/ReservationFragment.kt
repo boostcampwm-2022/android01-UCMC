@@ -28,6 +28,7 @@ class ReservationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
+        viewModel.startCollect()
 
         setUpRadioGroup()
 
@@ -48,6 +49,11 @@ class ReservationFragment :
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        viewModel.stopCollect()
+        super.onStop()
     }
 
     private fun setupDatePicker(availableDate: AvailableDate, reservationDates: List<AvailableDate>) {

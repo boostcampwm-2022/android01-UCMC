@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.gta.domain.model.NotificationType
 import com.gta.domain.usecase.notification.SetMessageTokenUseCase
 import com.gta.presentation.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,7 +77,7 @@ class NotificationService : FirebaseMessagingService() {
             .setGraph(R.navigation.nav_main)
 
         when (type) {
-            "예약 요청" -> {
+            NotificationType.REQUEST_RESERVATION.title -> {
                 val arguments = Bundle().apply {
                     putString("RESERVATION_ID", message.data["reservationId"])
                 }
@@ -86,17 +87,17 @@ class NotificationService : FirebaseMessagingService() {
                     addDestination(R.id.reservationRequestFragment)
                 }
             }
-            "예약 수락" -> {
+            NotificationType.ACCEPT_RESERVATION.title -> {
                 deepLinkBuilder.apply {
                     addDestination(R.id.notificationFragment)
                 }
             }
-            "예약 거절" -> {
+            NotificationType.DECLINE_RESERVATION.title -> {
                 deepLinkBuilder.apply {
                     addDestination(R.id.notificationFragment)
                 }
             }
-            "차량 반납" -> {
+            NotificationType.RETURN_CAR.title -> {
                 deepLinkBuilder.apply {
                     addDestination(R.id.mapFragment) // todo return fragment
                 }

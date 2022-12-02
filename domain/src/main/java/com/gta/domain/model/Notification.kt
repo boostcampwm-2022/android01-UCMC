@@ -4,7 +4,6 @@ data class Notification(
     val type: String = "",
     val message: String = "",
     val reservationId: String = "정보 없음",
-    val carId: String = "정보 없음",
     val fromId: String = "정보 없음"
 )
 
