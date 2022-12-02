@@ -9,7 +9,6 @@ import com.gta.presentation.databinding.FragmentReservationRequestBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ReservationRequestFragment :
@@ -21,22 +20,23 @@ class ReservationRequestFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.vm = viewModel
+        viewModel.startCollect()
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.reservation.collect {
-                Timber.d(it.carId)
+            viewModel.reservation?.collect {
                 when (it.insuranceOption) {
                     "LOW" -> binding.rgReservationInsuranceOption1.isChecked = true
                     "MEDIUM" -> binding.rgReservationInsuranceOption2.isChecked = true
                     "HIGH" -> binding.rgReservationInsuranceOption3.isChecked = true
                     else -> {}
                 }
-            }
-        }
-
-        repeatOnStarted(viewLifecycleOwner) {
-            viewModel.car.collect {
-                Timber.d(it.id)
+                if (it.state == "보류중") {
+                    binding.btnReservationDecline.visibility = View.VISIBLE
+                    binding.btnReservationAccept.visibility = View.VISIBLE
+                } else {
+                    binding.btnReservationDecline.visibility = View.GONE
+                    binding.btnReservationAccept.visibility = View.GONE
+                }
             }
         }
 
@@ -45,5 +45,10 @@ class ReservationRequestFragment :
                 if (it) findNavController().popBackStack()
             }
         }
+    }
+
+    override fun onStop() {
+        viewModel.stopCollect()
+        super.onStop()
     }
 }

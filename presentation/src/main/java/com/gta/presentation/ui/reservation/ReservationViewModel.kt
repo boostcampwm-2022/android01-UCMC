@@ -31,7 +31,7 @@ class ReservationViewModel @Inject constructor(
     getCarRentInfoUseCase: GetCarRentInfoUseCase,
     private val createReservationUseCase: CreateReservationUseCase
 ) : ViewModel() {
-    private val carId by lazy { args.get<String>("CAR_ID") }
+    private val carId by lazy { args.get<String>("CAR_ID") ?: "정보 없음" }
 
     private val _reservationDate = MutableLiveData<AvailableDate>()
     val reservationDate: LiveData<AvailableDate> get() = _reservationDate
@@ -89,8 +89,7 @@ class ReservationViewModel @Inject constructor(
         val date = reservationDate.value ?: return
         val price = totalPrice.value ?: return
         val option = insuranceOption.value ?: return
-        val ownerId = car?.value?.ownerId ?: ""
-
+        val ownerId = car?.value?.ownerId ?: return
         carId?.let {
             viewModelScope.launch {
                 _createReservationEvent.emit(

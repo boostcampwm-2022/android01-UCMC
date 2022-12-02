@@ -10,7 +10,9 @@ import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.reservation.FinishReservationUseCase
 import com.gta.domain.usecase.reservation.GetReservationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,45 +20,53 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import javax.inject.Inject
 
 @HiltViewModel
 class ReservationRequestViewModel @Inject constructor(
     args: SavedStateHandle,
     private val finishReservationUseCase: FinishReservationUseCase,
-    getReservationUseCase: GetReservationUseCase,
-    getCarDetailDataUseCase: GetCarDetailDataUseCase
+    private val getReservationUseCase: GetReservationUseCase,
+    private val getCarDetailDataUseCase: GetCarDetailDataUseCase
 ) : ViewModel() {
-    private val carId = args.get<String>("CAR_ID") ?: "정보 없음"
-    private val reservationId = args.get<String>("RESERVATION_ID") ?: "정보 없음"
+    private val carId by lazy { args.get<String>("CAR_ID") ?: "정보 없음" }
+    private val reservationId by lazy { args.get<String>("RESERVATION_ID") ?: "정보 없음" }
 
-    val car: StateFlow<CarDetail>
-    val reservation: StateFlow<Reservation>
+    var car: StateFlow<CarDetail>? = null
+    var reservation: StateFlow<Reservation>? = null
 
     private val _createReservationEvent = MutableSharedFlow<Boolean>()
     val createReservationEvent: SharedFlow<Boolean> get() = _createReservationEvent
 
-    init {
+    private lateinit var collectJob: CompletableJob
+
+    fun startCollect() {
+        collectJob = SupervisorJob()
         car = getCarDetailDataUseCase(carId)
             .flowOn(Dispatchers.IO)
             .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
+                scope = viewModelScope + collectJob,
+                started = SharingStarted.Eagerly,
                 initialValue = CarDetail()
             )
 
         reservation = getReservationUseCase(reservationId)
             .flowOn(Dispatchers.IO)
             .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
+                scope = viewModelScope + collectJob,
+                started = SharingStarted.Eagerly,
                 initialValue = Reservation()
             )
     }
 
+    fun stopCollect() {
+        collectJob.cancel()
+    }
+
     fun createReservation(accepted: Boolean) {
-        val reservation = reservation.value
-        val ownerId = car.value.owner.id
+        val reservation = reservation?.value ?: return
+        val ownerId = car?.value?.owner?.id ?: return
         val state = if (accepted) ReservationState.ACCEPT else ReservationState.CANCEL
 
         viewModelScope.launch {
