@@ -5,9 +5,9 @@ enum class ReservationState(val string: String) {
 }
 
 data class Reservation(
-    val carId: String = "",
-    val lenderId: String = "",
-    val ownerId: String = "",
+    val carId: String = "정보 없음",
+    val lenderId: String = "정보 없음",
+    val ownerId: String = "정보 없음",
     val state: String = ReservationState.PENDING.string,
     val reservationDate: AvailableDate = AvailableDate(),
     val price: Int = 0,

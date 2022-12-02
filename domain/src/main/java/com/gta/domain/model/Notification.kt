@@ -3,9 +3,9 @@ package com.gta.domain.model
 data class Notification(
     val type: String = "",
     val message: String = "",
-    val reservationId: String = "",
-    val carId: String = "",
-    val fromId: String = ""
+    val reservationId: String = "정보 없음",
+    val carId: String = "정보 없음",
+    val fromId: String = "정보 없음"
 )
 
 enum class NotificationType(val title: String, val msg: String) {
