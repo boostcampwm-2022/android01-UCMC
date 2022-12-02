@@ -42,19 +42,18 @@ class ReservationViewModel @Inject constructor(
     private val _totalPrice = MediatorLiveData<Int>()
     val totalPrice: LiveData<Int> get() = _totalPrice
 
-    val car: StateFlow<CarRentInfo>? = carId?.let { carId ->
+    val car: StateFlow<CarRentInfo> =
         getCarRentInfoUseCase(carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = CarRentInfo()
         )
-    }
 
     private val _createReservationEvent = MutableSharedFlow<Boolean>()
     val createReservationEvent: SharedFlow<Boolean> get() = _createReservationEvent
 
     val basePrice: LiveData<Int> = Transformations.map(_reservationDate) {
-        val carPrice = car?.value?.price ?: 0
+        val carPrice = car.value.price
         DateUtil.getDateCount(it.start, it.end) * carPrice
     }
 
@@ -89,22 +88,20 @@ class ReservationViewModel @Inject constructor(
         val date = reservationDate.value ?: return
         val price = totalPrice.value ?: return
         val option = insuranceOption.value ?: return
-        val ownerId = car?.value?.ownerId ?: return
-        carId?.let {
-            viewModelScope.launch {
-                _createReservationEvent.emit(
-                    createReservationUseCase(
-                        Reservation(
-                            carId = it,
-                            lenderId = FirebaseUtil.uid,
-                            ownerId = ownerId,
-                            reservationDate = date,
-                            price = price,
-                            insuranceOption = option.name
-                        )
+        val ownerId = car.value.ownerId
+        viewModelScope.launch {
+            _createReservationEvent.emit(
+                createReservationUseCase(
+                    Reservation(
+                        carId = carId,
+                        lenderId = FirebaseUtil.uid,
+                        ownerId = ownerId,
+                        reservationDate = date,
+                        price = price,
+                        insuranceOption = option.name
                     )
                 )
-            }
+            )
         }
     }
 }
