@@ -21,7 +21,7 @@ class GetUseStateAboutCarUseCase @Inject constructor(
                 uid == carRepository.getOwnerId(carId).first() -> {
                     UseState.OWNER
                 }
-                carId == reservation?.carId -> {
+                carId == reservation.carId -> {
                     UseState.NOW_RENT_USER
                 }
                 RentState.UNAVAILABLE == carRentState -> {

@@ -3,7 +3,7 @@ package com.gta.data.repository
 import com.gta.data.model.toProfile
 import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.UserDataSource
-import com.gta.domain.model.Reservation
+import com.gta.domain.model.SimpleReservation
 import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.UserRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -23,11 +23,11 @@ class UserRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getNowReservation(uid: String, carId: String): Flow<Reservation?> = callbackFlow {
+    override fun getNowReservation(uid: String, carId: String): Flow<SimpleReservation> = callbackFlow {
         val reservation = reservationDataSource.getRentingStateReservations(uid).first().find { reservation ->
             reservation.carId == carId
         }
-        trySend(reservation)
+        trySend(reservation ?: SimpleReservation())
         awaitClose()
     }
 }

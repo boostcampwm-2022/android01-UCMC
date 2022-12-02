@@ -85,7 +85,11 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                     )
                 }
                 UseState.NOW_RENT_USER -> {
-                    // TODO 반납하기 페이지
+                    findNavController().navigate(
+                        CarDetailFragmentDirections.actionCarDetailFragmentToReturnCarFragment(
+                            viewModel.carInfo.value.id
+                        )
+                    )
                 }
                 else -> {}
             }
