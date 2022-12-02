@@ -27,8 +27,8 @@ class ReservationRequestViewModel @Inject constructor(
     getReservationUseCase: GetReservationUseCase,
     getCarDetailDataUseCase: GetCarDetailDataUseCase
 ) : ViewModel() {
-    private val carId = args.get<String>("CAR_ID") ?: ""
-    private val reservationId = args.get<String>("RESERVATION_ID") ?: ""
+    private val carId = args.get<String>("CAR_ID") ?: "정보 없음"
+    private val reservationId = args.get<String>("RESERVATION_ID") ?: "정보 없음"
 
     val car: StateFlow<CarDetail>
     val reservation: StateFlow<Reservation>
@@ -41,7 +41,7 @@ class ReservationRequestViewModel @Inject constructor(
             .flowOn(Dispatchers.IO)
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.Eagerly,
+                started = SharingStarted.WhileSubscribed(5000),
                 initialValue = CarDetail()
             )
 
@@ -49,7 +49,7 @@ class ReservationRequestViewModel @Inject constructor(
             .flowOn(Dispatchers.IO)
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.Eagerly,
+                started = SharingStarted.WhileSubscribed(5000),
                 initialValue = Reservation()
             )
     }

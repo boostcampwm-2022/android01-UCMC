@@ -9,6 +9,7 @@ import com.gta.presentation.databinding.FragmentReservationRequestBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ReservationRequestFragment :
@@ -23,12 +24,19 @@ class ReservationRequestFragment :
 
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.reservation.collect {
+                Timber.d(it.carId)
                 when (it.insuranceOption) {
                     "LOW" -> binding.rgReservationInsuranceOption1.isChecked = true
                     "MEDIUM" -> binding.rgReservationInsuranceOption2.isChecked = true
                     "HIGH" -> binding.rgReservationInsuranceOption3.isChecked = true
                     else -> {}
                 }
+            }
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.car.collect {
+                Timber.d(it.id)
             }
         }
 
