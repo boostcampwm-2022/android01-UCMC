@@ -16,22 +16,25 @@ exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 0 * * *")
       const returnQuery = reservationRef
           .where("state", "==", "대여중");
       await returnQuery.get().then((snapshot) => {
-        snapshot.forEach((reservationDoc) => {
+        snapshot.forEach(async (reservationDoc) => {
           if (reservationDoc.get("reservationDate.end") <= now) {
-            reservationDoc.ref.update("state", "반납완료");
-            const lenderId = reservationDoc.get("lenderId");
-            userRef.doc(lenderId).get().then((userDoc) => {
-              const token = userDoc.get("messageToken");
-              const payload = {
-                "data": {
-                  "type": "반납완료",
-                  "message": "반납이 완료되었습니다.",
-                  "reservationId": reservationDoc.id,
-                  "carId": reservationDoc.get("carId"),
-                  "fromId": reservationDoc.get("ownerId"),
-                },
-              };
-              admin.messaging().sendToDevice(token, payload);
+            await reservationDoc.ref.update("state", "반납완료");
+            const reservation = await reservationDoc.ref.get();
+            const lenderId = await reservation.data().lenderId;
+            userRef.doc(lenderId).get().then(async (userDoc) => {
+              if (userDoc.exists) {
+                const token = await userDoc.data().messageToken;
+                const payload = {
+                  "data": {
+                    "type": "차량 반납",
+                    "message": "반납이 완료되었습니다.",
+                    "reservationId": reservationDoc.id,
+                    "carId": reservation.data().carId,
+                    "fromId": reservation.data().ownerId,
+                  },
+                };
+                await admin.messaging().sendToDevice(token, payload);
+              }
             });
           }
         });
