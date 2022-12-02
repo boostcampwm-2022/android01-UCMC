@@ -10,12 +10,12 @@ import javax.inject.Inject
 class UserDataSource @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) {
-    fun getUser(uid: String): Flow<UserInfo?> = callbackFlow {
+    fun getUser(uid: String): Flow<UserInfo> = callbackFlow {
         fireStore.collection("users").document(uid).get().addOnCompleteListener {
             if (it.isSuccessful) {
-                trySend(it.result.toObject(UserInfo::class.java))
+                trySend(it.result.toObject(UserInfo::class.java) ?: UserInfo())
             } else {
-                trySend(null)
+                trySend(UserInfo())
             }
         }
         awaitClose()

@@ -42,14 +42,13 @@ class CarRepositoryImpl @Inject constructor(
 
     override fun getCarData(carId: String): Flow<CarDetail> = callbackFlow {
         carDataSource.getCar(carId).first()?.let { car ->
-            userDataSource.getUser(car.ownerId).first()?.let { ownerInfo ->
-                trySend(
-                    car.toDetailCar(
-                        car.pinkSlip.informationNumber,
-                        ownerInfo.toProfile(car.ownerId)
-                    )
+            val ownerInfo = userDataSource.getUser(car.ownerId).first()
+            trySend(
+                car.toDetailCar(
+                    car.pinkSlip.informationNumber,
+                    ownerInfo.toProfile(car.ownerId)
                 )
-            } ?: trySend(CarDetail())
+            )
         } ?: trySend(CarDetail())
         awaitClose()
     }
@@ -80,17 +79,16 @@ class CarRepositoryImpl @Inject constructor(
     }
 
     override fun getSimpleCarList(ownerId: String): Flow<List<SimpleCar>> = callbackFlow {
-        userDataSource.getUser(ownerId).first()?.let { userInfo ->
-            if (userInfo.myCars.isNotEmpty()) {
-                carDataSource.getOwnerCars(userInfo.myCars).first().map { car ->
-                    car.toSimple(car.pinkSlip.informationNumber)
-                }.also { result ->
-                    trySend(result)
-                }
-            } else {
-                trySend(emptyList())
+        val userInfo = userDataSource.getUser(ownerId).first()
+        if (userInfo.myCars.isNotEmpty()) {
+            carDataSource.getOwnerCars(userInfo.myCars).first().map { car ->
+                car.toSimple(car.pinkSlip.informationNumber)
+            }.also { result ->
+                trySend(result)
             }
-        } ?: trySend(emptyList())
+        } else {
+            trySend(emptyList())
+        }
         awaitClose()
     }
 
@@ -109,10 +107,8 @@ class CarRepositoryImpl @Inject constructor(
 
     override fun removeCar(userId: String, carId: String): Flow<Boolean> = callbackFlow {
         if (carDataSource.removeCar(carId).first()) {
-            userDataSource.getUser(userId).first()?.let { userInfo ->
-                val newCars = userInfo.myCars.filter { it != carId }
-                trySend(userDataSource.removeCar(userId, newCars).first())
-            } ?: trySend(false)
+            val newCars = userDataSource.getUser(userId).first().myCars.filter { it != carId }
+            trySend(userDataSource.removeCar(userId, newCars).first())
         } else {
             trySend(false)
         }
@@ -125,7 +121,10 @@ class CarRepositoryImpl @Inject constructor(
             images.forEach { img ->
                 val image = Uri.parse(img)
                 val name = image.path?.substringAfterLast("/") ?: ""
-                storageDataSource.uploadPicture("car/$carId/${System.currentTimeMillis()}$name", img).first()?.let { uri ->
+                storageDataSource.uploadPicture(
+                    "car/$carId/${System.currentTimeMillis()}$name",
+                    img
+                ).first()?.let { uri ->
                     imageUri.add(uri)
                 }
             }

@@ -7,5 +7,5 @@ data class CarRentInfo(
     val comment: String = "차였어요",
     val availableDate: AvailableDate = AvailableDate(),
     val reservationDates: List<AvailableDate> = emptyList(),
-    val ownerId: String = ""
+    val ownerId: String = "정보 없음"
 )

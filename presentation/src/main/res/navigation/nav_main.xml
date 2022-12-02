@@ -16,6 +16,10 @@
         <action
             android:id="@+id/action_mapFragment_to_chattingListFragment"
             app:destination="@id/chattingListFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment"
+            app:popUpTo="@id/mapFragment" />
     </fragment>
 
     <fragment
@@ -182,7 +186,7 @@
     <fragment
         android:id="@+id/nicknameFragment"
         android:name="com.gta.presentation.ui.nickname.NicknameFragment"
-        android:label="NicknameFragment"
+        android:label="@string/nickname_toolbar"
         tools:layout="@layout/fragment_nickname">
         <argument
             android:name="thumb"
@@ -259,6 +263,31 @@
             app:destination="@id/reviewFragment"
             app:popUpTo="@id/carDetailFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.gta.presentation.ui.notification.NotificationFragment"
+        android:label="@string/notification_toolbar"
+        tools:layout="@layout/fragment_notification">
+        <action
+            android:id="@+id/action_notificationFragment_to_reservationRequestFragment"
+            app:destination="@id/reservationRequestFragment"
+            app:popUpTo="@id/notificationFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reservationRequestFragment"
+        android:name="com.gta.presentation.ui.reservation.check.ReservationCheckFragment"
+        android:label="@string/reservation_request_toolbar"
+        tools:layout="@layout/fragment_reservation_request">
+
+        <argument
+            android:name="CAR_ID"
+            app:argType="string" />
+        <argument
+            android:name="RESERVATION_ID"
+            app:argType="string" />
     </fragment>
 
 </navigation>
