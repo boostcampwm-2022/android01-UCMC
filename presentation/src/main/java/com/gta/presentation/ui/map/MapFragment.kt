@@ -3,6 +3,7 @@ package com.gta.presentation.ui.map
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PointF
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -16,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.gta.domain.model.Coordinate
 import com.gta.domain.model.LocationInfo
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
@@ -44,6 +46,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private var mapMode = LocationTrackingMode.None
     private val viewModel: MapViewModel by viewModels()
     private lateinit var inputManager: InputMethodManager
+
+    private val markerList = mutableListOf<Marker>()
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -79,6 +83,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
+
+        viewModel.startCollect()
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
 
@@ -106,6 +112,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             isScaleBarEnabled = true
             isLocationButtonEnabled = true
         }
+        getNearCars()
 
         binding.mapView.setOnTouchListener { _, event ->
             hideKeyboard()
@@ -114,6 +121,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                 true
             } else {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                getNearCars()
                 binding.mapView.onTouchEvent(event)
             }
         }
@@ -123,23 +131,27 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private fun setupWithMarker() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.cars.collectLatest {
+                viewModel.carsResponse.collectLatest {
+                    resetMarkers()
                     it.forEach { car ->
-                        Marker().apply {
-                            icon = MarkerIcons.BLACK
-                            iconTintColor = requireContext().getColor(R.color.primaryColor)
-                            position = LatLng(car.coordinate.x, car.coordinate.y)
-                            map = naverMap
+                        markerList.add(
+                            Marker().apply {
+                                icon = MarkerIcons.BLACK
+                                iconTintColor = requireContext().getColor(R.color.primaryColor)
+                                position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
+                                map = naverMap
 
-                            setOnClickListener {
-                                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                                naverMap.moveCamera(
-                                    CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
-                                )
-                                viewModel.setSelected(car)
-                                true
+                                setOnClickListener {
+                                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                                    naverMap.moveCamera(
+                                        CameraUpdate.scrollTo(position)
+                                            .animate(CameraAnimation.Easing)
+                                    )
+                                    viewModel.setSelected(car)
+                                    true
+                                }
                             }
-                        }
+                        )
                     }
                 }
             }
@@ -160,13 +172,14 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         menuAdapter = AutoCompleteAdapter(requireContext(), emptyList())
         menuAdapter.setOnItemClickListener(object : OnItemClickListener<LocationInfo> {
             override fun onClick(value: LocationInfo) {
-                binding.etSearch.setText(value.address)
+                binding.etSearch.setText(value.name ?: value.address)
                 naverMap.moveCamera(
                     CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude))
                         .animate(CameraAnimation.Easing)
                 )
                 hideKeyboard()
                 binding.etSearch.clearFocus()
+                getNearCars()
             }
 
             override fun onLongClick(v: View, value: LocationInfo) {}
@@ -176,13 +189,57 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             viewModel.setQuery(text.toString())
         }
 
+        binding.btnDeleteSearch.setOnClickListener {
+            binding.etSearch.setText("")
+        }
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchResult.collectLatest { list ->
+                viewModel.searchResponse.collectLatest { list ->
                     menuAdapter.replace(list)
                 }
             }
         }
+    }
+
+    private fun getNearCars() {
+        naverMap.let { naverMap ->
+            var minLat = 91.0
+            var maxLat = -91.0
+            var minLng = 181.0
+            var maxLng = -181.0
+
+            listOf(
+                PointF(binding.mapView.left.toFloat(), binding.mapView.top.toFloat()),
+                PointF(binding.mapView.left.toFloat(), binding.mapView.bottom.toFloat()),
+                PointF(binding.mapView.right.toFloat(), binding.mapView.top.toFloat()),
+                PointF(binding.mapView.right.toFloat(), binding.mapView.bottom.toFloat())
+            ).forEach { location ->
+                val tempLocation = naverMap.projection.fromScreenLocation(location)
+
+                if (tempLocation.latitude < minLat) {
+                    minLat = tempLocation.latitude
+                }
+                if (tempLocation.latitude > maxLat) {
+                    maxLat = tempLocation.latitude
+                }
+
+                if (tempLocation.longitude < minLng) {
+                    minLng = tempLocation.longitude
+                }
+                if (tempLocation.longitude > maxLng) {
+                    maxLng = tempLocation.longitude
+                }
+            }
+            viewModel.setPosition(Coordinate(minLat, minLng), Coordinate(maxLat, maxLng))
+        }
+    }
+
+    private fun resetMarkers() {
+        markerList.forEach {
+            it.map = null
+        }
+        markerList.clear()
     }
 
     override fun onAttach(context: Context) {
@@ -216,6 +273,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     override fun onStop() {
+        viewModel.stopCollect()
         binding.mapView.onStop()
         super.onStop()
     }

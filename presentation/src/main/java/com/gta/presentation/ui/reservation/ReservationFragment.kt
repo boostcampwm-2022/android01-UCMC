@@ -28,6 +28,7 @@ class ReservationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
+        viewModel.startCollect()
 
         setUpRadioGroup()
 
@@ -42,10 +43,17 @@ class ReservationFragment :
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.createReservationEvent.collectLatest { state ->
-                    findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToPaymentFragment())
+                    if (state) {
+                        findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToPaymentFragment())
+                    }
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        viewModel.stopCollect()
+        super.onStop()
     }
 
     private fun setupDatePicker(availableDate: AvailableDate, reservationDates: List<AvailableDate>) {
@@ -73,7 +81,7 @@ class ReservationFragment :
     }
 
     private fun setUpRadioGroup() {
-        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { group, checkedId ->
+        binding.rgReservationInsuranceOptions.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rg_reservation_insurance_option_1 -> {
                     viewModel.setInsuranceOption(InsuranceOption.LOW)

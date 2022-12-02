@@ -9,7 +9,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentLicenseRegistrationBinding
-import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -24,8 +23,6 @@ class LicenseRegistrationFragment : BaseFragment<FragmentLicenseRegistrationBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        (requireActivity() as MainActivity).supportActionBar?.title =
-            getString(R.string.license_registration_toolbar)
         initCollector()
     }
 
@@ -34,7 +31,7 @@ class LicenseRegistrationFragment : BaseFragment<FragmentLicenseRegistrationBind
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.registerEvent.collectLatest { state ->
                     if (state) {
-                        findNavController().navigate(R.id.action_licenseRegistrationFragment_to_myPageFragment)
+                        findNavController().navigate(R.id.action_licenseRegistrationFragment_to_myPageLicenseFragment)
                     }
                 }
             }

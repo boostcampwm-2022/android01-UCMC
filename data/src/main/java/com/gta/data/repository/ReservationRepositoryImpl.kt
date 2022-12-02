@@ -3,6 +3,7 @@ package com.gta.data.repository
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.ReservationDataSource
 import com.gta.domain.model.Reservation
+import com.gta.domain.model.ReservationState
 import com.gta.domain.repository.ReservationRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -15,19 +16,15 @@ class ReservationRepositoryImpl @Inject constructor(
     private val reservationDataSource: ReservationDataSource,
     private val carDataSource: CarDataSource
 ) : ReservationRepository {
-    override fun createReservation(reservation: Reservation): Flow<Boolean> = callbackFlow {
-        /*
-            1. 차 정보 가져오기
-            2. 차 예약 리스트 뒤에 새로운 예약 ID 붙이고 업데이트
-            3. 에약 리스트 추가
-         */
+    override fun createReservation(reservation: Reservation): Flow<String> = callbackFlow {
         val reservationId = "${System.currentTimeMillis()}${reservation.carId}"
-        carDataSource.getCar(reservation.carId).first()?.let { car ->
-            val updateReservations = car.reservations.plus(reservationId)
-            val updateResult = carDataSource.updateCarReservations(reservation.carId, updateReservations).first()
-            val createResult = reservationDataSource.createReservation(reservation, reservationId).first()
-            trySend(updateResult && createResult)
-        } ?: trySend(false)
+        carDataSource.getCar(reservation.carId).first()?.let {
+            if (reservationDataSource.createReservation(reservation, reservationId).first()) {
+                trySend(reservationId)
+            } else {
+                trySend("")
+            }
+        } ?: trySend("")
         awaitClose()
     }
 
@@ -40,5 +37,12 @@ class ReservationRepositoryImpl @Inject constructor(
 
     override fun getReservationCar(reservationId: String): Flow<String> {
         return getReservationInfo(reservationId).map { it.carId }
+    }
+
+    override suspend fun updateReservationState(
+        reservationId: String,
+        state: ReservationState
+    ): Boolean {
+        return reservationDataSource.updateReservationState(reservationId, state.string).first()
     }
 }

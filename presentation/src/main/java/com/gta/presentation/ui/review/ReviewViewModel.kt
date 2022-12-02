@@ -1,5 +1,6 @@
 package com.gta.presentation.ui.review
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.ReviewDTO
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReviewViewModel @Inject constructor(
+    args: SavedStateHandle,
     private val addReviewUseCase: AddReviewUseCase,
     private val getReviewDTOUseCase: GetReviewDTOUseCase
 ) : ViewModel() {
@@ -25,7 +27,7 @@ class ReviewViewModel @Inject constructor(
     val comment = MutableStateFlow("")
     val rating = MutableStateFlow(5.0f)
 
-    private val reservationId = "16691845818537FFI7GI3KKW4RE73X"
+    private val reservationId = args.get<String>("reservationId") ?: ""
 
     private val _reviewDTO = MutableStateFlow(ReviewDTO())
     val reviewDTO: StateFlow<ReviewDTO> get() = _reviewDTO

@@ -3,6 +3,7 @@ package com.gta.data.di
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.repository.LoginRepositoryImpl
 import com.gta.data.source.LoginDataSource
+import com.gta.data.source.MessageTokenDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.repository.LoginRepository
 import dagger.Module
@@ -24,6 +25,7 @@ object LoginModule {
     @Provides
     fun provideLoginRepository(
         userDataSource: UserDataSource,
-        loginDataSource: LoginDataSource
-    ): LoginRepository = LoginRepositoryImpl(userDataSource, loginDataSource)
+        loginDataSource: LoginDataSource,
+        messageTokenDataSource: MessageTokenDataSource
+    ): LoginRepository = LoginRepositoryImpl(userDataSource, loginDataSource, messageTokenDataSource)
 }

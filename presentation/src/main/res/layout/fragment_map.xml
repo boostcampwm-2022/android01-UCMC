@@ -26,21 +26,42 @@
                 android:theme="@style/Theme.UCMC"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/et_search"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:importantForAutofill="no"
-                    android:textColor="?attr/colorOnBackground"
-                    android:padding="@dimen/padding_small"
-                    android:layout_marginEnd="@dimen/padding_medium"
-                    android:hint="@string/search_hint"
-                    android:inputType="text"
-                    android:completionThreshold="1"
-                    android:background="@drawable/edittext_style"
-                    android:drawableStart="@drawable/ic_search"
-                    android:drawableTint="?attr/colorOnSurface" />
+                    android:layout_height="match_parent">
 
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/et_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/edittext_style"
+                        android:completionThreshold="1"
+                        android:drawableStart="@drawable/ic_search"
+                        android:drawableTint="?attr/colorOnSurface"
+                        android:hint="@string/search_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:padding="@dimen/padding_small"
+                        android:layout_marginEnd="@dimen/padding_small"
+                        android:textColor="?attr/colorOnBackground"
+                        tools:ignore="TouchTargetSizeCheck"
+                        tools:layout_editor_absoluteX="16dp"
+                        tools:layout_editor_absoluteY="8dp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_delete_search"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_close"
+                        android:background="@null"
+                        android:padding="@dimen/padding_small"
+                        app:layout_constraintTop_toTopOf="@id/et_search"
+                        app:layout_constraintBottom_toBottomOf="@id/et_search"
+                        app:layout_constraintEnd_toEndOf="@id/et_search"
+                        app:layout_constraintDimensionRatio="H,1:1"
+                        app:tint="?attr/colorOnBackground" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.appbar.MaterialToolbar>
 
             <com.naver.maps.map.MapView
@@ -71,7 +92,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:image_uri="@{vm.selectCar.image}"
-                    app:tint="@color/neutral80"
                     app:layout_constraintDimensionRatio="H,1:1"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>

@@ -19,6 +19,7 @@
             android:id="@+id/iv_car"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            app:image_uri="@{data.image}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_logo"

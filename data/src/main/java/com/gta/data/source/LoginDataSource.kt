@@ -10,11 +10,11 @@ import javax.inject.Inject
 class LoginDataSource @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) {
-    fun createUser(uid: String): Flow<Boolean> = callbackFlow {
+    fun createUser(uid: String, messageToken: String): Flow<Boolean> = callbackFlow {
         fireStore
             .collection("users")
             .document(uid)
-            .set(UserInfo(chatId = uid.hashCode().toLong()))
+            .set(UserInfo(messageToken = messageToken))
             .addOnCompleteListener {
                 trySend(it.isSuccessful)
             }

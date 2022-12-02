@@ -14,7 +14,7 @@ class MyPageRepositoryImpl @Inject constructor(
     private val storageDataSource: StorageDataSource
 ) : MyPageRepository {
     override fun setThumbnail(uid: String, uri: String): Flow<String> = callbackFlow {
-        val result = storageDataSource.uploadThumbnail(uri).first() ?: ""
+        val result = storageDataSource.uploadPicture("users/$uid/thumbnail", uri).first() ?: ""
         if (result.isNotEmpty() && myPageDataSource.setThumbnail(uid, result).first()) {
             trySend(result)
         } else {
@@ -23,8 +23,8 @@ class MyPageRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun deleteThumbnail(path: String): Flow<Boolean> = callbackFlow {
-        trySend(storageDataSource.deleteThumbnail(path).first())
+    override fun deleteThumbnail(uid: String, path: String): Flow<Boolean> = callbackFlow {
+        trySend(storageDataSource.deletePicture(path).first())
         awaitClose()
     }
 }

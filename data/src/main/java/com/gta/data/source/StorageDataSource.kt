@@ -10,12 +10,9 @@ import javax.inject.Inject
 class StorageDataSource @Inject constructor(
     private val storageReference: StorageReference
 ) {
-    fun uploadThumbnail(uri: String): Flow<String?> = callbackFlow {
+    fun uploadPicture(path: String, uri: String): Flow<String?> = callbackFlow {
         val image = Uri.parse(uri)
-        val name = image.path?.substringAfterLast("/") ?: ""
-        val ref = storageReference
-            .child("thumb")
-            .child("${System.currentTimeMillis()}$name")
+        val ref = storageReference.child(path)
         ref.putFile(image).continueWithTask {
             ref.downloadUrl
         }.addOnCompleteListener {
@@ -28,7 +25,7 @@ class StorageDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun deleteThumbnail(path: String): Flow<Boolean> = callbackFlow {
+    fun deletePicture(path: String): Flow<Boolean> = callbackFlow {
         storageReference.storage.getReferenceFromUrl(path).delete().addOnCompleteListener {
             trySend(it.isSuccessful)
         }

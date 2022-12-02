@@ -9,6 +9,8 @@ object Dependencies {
         const val MATERIAL = "1.7.0"
         const val CONSTRAINT_LAYOUT = "2.1.4"
         const val STARTUP = "1.2.0-alpha01"
+        const val SPLASH = "1.0.0"
+        const val DATASTORE = "1.0.0"
 
         // KTX
         const val KOTLIN = "1.7.10"
@@ -42,11 +44,16 @@ object Dependencies {
 
         // REST API
         const val RETROFIT = "2.9.0"
+        const val LOGGING_INTERCEPTER = "5.0.0-alpha.6"
 
         // Test
         const val JUNIT = "4.13.2"
         const val JUNIT_EXT = "1.1.4"
         const val ESPRESSO_CORE = "3.5.0"
+
+        // Github open Library
+        const val INDICATOR = "4.3"
+        const val LOTTIE = "5.0.1"
     }
 
     object Classpaths {
@@ -63,6 +70,7 @@ object Dependencies {
             const val APP_COMPAT = "androidx.appcompat:appcompat:${Versions.APP_COMPAT}"
             const val CORE = "androidx.core:core-ktx:${Versions.CORE}"
             const val STARTUP = "androidx.startup:startup-runtime:${Versions.STARTUP}"
+            const val SPLASH = "androidx.core:core-splashscreen:${Versions.SPLASH}"
 
             fun getAll(): ArrayList<String> {
                 return arrayListOf(APP_COMPAT, CORE)
@@ -103,11 +111,11 @@ object Dependencies {
                 "com.shobhitpuri.custombuttons:google-signin:${Versions.GOOGLE_SIGNIN_BUTTON}"
 
             fun getDataAll(): ArrayList<String> {
-                return arrayListOf(ANALYTICS, CRASHLYTICS, DATABASE, STORAGE, MESSAGING, FIRESTORE)
+                return arrayListOf(ANALYTICS, CRASHLYTICS, DATABASE, STORAGE, FIRESTORE)
             }
 
             fun getPresentationAll(): ArrayList<String> {
-                return arrayListOf(AUTH, GOOGLE_SIGNIN_BUTTON)
+                return arrayListOf(AUTH, GOOGLE_SIGNIN_BUTTON, MESSAGING)
             }
         }
 
@@ -171,6 +179,12 @@ object Dependencies {
             }
         }
 
+        const val INDICATOR = "com.tbuonomo:dotsindicator:${Versions.INDICATOR}"
+        const val LOTTIE = "com.airbnb.android:lottie:${Versions.LOTTIE}"
+
+        const val LOGGING_INTERCEPTER =
+            "com.squareup.okhttp3:logging-interceptor:${Versions.LOGGING_INTERCEPTER}"
+
         const val VIEW_PAGER_2 = "androidx.viewpager2:viewpager2:${Versions.VIEW_PAGER}"
 
         const val NAVER_MAP = "com.naver.maps:map-sdk:${Versions.NAVER_MAPS}"
@@ -178,9 +192,14 @@ object Dependencies {
         const val STREAM_CHAT =
             "io.getstream:stream-chat-android-ui-components:${Versions.STREAM_CHAT}"
 
+        const val STREAM_PUSH_PROVIDER =
+            "io.getstream:stream-chat-android-pushprovider-firebase:${Versions.STREAM_CHAT}"
+
         const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"
 
         const val INJECT = "javax.inject:javax.inject:${Versions.INJECT}"
+
+        const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
 
         object Test {
             const val EXT = "androidx.test.ext:junit:${Versions.JUNIT_EXT}"
@@ -211,6 +230,8 @@ object Dependencies {
             addAll(Room.getAll())
             add(TIMBER)
             addAll(Retrofit.getAll())
+            add(DATASTORE)
+            add(LOGGING_INTERCEPTER)
         }
 
         val dataKaptLibraries = arrayListOf<String>().apply {
@@ -236,7 +257,11 @@ object Dependencies {
             add(Hilt.HILT)
             add(NAVER_MAP)
             add(STREAM_CHAT)
+            add(STREAM_PUSH_PROVIDER)
             add(TIMBER)
+            add(AndroidX.SPLASH)
+            add(INDICATOR)
+            add(LOTTIE)
         }
 
         val presentationKaptLibraries = arrayListOf<String>().apply {

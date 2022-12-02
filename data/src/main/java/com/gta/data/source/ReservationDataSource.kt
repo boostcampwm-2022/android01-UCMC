@@ -1,9 +1,11 @@
 package com.gta.data.source
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.gta.data.model.Car
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.Reservation
+import com.gta.domain.model.ReservationState
+import com.gta.domain.model.SimpleReservation
+import com.gta.domain.model.toSimpleReservation
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -33,23 +35,30 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
         awaitClose()
     }
 
-    fun getAllReservations(): Flow<List<Reservation>> = callbackFlow {
-        fireStore.collection("reservations").get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                trySend(it.result.map { snapshot -> snapshot.toObject(Reservation::class.java) })
-            } else {
-                trySend(emptyList())
+    fun getRentingStateReservations(uid: String): Flow<List<SimpleReservation>> = callbackFlow {
+        fireStore
+            .collection("reservations")
+            .whereEqualTo("lenderId", uid)
+            .whereEqualTo("state", ReservationState.RENTING.string)
+            .get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    it.result.map { snapshot ->
+                        snapshot.toObject(Reservation::class.java).toSimpleReservation(snapshot.id)
+                    }.also { result ->
+                        trySend(result)
+                    }
+                } else {
+                    trySend(emptyList())
+                }
             }
-        }
         awaitClose()
     }
 
-    fun getCarReservationDates(car: Car): Flow<List<AvailableDate>> = callbackFlow {
-        fireStore.collection("reservations").get().addOnCompleteListener {
+    fun getCarReservationDates(carId: String): Flow<List<AvailableDate>> = callbackFlow {
+        fireStore.collection("reservations").whereEqualTo("carId", carId).get().addOnCompleteListener {
             if (it.isSuccessful) {
-                it.result.filter { document ->
-                    car.reservations.contains(document.id)
-                }.map { snapshot ->
+                it.result.map { snapshot ->
                     snapshot.toObject(Reservation::class.java).reservationDate
                 }.also { result ->
                     trySend(result)
@@ -57,6 +66,13 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
             } else {
                 trySend(emptyList())
             }
+        }
+        awaitClose()
+    }
+
+    fun updateReservationState(reservationId: String, state: String) = callbackFlow {
+        fireStore.document("reservations/$reservationId").update("state", state).addOnCompleteListener {
+            trySend(it.isSuccessful)
         }
         awaitClose()
     }

@@ -90,3 +90,5 @@ lint/tmp/
 *.DS_Store
 /presentation/src/main/java/com/gta/presentation/secret/Secrets.kt
 /data/src/main/java/com/gta/data/secret/
+
+/functions/node_modules

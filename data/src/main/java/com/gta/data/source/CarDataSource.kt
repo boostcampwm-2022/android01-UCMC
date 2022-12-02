@@ -2,6 +2,7 @@ package com.gta.data.source
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.model.Car
+import com.gta.domain.model.Coordinate
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -41,12 +42,15 @@ class CarDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun updateCarReservations(carId: String, reservations: List<Any?>): Flow<Boolean> =
+    /*
+        PinkSlipDataSource의 createCar와 동일한 코드
+     */
+    fun createCar(carId: String, car: Car): Flow<Boolean> =
         callbackFlow {
             fireStore
                 .collection("cars")
                 .document(carId)
-                .update("reservations", reservations)
+                .set(car)
                 .addOnCompleteListener {
                     trySend(it.isSuccessful)
                 }
@@ -61,6 +65,25 @@ class CarDataSource @Inject constructor(
                 trySend(emptyList())
             }
         }
+        awaitClose()
+    }
+
+    fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<Car>> = callbackFlow {
+        fireStore.collection("cars").whereGreaterThan("coordinate.latitude", min.latitude)
+            .whereLessThan("coordinate.latitude", max.latitude).get().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    it.result.filter { document ->
+                        val tmp = document.toObject(Car::class.java)
+                        tmp.coordinate.longitude >= min.longitude && tmp.coordinate.longitude <= max.longitude
+                    }.map { snapshot ->
+                        snapshot.toObject(Car::class.java)
+                    }.also { result ->
+                        trySend(result)
+                    }
+                } else {
+                    trySend(emptyList())
+                }
+            }
         awaitClose()
     }
 

@@ -33,10 +33,9 @@ class ReviewRepositoryImpl @Inject constructor(
          */
         val addReviewResult = reviewDataSource.addReview(opponentId, reservationId, review).first()
         if (addReviewResult) {
-            userDataSource.getUser(opponentId).first()?.let { userInfo ->
-                val updatedTemperature = userInfo.temperature + calcTemperature(review.rating)
-                trySend(reviewDataSource.updateTemperature(opponentId, updatedTemperature).first())
-            } ?: trySend(false)
+            val userInfo = userDataSource.getUser(opponentId).first()
+            val updatedTemperature = userInfo.temperature + calcTemperature(review.rating)
+            trySend(reviewDataSource.updateTemperature(opponentId, updatedTemperature).first())
         } else {
             trySend(false)
         }
@@ -47,26 +46,27 @@ class ReviewRepositoryImpl @Inject constructor(
         /*
             1. 예약 id로 예약을 불러온다.
             2. 예약에 있는 차 아이디로 차 정보를 불러온다. (carId, carModel 얻기)
-            3. 예약의 userId와 uid를 비교해서 리뷰를 보내는 대상을 특정한다.
+            3. 예약의 lenderId와 uid를 비교해서 리뷰를 보내는 대상을 특정한다.
             3-1. 같으면 대여자 -> 차주에게 리뷰를 보내는 케이스 (차 정보의 ownerId에서 UserProfile 얻기)
-            3-2. 다르면 차주 -> 대여자에게 리뷰를 보내는 케이스 (예약의 userId에서 UserProfile 얻기)
+            3-2. 다르면 차주 -> 대여자에게 리뷰를 보내는 케이스 (예약의 lenderId에서 UserProfile 얻기)
          */
         reservationDataSource.getReservation(reservationId).first()?.let { reservation ->
-            val reviewType = if (reservation.userId == uid) ReviewType.LENDER_TO_OWNER else ReviewType.OWNER_TO_LENDER
+            val reviewType =
+                if (reservation.lenderId == uid) ReviewType.LENDER_TO_OWNER else ReviewType.OWNER_TO_LENDER
             carDataSource.getCar(reservation.carId).first()?.let { car ->
                 val carImage = if (car.images.isNotEmpty()) car.images[0] else ""
-                val opponentId = if (reviewType == ReviewType.LENDER_TO_OWNER) car.ownerId else reservation.userId
-                userDataSource.getUser(opponentId).first()?.let { userInfo ->
-                    val profile = userInfo.toProfile(opponentId)
-                    trySend(
-                        ReviewDTO(
-                            reviewType = reviewType,
-                            opponent = profile,
-                            carImage = carImage,
-                            carModel = car.pinkSlip.model
-                        )
+                val opponentId =
+                    if (reservation.lenderId == uid) reservation.ownerId else reservation.lenderId
+                val userInfo = userDataSource.getUser(opponentId).first()
+                val profile = userInfo.toProfile(opponentId)
+                trySend(
+                    ReviewDTO(
+                        reviewType = reviewType,
+                        opponent = profile,
+                        carImage = carImage,
+                        carModel = car.pinkSlip.model
                     )
-                } ?: trySend(ReviewDTO())
+                )
             } ?: trySend(ReviewDTO())
         } ?: trySend(ReviewDTO())
         awaitClose()
