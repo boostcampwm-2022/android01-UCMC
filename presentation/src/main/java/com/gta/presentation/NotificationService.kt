@@ -62,6 +62,7 @@ class NotificationService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.ic_logo)
             .setContentTitle(message.data["type"])
             .setContentText(message.data["message"])
+            .setContentIntent(createPendingIntent(message))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         notificationManager.notify(0, builder.build())
