@@ -18,6 +18,7 @@ import com.gta.presentation.ui.map.MapViewModel
 import com.gta.presentation.ui.mypage.mycars.OnItemClickListener
 import com.gta.presentation.util.repeatOnStarted
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -76,6 +77,11 @@ class CarEditMapFragment :
     private fun setupWithMap() {
         naverMap.locationSource = locationSource
         naverMap.locationTrackingMode = mapMode
+
+        naverMap.extent = LatLngBounds(MAP_MIN_BOUND, MAP_MAX_BOUND)
+        naverMap.minZoom = MAP_MIN_ZOOM
+        naverMap.maxZoom = MAP_MAX_ZOOM
+
         naverMap.uiSettings.apply {
             isCompassEnabled = true
             isScaleBarEnabled = true
@@ -177,5 +183,11 @@ class CarEditMapFragment :
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+
+        private const val MAP_MIN_ZOOM = 5.0
+        private const val MAP_MAX_ZOOM = 18.0
+
+        private val MAP_MIN_BOUND = LatLng(31.43, 122.37)
+        private val MAP_MAX_BOUND = LatLng(44.35, 132.0)
     }
 }
