@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
@@ -53,6 +54,19 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
             }
         }
 
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.reportEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> {
+                        sendSnackBar(getString(R.string.report_success))
+                    }
+                    is UCMCResult.Error -> {
+                        sendSnackBar(result.exception)
+                    }
+                }
+            }
+        }
+
         binding.cvOwner.setOnClickListener {
             findNavController().navigate(
                 CarDetailFragmentDirections
@@ -62,8 +76,13 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
             )
         }
 
-        binding.inOwnerProfile.tvChatting.setOnClickListener {
-            viewModel.onChattingClick()
+        binding.inOwnerProfile.apply {
+            tvChatting.setOnClickListener {
+                viewModel.onChattingClick()
+            }
+            tvReport.setOnClickListener {
+                viewModel.onReportClick()
+            }
         }
 
         binding.btnNext.setOnClickListener {

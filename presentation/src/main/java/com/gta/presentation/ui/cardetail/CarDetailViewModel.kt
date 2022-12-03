@@ -4,10 +4,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.CarDetail
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.GetUseStateAboutCarUseCase
 import com.gta.domain.usecase.cardetail.UseState
+import com.gta.domain.usecase.user.ReportUserUseCase
 import com.gta.presentation.util.FirebaseUtil
+import com.gta.presentation.util.MutableEventFlow
+import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.getstream.chat.android.client.ChatClient
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,6 +28,7 @@ class CarDetailViewModel @Inject constructor(
     args: SavedStateHandle,
     getCarDetailDataUseCase: GetCarDetailDataUseCase,
     getUseStateAboutCarUseCase: GetUseStateAboutCarUseCase,
+    private val reportUserUseCase: ReportUserUseCase,
     private val chatClient: ChatClient
 ) : ViewModel() {
 
@@ -34,6 +39,9 @@ class CarDetailViewModel @Inject constructor(
 
     private val _navigateChattingEvent = MutableSharedFlow<String>()
     val navigateChattingEvent: SharedFlow<String> get() = _navigateChattingEvent
+
+    private val _reportEvent = MutableEventFlow<UCMCResult<Unit>>()
+    val reportEvent get() = _reportEvent.asEventFlow()
 
     init {
         carInfo = getCarDetailDataUseCase(carId).stateIn(
@@ -73,6 +81,11 @@ class CarDetailViewModel @Inject constructor(
     }
 
     fun onReportClick() {
-        Timber.d("자동차 상세페이지 신고")
+        if (carInfo.value.owner.id == "정보 없음" || FirebaseUtil.uid == carInfo.value.owner.id) {
+            return
+        }
+        viewModelScope.launch {
+            _reportEvent.emit(reportUserUseCase(carInfo.value.owner.id))
+        }
     }
 }
