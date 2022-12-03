@@ -8,6 +8,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment<VB : ViewDataBinding>(
     @LayoutRes private val layoutRes: Int
@@ -29,6 +30,12 @@ abstract class BaseFragment<VB : ViewDataBinding>(
     }
 
     fun isBindingNotNull(): Boolean = _binding != null
+
+    fun sendSnackBar(
+        message: String,
+        @androidx.annotation.IntRange(from = -2) length: Int = Snackbar.LENGTH_SHORT) {
+        Snackbar.make(binding.root, message, length).show()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
