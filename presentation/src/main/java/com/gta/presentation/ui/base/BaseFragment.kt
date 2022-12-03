@@ -33,7 +33,8 @@ abstract class BaseFragment<VB : ViewDataBinding>(
 
     fun sendSnackBar(
         message: String,
-        @androidx.annotation.IntRange(from = -2) length: Int = Snackbar.LENGTH_SHORT) {
+        @androidx.annotation.IntRange(from = -2) length: Int = Snackbar.LENGTH_SHORT
+    ) {
         Snackbar.make(binding.root, message, length).show()
     }
 

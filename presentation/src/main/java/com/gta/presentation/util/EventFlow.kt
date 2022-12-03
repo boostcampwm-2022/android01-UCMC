@@ -22,6 +22,7 @@ interface MutableEventFlow<T> : EventFlow<T>, FlowCollector<T>
 // collect에 들어가서 소비가 잘 됐는지 확인하기 위한 consumed 변수가 정의됐습니다.
 private class EventFlowSlot<T>(val value: T) {
     private val consumed = AtomicBoolean(false)
+
     // markConsumed가 호출되면 consumed를 리턴한 다음 consumed를 true로 바꿔줍니다.
     fun markConsumed() = consumed.getAndSet(true)
 }
