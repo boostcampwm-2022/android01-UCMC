@@ -12,9 +12,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.gta.domain.model.Coordinate
@@ -23,6 +20,7 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.ui.mypage.mycars.OnItemClickListener
+import com.gta.presentation.util.repeatOnStarted
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraAnimation
@@ -49,6 +47,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private lateinit var inputManager: InputMethodManager
 
     private val markerList = mutableListOf<Marker>()
+    private var selectedMarker: Marker? = null
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -126,39 +125,48 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             if (event.y >= binding.bottomSheet.top && event.y <= binding.bottomSheet.bottom) {
                 true
             } else {
+                selectedMarker = null
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                getNearCars()
                 binding.mapView.onTouchEvent(event)
             }
         }
+
+        naverMap.addOnCameraChangeListener { _, _ ->
+            getNearCars()
+        }
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "ResourceType")
     private fun setupWithMarker() {
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.carsResponse.collectLatest {
-                    resetMarkers()
-                    it.forEach { car ->
-                        markerList.add(
-                            Marker().apply {
-                                icon = MarkerIcons.BLACK
-                                iconTintColor = requireContext().getColor(R.color.primaryColor)
-                                position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
-                                map = naverMap
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.carsResponse.collectLatest {
+                resetMarkers()
+                it.forEach { car ->
+                    markerList.add(
+                        Marker().apply {
+                            position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
+                            icon = MarkerIcons.BLACK
+                            iconTintColor = requireContext().getColor(
+                                if (selectedMarker?.position == position) R.color.primaryDarkColor
+                                else R.color.primaryColor
+                            )
+                            map = naverMap
 
-                                setOnClickListener {
-                                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                                    naverMap.moveCamera(
-                                        CameraUpdate.scrollTo(position)
-                                            .animate(CameraAnimation.Easing)
-                                    )
-                                    viewModel.setSelected(car)
-                                    true
-                                }
+                            setOnClickListener {
+                                selectedMarker?.iconTintColor =
+                                    requireContext().getColor(R.color.primaryColor)
+                                selectedMarker = this
+                                iconTintColor = requireContext().getColor(R.color.primaryDarkColor)
+                                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                                naverMap.moveCamera(
+                                    CameraUpdate.scrollTo(position)
+                                        .animate(CameraAnimation.Easing)
+                                )
+                                viewModel.setSelected(car)
+                                true
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             }
         }
@@ -199,16 +207,18 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             binding.etSearch.setText("")
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchResponse.collectLatest { list ->
-                    menuAdapter.replace(list)
-                }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.searchResponse.collectLatest { list ->
+                menuAdapter.replace(list)
             }
         }
     }
 
     private fun getNearCars() {
+        markerList.forEach {
+            it.iconTintColor =
+                requireContext().getColor(if (it.position == selectedMarker?.position) R.color.primaryDarkColor else R.color.primaryColor)
+        }
         naverMap.let { naverMap ->
             var minLat = 91.0
             var maxLat = -91.0
