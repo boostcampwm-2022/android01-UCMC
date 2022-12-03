@@ -158,6 +158,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                                 selectedMarker = this
                                 iconTintColor = requireContext().getColor(R.color.primaryDarkColor)
                                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                                naverMap.moveCamera(CameraUpdate.zoomTo(MAP_FOCUS_ZOOM))
                                 naverMap.moveCamera(
                                     CameraUpdate.scrollTo(position)
                                         .animate(CameraAnimation.Easing)
@@ -187,6 +188,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         menuAdapter.setOnItemClickListener(object : OnItemClickListener<LocationInfo> {
             override fun onClick(value: LocationInfo) {
                 binding.etSearch.setText(value.name ?: value.address)
+                naverMap.moveCamera(CameraUpdate.zoomTo(MAP_FOCUS_ZOOM))
                 naverMap.moveCamera(
                     CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude))
                         .animate(CameraAnimation.Easing)
@@ -337,6 +339,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
         private const val MAP_MIN_ZOOM = 5.0
+        private const val MAP_FOCUS_ZOOM = 15.0
         private const val MAP_MAX_ZOOM = 18.0
 
         private val MAP_MIN_BOUND = LatLng(31.43, 122.37)
