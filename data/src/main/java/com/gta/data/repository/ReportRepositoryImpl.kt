@@ -18,7 +18,7 @@ class ReportRepositoryImpl @Inject constructor(
     override suspend fun reportUser(uid: String): UCMCResult<Unit> {
         val cooldown = REPORT_COOL_DOWN - getTimeAfterReporting()
         return if (cooldown > 0) {
-            UCMCResult.Error(context.getString(R.string.report_cooldown, (cooldown / 1000 + 1).toInt()))
+            UCMCResult.Error(context.getString(R.string.report_cooldown, cooldown / 1000 + 1))
         } else {
             addReportCount(uid)
         }
