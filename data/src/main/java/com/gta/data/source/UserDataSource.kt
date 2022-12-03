@@ -34,4 +34,11 @@ class UserDataSource @Inject constructor(
         }
         awaitClose()
     }
+
+    fun addReportCount(uid: String, count: Int) = callbackFlow {
+        fireStore.collection("users").document(uid).update("reportCount", count).addOnCompleteListener {
+            trySend(it.isSuccessful)
+        }
+        awaitClose()
+    }
 }

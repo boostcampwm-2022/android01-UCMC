@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="report_cooldown">%1d초만 참아주세요..!</string>
+    <string name="report_fail">다시 시도해주세요.</string>
+</resources>
