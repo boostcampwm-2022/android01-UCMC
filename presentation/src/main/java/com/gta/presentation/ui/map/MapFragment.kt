@@ -80,6 +80,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         }
     }
 
+    private val cameraListener = NaverMap.OnCameraChangeListener { _, _ ->
+        getNearCars()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
@@ -131,9 +135,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             }
         }
 
-        naverMap.addOnCameraChangeListener { _, _ ->
-            getNearCars()
-        }
+        naverMap.addOnCameraChangeListener(cameraListener)
     }
 
     @SuppressLint("ResourceAsColor", "ResourceType")
@@ -146,17 +148,13 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                         Marker().apply {
                             position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
                             icon = MarkerIcons.BLACK
-                            iconTintColor = requireContext().getColor(
-                                if (selectedMarker?.position == position) R.color.primaryDarkColor
-                                else R.color.primaryColor
-                            )
+                            setMarkerColor(this, selectedMarker?.position == position)
                             map = naverMap
 
                             setOnClickListener {
-                                selectedMarker?.iconTintColor =
-                                    requireContext().getColor(R.color.primaryColor)
+                                setMarkerColor(selectedMarker, false)
                                 selectedMarker = this
-                                iconTintColor = requireContext().getColor(R.color.primaryDarkColor)
+                                setMarkerColor(this, true)
                                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                                 naverMap.moveCamera(CameraUpdate.zoomTo(MAP_FOCUS_ZOOM))
                                 naverMap.moveCamera(
@@ -218,8 +216,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     private fun getNearCars() {
         markerList.forEach {
-            it.iconTintColor =
-                requireContext().getColor(if (it.position == selectedMarker?.position) R.color.primaryDarkColor else R.color.primaryColor)
+            setMarkerColor(it, selectedMarker?.position == it.position)
         }
         naverMap.let { naverMap ->
             var minLat = 91.0
@@ -260,6 +257,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         markerList.clear()
     }
 
+    private fun setMarkerColor(marker: Marker?, selected: Boolean) {
+        marker?.iconTintColor =
+            requireContext().getColor(if (selected) R.color.primaryDarkColor else R.color.primaryColor)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         backPressedCallback = object : OnBackPressedCallback(true) {
@@ -292,6 +294,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onStop() {
         viewModel.stopCollect()
+        naverMap.removeOnCameraChangeListener(cameraListener)
         binding.mapView.onStop()
         super.onStop()
     }
