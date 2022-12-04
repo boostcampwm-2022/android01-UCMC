@@ -25,14 +25,15 @@ class ReportRepositoryImpl @Inject constructor(
     }
 
     private suspend fun addReportCount(uid: String): UCMCResult<Unit> {
-        val user = userDataSource.getUser(uid).first()
-        val result = userDataSource.addReportCount(uid, user.reportCount + 1).first()
-        return if (result) {
-            lastReportedTime = System.currentTimeMillis()
-            UCMCResult.Success(Unit)
-        } else {
-            UCMCResult.Error(context.getString(R.string.report_fail))
-        }
+        return userDataSource.getUser(uid).first()?.let { user ->
+            val result = userDataSource.addReportCount(uid, user.reportCount + 1).first()
+            if (result) {
+                lastReportedTime = System.currentTimeMillis()
+                UCMCResult.Success(Unit)
+            } else {
+                UCMCResult.Error(context.getString(R.string.report_fail))
+            }
+        } ?: UCMCResult.Error(context.getString(R.string.report_fail))
     }
 
     private fun getTimeAfterReporting() =
