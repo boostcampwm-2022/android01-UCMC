@@ -1,5 +1,6 @@
 package com.gta.data.repository
 
+import com.gta.data.model.UserInfo
 import com.gta.data.source.LoginDataSource
 import com.gta.data.source.MessageTokenDataSource
 import com.gta.data.source.UserDataSource
@@ -20,7 +21,7 @@ class LoginRepositoryImpl @Inject constructor(
         uid: String
     ): Flow<LoginResult> = callbackFlow {
         val userInfo = userDataSource.getUser(uid).first()
-        if (userInfo != null) {
+        if (userInfo != UserInfo()) {
             trySend(LoginResult.SUCCESS)
         } else {
             trySend(LoginResult.NEWUSER)
