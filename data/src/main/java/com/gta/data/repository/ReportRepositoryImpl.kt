@@ -36,7 +36,7 @@ class ReportRepositoryImpl @Inject constructor(
         } ?: UCMCResult.Error(context.getString(R.string.report_fail))
     }
 
-    private fun getTimeAfterReporting() =
+    private fun getTimeAfterReporting(): Long =
         (System.currentTimeMillis() - lastReportedTime)
 
     companion object {

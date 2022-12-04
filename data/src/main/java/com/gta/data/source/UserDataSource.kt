@@ -28,14 +28,14 @@ class UserDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun updateUserMessageToken(uid: String, token: String) = callbackFlow {
+    fun updateUserMessageToken(uid: String, token: String): Flow<Boolean> = callbackFlow {
         fireStore.collection("users").document(uid).update("messageToken", token).addOnCompleteListener {
             trySend(it.isSuccessful)
         }
         awaitClose()
     }
 
-    fun addReportCount(uid: String, count: Int) = callbackFlow {
+    fun addReportCount(uid: String, count: Int): Flow<Boolean> = callbackFlow {
         fireStore.collection("users").document(uid).update("reportCount", count).addOnCompleteListener {
             trySend(it.isSuccessful)
         }
