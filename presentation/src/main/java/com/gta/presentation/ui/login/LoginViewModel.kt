@@ -12,8 +12,8 @@ import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.models.User
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -28,8 +28,8 @@ class LoginViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
 
-    private val _loginEvent = MutableSharedFlow<LoginResult>()
-    val loginEvent: SharedFlow<LoginResult> get() = _loginEvent
+    private val _loginEvent = MutableStateFlow(LoginResult.FAILURE)
+    val loginEvent: StateFlow<LoginResult> get() = _loginEvent
 
     fun signInWithToken(token: String?) {
         token ?: return
