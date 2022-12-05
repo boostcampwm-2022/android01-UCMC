@@ -5,7 +5,7 @@ import com.gta.data.source.CarDataSource
 import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.ReviewDataSource
 import com.gta.data.source.UserDataSource
-import com.gta.domain.model.DuplicatedReview
+import com.gta.domain.model.DuplicatedItemException
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.ReviewDTO
 import com.gta.domain.model.ReviewType
@@ -59,7 +59,7 @@ class ReviewRepositoryImpl @Inject constructor(
                 if (reservation.lenderId == uid) reservation.ownerId else reservation.lenderId
             // 중복된 리뷰 등록을 시도하면 에러 반환
             if (isDuplicatedReview(opponentId, reservationId)) {
-                return UCMCResult.Error(DuplicatedReview())
+                return UCMCResult.Error(DuplicatedItemException())
             }
             carDataSource.getCar(reservation.carId).first()?.let { car ->
                 val carImage = if (car.images.isNotEmpty()) car.images[0] else ""

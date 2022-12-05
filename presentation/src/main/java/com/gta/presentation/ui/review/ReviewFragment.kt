@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.gta.domain.model.DuplicatedReview
+import com.gta.domain.model.DuplicatedItemException
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
@@ -32,7 +32,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(
             viewModel.reviewDTOEvent.collectLatest { result ->
                 if (result is UCMCResult.Error) {
                     when (result.e) {
-                        is DuplicatedReview -> {
+                        is DuplicatedItemException -> {
                             sendSnackBar(getString(R.string.review_error_firestore_review_duplicated))
                         }
                         is FirestoreException -> {
