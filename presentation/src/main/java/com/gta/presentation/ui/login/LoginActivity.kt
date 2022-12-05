@@ -97,7 +97,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
                     LoginResult.NEWUSER -> {
                         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
-                    else -> {}
+                    LoginResult.FAILURE -> {}
                 }
             }
         }
