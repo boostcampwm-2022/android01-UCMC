@@ -44,7 +44,7 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
                         sendSnackBar(getString(R.string.report_success))
                     }
                     is UCMCResult.Error -> {
-                        sendSnackBar(result.exception)
+                        sendSnackBar(result.message)
                     }
                 }
             }
