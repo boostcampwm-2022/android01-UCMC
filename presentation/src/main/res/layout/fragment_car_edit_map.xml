@@ -5,6 +5,7 @@
     tools:context=".ui.map.MapFragment">
 
     <data>
+
         <variable
             name="vm"
             type="com.gta.presentation.ui.map.MapViewModel" />
@@ -13,6 +14,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/coordinator"
             android:layout_width="match_parent"
@@ -34,6 +36,7 @@
                         android:id="@+id/et_search"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginEnd="@dimen/padding_small"
                         android:background="@drawable/edittext_style"
                         android:completionThreshold="1"
                         android:drawableStart="@drawable/ic_search"
@@ -42,7 +45,6 @@
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:padding="@dimen/padding_small"
-                        android:layout_marginEnd="@dimen/padding_small"
                         android:textColor="?attr/colorOnBackground"
                         tools:ignore="TouchTargetSizeCheck"
                         tools:layout_editor_absoluteX="16dp"
@@ -52,25 +54,128 @@
                         android:id="@+id/btn_delete_search"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_close"
                         android:background="@null"
                         android:padding="@dimen/padding_small"
-                        app:layout_constraintTop_toTopOf="@id/et_search"
+                        android:src="@drawable/ic_close"
                         app:layout_constraintBottom_toBottomOf="@id/et_search"
-                        app:layout_constraintEnd_toEndOf="@id/et_search"
                         app:layout_constraintDimensionRatio="H,1:1"
+                        app:layout_constraintEnd_toEndOf="@id/et_search"
+                        app:layout_constraintTop_toTopOf="@id/et_search"
                         app:tint="?attr/colorOnBackground" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.appbar.MaterialToolbar>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingVertical="@dimen/padding_medium"
+                android:text="등록된 차량을\n주차할 장소를 선택해주세요"
+                android:textSize="@dimen/font_title_medium"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/tb_toolbar" />
+
             <com.naver.maps.map.MapView
                 android:id="@+id/map_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingVertical="@dimen/padding_large"
                 app:navermap_latitude="37.3588798"
-                app:navermap_longitude="127.1051933"/>
+                app:navermap_longitude="127.1051933" />
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_my_car"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_done"
+                style="@style/Theme.UCMC.BottomButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="위치 선택하기"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorSurface"
+                android:clickable="true"
+                android:elevation="3dp"
+                android:focusable="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_location_select_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_large"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:text="선택한 위치가 이 위치가 맞나요?\n선택한 곳의 장소명을 입력해주세요"
+                    android:textSize="@dimen/font_title_medium"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/tl_location"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tl_location"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_small"
+                    app:boxStrokeColor="?attr/colorPrimary"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_location_done"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location_select_label">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_location_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textSize="@dimen/font_body_medium" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_location_cancle"
+                    style="@style/Theme.UCMC.BottomButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:backgroundTint="?attr/colorSecondaryVariant"
+                    android:text="위치 다시 선택"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_location_done"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_location_done"
+                    style="@style/Theme.UCMC.BottomButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_large"
+                    android:text="위치 확정"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_location_cancle"
+                    app:layout_constraintTop_toBottomOf="@+id/tl_location" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
