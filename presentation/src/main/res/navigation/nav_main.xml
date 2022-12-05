@@ -272,19 +272,16 @@
         tools:layout="@layout/fragment_notification">
         <action
             android:id="@+id/action_notificationFragment_to_reservationRequestFragment"
-            app:destination="@id/reservationRequestFragment"
+            app:destination="@id/reservationCheckFragment"
             app:popUpTo="@id/notificationFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/reservationRequestFragment"
+        android:id="@+id/reservationCheckFragment"
         android:name="com.gta.presentation.ui.reservation.check.ReservationCheckFragment"
         android:label="@string/reservation_request_toolbar"
         tools:layout="@layout/fragment_reservation_request">
 
-        <argument
-            android:name="CAR_ID"
-            app:argType="string" />
         <argument
             android:name="RESERVATION_ID"
             app:argType="string" />
