@@ -33,6 +33,6 @@ fun Notification.toInfo(id: String): NotificationInfo = NotificationInfo(
     fromId = fromId,
     fromNickName = fromId,
     carImage = "",
-    licensePlate = "---",
+    licensePlate = "정보 없음",
     date = id.substringBefore("-")
 )

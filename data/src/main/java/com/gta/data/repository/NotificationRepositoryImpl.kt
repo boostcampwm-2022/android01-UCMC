@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class NotificationRepositoryImpl @Inject constructor(
@@ -34,6 +36,8 @@ class NotificationRepositoryImpl @Inject constructor(
         val notificationId = "${System.currentTimeMillis()}-$userId"
         return notificationDataSource.saveNotification(notification, userId, notificationId).first()
     }
+
+    private val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
 
     suspend fun getNotificationInfoDetailItem(notifyInfo: NotificationInfo): NotificationInfo {
         val reservation = reservationDataSource.getReservation(notifyInfo.reservationId).first()
@@ -53,6 +57,8 @@ class NotificationRepositoryImpl @Inject constructor(
                 }
             }
         }
+
+        notifyInfo.date = dateFormat.format(notifyInfo.date.toLong())
 
         Timber.d("notifyInfo 번호판 ${notifyInfo.licensePlate}")
         return notifyInfo
