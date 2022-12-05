@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.NotificationType
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentNotificationListBinding
@@ -35,29 +36,40 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
                 override fun onClick(type: NotificationType, reservation: String) {
                     when (type) {
                         NotificationType.REQUEST_RESERVATION -> {
-                            // TODO 수락/거절 이동(RESERVASTON ID)
-                            NotificationListFragmentDirections
-                                .actionNotificationListFragmentToReservationCheckFragment(
-                                    reservation
-                                )
+                            Timber.d("수락 요청")
+                            findNavController().navigate(
+                                NotificationListFragmentDirections
+                                    .actionNotificationListFragmentToReservationCheckFragment(
+                                        reservation
+                                    )
+                            )
                         }
                         NotificationType.ACCEPT_RESERVATION -> {
-                            NotificationListFragmentDirections
-                                .actionNotificationListFragmentToReservationCheckFragment(
-                                    reservation
-                                )
+                            Timber.d("수락")
+                            findNavController().navigate(
+                                NotificationListFragmentDirections
+                                    .actionNotificationListFragmentToReservationCheckFragment(
+                                        reservation
+                                    )
+                            )
                         }
                         NotificationType.DECLINE_RESERVATION -> {
-                            NotificationListFragmentDirections
-                                .actionNotificationListFragmentToReservationCheckFragment(
-                                    reservation
-                                )
+                            Timber.d("취소")
+                            findNavController().navigate(
+                                NotificationListFragmentDirections
+                                    .actionNotificationListFragmentToReservationCheckFragment(
+                                        reservation
+                                    )
+                            )
                         }
                         NotificationType.RETURN_CAR -> {
-                            NotificationListFragmentDirections
-                                .actionNotificationListFragmentToReviewFragment(
-                                    reservation
-                                )
+                            Timber.d("반납 확인")
+                            findNavController().navigate(
+                                NotificationListFragmentDirections
+                                    .actionNotificationListFragmentToReviewFragment(
+                                        reservation
+                                    )
+                            )
                         }
                     }
                 }
