@@ -42,6 +42,12 @@ class CarEditViewModel @Inject constructor(
     val availableDate: StateFlow<AvailableDate>
         get() = _availableDate
 
+    private val _location = MutableStateFlow<String>("정보 없음")
+    val location: StateFlow<String>
+        get() = _location
+
+    private var coordinate: Coordinate? = null
+
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.NOMAL)
     val updateState: StateFlow<UpdateState>
         get() = _updateState
@@ -65,6 +71,7 @@ class CarEditViewModel @Inject constructor(
                 else -> false
             }
             _availableDate.value = carInfo.availableDate
+            _location.value = carInfo.location
         }
     }
 
@@ -78,6 +85,11 @@ class CarEditViewModel @Inject constructor(
 
     fun setAvailableDate(start: Long, end: Long) {
         _availableDate.value = AvailableDate(start, end)
+    }
+
+    fun setLocationData(text: String, latitude: Double, longitude: Double) {
+        _location.value = text
+        coordinate = Coordinate(latitude, longitude)
     }
 
     fun updateData() {

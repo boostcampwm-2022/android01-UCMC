@@ -99,7 +99,30 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             viewModel.setAvailableDate(it.first, it.second)
         }
 
+        // 위치 수정 값
+        setChangeLocation()
+
         return binding.root
+    }
+
+    private fun setChangeLocation() {
+        val text = findNavController()
+            .currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<String>("LOCATION")?.value
+        val latitude = findNavController()
+            .currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<String>("LATITUDE")?.value
+        val longitude = findNavController()
+            .currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<String>("LONGITUDE")?.value
+
+        if (text != null && latitude != null && longitude != null) {
+            viewModel.setLocationData(
+                text,
+                latitude.toDouble(),
+                longitude.toDouble()
+            )
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

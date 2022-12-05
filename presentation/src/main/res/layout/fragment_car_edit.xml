@@ -270,7 +270,7 @@
                     android:layout_marginHorizontal="@dimen/padding_medium"
                     android:layout_marginVertical="@dimen/padding_medium"
                     android:gravity="end"
-                    android:text="@string/no_information"
+                    android:text="@{vm.location}"
                     android:textSize="@dimen/font_title_medium"
                     app:layout_constraintBottom_toTopOf="@+id/btn_done"
                     app:layout_constraintEnd_toStartOf="@+id/iv_location_edit"

@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.LocationInfo
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditMapBinding
@@ -84,23 +85,36 @@ class CarEditMapFragment :
                 map = naverMap
             }
 
-            seVisibleAtSelectLocation(true)
+            setVisibleAtSelectLocation(true)
         }
 
         binding.btnLocationCancle.setOnClickListener {
-            seVisibleAtSelectLocation(false)
+            setVisibleAtSelectLocation(false)
             marker.map = null
         }
 
         binding.btnLocationDone.setOnClickListener {
-            // TODO 완료
-            Timber.d("완료")
+            // TODO 완료 안내 메시지 추가 고민
+            
+            saveLocationData("LOCATION", binding.etLocationInput.text.toString())
+            saveLocationData("LATITUDE", marker.position.latitude.toString())
+            saveLocationData("LONGITUDE", marker.position.longitude.toString())
+
+            findNavController().navigateUp()
         }
     }
 
-    fun seVisibleAtSelectLocation(state: Boolean) {
+    private fun setVisibleAtSelectLocation(state: Boolean) {
         binding.layoutDone.visibility = if (state) View.VISIBLE else View.GONE
         binding.ivMyCar.visibility = if (!state) View.VISIBLE else View.GONE
+    }
+
+    private fun saveLocationData(key: String, value: String) {
+        findNavController()
+            .previousBackStackEntry?.savedStateHandle?.set(
+                key,
+                value
+            )
     }
 
     override fun onMapReady(naverMap: NaverMap) {
