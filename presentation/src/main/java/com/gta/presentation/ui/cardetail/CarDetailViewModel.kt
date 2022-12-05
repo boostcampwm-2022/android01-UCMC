@@ -9,15 +9,19 @@ import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.GetUseStateAboutCarUseCase
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.domain.usecase.user.ReportUserUseCase
+import com.gta.presentation.util.EventFlow
 import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.MutableEventFlow
 import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.getstream.chat.android.client.ChatClient
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -32,7 +36,12 @@ class CarDetailViewModel @Inject constructor(
     private val chatClient: ChatClient
 ) : ViewModel() {
 
-    val carInfo: StateFlow<CarDetail>
+    private val _carInfoEvent = MutableEventFlow<UCMCResult<CarDetail>>()
+    val carInfoEvetn: EventFlow<UCMCResult<CarDetail>> get() = _carInfoEvent.asEventFlow()
+
+    private val _carInfo = MutableStateFlow(CarDetail())
+    val carInfo: StateFlow<CarDetail> get() = _carInfo
+
     val useState: StateFlow<UseState>
 
     private val carId = args.get<String>("CAR_ID") ?: "정보 없음"
@@ -44,11 +53,11 @@ class CarDetailViewModel @Inject constructor(
     val reportEvent get() = _reportEvent.asEventFlow()
 
     init {
-        carInfo = getCarDetailDataUseCase(carId).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = CarDetail()
-        )
+        getCarDetailDataUseCase(carId).onEach {
+            if (it is UCMCResult.Success)
+                _carInfo.emit(it.data)
+            _carInfoEvent.emit(it)
+        }.launchIn(viewModelScope)
 
         useState = getUseStateAboutCarUseCase(FirebaseUtil.uid, carId).stateIn(
             scope = viewModelScope,

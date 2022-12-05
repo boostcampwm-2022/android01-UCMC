@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.RentState
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UpdateCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UploadCarImagesUseCase
@@ -38,11 +39,11 @@ class CarEditViewModel @Inject constructor(
     val comment = MutableStateFlow("")
     val rentState = MutableStateFlow(false)
 
-    private val _availableDate = MutableStateFlow<AvailableDate>(AvailableDate())
+    private val _availableDate = MutableStateFlow(AvailableDate())
     val availableDate: StateFlow<AvailableDate>
         get() = _availableDate
 
-    private val _updateState = MutableStateFlow<UpdateState>(UpdateState.NOMAL)
+    private val _updateState = MutableStateFlow(UpdateState.NOMAL)
     val updateState: StateFlow<UpdateState>
         get() = _updateState
 
@@ -54,17 +55,19 @@ class CarEditViewModel @Inject constructor(
 
         viewModelScope.launch {
             val carInfo = getCarDetailDataUseCase(carId).first()
-            _images.value = carInfo.images
-            initImage = carInfo.images
+            if (carInfo is UCMCResult.Success) {
+                _images.value = carInfo.data.images
+                initImage = carInfo.data.images
 
-            price.value = carInfo.price.toString()
-            comment.value = carInfo.comment
+                price.value = carInfo.data.price.toString()
+                comment.value = carInfo.data.comment
 
-            rentState.value = when (carInfo.rentState) {
-                RentState.AVAILABLE -> true
-                else -> false
+                rentState.value = when (carInfo.data.rentState) {
+                    RentState.AVAILABLE -> true
+                    else -> false
+                }
+                _availableDate.value = carInfo.data.availableDate
             }
-            _availableDate.value = carInfo.availableDate
         }
     }
 
