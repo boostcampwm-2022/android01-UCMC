@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.CoolDownException
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentOwnerProfileBinding
-import com.gta.presentation.model.ReportEventState
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,14 +42,11 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.reportEvent.collectLatest { result ->
                 when (result) {
-                    is ReportEventState.Success -> {
+                    is UCMCResult.Error -> {
+                        handleErrorMessage(result.e)
+                    }
+                    is UCMCResult.Success -> {
                         sendSnackBar(message = getString(R.string.report_success))
-                    }
-                    is ReportEventState.Cooldown -> {
-                        sendSnackBar(message = getString(R.string.report_cooldown, result.cooldown))
-                    }
-                    is ReportEventState.Error -> {
-                        sendSnackBar(message = getString(R.string.report_fail))
                     }
                 }
             }
@@ -56,6 +55,17 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.carList.collectLatest {
                 carListAdapter.submitList(it)
+            }
+        }
+    }
+
+    private fun handleErrorMessage(e: Exception) {
+        when (e) {
+            is FirestoreException -> {
+                sendSnackBar(message = getString(R.string.report_fail))
+            }
+            is CoolDownException -> {
+                sendSnackBar(message = getString(R.string.report_cooldown, e.cooldown))
             }
         }
     }

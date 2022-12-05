@@ -3,6 +3,7 @@ package com.gta.data.repository
 import com.gta.data.source.UserDataSource
 import com.gta.domain.model.CoolDownException
 import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.ReportRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -13,24 +14,25 @@ class ReportRepositoryImpl @Inject constructor(
 
     private var lastReportedTime = 0L
 
-    override suspend fun reportUser(uid: String) {
+    override suspend fun reportUser(uid: String): UCMCResult<Unit> {
         val cooldown = REPORT_COOL_DOWN - getTimeAfterReporting()
-        if (cooldown > 0) {
-            throw CoolDownException(cooldown / 1000 + 1)
+        return if (cooldown > 0) {
+            UCMCResult.Error(CoolDownException(cooldown / 1000 + 1))
         } else {
             addReportCount(uid)
         }
     }
 
-    private suspend fun addReportCount(uid: String) {
+    private suspend fun addReportCount(uid: String): UCMCResult<Unit> {
         return userDataSource.getUser(uid).first()?.let { user ->
             val result = userDataSource.addReportCount(uid, user.reportCount + 1).first()
             if (result) {
                 lastReportedTime = System.currentTimeMillis()
+                UCMCResult.Success(Unit)
             } else {
-                throw FirestoreException()
+                UCMCResult.Error(FirestoreException())
             }
-        } ?: throw FirestoreException()
+        } ?: UCMCResult.Error(FirestoreException())
     }
 
     private fun getTimeAfterReporting(): Long =
