@@ -37,7 +37,7 @@ class CarDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _carInfoEvent = MutableEventFlow<UCMCResult<CarDetail>>()
-    val carInfoEvetn: EventFlow<UCMCResult<CarDetail>> get() = _carInfoEvent.asEventFlow()
+    val carInfoEvent: EventFlow<UCMCResult<CarDetail>> get() = _carInfoEvent.asEventFlow()
 
     private val _carInfo = MutableStateFlow(CarDetail())
     val carInfo: StateFlow<CarDetail> get() = _carInfo
