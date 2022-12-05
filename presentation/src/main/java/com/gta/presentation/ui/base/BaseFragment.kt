@@ -33,9 +33,14 @@ abstract class BaseFragment<VB : ViewDataBinding>(
 
     fun sendSnackBar(
         message: String,
-        @androidx.annotation.IntRange(from = -2) length: Int = Snackbar.LENGTH_SHORT
+        @androidx.annotation.IntRange(from = -2) length: Int = Snackbar.LENGTH_SHORT,
+        anchorView: View? = null
     ) {
-        Snackbar.make(binding.root, message, length).show()
+        Snackbar.make(binding.root, message, length).apply {
+            if (anchorView != null) {
+                this.anchorView = anchorView
+            }
+        }.show()
     }
 
     override fun onDestroyView() {

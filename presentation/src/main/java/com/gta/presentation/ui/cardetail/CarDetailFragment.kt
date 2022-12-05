@@ -58,10 +58,16 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
             viewModel.reportEvent.collectLatest { result ->
                 when (result) {
                     is UCMCResult.Success -> {
-                        sendSnackBar(getString(R.string.report_success))
+                        sendSnackBar(
+                            message = getString(R.string.report_success),
+                            anchorView = binding.btnNext
+                        )
                     }
                     is UCMCResult.Error -> {
-                        sendSnackBar(result.exception)
+                        sendSnackBar(
+                            message = getString(R.string.report_success),
+                            anchorView = binding.btnNext
+                        )
                     }
                 }
             }
