@@ -69,8 +69,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         binding.btnLoginGoogle.setOnClickListener {
             googleLogin()
         }
-
-        setupSlasphScreen(splashScreen)
+        setupSplashScreen(splashScreen)
     }
 
     override fun onResume() {
@@ -95,10 +94,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
             viewModel.loginEvent.collectLatest { state ->
                 when (state) {
                     LoginResult.SUCCESS -> startMainActivity()
-                    LoginResult.FAILURE -> {}
                     LoginResult.NEWUSER -> {
                         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
+                    else -> {}
                 }
             }
         }
@@ -145,11 +144,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         requestActivity.launch(googleSignInClient.signInIntent)
     }
 
-    private fun setupSlasphScreen(splashScreen: androidx.core.splashscreen.SplashScreen) {
+    private fun setupSplashScreen(splashScreen: androidx.core.splashscreen.SplashScreen) {
         val content: View = findViewById(android.R.id.content)
         content.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                return if (viewModel.loginEvent.value == LoginResult.SUCCESS) {
+                return if (viewModel.isLoading.not()) {
                     content.viewTreeObserver.removeOnPreDrawListener(this)
                     true
                 } else false

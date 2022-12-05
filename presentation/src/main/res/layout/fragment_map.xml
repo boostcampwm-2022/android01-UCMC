@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:orientation="vertical"
-            android:background="@color/neutral99"
+            android:background="?android:attr/colorBackground"
             android:padding="@dimen/padding_large"
             app:behavior_hideable="true"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
