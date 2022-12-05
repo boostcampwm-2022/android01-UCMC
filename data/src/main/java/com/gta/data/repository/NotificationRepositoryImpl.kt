@@ -59,7 +59,7 @@ class NotificationRepositoryImpl @Inject constructor(
     }
 
     override fun getNotificationInfoList(userId: String): Flow<PagingData<NotificationInfo>> {
-        return Pager(PagingConfig(20)) {
+        return Pager(PagingConfig(10)) {
             NotificationPagingSource(userId, notificationDataSource, this)
         }.flow
     }

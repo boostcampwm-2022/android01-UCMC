@@ -24,11 +24,11 @@ class NotificationPagingSource(
 
             LoadResult.Page(
                 data = currentPage.map {
-                    // repository.getNotificationInfoDetailItem(
-                    it.toObject(
-                        Notification::class.java
-                    ).toInfo(it.id)
-                    // )
+                    repository.getNotificationInfoDetailItem(
+                        it.toObject(
+                            Notification::class.java
+                        ).toInfo(it.id)
+                    )
                 },
                 prevKey = null,
                 nextKey = nextPage
