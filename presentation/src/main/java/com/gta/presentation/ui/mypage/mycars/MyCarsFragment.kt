@@ -5,7 +5,11 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.FirebaseException
+import com.gta.domain.model.DeleteFailException
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
+import com.gta.domain.model.UserNotFoundException
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMyCarsBinding
 import com.gta.presentation.ui.MainActivity
@@ -51,7 +55,7 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
                     is UCMCResult.Success ->
                         adapter.submitList(result.data)
                     is UCMCResult.Error ->
-                        sendSnackBar(result.e.message)
+                        handleErrorMessage(result.e)
                 }
             }
         }
@@ -63,7 +67,7 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
                         viewModel.getCarList()
                     }
                     is UCMCResult.Error -> {
-                        sendSnackBar(result.e.message)
+                        handleErrorMessage(result.e)
                     }
                 }
             }
@@ -100,5 +104,14 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
                 popup.show()
             }
         })
+    }
+
+    private fun handleErrorMessage(e: Exception) {
+        when (e) {
+            is FirestoreException -> sendSnackBar(resources.getString(R.string.exception_car_list_fail))
+            is DeleteFailException -> sendSnackBar(resources.getString(R.string.exception_delete_fail))
+            is UserNotFoundException -> sendSnackBar(resources.getString(R.string.exception_user_not_found))
+            else -> sendSnackBar(e.message)
+        }
     }
 }

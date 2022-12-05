@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.CoolDownException
+import com.gta.domain.model.DeleteFailException
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
+import com.gta.domain.model.UserNotFoundException
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentOwnerProfileBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -44,7 +48,7 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
                         sendSnackBar(getString(R.string.report_success))
                     }
                     is UCMCResult.Error -> {
-                        sendSnackBar(result.e.message)
+                        handleErrorMessage(result.e)
                     }
                 }
             }
@@ -54,9 +58,21 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
             viewModel.carListEvent.collectLatest { result ->
                 when (result) {
                     is UCMCResult.Success -> carListAdapter.submitList(result.data)
-                    is UCMCResult.Error -> sendSnackBar(result.e.message)
+                    is UCMCResult.Error -> handleErrorMessage(result.e)
                 }
             }
+        }
+    }
+
+    private fun handleErrorMessage(e: Exception) {
+        when (e) {
+            is FirestoreException -> {
+                sendSnackBar(message = getString(R.string.report_fail))
+            }
+            is CoolDownException -> {
+                sendSnackBar(message = getString(R.string.report_cooldown, e.cooldown))
+            }
+            else -> sendSnackBar(e.message)
         }
     }
 }

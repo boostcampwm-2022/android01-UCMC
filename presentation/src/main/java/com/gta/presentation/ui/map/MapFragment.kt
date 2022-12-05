@@ -14,7 +14,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.gta.domain.model.CarDetail
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.LocationInfo
 import com.gta.domain.model.SimpleCar

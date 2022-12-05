@@ -15,11 +15,13 @@ import com.gta.data.source.UserDataSource
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.Coordinate
+import com.gta.domain.model.DeleteFailException
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UpdateCar
+import com.gta.domain.model.UserNotFoundException
 import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -130,11 +132,11 @@ class CarRepositoryImpl @Inject constructor(
                 if (userDataSource.removeCar(userId, newCars).first()) {
                     UCMCResult.Success(Unit)
                 } else {
-                    UCMCResult.Error(FirestoreException()) // TODO 삭제에 실패했을 경우 차를 다시 생성
+                    UCMCResult.Error(DeleteFailException()) // TODO 삭제에 실패했을 경우 차를 다시 생성
                 }
-            } ?: UCMCResult.Error(FirestoreException()) // TODO 삭제에 실패했을 경우 차를 다시 생성
+            } ?: UCMCResult.Error(UserNotFoundException()) // TODO 삭제에 실패했을 경우 차를 다시 생성
         } else {
-            return UCMCResult.Error(FirestoreException())
+            return UCMCResult.Error(DeleteFailException())
         }
     }
 

@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.gta.presentation.R
 
 abstract class BaseFragment<VB : ViewDataBinding>(
     @LayoutRes private val layoutRes: Int
@@ -36,7 +37,11 @@ abstract class BaseFragment<VB : ViewDataBinding>(
         @androidx.annotation.IntRange(from = -2) length: Int = Snackbar.LENGTH_SHORT,
         anchorView: View? = null
     ) {
-        Snackbar.make(binding.root, message ?: "알 수 없는 오류가 발생했어요.", length).apply {
+        Snackbar.make(
+            binding.root,
+            message ?: requireContext().resources.getString(R.string.exception_not_found),
+            length
+        ).apply {
             if (anchorView != null) {
                 this.anchorView = anchorView
             }

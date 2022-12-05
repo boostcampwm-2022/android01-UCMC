@@ -59,8 +59,7 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideReportRepository(
-        @ApplicationContext context: Context,
         userDataSource: UserDataSource
     ): ReportRepository =
-        ReportRepositoryImpl(context, userDataSource)
+        ReportRepositoryImpl(userDataSource)
 }
