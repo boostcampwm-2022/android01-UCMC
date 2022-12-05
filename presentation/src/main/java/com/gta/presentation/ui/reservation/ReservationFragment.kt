@@ -75,7 +75,7 @@ class ReservationFragment :
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.setReservationDate(it)
+            viewModel.setReservationDate(AvailableDate(it.first, it.second))
         }
 
         binding.ivReservationNext.setOnClickListener {
