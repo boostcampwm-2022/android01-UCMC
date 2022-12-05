@@ -1,11 +1,11 @@
 package com.gta.domain.repository
 
 import com.gta.domain.model.DrivingLicense
-import kotlinx.coroutines.flow.Flow
+import com.gta.domain.model.UCMCResult
 import java.nio.ByteBuffer
 
 interface LicenseRepository {
-    fun getLicenseFromImage(buffer: ByteBuffer): Flow<DrivingLicense?>
-    fun getLicenseFromDatabase(uid: String): Flow<DrivingLicense?>
-    fun setLicense(uid: String, license: DrivingLicense, uri: String): Flow<Boolean>
+    fun getLicenseFromImage(buffer: ByteBuffer): DrivingLicense
+    suspend fun getLicenseFromDatabase(uid: String): UCMCResult<DrivingLicense>
+    suspend fun setLicense(uid: String, license: DrivingLicense, uri: String): UCMCResult<Unit>
 }

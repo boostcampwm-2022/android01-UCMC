@@ -81,7 +81,6 @@ class ReviewRepositoryImpl @Inject constructor(
     private suspend fun isDuplicatedReview(opponentId: String, reservationId: String) =
         reviewDataSource.isExistReview(opponentId, reservationId).first()
 
-
     private fun calcTemperature(temperature: Float): Float = temperature - MIDDLE_RATING
 
     companion object {

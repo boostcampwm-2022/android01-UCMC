@@ -79,6 +79,10 @@
     <string name="license_registration_aptitude">적성검사</string>
     <string name="license_registration_expiration">만료일</string>
     <string name="license_registration_button">등록하기</string>
+    <string name="license_registration_error_expired">만료된 면허증 입니다.</string>
+    <string name="license_registration_error_firestore">면허증 등록을 실패했습니다. 다시 시도해주세요.</string>
+    <string name="license_registration_apply_success">면허증 등록을 완료했어요!</string>
+    <string name="license_error_firestore">면허증 정보를 불러오는데 실패했습니다.</string>
 
     <string name="pink_slip_guide_toolbar">자동차 등록</string>
     <string name="pink_slip_guide_title">자동차 등록증을 등록해주세요</string>
