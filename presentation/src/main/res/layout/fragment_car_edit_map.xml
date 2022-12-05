@@ -73,7 +73,7 @@
                 android:elevation="2dp"
                 android:paddingHorizontal="@dimen/padding_medium"
                 android:paddingVertical="@dimen/padding_large"
-                android:text="등록된 차량을\n주차할 장소를 선택해주세요"
+                android:text="@string/car_edit_map_location_select_label"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/tb_toolbar" />
@@ -102,7 +102,7 @@
                 style="@style/Theme.UCMC.BottomButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="위치 선택하기"
+                android:text="@string/car_edit_map_location_select_button"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -123,7 +123,7 @@
                     android:layout_marginHorizontal="@dimen/padding_medium"
                     android:layout_marginTop="@dimen/padding_large"
                     android:layout_marginBottom="@dimen/padding_small"
-                    android:text="선택한 위치가 이 위치가 맞나요?\n선택한 곳의 장소명을 입력해주세요"
+                    android:text="@string/car_edit_map_location_check_message"
                     android:textSize="@dimen/font_title_medium"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/tl_location"
@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_medium"
                     android:backgroundTint="?attr/colorSecondaryVariant"
-                    android:text="위치 다시 선택"
+                    android:text="@string/car_edit_map_re_select_button"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btn_location_done"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -171,7 +171,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_large"
-                    android:text="위치 확정"
+                    android:text="@string/car_edit_map_location_done"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_location_cancle"
