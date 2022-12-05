@@ -3,7 +3,7 @@ const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
-exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 0 * * *")
+exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 9 * * *")
     .timeZone("Asia/Seoul")
     .onRun(async (context) => {
       const curr = new Date();
