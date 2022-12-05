@@ -167,4 +167,6 @@
     <string name="hour_format">%d시간</string>
     <string name="day_hour_format">%d일 %d시간</string>
     <string name="minute_format">%d분</string>
+
+    <string name="no_transactions">거래 내역이 존재하지 않습니다.</string>
 </resources>
