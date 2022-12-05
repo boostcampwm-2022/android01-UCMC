@@ -15,7 +15,6 @@ class MyPageRepositoryImpl @Inject constructor(
     override suspend fun setThumbnail(uid: String, uri: String, prevThumbnailPath: String): UCMCResult<String> {
         val result = storageDataSource.uploadPicture("users/$uid/thumbnail", uri).first() ?: ""
         return if (result.isNotEmpty() && myPageDataSource.setThumbnail(uid, result).first()) {
-            storageDataSource.deletePicture(prevThumbnailPath).first()
             UCMCResult.Success(uri)
         } else {
             UCMCResult.Error(FirestoreException())
