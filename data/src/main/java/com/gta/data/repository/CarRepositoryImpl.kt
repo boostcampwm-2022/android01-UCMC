@@ -17,6 +17,7 @@ import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UpdateCar
 import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
@@ -99,10 +100,12 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<SimpleCar>> =
+    override fun getNearCars(min: Coordinate, max: Coordinate): Flow<UCMCResult<List<SimpleCar>>> =
         callbackFlow {
             val cars = carDataSource.getNearCars(min, max).first()
-            trySend(cars.map { it.toSimple(it.pinkSlip.informationNumber) })
+            trySend(UCMCResult.Success(cars.map {
+                it.toSimple(it.pinkSlip.informationNumber)
+            }))
             awaitClose()
         }
 

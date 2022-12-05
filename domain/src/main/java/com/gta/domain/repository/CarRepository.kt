@@ -5,6 +5,7 @@ import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UpdateCar
 import kotlinx.coroutines.flow.Flow
 
@@ -17,7 +18,7 @@ interface CarRepository {
     fun getSimpleCar(carId: String): Flow<SimpleCar>
     fun getSimpleCarList(ownerId: String): Flow<List<SimpleCar>>
     fun getAllCars(): Flow<List<SimpleCar>>
-    fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<SimpleCar>>
+    fun getNearCars(min: Coordinate, max: Coordinate): Flow<UCMCResult<List<SimpleCar>>>
     fun removeCar(userId: String, carId: String): Flow<Boolean>
     fun setCarImagesStorage(carId: String, images: List<String>): Flow<List<String>>
     fun deleteImagesStorage(images: List<String>): Flow<Boolean>

@@ -5,8 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.LocationInfo
 import com.gta.domain.model.SimpleCar
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.map.GetNearCarsUseCase
 import com.gta.domain.usecase.map.GetSearchAddressUseCase
+import com.gta.presentation.util.EventFlow
+import com.gta.presentation.util.MutableEventFlow
+import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.Dispatchers
@@ -41,11 +45,8 @@ class MapViewModel @Inject constructor(
     )
     val carsRequest: SharedFlow<Pair<Coordinate, Coordinate>> get() = _carsRequest
 
-    private var _carsResponse = MutableSharedFlow<List<SimpleCar>>()
-    val carsResponse: SharedFlow<List<SimpleCar>> get() = _carsResponse
-
-    private var _selectCar = MutableStateFlow(SimpleCar())
-    val selectCar: StateFlow<SimpleCar> get() = _selectCar
+    private var _carsResponse = MutableEventFlow<UCMCResult<List<SimpleCar>>>()
+    val carsResponse: EventFlow<UCMCResult<List<SimpleCar>>> get() = _carsResponse.asEventFlow()
 
     private var _searchRequest = MutableSharedFlow<String>(
         extraBufferCapacity = 1,
@@ -53,8 +54,11 @@ class MapViewModel @Inject constructor(
     )
     private val searchRequest: SharedFlow<String> get() = _searchRequest
 
-    private var _searchResponse = MutableSharedFlow<List<LocationInfo>>()
-    val searchResponse: SharedFlow<List<LocationInfo>> get() = _searchResponse
+    private var _searchResponse = MutableEventFlow<UCMCResult<List<LocationInfo>>>()
+    val searchResponse: EventFlow<UCMCResult<List<LocationInfo>>> get() = _searchResponse.asEventFlow()
+
+    private var _selectCar = MutableStateFlow(SimpleCar())
+    val selectCar: StateFlow<SimpleCar> get() = _selectCar
 
     private lateinit var collectJob: CompletableJob
 
@@ -66,8 +70,8 @@ class MapViewModel @Inject constructor(
             .flatMapLatest { query ->
                 searchAddressUseCase(query)
             }.flowOn(Dispatchers.IO)
-            .onEach { rawList ->
-                _searchResponse.emit(rawList)
+            .onEach { result ->
+                _searchResponse.emit(result)
             }.launchIn(viewModelScope + collectJob)
 
         carsRequest
@@ -75,8 +79,8 @@ class MapViewModel @Inject constructor(
             .flatMapLatest { (min, max) ->
                 getNearCarsUseCase(min, max)
             }.flowOn(Dispatchers.IO)
-            .onEach { list ->
-                _carsResponse.emit(list)
+            .onEach { result ->
+                _carsResponse.emit(result)
             }.launchIn(viewModelScope + collectJob)
     }
 

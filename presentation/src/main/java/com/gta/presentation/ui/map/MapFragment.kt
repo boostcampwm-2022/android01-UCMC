@@ -14,8 +14,11 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.gta.domain.model.CarDetail
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.LocationInfo
+import com.gta.domain.model.SimpleCar
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -138,34 +141,19 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         naverMap.addOnCameraChangeListener(cameraListener)
     }
 
-    @SuppressLint("ResourceAsColor", "ResourceType")
     private fun setupWithMarker() {
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.carsResponse.collectLatest {
-                resetMarkers()
-                it.forEach { car ->
-                    markerList.add(
-                        Marker().apply {
-                            position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
-                            icon = MarkerIcons.BLACK
-                            setMarkerColor(this, selectedMarker?.position == position)
-                            map = naverMap
-
-                            setOnClickListener {
-                                setMarkerColor(selectedMarker, false)
-                                selectedMarker = this
-                                setMarkerColor(this, true)
-                                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                                naverMap.moveCamera(CameraUpdate.zoomTo(MAP_FOCUS_ZOOM))
-                                naverMap.moveCamera(
-                                    CameraUpdate.scrollTo(position)
-                                        .animate(CameraAnimation.Easing)
-                                )
-                                viewModel.setSelected(car)
-                                true
-                            }
+            viewModel.carsResponse.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> {
+                        resetMarkers()
+                        result.data.forEach { car ->
+                            markerList.add(createMarker(car))
                         }
-                    )
+                    }
+                    is UCMCResult.Error -> {
+                        sendSnackBar(result.e.message ?: "알 수 없는 오류입니다.")
+                    }
                 }
             }
         }
@@ -208,8 +196,15 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.searchResponse.collectLatest { list ->
-                menuAdapter.replace(list)
+            viewModel.searchResponse.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> {
+                        menuAdapter.replace(result.data)
+                    }
+                    is UCMCResult.Error -> {
+                        sendSnackBar(result.e.message ?: "알 수 없는 오류입니다.")
+                    }
+                }
             }
         }
     }
@@ -248,6 +243,32 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             }
             viewModel.setPosition(Coordinate(minLat, minLng), Coordinate(maxLat, maxLng))
         }
+    }
+
+    private fun createMarker(car: SimpleCar): Marker {
+        val marker = Marker()
+        marker.apply {
+            position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
+            icon = MarkerIcons.BLACK
+            setMarkerColor(this, selectedMarker?.position == position)
+            map = naverMap
+
+            setOnClickListener {
+                setMarkerColor(selectedMarker, false)
+                selectedMarker = this
+                setMarkerColor(this, true)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                naverMap.moveCamera(CameraUpdate.zoomTo(MAP_FOCUS_ZOOM))
+                naverMap.moveCamera(
+                    CameraUpdate.scrollTo(position)
+                        .animate(CameraAnimation.Easing)
+                )
+                viewModel.setSelected(car)
+                true
+            }
+        }
+
+        return marker
     }
 
     private fun resetMarkers() {
