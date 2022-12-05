@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentOwnerProfileBinding
+import com.gta.presentation.model.ReportEventState
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,11 +40,14 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.reportEvent.collectLatest { result ->
                 when (result) {
-                    is UCMCResult.Success -> {
-                        sendSnackBar(getString(R.string.report_success))
+                    is ReportEventState.Success -> {
+                        sendSnackBar(message = getString(R.string.report_success))
                     }
-                    is UCMCResult.Error -> {
-                        sendSnackBar(result.message)
+                    is ReportEventState.Cooldown -> {
+                        sendSnackBar(message = getString(R.string.report_cooldown, result.cooldown))
+                    }
+                    is ReportEventState.Error -> {
+                        sendSnackBar(message = getString(R.string.report_fail))
                     }
                 }
             }

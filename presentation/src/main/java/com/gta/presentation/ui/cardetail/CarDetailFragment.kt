@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
+import com.gta.presentation.model.ReportEventState
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.repeatOnStarted
@@ -57,15 +57,21 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.reportEvent.collectLatest { result ->
                 when (result) {
-                    is UCMCResult.Success -> {
+                    is ReportEventState.Success -> {
                         sendSnackBar(
                             message = getString(R.string.report_success),
                             anchorView = binding.btnNext
                         )
                     }
-                    is UCMCResult.Error -> {
+                    is ReportEventState.Cooldown -> {
                         sendSnackBar(
-                            message = result.message,
+                            message = getString(R.string.report_cooldown, result.cooldown),
+                            anchorView = binding.btnNext
+                        )
+                    }
+                    is ReportEventState.Error -> {
+                        sendSnackBar(
+                            message = getString(R.string.report_fail),
                             anchorView = binding.btnNext
                         )
                     }
