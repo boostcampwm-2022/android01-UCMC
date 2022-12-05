@@ -60,7 +60,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     supportActionBar?.show()
                     showBottomNav()
                 }
-                R.id.paymentFragment -> {
+                R.id.paymentFragment, R.id.carEditMapFragment -> {
                     supportActionBar?.hide()
                     hideBottomNav()
                 }
