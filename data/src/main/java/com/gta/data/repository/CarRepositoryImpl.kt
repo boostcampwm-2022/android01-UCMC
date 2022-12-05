@@ -15,6 +15,7 @@ import com.gta.data.source.UserDataSource
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.Coordinate
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UCMCResult
@@ -80,24 +81,27 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getSimpleCarList(ownerId: String): Flow<UCMCResult<List<SimpleCar>>> = callbackFlow {
-        val userInfo = userDataSource.getUser(ownerId).first() ?: UserInfo()
-        if (userInfo.myCars.isNotEmpty()) {
-            val result = carDataSource.getOwnerCars(userInfo.myCars).first()
-            if (result != null) {
-                result.map { car ->
-                    car.toSimple(car.pinkSlip.informationNumber)
-                }.also { mapped ->
-                    trySend(UCMCResult.Success(mapped))
+    override fun getSimpleCarList(ownerId: String): Flow<UCMCResult<List<SimpleCar>>> =
+        callbackFlow {
+            val userInfo = userDataSource.getUser(ownerId).first()
+            if (userInfo == null) {
+                trySend(UCMCResult.Error(FirestoreException()))
+            } else if (userInfo.myCars.isNotEmpty()) {
+                val result = carDataSource.getOwnerCars(userInfo.myCars).first()
+                if (result != null) {
+                    result.map { car ->
+                        car.toSimple(car.pinkSlip.informationNumber)
+                    }.also { mapped ->
+                        trySend(UCMCResult.Success(mapped))
+                    }
+                } else {
+                    trySend(UCMCResult.Error(FirestoreException()))
                 }
             } else {
-                trySend(UCMCResult.Error(Exception("등록된 차를 찾을 수 없어요.")))
+                trySend(UCMCResult.Success(emptyList()))
             }
-        } else {
-            trySend(UCMCResult.Success(emptyList()))
+            awaitClose()
         }
-        awaitClose()
-    }
 
     override fun getAllCars(): Flow<List<SimpleCar>> = callbackFlow {
         val cars = carDataSource.getAllCars().first()
@@ -108,7 +112,8 @@ class CarRepositoryImpl @Inject constructor(
     override fun getNearCars(min: Coordinate, max: Coordinate): Flow<UCMCResult<List<SimpleCar>>> =
         callbackFlow {
             val cars = carDataSource.getNearCars(min, max).first()
-            trySend(
+            if (cars == null) trySend(UCMCResult.Error(FirestoreException()))
+            else trySend(
                 UCMCResult.Success(
                     cars.map {
                         it.toSimple(it.pinkSlip.informationNumber)
@@ -125,11 +130,11 @@ class CarRepositoryImpl @Inject constructor(
                 if (userDataSource.removeCar(userId, newCars).first()) {
                     UCMCResult.Success(Unit)
                 } else {
-                    UCMCResult.Error(Exception("삭제에 실패했어요."))
+                    UCMCResult.Error(FirestoreException()) // TODO 삭제에 실패했을 경우 차를 다시 생성
                 }
-            } ?: UCMCResult.Error(Exception("사용자 정보를 불러오는 데 실패했어요."))
+            } ?: UCMCResult.Error(FirestoreException()) // TODO 삭제에 실패했을 경우 차를 다시 생성
         } else {
-            return UCMCResult.Error(Exception("삭제에 실패했어요."))
+            return UCMCResult.Error(FirestoreException())
         }
     }
 

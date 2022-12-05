@@ -68,7 +68,7 @@ class CarDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<Car>> = callbackFlow {
+    fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<Car>?> = callbackFlow {
         fireStore.collection("cars").whereGreaterThan("coordinate.latitude", min.latitude)
             .whereLessThan("coordinate.latitude", max.latitude).get().addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -81,7 +81,7 @@ class CarDataSource @Inject constructor(
                         trySend(result)
                     }
                 } else {
-                    trySend(emptyList())
+                    trySend(null)
                 }
             }
         awaitClose()
