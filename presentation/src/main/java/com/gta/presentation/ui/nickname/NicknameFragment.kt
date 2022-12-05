@@ -36,7 +36,10 @@ class NicknameFragment : BaseFragment<FragmentNicknameBinding>(
             viewModel.nicknameChangeEvent.collectLatest { state ->
                 when (state) {
                     is UCMCResult.Error -> {
-                        sendSnackBar(getString(R.string.nickname_error_firestore))
+                        sendSnackBar(
+                            message = getString(R.string.nickname_error_firestore),
+                            anchorView = binding.btnNicknameApply
+                        )
                     }
                     is UCMCResult.Success -> {
                         findNavController().navigate(R.id.action_nicknameFragment_to_myPageFragment)
