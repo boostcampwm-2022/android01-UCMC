@@ -33,9 +33,10 @@ class ReviewRepositoryImpl @Inject constructor(
          */
         val addReviewResult = reviewDataSource.addReview(opponentId, reservationId, review).first()
         if (addReviewResult) {
-            val userInfo = userDataSource.getUser(opponentId).first()
-            val updatedTemperature = userInfo.temperature + calcTemperature(review.rating)
-            trySend(reviewDataSource.updateTemperature(opponentId, updatedTemperature).first())
+            userDataSource.getUser(opponentId).first()?.let { userInfo ->
+                val updatedTemperature = userInfo.temperature + calcTemperature(review.rating)
+                trySend(reviewDataSource.updateTemperature(opponentId, updatedTemperature).first())
+            } ?: trySend(false)
         } else {
             trySend(false)
         }
@@ -57,16 +58,17 @@ class ReviewRepositoryImpl @Inject constructor(
                 val carImage = if (car.images.isNotEmpty()) car.images[0] else ""
                 val opponentId =
                     if (reservation.lenderId == uid) reservation.ownerId else reservation.lenderId
-                val userInfo = userDataSource.getUser(opponentId).first()
-                val profile = userInfo.toProfile(opponentId)
-                trySend(
-                    ReviewDTO(
-                        reviewType = reviewType,
-                        opponent = profile,
-                        carImage = carImage,
-                        carModel = car.pinkSlip.model
+                userDataSource.getUser(opponentId).first()?.let { userInfo ->
+                    val profile = userInfo.toProfile(opponentId)
+                    trySend(
+                        ReviewDTO(
+                            reviewType = reviewType,
+                            opponent = profile,
+                            carImage = carImage,
+                            carModel = car.pinkSlip.model
+                        )
                     )
-                )
+                } ?: trySend(ReviewDTO())
             } ?: trySend(ReviewDTO())
         } ?: trySend(ReviewDTO())
         awaitClose()

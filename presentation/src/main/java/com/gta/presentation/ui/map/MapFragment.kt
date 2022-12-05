@@ -12,9 +12,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.gta.domain.model.Coordinate
@@ -23,7 +20,9 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMapBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.ui.mypage.mycars.OnItemClickListener
+import com.gta.presentation.util.repeatOnStarted
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -48,6 +47,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private lateinit var inputManager: InputMethodManager
 
     private val markerList = mutableListOf<Marker>()
+    private var selectedMarker: Marker? = null
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -80,6 +80,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         }
     }
 
+    private val cameraListener = NaverMap.OnCameraChangeListener { _, _ ->
+        getNearCars()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
@@ -107,6 +111,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private fun setupWithMap() {
         naverMap.locationSource = locationSource
         naverMap.locationTrackingMode = mapMode
+
+        naverMap.extent = LatLngBounds(MAP_MIN_BOUND, MAP_MAX_BOUND)
+        naverMap.minZoom = MAP_MIN_ZOOM
+        naverMap.maxZoom = MAP_MAX_ZOOM
+
         naverMap.uiSettings.apply {
             isCompassEnabled = true
             isScaleBarEnabled = true
@@ -120,39 +129,43 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             if (event.y >= binding.bottomSheet.top && event.y <= binding.bottomSheet.bottom) {
                 true
             } else {
+                selectedMarker = null
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                getNearCars()
                 binding.mapView.onTouchEvent(event)
             }
         }
+
+        naverMap.addOnCameraChangeListener(cameraListener)
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "ResourceType")
     private fun setupWithMarker() {
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.carsResponse.collectLatest {
-                    resetMarkers()
-                    it.forEach { car ->
-                        markerList.add(
-                            Marker().apply {
-                                icon = MarkerIcons.BLACK
-                                iconTintColor = requireContext().getColor(R.color.primaryColor)
-                                position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
-                                map = naverMap
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.carsResponse.collectLatest {
+                resetMarkers()
+                it.forEach { car ->
+                    markerList.add(
+                        Marker().apply {
+                            position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
+                            icon = MarkerIcons.BLACK
+                            setMarkerColor(this, selectedMarker?.position == position)
+                            map = naverMap
 
-                                setOnClickListener {
-                                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                                    naverMap.moveCamera(
-                                        CameraUpdate.scrollTo(position)
-                                            .animate(CameraAnimation.Easing)
-                                    )
-                                    viewModel.setSelected(car)
-                                    true
-                                }
+                            setOnClickListener {
+                                setMarkerColor(selectedMarker, false)
+                                selectedMarker = this
+                                setMarkerColor(this, true)
+                                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                                naverMap.moveCamera(CameraUpdate.zoomTo(MAP_FOCUS_ZOOM))
+                                naverMap.moveCamera(
+                                    CameraUpdate.scrollTo(position)
+                                        .animate(CameraAnimation.Easing)
+                                )
+                                viewModel.setSelected(car)
+                                true
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             }
         }
@@ -173,6 +186,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         menuAdapter.setOnItemClickListener(object : OnItemClickListener<LocationInfo> {
             override fun onClick(value: LocationInfo) {
                 binding.etSearch.setText(value.name ?: value.address)
+                naverMap.moveCamera(CameraUpdate.zoomTo(MAP_FOCUS_ZOOM))
                 naverMap.moveCamera(
                     CameraUpdate.scrollTo(LatLng(value.latitude, value.longitude))
                         .animate(CameraAnimation.Easing)
@@ -193,16 +207,17 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             binding.etSearch.setText("")
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchResponse.collectLatest { list ->
-                    menuAdapter.replace(list)
-                }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.searchResponse.collectLatest { list ->
+                menuAdapter.replace(list)
             }
         }
     }
 
     private fun getNearCars() {
+        markerList.forEach {
+            setMarkerColor(it, selectedMarker?.position == it.position)
+        }
         naverMap.let { naverMap ->
             var minLat = 91.0
             var maxLat = -91.0
@@ -242,6 +257,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         markerList.clear()
     }
 
+    private fun setMarkerColor(marker: Marker?, selected: Boolean) {
+        marker?.iconTintColor =
+            requireContext().getColor(if (selected) R.color.primaryDarkColor else R.color.primaryColor)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         backPressedCallback = object : OnBackPressedCallback(true) {
@@ -274,6 +294,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onStop() {
         viewModel.stopCollect()
+        naverMap.removeOnCameraChangeListener(cameraListener)
         binding.mapView.onStop()
         super.onStop()
     }
@@ -319,5 +340,12 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+
+        private const val MAP_MIN_ZOOM = 5.0
+        private const val MAP_FOCUS_ZOOM = 15.0
+        private const val MAP_MAX_ZOOM = 18.0
+
+        private val MAP_MIN_BOUND = LatLng(31.43, 122.37)
+        private val MAP_MAX_BOUND = LatLng(44.35, 132.0)
     }
 }

@@ -10,28 +10,30 @@ import javax.inject.Inject
 class UserDataSource @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) {
-    fun getUser(uid: String): Flow<UserInfo> = callbackFlow {
+    fun getUser(uid: String): Flow<UserInfo?> = callbackFlow {
         fireStore.collection("users").document(uid).get().addOnCompleteListener {
             if (it.isSuccessful) {
-                trySend(it.result.toObject(UserInfo::class.java) ?: UserInfo())
+                trySend(it.result.toObject(UserInfo::class.java))
             } else {
-                trySend(UserInfo())
+                trySend(null)
             }
         }
         awaitClose()
     }
 
     fun removeCar(uid: String, newCars: List<String>): Flow<Boolean> = callbackFlow {
-        fireStore.collection("users").document(uid).update("myCars", newCars).addOnCompleteListener {
-            trySend(it.isSuccessful)
-        }
+        fireStore.collection("users").document(uid).update("myCars", newCars)
+            .addOnCompleteListener {
+                trySend(it.isSuccessful)
+            }
         awaitClose()
     }
 
-    fun updateUserMessageToken(uid: String, token: String): Flow<Boolean> = callbackFlow {
-        fireStore.collection("users").document(uid).update("messageToken", token).addOnCompleteListener {
-            trySend(it.isSuccessful)
-        }
+    fun updateUserMessageToken(uid: String, token: String) = callbackFlow {
+        fireStore.collection("users").document(uid).update("messageToken", token)
+            .addOnCompleteListener {
+                trySend(it.isSuccessful)
+            }
         awaitClose()
     }
 

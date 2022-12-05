@@ -17,8 +17,8 @@ data class Meta(
 data class Place(
     @SerializedName("address_name") var addressName: String,
     @SerializedName("place_name") var placeName: String?,
-    var latitude: String,
-    var longitude: String
+    @SerializedName("y") var latitude: String,
+    @SerializedName("x") var longitude: String
 )
 
 fun Place.toLocationInfo(): LocationInfo {
