@@ -116,14 +116,17 @@ class CarRepositoryImpl @Inject constructor(
     override fun getNearCars(min: Coordinate, max: Coordinate): Flow<UCMCResult<List<SimpleCar>>> =
         callbackFlow {
             val cars = carDataSource.getNearCars(min, max).first()
-            if (cars == null) trySend(UCMCResult.Error(FirestoreException()))
-            else trySend(
-                UCMCResult.Success(
-                    cars.map {
-                        it.toSimple(it.pinkSlip.informationNumber)
-                    }
+            if (cars == null) {
+                trySend(UCMCResult.Error(FirestoreException()))
+            } else {
+                trySend(
+                    UCMCResult.Success(
+                        cars.map {
+                            it.toSimple(it.pinkSlip.informationNumber)
+                        }
+                    )
                 )
-            )
+            }
             awaitClose()
         }
 

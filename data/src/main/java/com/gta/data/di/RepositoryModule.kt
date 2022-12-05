@@ -1,6 +1,5 @@
 package com.gta.data.di
 
-import android.content.Context
 import com.gta.data.repository.CarRepositoryImpl
 import com.gta.data.repository.MapRepositoryImpl
 import com.gta.data.repository.ReportRepositoryImpl
@@ -17,7 +16,6 @@ import com.gta.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 

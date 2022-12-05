@@ -54,8 +54,9 @@ class CarDetailViewModel @Inject constructor(
 
     init {
         getCarDetailDataUseCase(carId).onEach {
-            if (it is UCMCResult.Success)
+            if (it is UCMCResult.Success) {
                 _carInfo.emit(it.data)
+            }
             _carInfoEvent.emit(it)
         }.launchIn(viewModelScope)
 

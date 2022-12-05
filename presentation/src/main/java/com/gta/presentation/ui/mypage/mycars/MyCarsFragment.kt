@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.FirebaseException
 import com.gta.domain.model.DeleteFailException
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult

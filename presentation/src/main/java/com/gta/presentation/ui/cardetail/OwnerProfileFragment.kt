@@ -5,10 +5,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.CoolDownException
-import com.gta.domain.model.DeleteFailException
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
-import com.gta.domain.model.UserNotFoundException
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentOwnerProfileBinding
 import com.gta.presentation.ui.base.BaseFragment

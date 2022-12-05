@@ -42,7 +42,9 @@ class ReservationRepositoryImpl @Inject constructor(
         return getReservationInfo(reservationId).map {
             if (it is UCMCResult.Success) {
                 it.data.carId
-            } else ""
+            } else {
+                ""
+            }
         }
     }
 
