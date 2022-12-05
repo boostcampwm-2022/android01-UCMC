@@ -49,5 +49,14 @@ exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 0 * * *")
           }
         });
       });
+
+      const cancelQuery = reservationRef.where("state", "==", "보류중");
+      await cancelQuery.get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.get("reservationDate.start") <= now) {
+            doc.ref.update("state", "취소");
+          }
+        });
+      });
       return null;
     });
