@@ -16,8 +16,6 @@ import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.presentation.util.DateUtil
 import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -30,7 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ReservationViewModel @Inject constructor(
     args: SavedStateHandle,
-    private val getCarRentInfoUseCase: GetCarRentInfoUseCase,
+    getCarRentInfoUseCase: GetCarRentInfoUseCase,
     private val createReservationUseCase: CreateReservationUseCase
 ) : ViewModel() {
     private val carId = args.get<String>("CAR_ID") ?: "정보 없음"
@@ -47,7 +45,11 @@ class ReservationViewModel @Inject constructor(
     private val _createReservationEvent = MutableSharedFlow<Boolean>()
     val createReservationEvent: SharedFlow<Boolean> get() = _createReservationEvent
 
-    var car: StateFlow<CarRentInfo>? = null
+    var car: StateFlow<CarRentInfo>? = getCarRentInfoUseCase(carId).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = CarRentInfo()
+    )
 
     val basePrice: LiveData<Int> = Transformations.map(_reservationDate) {
         val carPrice = car?.value?.price ?: 0
@@ -56,8 +58,6 @@ class ReservationViewModel @Inject constructor(
 
     private val _isPaymentOptionChecked = MutableStateFlow(false)
     val isPaymentOptionChecked: StateFlow<Boolean> get() = _isPaymentOptionChecked
-
-    private lateinit var collectJob: CompletableJob
 
     init {
         _totalPrice.addSource(basePrice) { basePrice ->
@@ -81,20 +81,6 @@ class ReservationViewModel @Inject constructor(
 
     fun setIsPaymentOptionChecked(isChecked: Boolean) {
         _isPaymentOptionChecked.value = isChecked
-    }
-
-    fun startCollect() {
-        collectJob = SupervisorJob()
-
-        car = getCarRentInfoUseCase(carId).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = CarRentInfo()
-        )
-    }
-
-    fun stopCollect() {
-        collectJob.cancel()
     }
 
     fun createReservation() {
