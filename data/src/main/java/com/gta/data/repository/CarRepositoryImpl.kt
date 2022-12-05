@@ -80,16 +80,21 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getSimpleCarList(ownerId: String): Flow<List<SimpleCar>> = callbackFlow {
+    override fun getSimpleCarList(ownerId: String): Flow<UCMCResult<List<SimpleCar>>> = callbackFlow {
         val userInfo = userDataSource.getUser(ownerId).first() ?: UserInfo()
         if (userInfo.myCars.isNotEmpty()) {
-            carDataSource.getOwnerCars(userInfo.myCars).first().map { car ->
-                car.toSimple(car.pinkSlip.informationNumber)
-            }.also { result ->
-                trySend(result)
+            val result = carDataSource.getOwnerCars(userInfo.myCars).first()
+            if (result != null) {
+                result.map { car ->
+                    car.toSimple(car.pinkSlip.informationNumber)
+                }.also { mapped ->
+                    trySend(UCMCResult.Success(mapped))
+                }
+            } else {
+                trySend(UCMCResult.Error(Exception("등록된 차를 찾을 수 없어요.")))
             }
         } else {
-            trySend(emptyList())
+            trySend(UCMCResult.Success(emptyList()))
         }
         awaitClose()
     }
@@ -103,22 +108,29 @@ class CarRepositoryImpl @Inject constructor(
     override fun getNearCars(min: Coordinate, max: Coordinate): Flow<UCMCResult<List<SimpleCar>>> =
         callbackFlow {
             val cars = carDataSource.getNearCars(min, max).first()
-            trySend(UCMCResult.Success(cars.map {
-                it.toSimple(it.pinkSlip.informationNumber)
-            }))
+            trySend(
+                UCMCResult.Success(
+                    cars.map {
+                        it.toSimple(it.pinkSlip.informationNumber)
+                    }
+                )
+            )
             awaitClose()
         }
 
-    override fun removeCar(userId: String, carId: String): Flow<Boolean> = callbackFlow {
-        if (carDataSource.removeCar(carId).first()) {
+    override suspend fun removeCar(userId: String, carId: String): UCMCResult<Unit> {
+        return if (carDataSource.removeCar(carId).first()) {
             userDataSource.getUser(userId).first()?.let { user ->
                 val newCars = user.myCars.filter { it != carId }
-                trySend(userDataSource.removeCar(userId, newCars).first())
-            } ?: trySend(false)
+                if (userDataSource.removeCar(userId, newCars).first()) {
+                    UCMCResult.Success(Unit)
+                } else {
+                    UCMCResult.Error(Exception("삭제에 실패했어요."))
+                }
+            } ?: UCMCResult.Error(Exception("사용자 정보를 불러오는 데 실패했어요."))
         } else {
-            trySend(false)
+            return UCMCResult.Error(Exception("삭제에 실패했어요."))
         }
-        awaitClose()
     }
 
     override fun setCarImagesStorage(carId: String, images: List<String>): Flow<List<String>> =

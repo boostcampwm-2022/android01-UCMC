@@ -4,17 +4,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMyCarsBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_cars) {
@@ -47,10 +45,26 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
 
     private fun setupWithRecyclerView() {
         binding.rvCarList.adapter = adapter
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.userCarList.collectLatest {
-                    adapter.submitList(it)
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.userCarEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success ->
+                        adapter.submitList(result.data)
+                    is UCMCResult.Error ->
+                        sendSnackBar(result.e.message)
+                }
+            }
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.deleteEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> {
+                        viewModel.getCarList()
+                    }
+                    is UCMCResult.Error -> {
+                        sendSnackBar(result.e.message)
+                    }
                 }
             }
         }

@@ -22,7 +22,7 @@ class CarDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun getOwnerCars(cars: List<String>): Flow<List<Car>> = callbackFlow {
+    fun getOwnerCars(cars: List<String>): Flow<List<Car>?> = callbackFlow {
         fireStore
             .collection("cars")
             .get()
@@ -36,7 +36,7 @@ class CarDataSource @Inject constructor(
                         trySend(result)
                     }
                 } else {
-                    trySend(emptyList())
+                    trySend(null)
                 }
             }
         awaitClose()

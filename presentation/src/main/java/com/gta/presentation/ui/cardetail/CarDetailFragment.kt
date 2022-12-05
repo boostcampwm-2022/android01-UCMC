@@ -65,7 +65,7 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                     }
                     is UCMCResult.Error -> {
                         sendSnackBar(
-                            message = result.message,
+                            message = result.e.message,
                             anchorView = binding.btnNext
                         )
                     }
