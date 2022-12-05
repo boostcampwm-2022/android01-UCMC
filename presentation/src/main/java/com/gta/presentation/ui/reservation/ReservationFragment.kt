@@ -56,7 +56,10 @@ class ReservationFragment :
         super.onStop()
     }
 
-    private fun setupDatePicker(availableDate: AvailableDate, reservationDates: List<AvailableDate>) {
+    private fun setupDatePicker(
+        availableDate: AvailableDate,
+        reservationDates: List<AvailableDate>
+    ) {
         val (startDate, endDate) = availableDate
 
         val constraints = CalendarConstraints.Builder()
@@ -72,7 +75,7 @@ class ReservationFragment :
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.setReservationDate(AvailableDate(it.first, it.second))
+            viewModel.setReservationDate(it)
         }
 
         binding.ivReservationNext.setOnClickListener {

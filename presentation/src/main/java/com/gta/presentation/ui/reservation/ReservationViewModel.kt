@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -71,8 +72,19 @@ class ReservationViewModel @Inject constructor(
         }
     }
 
-    fun setReservationDate(selected: AvailableDate) {
-        _reservationDate.value = selected
+    fun setReservationDate(selected: androidx.core.util.Pair<Long, Long>) {
+        val calendar = Calendar.getInstance()
+        val startTime = calendar.run {
+            timeInMillis = selected.first
+            set(Calendar.HOUR_OF_DAY, 0)
+            timeInMillis
+        }
+        val endTime = calendar.run {
+            timeInMillis = selected.second
+            set(Calendar.HOUR_OF_DAY, 0)
+            timeInMillis
+        }
+        _reservationDate.value = AvailableDate(startTime, endTime)
     }
 
     fun setInsuranceOption(option: InsuranceOption) {
