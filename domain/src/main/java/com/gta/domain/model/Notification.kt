@@ -25,3 +25,14 @@ enum class NotificationType(val title: String, val msg: String) {
         "대여자가 차를 반납했습니다."
     )
 }
+
+fun Notification.toInfo(id: String): NotificationInfo = NotificationInfo(
+    id = id,
+    type = NotificationType.values().filter { it.title == type }[0],
+    reservationId = reservationId,
+    fromId = fromId,
+    fromNickName = fromId,
+    carImage = "",
+    licensePlate = "---",
+    date = id.substringBefore("-")
+)

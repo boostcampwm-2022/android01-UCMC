@@ -92,7 +92,7 @@ fun setNotificationListItemTitle(textView: TextView, type: NotificationType) {
             NotificationType.ACCEPT_RESERVATION -> {
                 textView.resources.getString(R.string.notification_list_accept_title)
             }
-            NotificationType.REJECT_RESERVATION -> {
+            NotificationType.DECLINE_RESERVATION -> {
                 textView.resources.getString(R.string.notification_list_reject_title)
             }
             NotificationType.RETURN_CAR -> {
@@ -120,7 +120,7 @@ fun setNotificationListItemBody(
             NotificationType.ACCEPT_RESERVATION -> {
                 textView.resources.getString(R.string.notification_list_accept_message, from, car)
             }
-            NotificationType.REJECT_RESERVATION -> {
+            NotificationType.DECLINE_RESERVATION -> {
                 textView.resources.getString(R.string.notification_list_reject_message, from, car)
             }
             NotificationType.RETURN_CAR -> {

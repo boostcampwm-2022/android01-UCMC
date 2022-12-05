@@ -3,15 +3,15 @@ package com.gta.presentation.ui.notification
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.gta.domain.model.NotificationInfo
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ItemNotificationListBinding
 
 class NotificationListAdapter :
-    ListAdapter<NotificationInfo, NotificationListAdapter.NotificationViewHolder>(
+    PagingDataAdapter<NotificationInfo, NotificationListAdapter.NotificationViewHolder>(
         NotificationDiffCallback()
     ) {
 
@@ -35,7 +35,7 @@ class NotificationListAdapter :
     }
 
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
     }
 }
 
