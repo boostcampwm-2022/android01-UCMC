@@ -125,7 +125,7 @@
     <fragment
         android:id="@+id/pinkSlipGuideFragment"
         android:name="com.gta.presentation.ui.pinkslip.guide.PinkSlipGuideFragment"
-        android:label="PinkSlipGuideFragment"
+        android:label="@string/pink_slip_guide_toolbar"
         tools:layout="@layout/fragment_camera_guide">
         <action
             android:id="@+id/action_pinkSlipGuideFragment_to_pinkSlipRegistrationFragment"
@@ -135,7 +135,7 @@
     <fragment
         android:id="@+id/pinkSlipRegistrationFragment"
         android:name="com.gta.presentation.ui.pinkslip.registration.PinkSlipRegistrationFragment"
-        android:label="PinkSlipRegistrationFragment"
+        android:label="@string/pink_slip_registration_toolbar"
         tools:layout="@layout/fragment_pink_slip_registration">
         <argument
             android:name="uri"
