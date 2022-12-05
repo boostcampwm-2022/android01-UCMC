@@ -45,16 +45,18 @@ class CarRepositoryImpl @Inject constructor(
         return getCar(carId).map { it.toDetailCar("", UserProfile()).rentState }
     }
 
-    override fun getCarData(carId: String): Flow<CarDetail> = callbackFlow {
+    override fun getCarData(carId: String): Flow<UCMCResult<CarDetail>> = callbackFlow {
         carDataSource.getCar(carId).first()?.let { car ->
             val ownerInfo = userDataSource.getUser(car.ownerId).first() ?: UserInfo()
             trySend(
-                car.toDetailCar(
-                    car.pinkSlip.informationNumber,
-                    ownerInfo.toProfile(car.ownerId)
+                UCMCResult.Success(
+                    car.toDetailCar(
+                        car.pinkSlip.informationNumber,
+                        ownerInfo.toProfile(car.ownerId)
+                    )
                 )
             )
-        } ?: trySend(CarDetail())
+        } ?: trySend(UCMCResult.Error(FirestoreException()))
         awaitClose()
     }
 

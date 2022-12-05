@@ -174,4 +174,5 @@
     <string name="exception_user_not_found">사용자 정보를 찾을 수 없어요.</string>
     <string name="exception_delete_fail">데이터를 삭제하는 데 실패했어요.</string>
     <string name="exception_car_list_fail">차 목록을 불러오는 데 실패했어요.</string>
+    <string name="exception_load_data">데이터를 불러오는 데 실패했어요.</string>
 </resources>

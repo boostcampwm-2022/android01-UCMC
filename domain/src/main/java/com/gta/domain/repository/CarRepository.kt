@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface CarRepository {
     fun getOwnerId(carId: String): Flow<String>
     fun getCarRentState(carId: String): Flow<RentState>
-    fun getCarData(carId: String): Flow<CarDetail>
+    fun getCarData(carId: String): Flow<UCMCResult<CarDetail>>
     fun updateCarDetail(carId: String, update: UpdateCar): Flow<Boolean>
     fun getCarRentInfo(carId: String): Flow<CarRentInfo>
     fun getSimpleCar(carId: String): Flow<SimpleCar>
