@@ -36,15 +36,28 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
                     when (type) {
                         NotificationType.REQUEST_RESERVATION -> {
                             // TODO 수락/거절 이동(RESERVASTON ID)
+                            NotificationListFragmentDirections
+                                .actionNotificationListFragmentToReservationCheckFragment(
+                                    reservation
+                                )
                         }
                         NotificationType.ACCEPT_RESERVATION -> {
+                            NotificationListFragmentDirections
+                                .actionNotificationListFragmentToReservationCheckFragment(
+                                    reservation
+                                )
                         }
-                        NotificationType.REJECT_RESERVATION -> {
+                        NotificationType.DECLINE_RESERVATION -> {
+                            NotificationListFragmentDirections
+                                .actionNotificationListFragmentToReservationCheckFragment(
+                                    reservation
+                                )
                         }
                         NotificationType.RETURN_CAR -> {
-                            NotificationListFragmentDirections.actionNotificationListFragmentToReviewFragment(
-                                reservation
-                            )
+                            NotificationListFragmentDirections
+                                .actionNotificationListFragmentToReviewFragment(
+                                    reservation
+                                )
                         }
                     }
                 }
