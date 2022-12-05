@@ -24,9 +24,14 @@ import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import timber.log.Timber
 
+@AndroidEntryPoint
 class CarEditMapFragment :
     BaseFragment<FragmentCarEditMapBinding>(R.layout.fragment_car_edit_map),
     OnMapReadyCallback {
@@ -36,6 +41,8 @@ class CarEditMapFragment :
     private var mapMode = LocationTrackingMode.None
     private val viewModel: MapViewModel by viewModels()
     private lateinit var inputManager: InputMethodManager
+
+    private val marker: Marker = Marker()
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -64,6 +71,36 @@ class CarEditMapFragment :
         binding.mapView.getMapAsync(this)
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+
+        // location 지정을 위한 작업 시작
+        marker.apply {
+            icon = MarkerIcons.BLACK
+            iconTintColor = requireContext().getColor(R.color.primaryColor)
+        }
+
+        binding.btnDone.setOnClickListener {
+            marker.apply {
+                position = naverMap.cameraPosition.target
+                map = naverMap
+            }
+
+            seVisibleAtSelectLocation(true)
+        }
+
+        binding.btnLocationCancle.setOnClickListener {
+            seVisibleAtSelectLocation(false)
+            marker.map = null
+        }
+
+        binding.btnLocationDone.setOnClickListener {
+            // TODO 완료
+            Timber.d("완료")
+        }
+    }
+
+    fun seVisibleAtSelectLocation(state: Boolean) {
+        binding.layoutDone.visibility = if (state) View.VISIBLE else View.GONE
+        binding.ivMyCar.visibility = if (!state) View.VISIBLE else View.GONE
     }
 
     override fun onMapReady(naverMap: NaverMap) {
