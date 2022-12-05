@@ -289,7 +289,7 @@
     <fragment
         android:id="@+id/notificationListFragment"
         android:name="com.gta.presentation.ui.notification.NotificationListFragment"
-        android:label="fragment_notification_list"
+        android:label="@string/notification_list_page"
         tools:layout="@layout/fragment_notification_list">
         <action
             android:id="@+id/action_notificationListFragment_to_reviewFragment"

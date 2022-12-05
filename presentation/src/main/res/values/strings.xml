@@ -35,6 +35,7 @@
 
     <string name="car_edit_wait_loading_text">변경사항을 업로드 중입니다.\n잠시만 기다려 주세요..</string>
 
+    <string name="notification_list_page">알림 목록</string>
     <string name="notification_list_request_title">예약 요청이 왔습니다.</string>
     <string name="notification_list_request_message">%s님이 %s 차를 원해요!</string>
     <string name="notification_list_accept_title">예약이 수락되었습니다.</string>
