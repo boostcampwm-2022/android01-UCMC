@@ -117,6 +117,13 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             datePicker.show(childFragmentManager, null)
         }
 
+        binding.ivLocationEdit.setOnClickListener {
+            findNavController().navigate(
+                CarEditFragmentDirections
+                    .actionCarDetailEditFragmentToCarEditMapFragment()
+            )
+        }
+
         binding.btnDone.setOnClickListener {
             // TODO 확인 작업
             viewModel.updateData()
