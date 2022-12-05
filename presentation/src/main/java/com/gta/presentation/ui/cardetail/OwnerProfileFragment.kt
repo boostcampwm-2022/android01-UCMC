@@ -44,15 +44,18 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
                         sendSnackBar(getString(R.string.report_success))
                     }
                     is UCMCResult.Error -> {
-                        sendSnackBar(result.message)
+                        sendSnackBar(result.e.message)
                     }
                 }
             }
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.carList.collectLatest {
-                carListAdapter.submitList(it)
+            viewModel.carListEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> carListAdapter.submitList(result.data)
+                    is UCMCResult.Error -> sendSnackBar(result.e.message)
+                }
             }
         }
     }

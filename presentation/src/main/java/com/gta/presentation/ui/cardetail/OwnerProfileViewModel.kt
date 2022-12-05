@@ -9,12 +9,14 @@ import com.gta.domain.model.UserProfile
 import com.gta.domain.usecase.cardetail.GetOwnerCarsUseCase
 import com.gta.domain.usecase.cardetail.GetOwnerInfoUseCase
 import com.gta.domain.usecase.user.ReportUserUseCase
+import com.gta.presentation.util.EventFlow
 import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.MutableEventFlow
 import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,12 +25,14 @@ import javax.inject.Inject
 class OwnerProfileViewModel @Inject constructor(
     args: SavedStateHandle,
     getOwnerInfoUseCase: GetOwnerInfoUseCase,
-    getOwnerCarsUseCase: GetOwnerCarsUseCase,
+    private val getOwnerCarsUseCase: GetOwnerCarsUseCase,
     private val reportUserUseCase: ReportUserUseCase
 ) : ViewModel() {
 
     val owner: StateFlow<UserProfile>
-    val carList: StateFlow<List<SimpleCar>>
+
+    private val _carListEvent = MutableEventFlow<UCMCResult<List<SimpleCar>>>()
+    val carListEvent: EventFlow<UCMCResult<List<SimpleCar>>> get() = _carListEvent.asEventFlow()
 
     private val _reportEvent = MutableEventFlow<UCMCResult<Unit>>()
     val reportEvent get() = _reportEvent.asEventFlow()
@@ -42,11 +46,15 @@ class OwnerProfileViewModel @Inject constructor(
             initialValue = UserProfile()
         )
 
-        carList = getOwnerCarsUseCase(ownerId).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+        getCarList()
+    }
+
+    fun getCarList() {
+        viewModelScope.launch {
+            getOwnerCarsUseCase(ownerId).collectLatest {
+                _carListEvent.emit(it)
+            }
+        }
     }
 
     fun onReportClick() {
