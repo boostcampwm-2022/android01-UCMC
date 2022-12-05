@@ -123,6 +123,10 @@
     <string name="review_input_hint_for_lender">차주의 매너, 차 상태 등 서비스에 대한 리뷰를 남겨주세요. 감사 인사도 좋아요 :)</string>
     <string name="review_input_hint_for_owner">대여자의 매너, 대여 후 차 상태 등 리뷰를 남겨주세요. 감사 인사도 좋아요 :)</string>
     <string name="review_btn_apply">리뷰완료</string>
+    <string name="review_error_firestore_load_reservation">예약 정보를 불러오는데 실패했습니다.\n이전 화면으로 이동합니다.</string>
+    <string name="review_error_firestore_review_duplicated">이미 리뷰를 등록한 거래입니다.\n이전 화면으로 이동합니다.</string>
+    <string name="review_error_firestore_review_apply">리뷰 등록에 실패했습니다. 다시 시도해주세요.</string>
+    <string name="review_apply_success">리뷰 작성을 완료했습니다!</string>
 
     <string name="default_notification_channel_id">ucmc_notifications</string>
     <string name="default_notification_name">자동차 예약, 반납 알림</string>
