@@ -7,6 +7,7 @@ import com.gta.domain.model.LocationInfo
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.usecase.map.GetNearCarsUseCase
 import com.gta.domain.usecase.map.GetSearchAddressUseCase
+import com.gta.presentation.ui.cardetail.edit.GetCoordinateLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -31,7 +33,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MapViewModel @Inject constructor(
     private val getNearCarsUseCase: GetNearCarsUseCase,
-    private val searchAddressUseCase: GetSearchAddressUseCase
+    private val searchAddressUseCase: GetSearchAddressUseCase,
+    private val getCoordinateLocation: GetCoordinateLocation
 ) : ViewModel() {
     private val SEARCH_TIMEOUT = 500L
 
@@ -99,6 +102,16 @@ class MapViewModel @Inject constructor(
     fun setQuery(query: String) {
         viewModelScope.launch {
             _searchRequest.emit(query)
+        }
+    }
+
+    private val _location = MutableSharedFlow<String?>()
+    val location: SharedFlow<String?>
+        get() = _location
+
+    fun getLocationAddress(longitude: Double, latitude: Double) {
+        viewModelScope.launch {
+            _location.emit(getCoordinateLocation(longitude, latitude).first())
         }
     }
 }

@@ -9,6 +9,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.LocationInfo
 import com.gta.presentation.R
@@ -30,6 +33,7 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -85,6 +89,12 @@ class CarEditMapFragment :
                 map = naverMap
             }
 
+            Timber.d("x ${marker.position.longitude} y ${marker.position.latitude}")
+            viewModel.getLocationAddress(
+                marker.position.longitude,
+                marker.position.latitude
+            )
+
             setVisibleAtSelectLocation(true)
         }
 
@@ -95,12 +105,26 @@ class CarEditMapFragment :
 
         binding.btnLocationDone.setOnClickListener {
             // TODO 완료 안내 메시지 추가 고민
-            
+
             saveLocationData("LOCATION", binding.etLocationInput.text.toString())
             saveLocationData("LATITUDE", marker.position.latitude.toString())
             saveLocationData("LONGITUDE", marker.position.longitude.toString())
 
             findNavController().navigateUp()
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.location.collectLatest { location ->
+                    if (location != null && location != "") {
+                        binding.etLocationInput.isEnabled = false
+                        binding.etLocationInput.setText(location)
+                    } else {
+                        binding.etLocationInput.isEnabled = true
+                        binding.etLocationInput.setText("직접 입력해 주세요")
+                    }
+                }
+            }
         }
     }
 

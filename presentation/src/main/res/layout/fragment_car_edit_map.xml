@@ -72,7 +72,7 @@
                 android:background="?attr/colorSurface"
                 android:elevation="2dp"
                 android:paddingHorizontal="@dimen/padding_medium"
-                android:paddingVertical="@dimen/padding_medium"
+                android:paddingVertical="@dimen/padding_large"
                 android:text="등록된 차량을\n주차할 장소를 선택해주세요"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
@@ -148,6 +148,7 @@
                         android:id="@+id/et_location_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:maxLines="1"
                         android:textSize="@dimen/font_body_medium" />
                 </com.google.android.material.textfield.TextInputLayout>
