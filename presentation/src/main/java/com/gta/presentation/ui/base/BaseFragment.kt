@@ -32,11 +32,11 @@ abstract class BaseFragment<VB : ViewDataBinding>(
     fun isBindingNotNull(): Boolean = _binding != null
 
     fun sendSnackBar(
-        message: String,
+        message: String?,
         @androidx.annotation.IntRange(from = -2) length: Int = Snackbar.LENGTH_SHORT,
         anchorView: View? = null
     ) {
-        Snackbar.make(binding.root, message, length).apply {
+        Snackbar.make(binding.root, message ?: "알 수 없는 오류가 발생했어요.", length).apply {
             if (anchorView != null) {
                 this.anchorView = anchorView
             }
