@@ -43,6 +43,6 @@ class ReservationRepositoryImpl @Inject constructor(
         reservationId: String,
         state: ReservationState
     ): Boolean {
-        return reservationDataSource.updateReservationState(reservationId, state.string).first()
+        return reservationDataSource.updateReservationState(reservationId, state.state).first()
     }
 }
