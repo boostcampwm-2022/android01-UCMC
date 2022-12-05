@@ -2,6 +2,7 @@ package com.gta.data.repository
 
 import android.net.Uri
 import com.gta.data.model.Car
+import com.gta.data.model.UserInfo
 import com.gta.data.model.toCarRentInfo
 import com.gta.data.model.toDetailCar
 import com.gta.data.model.toProfile
@@ -42,7 +43,7 @@ class CarRepositoryImpl @Inject constructor(
 
     override fun getCarData(carId: String): Flow<CarDetail> = callbackFlow {
         carDataSource.getCar(carId).first()?.let { car ->
-            val ownerInfo = userDataSource.getUser(car.ownerId).first()
+            val ownerInfo = userDataSource.getUser(car.ownerId).first() ?: UserInfo()
             trySend(
                 car.toDetailCar(
                     car.pinkSlip.informationNumber,
@@ -79,7 +80,7 @@ class CarRepositoryImpl @Inject constructor(
     }
 
     override fun getSimpleCarList(ownerId: String): Flow<List<SimpleCar>> = callbackFlow {
-        val userInfo = userDataSource.getUser(ownerId).first()
+        val userInfo = userDataSource.getUser(ownerId).first() ?: UserInfo()
         if (userInfo.myCars.isNotEmpty()) {
             carDataSource.getOwnerCars(userInfo.myCars).first().map { car ->
                 car.toSimple(car.pinkSlip.informationNumber)
@@ -107,8 +108,10 @@ class CarRepositoryImpl @Inject constructor(
 
     override fun removeCar(userId: String, carId: String): Flow<Boolean> = callbackFlow {
         if (carDataSource.removeCar(carId).first()) {
-            val newCars = userDataSource.getUser(userId).first().myCars.filter { it != carId }
-            trySend(userDataSource.removeCar(userId, newCars).first())
+            userDataSource.getUser(userId).first()?.let { user ->
+                val newCars = user.myCars.filter { it != carId }
+                trySend(userDataSource.removeCar(userId, newCars).first())
+            } ?: trySend(false)
         } else {
             trySend(false)
         }

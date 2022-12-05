@@ -18,16 +18,19 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     override fun getUserProfile(uid: String): Flow<UserProfile> = callbackFlow {
-        val profile = userDataSource.getUser(uid).first().toProfile(uid)
-        trySend(profile)
+        userDataSource.getUser(uid).first()?.let { profile ->
+            trySend(profile.toProfile(uid))
+        } ?: trySend(UserProfile())
         awaitClose()
     }
 
-    override fun getNowReservation(uid: String, carId: String): Flow<SimpleReservation> = callbackFlow {
-        val reservation = reservationDataSource.getRentingStateReservations(uid).first().find { reservation ->
-            reservation.carId == carId
+    override fun getNowReservation(uid: String, carId: String): Flow<SimpleReservation> =
+        callbackFlow {
+            val reservation =
+                reservationDataSource.getRentingStateReservations(uid).first().find { reservation ->
+                    reservation.carId == carId
+                }
+            trySend(reservation ?: SimpleReservation())
+            awaitClose()
         }
-        trySend(reservation ?: SimpleReservation())
-        awaitClose()
-    }
 }
