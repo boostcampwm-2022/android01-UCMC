@@ -118,8 +118,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_large"
                 android:text="@string/mypage_title_account"
-                android:textSize="@dimen/font_title_medium"
                 android:textColor="@color/black"
+                android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
                 app:layout_constraintTop_toBottomOf="@+id/div_mypage_level0" />
@@ -200,16 +200,28 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_mypage_title_transaction" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_mypage_transaction_history"
+                android:id="@+id/btn_mypage_buy_history"
                 style="@style/mypageButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/mypage_btn_transaction"
+                android:text="@string/mypage_btn_transaction_buy"
                 app:icon="@drawable/ic_mypage_deal"
                 app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
                 app:layout_constraintTop_toBottomOf="@id/btn_mypage_car" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mypage_sell_history"
+                style="@style/mypageButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/mypage_btn_transaction_sell"
+                app:icon="@drawable/ic_mypage_deal_inverse"
+                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
+                app:layout_constraintTop_toBottomOf="@id/btn_mypage_buy_history" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_mypage_fine"
@@ -221,7 +233,7 @@
                 app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
-                app:layout_constraintTop_toBottomOf="@id/btn_mypage_transaction_history" />
+                app:layout_constraintTop_toBottomOf="@id/btn_mypage_sell_history" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/div_mypage_level3"
