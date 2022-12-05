@@ -2,10 +2,9 @@ package com.gta.data.repository
 
 import com.gta.data.source.MyPageDataSource
 import com.gta.data.source.StorageDataSource
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.MyPageRepository
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -13,18 +12,13 @@ class MyPageRepositoryImpl @Inject constructor(
     private val myPageDataSource: MyPageDataSource,
     private val storageDataSource: StorageDataSource
 ) : MyPageRepository {
-    override fun setThumbnail(uid: String, uri: String): Flow<String> = callbackFlow {
+    override suspend fun setThumbnail(uid: String, uri: String, prevThumbnailPath: String): UCMCResult<String> {
         val result = storageDataSource.uploadPicture("users/$uid/thumbnail", uri).first() ?: ""
-        if (result.isNotEmpty() && myPageDataSource.setThumbnail(uid, result).first()) {
-            trySend(result)
+        return if (result.isNotEmpty() && myPageDataSource.setThumbnail(uid, result).first()) {
+            storageDataSource.deletePicture(prevThumbnailPath).first()
+            UCMCResult.Success(uri)
         } else {
-            trySend("")
+            UCMCResult.Error(FirestoreException())
         }
-        awaitClose()
-    }
-
-    override fun deleteThumbnail(uid: String, path: String): Flow<Boolean> = callbackFlow {
-        trySend(storageDataSource.deletePicture(path).first())
-        awaitClose()
     }
 }

@@ -3,11 +3,13 @@ package com.gta.presentation.ui.mypage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UserProfile
-import com.gta.domain.usecase.mypage.DeleteThumbnailUseCase
 import com.gta.domain.usecase.mypage.SetThumbnailUseCase
 import com.gta.domain.usecase.user.GetUserProfileUseCase
 import com.gta.presentation.util.FirebaseUtil
+import com.gta.presentation.util.MutableEventFlow
+import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.models.User
@@ -24,32 +26,20 @@ class MyPageViewModel @Inject constructor(
     private val auth: FirebaseAuth,
     private val chatClient: ChatClient,
     private val getUserProfileUseCase: GetUserProfileUseCase,
-    private val setThumbnailUseCase: SetThumbnailUseCase,
-    private val deleteThumbnailUseCase: DeleteThumbnailUseCase
+    private val setThumbnailUseCase: SetThumbnailUseCase
 ) : ViewModel() {
 
     private val _userProfile = MutableStateFlow(UserProfile())
     val userProfile: StateFlow<UserProfile> get() = _userProfile
 
-    private val _thumbnailUpdateEvent = MutableSharedFlow<String>()
-    val thumbnailUpdateEvent: SharedFlow<String> get() = _thumbnailUpdateEvent
+    private val _thumbnailUpdateEvent = MutableEventFlow<UCMCResult<String>>()
+    val thumbnailUpdateEvent get() = _thumbnailUpdateEvent.asEventFlow()
 
     private val _nicknameEditEvent = MutableSharedFlow<String>()
     val nicknameEditEvent: SharedFlow<String> get() = _nicknameEditEvent
 
     init {
         requestUserProfile()
-    }
-
-    fun changeThumbnail(uri: String) {
-        val uid = auth.uid ?: return
-        val previousImage = userProfile.value.image
-        viewModelScope.launch {
-            if (previousImage.isNotEmpty()) {
-                deleteThumbnailUseCase(uid, previousImage).first()
-            }
-            _userProfile.emit(userProfile.value.copy(image = uri))
-        }
     }
 
     private fun requestUserProfile() {
@@ -59,12 +49,14 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun updateThumbnail(uri: String) {
+        val previousImage = userProfile.value.image
         viewModelScope.launch {
-            val updatedUri = setThumbnailUseCase(FirebaseUtil.uid, uri).first()
-            if (updatedUri.isNotEmpty()) {
-                updateChatThumbnail(updatedUri)
+            val result = setThumbnailUseCase(FirebaseUtil.uid, uri, previousImage)
+            if (result is UCMCResult.Success && result.data.isNotEmpty()) {
+                updateChatThumbnail(result.data)
+                _userProfile.emit(userProfile.value.copy(image = uri))
             }
-            _thumbnailUpdateEvent.emit(updatedUri)
+            _thumbnailUpdateEvent.emit(result)
         }
     }
 
