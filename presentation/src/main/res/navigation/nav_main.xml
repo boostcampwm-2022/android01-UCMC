@@ -212,7 +212,7 @@
             app:popUpTo="@id/mapFragment"
             app:popUpToInclusive="true" />
     </fragment>
-
+    
     <fragment
         android:id="@+id/chattingListFragment"
         android:name="com.gta.presentation.ui.chatting.list.ChattingListFragment"
@@ -290,6 +290,10 @@
         android:id="@+id/notificationListFragment"
         android:name="com.gta.presentation.ui.notification.NotificationListFragment"
         android:label="fragment_notification_list"
-        tools:layout="@layout/fragment_notification_list" />
+        tools:layout="@layout/fragment_notification_list">
+        <action
+            android:id="@+id/action_notificationListFragment_to_reviewFragment"
+            app:destination="@id/reviewFragment" />
+    </fragment>
 
 </navigation>

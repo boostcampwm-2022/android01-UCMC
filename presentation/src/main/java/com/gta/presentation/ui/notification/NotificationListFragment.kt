@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.gta.domain.model.NotificationType
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentNotificationListBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -29,7 +30,26 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding.rvNotification.adapter = adapter
+        binding.rvNotification.adapter = adapter.apply {
+            setItemClickListener(object : NotificationListAdapter.OnItemClickListener {
+                override fun onClick(type: NotificationType, reservation: String) {
+                    when (type) {
+                        NotificationType.REQUEST_RESERVATION -> {
+                            // TODO 수락/거절 이동(RESERVASTON ID)
+                        }
+                        NotificationType.ACCEPT_RESERVATION -> {
+                        }
+                        NotificationType.REJECT_RESERVATION -> {
+                        }
+                        NotificationType.RETURN_CAR -> {
+                            NotificationListFragmentDirections.actionNotificationListFragmentToReviewFragment(
+                                reservation
+                            )
+                        }
+                    }
+                }
+            })
+        }
         return binding.root
     }
 
@@ -39,7 +59,7 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.notificationList.collectLatest {
-                    Timber.d("fragment ${it}")
+                    Timber.d("fragment $it")
                     adapter.submitData(it)
                 }
             }

@@ -7,17 +7,38 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.gta.domain.model.NotificationInfo
+import com.gta.domain.model.NotificationType
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ItemNotificationListBinding
+import com.gta.presentation.ui.cardetail.edit.CarEditImagesAdapter
 
 class NotificationListAdapter :
     PagingDataAdapter<NotificationInfo, NotificationListAdapter.NotificationViewHolder>(
         NotificationDiffCallback()
     ) {
 
+    private var itemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onClick(type: NotificationType, reservation: String)
+    }
+
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        itemClickListener = onItemClickListener
+    }
+
     class NotificationViewHolder(
-        private val binding: ItemNotificationListBinding
+        private val binding: ItemNotificationListBinding,
+        itemClickListener: OnItemClickListener?
     ) : ViewHolder(binding.root) {
+
+        init {
+            itemView.setOnClickListener {
+                binding.notification?.let {
+                    itemClickListener?.onClick(it.type, it.reservationId)
+                }
+            }
+        }
         fun bind(item: NotificationInfo) {
             binding.notification = item
         }
@@ -30,7 +51,8 @@ class NotificationListAdapter :
                 R.layout.item_notification_list,
                 parent,
                 false
-            )
+            ),
+            itemClickListener
         )
     }
 
