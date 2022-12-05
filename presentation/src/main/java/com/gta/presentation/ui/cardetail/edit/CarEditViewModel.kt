@@ -93,7 +93,6 @@ class CarEditViewModel @Inject constructor(
     }
 
     fun updateData() {
-        // TODO 대여반납 위치 update 하기
         _updateState.value = UpdateState.LOAD
 
         viewModelScope.launch {
@@ -106,8 +105,8 @@ class CarEditViewModel @Inject constructor(
                         comment.value,
                         if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
                         availableDate.value,
-                        "수정된 위치",
-                        Coordinate(37.3588798, 127.1051933)
+                        location.value,
+                        coordinate ?: Coordinate(37.3588798, 127.1051933)
                     ).first()
                 ) {
                     UpdateState.SUCCESS
