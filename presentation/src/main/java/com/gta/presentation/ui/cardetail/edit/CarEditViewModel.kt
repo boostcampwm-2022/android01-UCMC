@@ -46,7 +46,9 @@ class CarEditViewModel @Inject constructor(
     val location: StateFlow<String>
         get() = _location
 
-    private var coordinate: Coordinate? = null
+    private var _coordinate: Coordinate? = null
+    val coordinate: Coordinate?
+        get() = _coordinate
 
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.NOMAL)
     val updateState: StateFlow<UpdateState>
@@ -89,7 +91,7 @@ class CarEditViewModel @Inject constructor(
 
     fun setLocationData(text: String, latitude: Double, longitude: Double) {
         _location.value = text
-        coordinate = Coordinate(latitude, longitude)
+        _coordinate = Coordinate(latitude, longitude)
     }
 
     fun updateData() {

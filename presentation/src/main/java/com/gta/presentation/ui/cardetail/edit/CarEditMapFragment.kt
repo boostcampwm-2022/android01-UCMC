@@ -13,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.gta.domain.model.LocationInfo
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditMapBinding
@@ -48,6 +49,7 @@ class CarEditMapFragment :
     private lateinit var inputManager: InputMethodManager
 
     private val marker: Marker = Marker()
+    private val args: CarEditMapFragmentArgs by navArgs()
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -168,6 +170,14 @@ class CarEditMapFragment :
             binding.etSearch.clearFocus()
             binding.mapView.onTouchEvent(event)
         }
+
+        // 초기 위치 설정
+        val location = args.coordinate
+        naverMap.moveCamera(
+            CameraUpdate.scrollTo(
+                LatLng(location.latitude, location.longitude)
+            )
+        )
     }
 
     private fun setupWithSearch() {

@@ -17,6 +17,7 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
+import com.gta.domain.model.Coordinate
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -143,7 +144,9 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
         binding.ivLocationEdit.setOnClickListener {
             findNavController().navigate(
                 CarEditFragmentDirections
-                    .actionCarDetailEditFragmentToCarEditMapFragment()
+                    .actionCarDetailEditFragmentToCarEditMapFragment(
+                        viewModel.coordinate ?: Coordinate(37.3588798, 127.1051933)
+                    )
             )
         }
 

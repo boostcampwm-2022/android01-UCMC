@@ -270,7 +270,11 @@
     <fragment
         android:id="@+id/carEditMapFragment"
         android:name="com.gta.presentation.ui.cardetail.edit.CarEditMapFragment"
-        android:label="CarEditMapFragment" />
+        android:label="CarEditMapFragment" >
+        <argument
+            android:name="coordinate"
+            app:argType="com.gta.domain.model.Coordinate" />
+    </fragment>
 
     <fragment
         android:id="@+id/notificationFragment"
