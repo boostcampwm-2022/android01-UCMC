@@ -113,6 +113,7 @@
     <string name="nickname_error_min_length">닉네임은 2자 이상 입력해주세요</string>
     <string name="nickname_error_symbols">한글, 영어, 숫자만 입력해주세요</string>
     <string name="nickname_btn_apply">적용하기</string>
+    <string name="nickname_error_firestore">닉네임 변경에 실패했습니다. 다시 시도해주세요.</string>
 
     <string name="review_toolbar">리뷰 남기기</string>
     <string name="review_nickname_for_lender">%1s님의</string>

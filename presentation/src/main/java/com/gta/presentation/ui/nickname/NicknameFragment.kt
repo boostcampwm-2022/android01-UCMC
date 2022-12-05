@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.NicknameState
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentNicknameBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -33,8 +34,13 @@ class NicknameFragment : BaseFragment<FragmentNicknameBinding>(
         }
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.nicknameChangeEvent.collectLatest { state ->
-                if (state) {
-                    findNavController().navigate(R.id.action_nicknameFragment_to_myPageFragment)
+                when (state) {
+                    is UCMCResult.Error -> {
+                        sendSnackBar(getString(R.string.nickname_error_firestore))
+                    }
+                    is UCMCResult.Success -> {
+                        findNavController().navigate(R.id.action_nicknameFragment_to_myPageFragment)
+                    }
                 }
             }
         }
