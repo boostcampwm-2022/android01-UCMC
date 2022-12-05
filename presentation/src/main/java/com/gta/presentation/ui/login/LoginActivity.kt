@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -60,7 +61,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         requestNotificationPermission()
         initCollector()
@@ -68,6 +69,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         binding.btnLoginGoogle.setOnClickListener {
             googleLogin()
         }
+        setupSplashScreen(splashScreen)
     }
 
     override fun onResume() {
@@ -92,10 +94,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
             viewModel.loginEvent.collectLatest { state ->
                 when (state) {
                     LoginResult.SUCCESS -> startMainActivity()
-                    LoginResult.FAILURE -> {}
                     LoginResult.NEWUSER -> {
                         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
+                    LoginResult.FAILURE -> {}
                 }
             }
         }
@@ -140,6 +142,18 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
     private fun googleLogin() {
         requestActivity.launch(googleSignInClient.signInIntent)
+    }
+
+    private fun setupSplashScreen(splashScreen: androidx.core.splashscreen.SplashScreen) {
+        val content: View = findViewById(android.R.id.content)
+        content.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                return if (viewModel.isLoading.not()) {
+                    content.viewTreeObserver.removeOnPreDrawListener(this)
+                    true
+                } else false
+            }
+        })
     }
 
     private fun getAssetData(fileName: String): String {

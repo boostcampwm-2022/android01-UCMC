@@ -31,6 +31,9 @@ class LoginViewModel @Inject constructor(
     private val _loginEvent = MutableSharedFlow<LoginResult>()
     val loginEvent: SharedFlow<LoginResult> get() = _loginEvent
 
+    var isLoading = true
+        private set
+
     fun signInWithToken(token: String?) {
         token ?: return
         val credential = GoogleAuthProvider.getCredential(token, null)
@@ -44,10 +47,19 @@ class LoginViewModel @Inject constructor(
     }
 
     fun checkCurrentUser(shouldUpdateMessageToken: Boolean = false) {
-        val user = auth.currentUser ?: return
-        FirebaseUtil.setUid(user)
-        viewModelScope.launch {
-            handleLoginResult(checkCurrentUserUseCase(FirebaseUtil.uid, shouldUpdateMessageToken).first())
+        val user = auth.currentUser
+        if (user != null) {
+            FirebaseUtil.setUid(user)
+            viewModelScope.launch {
+                handleLoginResult(
+                    checkCurrentUserUseCase(
+                        FirebaseUtil.uid,
+                        shouldUpdateMessageToken
+                    ).first()
+                )
+            }
+        } else {
+            isLoading = false
         }
     }
 
@@ -62,6 +74,7 @@ class LoginViewModel @Inject constructor(
             if (loginResult == LoginResult.SUCCESS) {
                 createChatUser()
             } else {
+                isLoading = false
                 _loginEvent.emit(loginResult)
             }
         }
