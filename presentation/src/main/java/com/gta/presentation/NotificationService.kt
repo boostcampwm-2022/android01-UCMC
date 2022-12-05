@@ -84,22 +84,36 @@ class NotificationService : FirebaseMessagingService() {
                 deepLinkBuilder.apply {
                     setArguments(arguments)
                     addDestination(R.id.notificationFragment)
-                    addDestination(R.id.reservationRequestFragment)
+                    addDestination(R.id.reservationCheckFragment)
                 }
             }
             NotificationType.ACCEPT_RESERVATION.title -> {
+                val arguments = Bundle().apply {
+                    putString("RESERVATION_ID", message.data["reservationId"])
+                }
                 deepLinkBuilder.apply {
+                    setArguments(arguments)
                     addDestination(R.id.notificationFragment)
+                    addDestination(R.id.reservationCheckFragment)
                 }
             }
             NotificationType.DECLINE_RESERVATION.title -> {
+                val arguments = Bundle().apply {
+                    putString("RESERVATION_ID", message.data["reservationId"])
+                }
                 deepLinkBuilder.apply {
+                    setArguments(arguments)
                     addDestination(R.id.notificationFragment)
+                    addDestination(R.id.reservationCheckFragment)
                 }
             }
             NotificationType.RETURN_CAR.title -> {
+                val arguments = Bundle().apply {
+                    putString("RESERVATION_ID", message.data["reservationId"])
+                }
                 deepLinkBuilder.apply {
-                    addDestination(R.id.mapFragment) // todo return fragment
+                    setArguments(arguments)
+                    addDestination(R.id.reviewFragment)
                 }
             }
             else -> {
