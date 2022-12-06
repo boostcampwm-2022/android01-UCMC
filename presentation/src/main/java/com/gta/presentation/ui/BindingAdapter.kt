@@ -4,11 +4,15 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.NotificationType
+import com.gta.domain.model.ReservationState
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
+import com.gta.presentation.model.TransactionState
 import com.gta.presentation.util.DateUtil
 
 @BindingAdapter("image_uri")
@@ -52,9 +56,9 @@ fun setReservationTime(textView: TextView, selection: AvailableDate?, dateType: 
         DateType.RANGE -> {
             textView.text = selection?.let {
                 "${DateUtil.dateFormat.format(selection.start)} ~ ${
-                DateUtil.dateFormat.format(
-                    selection.end
-                )
+                    DateUtil.dateFormat.format(
+                        selection.end
+                    )
                 }"
             } ?: textView.resources.getString(R.string.placeholder_date_range)
         }
@@ -127,4 +131,33 @@ fun setNotificationListItemBody(
                 textView.resources.getString(R.string.notification_list_return_message, from, car)
             }
         }
+}
+
+@BindingAdapter("reservation_state")
+fun setReservationState(textView: TextView, reservationState: ReservationState) {
+    textView.text =
+        when (reservationState) {
+            ReservationState.CANCEL -> {
+                textView.resources.getString(R.string.cancel)
+            }
+            ReservationState.PENDING -> {
+                textView.resources.getString(R.string.pending)
+            }
+            ReservationState.ACCEPT -> {
+                textView.resources.getString(R.string.accept)
+            }
+            ReservationState.RENTING -> {
+                textView.resources.getString(R.string.renting)
+            }
+            ReservationState.DONE -> {
+                textView.resources.getString(R.string.return_completed)
+            }
+        }
+}
+
+@BindingAdapter("submitList")
+fun bindSubmitList(view: RecyclerView, itemList: List<Any>?) {
+    view.adapter?.let {
+        (view.adapter as ListAdapter<Any, *>).submitList(itemList)
+    }
 }

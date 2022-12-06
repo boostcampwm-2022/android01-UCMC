@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data></data>
+    <data>
+
+        <import type="com.gta.presentation.model.DateType" />
+
+        <variable
+            name="item"
+            type="com.gta.domain.model.Transaction" />
+    </data>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_item"
@@ -27,11 +34,10 @@
                 app:layout_constraintGuide_end="@dimen/padding_medium" />
 
             <com.google.android.material.imageview.ShapeableImageView
-
                 android:id="@+id/iv_thumbnail"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_logo"
+                app:image_uri="@{item.thumbnailImg}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Percent" />
@@ -46,6 +52,7 @@
                 android:textSize="@dimen/font_body_medium"
                 app:layout_constraintStart_toEndOf="@+id/iv_thumbnail"
                 app:layout_constraintTop_toTopOf="parent"
+                app:reservation_state="@{item.reservationState}"
                 tools:text="보류중" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -55,6 +62,7 @@
                 android:layout_marginStart="@dimen/padding_medium"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="@{item.carModel}"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/tv_reservation_date"
@@ -68,6 +76,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_body_medium"
+                selection="@{item.reservationDate}"
+                date_type="@{DateType.RANGE}"
                 app:layout_constraintBottom_toBottomOf="@id/iv_detail"
                 app:layout_constraintEnd_toStartOf="@id/iv_detail"
                 app:layout_constraintStart_toStartOf="@+id/tv_title"
