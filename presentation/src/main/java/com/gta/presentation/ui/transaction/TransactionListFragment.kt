@@ -22,6 +22,10 @@ class TransactionListFragment : BaseFragment<FragmentTransactionListBinding>(R.l
         binding.apply {
             vm = viewModel
             rvTransactionListTransactions.adapter = TransactionListAdapter()
+            srlTransactionListRefresh.setOnRefreshListener {
+                srlTransactionListRefresh.isRefreshing = false
+                viewModel.setTransactions()
+            }
         }
     }
 

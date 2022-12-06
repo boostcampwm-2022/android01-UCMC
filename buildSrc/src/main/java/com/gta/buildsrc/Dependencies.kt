@@ -11,6 +11,7 @@ object Dependencies {
         const val STARTUP = "1.2.0-alpha01"
         const val SPLASH = "1.0.0"
         const val DATASTORE = "1.0.0"
+        const val SWIPE_REFRESH_LAYOUT = "1.1.0"
 
         // KTX
         const val KOTLIN = "1.7.10"
@@ -72,6 +73,8 @@ object Dependencies {
             const val CORE = "androidx.core:core-ktx:${Versions.CORE}"
             const val STARTUP = "androidx.startup:startup-runtime:${Versions.STARTUP}"
             const val SPLASH = "androidx.core:core-splashscreen:${Versions.SPLASH}"
+            const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
+            const val SWIPE_REFRESH_LAYOUT = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.SWIPE_REFRESH_LAYOUT}"
 
             fun getAll(): ArrayList<String> {
                 return arrayListOf(APP_COMPAT, CORE)
@@ -209,8 +212,6 @@ object Dependencies {
 
         const val INJECT = "javax.inject:javax.inject:${Versions.INJECT}"
 
-        const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
-
         object Test {
             const val EXT = "androidx.test.ext:junit:${Versions.JUNIT_EXT}"
             const val JUNIT = "junit:junit:${Versions.JUNIT}"
@@ -240,7 +241,7 @@ object Dependencies {
             addAll(Room.getAll())
             add(TIMBER)
             addAll(Retrofit.getAll())
-            add(DATASTORE)
+            add(AndroidX.DATASTORE)
             add(LOGGING_INTERCEPTER)
             add(Paging.PAGING)
         }
@@ -275,6 +276,7 @@ object Dependencies {
             add(INDICATOR)
             add(LOTTIE)
             add(Paging.PAGING)
+            add(AndroidX.SWIPE_REFRESH_LAYOUT)
         }
 
         val presentationKaptLibraries = arrayListOf<String>().apply {

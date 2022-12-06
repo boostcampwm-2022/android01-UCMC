@@ -9,31 +9,40 @@ import com.gta.presentation.model.TransactionState
 import com.gta.presentation.model.TransactionUserState
 import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TransactionListViewModel @Inject constructor(
     args: SavedStateHandle,
-    getTransactionsUseCase: GetTransactionsUseCase
+    private val getTransactionsUseCase: GetTransactionsUseCase
 ) : ViewModel() {
 
-    val transaction: StateFlow<List<Transaction>>
+    private val userState: TransactionUserState
+    private val transactionState: TransactionState
+
+    private val _transaction = MutableStateFlow<List<Transaction>>(emptyList())
+    val transaction: StateFlow<List<Transaction>> get() = _transaction
 
     init {
-        val userState = args.get<TransactionUserState>(TransactionPagerAdapter.USER_STATE_ARG) ?: TransactionUserState.LENDER
-        val transactionState = args.get<TransactionState>(TransactionPagerAdapter.TRANSACTION_STATE_ARG) ?: TransactionState.TRADING
+        userState = args.get<TransactionUserState>(TransactionPagerAdapter.USER_STATE_ARG) ?: TransactionUserState.LENDER
+        transactionState = args.get<TransactionState>(TransactionPagerAdapter.TRANSACTION_STATE_ARG) ?: TransactionState.TRADING
 
-        transaction = getTransactionsUseCase(
-            FirebaseUtil.uid,
-            userState == TransactionUserState.LENDER,
-            transactionState == TransactionState.TRADING
-        ).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+        setTransactions()
+    }
+
+    fun setTransactions() {
+        viewModelScope.launch {
+            _transaction.emit(getTransactionsUseCase(
+                FirebaseUtil.uid,
+                userState == TransactionUserState.LENDER,
+                transactionState == TransactionState.TRADING
+            ).first())
+        }
     }
 }
