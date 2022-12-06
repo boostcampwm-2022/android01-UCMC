@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 enum class UpdateState {
-    NOMAL, LOAD, SUCCESS, FAIL
+    NORMAL, LOAD, SUCCESS, FAIL
 }
 
 @HiltViewModel
@@ -43,7 +43,7 @@ class CarEditViewModel @Inject constructor(
     val availableDate: StateFlow<AvailableDate>
         get() = _availableDate
 
-    private val _updateState = MutableStateFlow(UpdateState.NOMAL)
+    private val _updateState = MutableStateFlow(UpdateState.NORMAL)
     val updateState: StateFlow<UpdateState>
         get() = _updateState
 
@@ -62,10 +62,7 @@ class CarEditViewModel @Inject constructor(
                 price.value = carInfo.data.price.toString()
                 comment.value = carInfo.data.comment
 
-                rentState.value = when (carInfo.data.rentState) {
-                    RentState.AVAILABLE -> true
-                    else -> false
-                }
+                rentState.value = carInfo.data.rentState == RentState.AVAILABLE
                 _availableDate.value = carInfo.data.availableDate
             }
         }
