@@ -286,5 +286,17 @@
             android:name="RESERVATION_ID"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationListFragment"
+        android:name="com.gta.presentation.ui.notification.NotificationListFragment"
+        android:label="@string/notification_list_page"
+        tools:layout="@layout/fragment_notification_list">
+        <action
+            android:id="@+id/action_notificationListFragment_to_reviewFragment"
+            app:destination="@id/reviewFragment" />
+        <action
+            android:id="@+id/action_notificationListFragment_to_reservationCheckFragment"
+            app:destination="@id/reservationCheckFragment" />
+    </fragment>
 
 </navigation>

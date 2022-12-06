@@ -6,6 +6,7 @@ import com.gta.domain.model.Coordinate
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class CarDataSource @Inject constructor(
@@ -20,6 +21,14 @@ class CarDataSource @Inject constructor(
             }
         }
         awaitClose()
+    }
+
+    suspend fun getSuspendCar(carId: String): Car? {
+        return fireStore.collection("cars")
+            .document(carId)
+            .get()
+            .await()
+            .toObject(Car::class.java)
     }
 
     fun getOwnerCars(cars: List<String>): Flow<List<Car>> = callbackFlow {

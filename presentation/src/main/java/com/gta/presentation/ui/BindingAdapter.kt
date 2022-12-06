@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.gta.domain.model.AvailableDate
+import com.gta.domain.model.NotificationType
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
@@ -79,4 +80,51 @@ fun setAvailableDateText(textView: TextView, availableDate: AvailableDate?) {
     } else {
         textView.resources.getString(R.string.car_edit_rent_unavailable)
     }
+}
+
+@BindingAdapter("text_notification_list_title")
+fun setNotificationListItemTitle(textView: TextView, type: NotificationType) {
+    textView.text =
+        when (type) {
+            NotificationType.REQUEST_RESERVATION -> {
+                textView.resources.getString(R.string.notification_list_request_title)
+            }
+            NotificationType.ACCEPT_RESERVATION -> {
+                textView.resources.getString(R.string.notification_list_accept_title)
+            }
+            NotificationType.DECLINE_RESERVATION -> {
+                textView.resources.getString(R.string.notification_list_reject_title)
+            }
+            NotificationType.RETURN_CAR -> {
+                textView.resources.getString(R.string.notification_list_return_title)
+            }
+        }
+}
+
+@BindingAdapter(
+    "text_notification_list_body_type",
+    "text_notification_list_body_from",
+    "text_notification_list_body_car"
+)
+fun setNotificationListItemBody(
+    textView: TextView,
+    type: NotificationType,
+    from: String,
+    car: String
+) {
+    textView.text =
+        when (type) {
+            NotificationType.REQUEST_RESERVATION -> {
+                textView.resources.getString(R.string.notification_list_request_message, from, car)
+            }
+            NotificationType.ACCEPT_RESERVATION -> {
+                textView.resources.getString(R.string.notification_list_accept_message, from, car)
+            }
+            NotificationType.DECLINE_RESERVATION -> {
+                textView.resources.getString(R.string.notification_list_reject_message, from, car)
+            }
+            NotificationType.RETURN_CAR -> {
+                textView.resources.getString(R.string.notification_list_return_message, from, car)
+            }
+        }
 }
