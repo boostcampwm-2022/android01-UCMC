@@ -17,8 +17,8 @@
             android:id="@+id/action_mapFragment_to_chattingListFragment"
             app:destination="@id/chattingListFragment" />
         <action
-            android:id="@+id/action_mapFragment_to_notificationFragment"
-            app:destination="@id/notificationFragment"
+            android:id="@+id/action_mapFragment_to_notificationListFragment"
+            app:destination="@id/notificationListFragment"
             app:popUpTo="@id/mapFragment" />
     </fragment>
 
@@ -274,17 +274,6 @@
         <argument
             android:name="coordinate"
             app:argType="com.gta.domain.model.Coordinate" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/notificationFragment"
-        android:name="com.gta.presentation.ui.notification.NotificationFragment"
-        android:label="@string/notification_toolbar"
-        tools:layout="@layout/fragment_notification">
-        <action
-            android:id="@+id/action_notificationFragment_to_reservationRequestFragment"
-            app:destination="@id/reservationCheckFragment"
-            app:popUpTo="@id/notificationFragment" />
     </fragment>
 
     <fragment

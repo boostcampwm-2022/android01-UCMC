@@ -83,7 +83,7 @@ class NotificationService : FirebaseMessagingService() {
                 }
                 deepLinkBuilder.apply {
                     setArguments(arguments)
-                    addDestination(R.id.notificationFragment)
+                    addDestination(R.id.notificationListFragment)
                     addDestination(R.id.reservationCheckFragment)
                 }
             }
@@ -93,7 +93,7 @@ class NotificationService : FirebaseMessagingService() {
                 }
                 deepLinkBuilder.apply {
                     setArguments(arguments)
-                    addDestination(R.id.notificationFragment)
+                    addDestination(R.id.notificationListFragment)
                     addDestination(R.id.reservationCheckFragment)
                 }
             }
@@ -103,7 +103,7 @@ class NotificationService : FirebaseMessagingService() {
                 }
                 deepLinkBuilder.apply {
                     setArguments(arguments)
-                    addDestination(R.id.notificationFragment)
+                    addDestination(R.id.notificationListFragment)
                     addDestination(R.id.reservationCheckFragment)
                 }
             }
