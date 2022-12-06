@@ -231,6 +231,9 @@
         <argument
             android:name="CAR_ID"
             app:argType="string" />
+        <action
+            android:id="@+id/action_carDetailEditFragment_to_carEditMapFragment"
+            app:destination="@id/carEditMapFragment" />
     </fragment>
 
     <fragment
@@ -263,6 +266,14 @@
             app:destination="@id/reviewFragment"
             app:popUpTo="@id/carDetailFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/carEditMapFragment"
+        android:name="com.gta.presentation.ui.cardetail.edit.CarEditMapFragment"
+        android:label="CarEditMapFragment" >
+        <argument
+            android:name="coordinate"
+            app:argType="com.gta.domain.model.Coordinate" />
     </fragment>
 
     <fragment

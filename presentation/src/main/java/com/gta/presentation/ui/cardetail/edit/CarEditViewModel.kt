@@ -43,12 +43,22 @@ class CarEditViewModel @Inject constructor(
     val availableDate: StateFlow<AvailableDate>
         get() = _availableDate
 
-    private val _updateState = MutableStateFlow(UpdateState.NORMAL)
+
+    private val _location = MutableStateFlow<String>("정보 없음")
+    val location: StateFlow<String>
+        get() = _location
+
+    var coordinate: Coordinate? = null
+        private set
+
+    private val _updateState = MutableStateFlow<UpdateState>(UpdateState.NOMAL)
     val updateState: StateFlow<UpdateState>
         get() = _updateState
 
     // 초기 이미지
     private var initImage: List<String> = emptyList()
+
+    val defaultCoordinate = Coordinate(37.3588798, 127.1051933)
 
     init {
         carId = args.get<String>("CAR_ID") ?: "정보 없음"
@@ -65,6 +75,9 @@ class CarEditViewModel @Inject constructor(
                 rentState.value = carInfo.data.rentState == RentState.AVAILABLE
                 _availableDate.value = carInfo.data.availableDate
             }
+            _availableDate.value = carInfo.availableDate
+            _location.value = carInfo.location
+            coordinate = carInfo.coordinate
         }
     }
 
@@ -80,8 +93,12 @@ class CarEditViewModel @Inject constructor(
         _availableDate.value = AvailableDate(start, end)
     }
 
+    fun setLocationData(text: String, latitude: Double, longitude: Double) {
+        _location.value = text
+        coordinate = Coordinate(latitude, longitude)
+    }
+
     fun updateData() {
-        // TODO 대여반납 위치 update 하기
         _updateState.value = UpdateState.LOAD
 
         viewModelScope.launch {
@@ -94,8 +111,8 @@ class CarEditViewModel @Inject constructor(
                         comment.value,
                         if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
                         availableDate.value,
-                        "수정된 위치",
-                        Coordinate(37.3588798, 127.1051933)
+                        location.value,
+                        coordinate ?: defaultCoordinate
                     ).first()
                 ) {
                     UpdateState.SUCCESS

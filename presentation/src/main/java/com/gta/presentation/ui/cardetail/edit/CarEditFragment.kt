@@ -17,6 +17,7 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
+import com.gta.domain.model.Coordinate
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -99,7 +100,30 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             viewModel.setAvailableDate(it.first, it.second)
         }
 
+        // 위치 수정 값
+        setChangeLocation()
+
         return binding.root
+    }
+
+    private fun setChangeLocation() {
+        val text = findNavController()
+            .currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<String>("LOCATION")?.value
+        val latitude = findNavController()
+            .currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<String>("LATITUDE")?.value
+        val longitude = findNavController()
+            .currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<String>("LONGITUDE")?.value
+
+        if (text != null && latitude != null && longitude != null) {
+            viewModel.setLocationData(
+                text,
+                latitude.toDouble(),
+                longitude.toDouble()
+            )
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,6 +139,15 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
 
         binding.ivDayEdit.setOnClickListener {
             datePicker.show(childFragmentManager, null)
+        }
+
+        binding.ivLocationEdit.setOnClickListener {
+            findNavController().navigate(
+                CarEditFragmentDirections
+                    .actionCarDetailEditFragmentToCarEditMapFragment(
+                        viewModel.coordinate ?: viewModel.defaultCoordinate
+                    )
+            )
         }
 
         binding.btnDone.setOnClickListener {
