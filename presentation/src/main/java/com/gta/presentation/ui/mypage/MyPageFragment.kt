@@ -15,7 +15,6 @@ import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMypageBinding
 import com.gta.presentation.ui.base.BaseFragment
-import com.gta.presentation.ui.bindImageUri
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

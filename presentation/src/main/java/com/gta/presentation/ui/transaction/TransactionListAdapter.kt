@@ -13,7 +13,7 @@ import com.gta.presentation.databinding.ItemTransactionBinding
 class TransactionListAdapter : ListAdapter<Transaction, TransactionListAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
 
     class TransactionViewHolder(
-        private val binding: ItemTransactionBinding,
+        private val binding: ItemTransactionBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Transaction) {

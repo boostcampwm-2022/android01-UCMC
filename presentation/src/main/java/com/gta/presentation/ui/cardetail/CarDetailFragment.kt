@@ -122,12 +122,11 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
         }
     }
 
-
     override fun onStop() {
         viewModel.stopCollect()
         super.onStop()
     }
-    
+
     private fun handleErrorMessage(e: Exception) {
         when (e) {
             is FirestoreException -> {

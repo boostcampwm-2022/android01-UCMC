@@ -12,7 +12,6 @@ import com.gta.domain.model.ReservationState
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
-import com.gta.presentation.model.TransactionState
 import com.gta.presentation.util.DateUtil
 
 @BindingAdapter("image_uri")
@@ -55,11 +54,7 @@ fun setReservationTime(textView: TextView, selection: AvailableDate?, dateType: 
     when (dateType) {
         DateType.RANGE -> {
             textView.text = selection?.let {
-                "${DateUtil.dateFormat.format(selection.start)} ~ ${
-                    DateUtil.dateFormat.format(
-                        selection.end
-                    )
-                }"
+                "${DateUtil.dateFormat.format(selection.start)} ~ ${DateUtil.dateFormat.format(selection.end)}"
             } ?: textView.resources.getString(R.string.placeholder_date_range)
         }
         DateType.DAY_COUNT -> {

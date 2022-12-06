@@ -2,7 +2,6 @@ package com.gta.presentation.ui.transaction
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gta.presentation.R
@@ -11,9 +10,6 @@ import com.gta.presentation.model.TransactionState
 import com.gta.presentation.model.TransactionUserState
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
-import com.gta.presentation.util.repeatOnStarted
-import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
 
 class TransactionFragment : BaseFragment<FragmentTransactionBinding>(R.layout.fragment_transaction) {
 

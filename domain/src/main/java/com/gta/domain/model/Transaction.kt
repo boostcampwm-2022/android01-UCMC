@@ -5,5 +5,5 @@ data class Transaction(
     val reservationState: ReservationState = ReservationState.PENDING,
     val reservationDate: AvailableDate = AvailableDate(),
     val carModel: String = "",
-    val thumbnailImg: String = "",
+    val thumbnailImg: String = ""
 )
