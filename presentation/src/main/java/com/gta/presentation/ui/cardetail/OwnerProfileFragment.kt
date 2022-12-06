@@ -43,11 +43,11 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.reportEvent.collectLatest { result ->
                 when (result) {
-                    is UCMCResult.Success -> {
-                        sendSnackBar(getString(R.string.report_success))
-                    }
                     is UCMCResult.Error -> {
                         handleErrorMessage(result.e)
+                    }
+                    is UCMCResult.Success -> {
+                        sendSnackBar(message = getString(R.string.report_success))
                     }
                 }
             }
@@ -77,6 +77,17 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
                 sendSnackBar(message = getString(R.string.report_cooldown, e.cooldown))
             }
             else -> sendSnackBar(e.message)
+        }
+    }
+
+    private fun handleErrorMessage(e: Exception) {
+        when (e) {
+            is FirestoreException -> {
+                sendSnackBar(message = getString(R.string.report_fail))
+            }
+            is CoolDownException -> {
+                sendSnackBar(message = getString(R.string.report_cooldown, e.cooldown))
+            }
         }
     }
 }

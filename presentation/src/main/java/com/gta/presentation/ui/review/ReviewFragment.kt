@@ -3,16 +3,16 @@ package com.gta.presentation.ui.review
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.DuplicatedItemException
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReviewBinding
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ReviewFragment : BaseFragment<FragmentReviewBinding>(
@@ -28,10 +28,32 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(
     }
 
     private fun initCollector() {
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.addReviewEvent.collectLatest { state ->
-                    if (state) {
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.reviewDTOEvent.collectLatest { result ->
+                if (result is UCMCResult.Error) {
+                    when (result.e) {
+                        is DuplicatedItemException -> {
+                            sendSnackBar(getString(R.string.review_error_firestore_review_duplicated))
+                        }
+                        is FirestoreException -> {
+                            sendSnackBar(getString(R.string.review_error_firestore_load_reservation))
+                        }
+                    }
+                    findNavController().popBackStack()
+                }
+            }
+        }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.addReviewEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Error -> {
+                        sendSnackBar(
+                            message = getString(R.string.review_error_firestore_review_apply),
+                            anchorView = binding.btnReviewApply
+                        )
+                    }
+                    is UCMCResult.Success -> {
+                        sendSnackBar(getString(R.string.review_apply_success))
                         findNavController().navigate(ReviewFragmentDirections.actionReviewFragmentToMapFragment())
                     }
                 }

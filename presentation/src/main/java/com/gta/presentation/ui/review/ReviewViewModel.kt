@@ -4,17 +4,17 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.ReviewDTO
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UserReview
 import com.gta.domain.usecase.review.AddReviewUseCase
 import com.gta.domain.usecase.review.GetReviewDTOUseCase
 import com.gta.presentation.util.FirebaseUtil
+import com.gta.presentation.util.MutableEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,8 +32,11 @@ class ReviewViewModel @Inject constructor(
     private val _reviewDTO = MutableStateFlow(ReviewDTO())
     val reviewDTO: StateFlow<ReviewDTO> get() = _reviewDTO
 
-    private val _addReviewEvent = MutableSharedFlow<Boolean>()
-    val addReviewEvent: SharedFlow<Boolean> get() = _addReviewEvent
+    private val _reviewDTOEvent = MutableEventFlow<UCMCResult<ReviewDTO>>()
+    val reviewDTOEvent get() = _reviewDTOEvent
+
+    private val _addReviewEvent = MutableEventFlow<UCMCResult<Unit>>()
+    val addReviewEvent get() = _addReviewEvent
 
     init {
         // 예약 id로 이미 리뷰를 했는지 검사가 필요
@@ -43,7 +46,12 @@ class ReviewViewModel @Inject constructor(
 
     private fun getReviewDTO(reservationId: String) {
         viewModelScope.launch {
-            _reviewDTO.emit(getReviewDTOUseCase(FirebaseUtil.uid, reservationId).first())
+            val result = getReviewDTOUseCase(FirebaseUtil.uid, reservationId)
+            if (result is UCMCResult.Success) {
+                Timber.tag("review").i("${result.data}")
+                _reviewDTO.emit(result.data)
+            }
+            _reviewDTOEvent.emit(result)
         }
     }
 
@@ -54,7 +62,7 @@ class ReviewViewModel @Inject constructor(
                     opponentId = reviewDTO.value.opponent.id,
                     reservationId = reservationId,
                     review = getUserReview()
-                ).first()
+                )
             )
         }
     }

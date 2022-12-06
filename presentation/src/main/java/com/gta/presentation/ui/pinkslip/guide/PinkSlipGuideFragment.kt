@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import com.gta.presentation.R
-import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.CameraGuideFragment
 
 class PinkSlipGuideFragment : CameraGuideFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as MainActivity).supportActionBar?.title =
-            getString(R.string.pink_slip_guide_toolbar)
         binding.tvCameraGuideTitle.setText(R.string.pink_slip_guide_title)
         binding.ivCameraGuideSample.setImageResource(R.drawable.img_pink_slip)
     }

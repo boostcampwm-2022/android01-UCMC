@@ -28,6 +28,7 @@ object Dependencies {
         const val HILT = "2.44"
         const val VIEW_PAGER = "1.0.0"
         const val ROOM = "2.4.3"
+        const val PAGING = "3.1.1"
 
         const val INJECT = "1"
 
@@ -179,6 +180,15 @@ object Dependencies {
             }
         }
 
+        object Paging {
+            const val PAGING = "androidx.paging:paging-runtime:${Versions.PAGING}"
+            const val KTX = "androidx.paging:paging-common:${Versions.PAGING}"
+
+            fun getAll(): ArrayList<String> {
+                return arrayListOf(PAGING, KTX)
+            }
+        }
+
         const val INDICATOR = "com.tbuonomo:dotsindicator:${Versions.INDICATOR}"
         const val LOTTIE = "com.airbnb.android:lottie:${Versions.LOTTIE}"
 
@@ -232,6 +242,7 @@ object Dependencies {
             addAll(Retrofit.getAll())
             add(DATASTORE)
             add(LOGGING_INTERCEPTER)
+            add(Paging.PAGING)
         }
 
         val dataKaptLibraries = arrayListOf<String>().apply {
@@ -242,6 +253,7 @@ object Dependencies {
         val domainLibraries = arrayListOf<String>().apply {
             add(Coroutine.CORE)
             add(INJECT)
+            add(Paging.KTX)
         }
 
         val presentationLibraries = arrayListOf<String>().apply {
@@ -262,6 +274,7 @@ object Dependencies {
             add(AndroidX.SPLASH)
             add(INDICATOR)
             add(LOTTIE)
+            add(Paging.PAGING)
         }
 
         val presentationKaptLibraries = arrayListOf<String>().apply {

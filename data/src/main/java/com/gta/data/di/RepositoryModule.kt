@@ -56,8 +56,6 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideReportRepository(
-        userDataSource: UserDataSource
-    ): ReportRepository =
+    fun provideReportRepository(userDataSource: UserDataSource): ReportRepository =
         ReportRepositoryImpl(userDataSource)
 }

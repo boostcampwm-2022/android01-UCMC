@@ -2,6 +2,8 @@ package com.gta.presentation.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -26,7 +28,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private val navHostFragment by lazy { supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment }
     private val navController by lazy { navHostFragment.navController }
-    private val appBarConfiguration = AppBarConfiguration(setOf(R.id.mapFragment, R.id.chattingListFragment, R.id.myPageFragment))
+    private val appBarConfiguration =
+        AppBarConfiguration(setOf(R.id.mapFragment, R.id.chattingListFragment, R.id.myPageFragment))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +50,38 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main_activity, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_top_notification -> {
+                navController.navigate(R.id.notificationListFragment)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        when (navController.currentDestination?.id) {
+            R.id.chattingListFragment, R.id.myPageFragment -> {
+                menu?.findItem(R.id.menu_top_notification)?.isVisible = true
+            }
+            else -> {
+                menu?.findItem(R.id.menu_top_notification)?.isVisible = false
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     private fun setupWithBottomNavigation() {
         binding.bnvMain.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            invalidateOptionsMenu()
             when (destination.id) {
                 R.id.mapFragment -> {
                     supportActionBar?.hide()

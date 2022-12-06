@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMypageBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -63,8 +64,10 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
     private fun initCollector() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.thumbnailUpdateEvent.collectLatest { uri ->
-                    viewModel.changeThumbnail(uri)
+                viewModel.thumbnailUpdateEvent.collectLatest { result ->
+                    if (result is UCMCResult.Error) {
+                        sendSnackBar(getString(R.string.mypage_error_firestore))
+                    }
                 }
             }
         }
