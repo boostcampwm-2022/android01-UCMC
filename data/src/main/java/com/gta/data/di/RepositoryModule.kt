@@ -3,15 +3,18 @@ package com.gta.data.di
 import com.gta.data.repository.CarRepositoryImpl
 import com.gta.data.repository.MapRepositoryImpl
 import com.gta.data.repository.ReportRepositoryImpl
+import com.gta.data.repository.TransactionRepositoryImpl
 import com.gta.data.repository.UserRepositoryImpl
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.MapDataSource
 import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.StorageDataSource
+import com.gta.data.source.TransactionDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.repository.CarRepository
 import com.gta.domain.repository.MapRepository
 import com.gta.domain.repository.ReportRepository
+import com.gta.domain.repository.TransactionRepository
 import com.gta.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -58,4 +61,11 @@ class RepositoryModule {
     @Singleton
     fun provideReportRepository(userDataSource: UserDataSource): ReportRepository =
         ReportRepositoryImpl(userDataSource)
+
+    @Provides
+    @Singleton
+    fun provideTransactionRepository(
+        transactionDataSource: TransactionDataSource
+    ): TransactionRepository =
+        TransactionRepositoryImpl(transactionDataSource)
 }

@@ -17,5 +17,6 @@ data class Reservation(
 fun Reservation.toSimpleReservation(reservationId: String): SimpleReservation = SimpleReservation(
     reservationId = reservationId,
     carId = carId,
+    reservationState = state,
     reservationDate = reservationDate
 )

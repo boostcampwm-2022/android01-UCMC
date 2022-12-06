@@ -59,6 +59,12 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
         binding.btnMypageLicense.setOnClickListener {
             findNavController().navigate(R.id.action_myPageFragment_to_myPageLicenseFragment)
         }
+        binding.btnMypageBuyHistory.setOnClickListener {
+            findNavController().navigate(MyPageFragmentDirections.actionMyPageFragmentToTransactionListFragment(getString(R.string.mypage_btn_transaction_buy)))
+        }
+        binding.btnMypageSellHistory.setOnClickListener {
+            findNavController().navigate(MyPageFragmentDirections.actionMyPageFragmentToTransactionListFragment(getString(R.string.mypage_btn_transaction_sell)))
+        }
     }
 
     private fun initCollector() {

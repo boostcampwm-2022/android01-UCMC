@@ -17,7 +17,6 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
-import com.gta.domain.model.Coordinate
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditBinding
 import com.gta.presentation.ui.base.BaseFragment

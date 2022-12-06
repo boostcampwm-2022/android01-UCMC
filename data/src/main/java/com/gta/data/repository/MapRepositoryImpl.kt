@@ -6,7 +6,6 @@ import com.gta.domain.model.LocationInfo
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import javax.inject.Inject

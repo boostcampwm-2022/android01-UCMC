@@ -35,7 +35,6 @@
 
     <string name="car_edit_wait_loading_text">변경사항을 업로드 중입니다.\n잠시만 기다려 주세요..</string>
 
-    
     <string name="car_edit_map_location_select_label">등록된 차량을\n주차할 장소를 선택해주세요</string>
     <string name="car_edit_map_location_select_button">위치 선택하기</string>
     <string name="car_edit_map_location_check_message">선택한 위치가 이 위치가 맞나요?\n선택한 곳의 장소명을 확인해주세요</string>
@@ -187,6 +186,13 @@
     <string name="minute_format">%d분</string>
 
     <string name="no_transactions">거래 내역이 존재하지 않습니다.</string>
+    <string name="cancel">취소</string>
+    <string name="pending">보류중</string>
+    <string name="accept">허락</string>
+    <string name="renting">대여중</string>
+    <string name="return_completed">반납 완료</string>
+    <string name="trading">거래중</string>
+    <string name="transaction_completed">거래 완료</string>
 
     <string name="exception_not_found">알 수 없는 오류가 발생헀어요.</string>
     <string name="exception_user_not_found">사용자 정보를 찾을 수 없어요.</string>

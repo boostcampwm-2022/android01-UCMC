@@ -43,7 +43,6 @@ class CarEditViewModel @Inject constructor(
     val availableDate: StateFlow<AvailableDate>
         get() = _availableDate
 
-
     private val _location = MutableStateFlow<String>("정보 없음")
     val location: StateFlow<String>
         get() = _location
@@ -77,7 +76,6 @@ class CarEditViewModel @Inject constructor(
                 _location.value = carInfo.data.location
                 coordinate = carInfo.data.coordinate
             }
-
         }
     }
 

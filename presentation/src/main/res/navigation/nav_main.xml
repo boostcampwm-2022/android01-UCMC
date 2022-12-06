@@ -56,6 +56,9 @@
             android:id="@+id/action_myPageFragment_to_myPageLicenseFragment"
             app:destination="@id/myPageLicenseFragment"
             app:popUpTo="@id/myPageFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_transactionListFragment"
+            app:destination="@id/transactionFragment" />
     </fragment>
 
     <fragment
@@ -296,6 +299,26 @@
             app:destination="@id/reviewFragment" />
         <action
             android:id="@+id/action_notificationListFragment_to_reservationCheckFragment"
+            app:destination="@id/reservationCheckFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transactionFragment"
+        android:name="com.gta.presentation.ui.transaction.TransactionFragment"
+        android:label="니 차 거래내역"
+        tools:layout="@layout/fragment_transaction">
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transactionListFragment"
+        android:name="com.gta.presentation.ui.transaction.TransactionListFragment"
+        android:label="fragment_transaction_list"
+        tools:layout="@layout/fragment_transaction_list" >
+        <action
+            android:id="@+id/action_transactionListFragment_to_reservationCheckFragment"
             app:destination="@id/reservationCheckFragment" />
     </fragment>
 

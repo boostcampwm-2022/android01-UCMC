@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.gta.presentation.model.DateType" />
+
+        <variable
+            name="item"
+            type="com.gta.domain.model.Transaction" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_small"
+        app:cardCornerRadius="@dimen/padding_medium"
+        app:cardElevation="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/padding_medium"
+            android:paddingStart="@dimen/padding_medium">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/padding_medium" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_thumbnail"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:image_uri="@{item.thumbnailImg}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Percent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_reservation_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_medium"
+                android:background="@drawable/bg_reservation_tag"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:textSize="@dimen/font_body_medium"
+                app:layout_constraintStart_toEndOf="@+id/iv_thumbnail"
+                app:layout_constraintTop_toTopOf="parent"
+                app:reservation_state="@{item.reservationState}"
+                tools:text="보류중" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_medium"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{item.carModel}"
+                android:textSize="@dimen/font_title_medium"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/tv_reservation_date"
+                app:layout_constraintEnd_toStartOf="@id/iv_detail"
+                app:layout_constraintStart_toEndOf="@+id/iv_thumbnail"
+                app:layout_constraintTop_toTopOf="@+id/iv_detail"
+                tools:text="[말티즈] 멍멍 나들이 하세요" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_reservation_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_body_medium"
+                selection="@{item.reservationDate}"
+                date_type="@{DateType.RANGE}"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail"
+                app:layout_constraintEnd_toStartOf="@id/iv_detail"
+                app:layout_constraintStart_toStartOf="@+id/tv_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                tools:text="22/12/05 ~ 22/12/06" />
+
+            <ImageView
+                android:id="@+id/iv_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_all_arrow_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</layout>
