@@ -19,7 +19,8 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:theme="@style/Theme.UCMC.Splash"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +31,8 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.MainActivity">
+            android:name=".ui.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
