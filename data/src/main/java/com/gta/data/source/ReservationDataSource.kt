@@ -39,7 +39,7 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
         fireStore
             .collection("reservations")
             .whereEqualTo("lenderId", uid)
-            .whereEqualTo("state", ReservationState.RENTING.string)
+            .whereEqualTo("state", ReservationState.RENTING.state)
             .get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -56,24 +56,28 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
     }
 
     fun getCarReservationDates(carId: String): Flow<List<AvailableDate>> = callbackFlow {
-        fireStore.collection("reservations").whereEqualTo("carId", carId).get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                it.result.map { snapshot ->
-                    snapshot.toObject(Reservation::class.java).reservationDate
-                }.also { result ->
-                    trySend(result)
+        fireStore.collection("reservations")
+            .whereEqualTo("carId", carId)
+            .whereGreaterThanOrEqualTo("state", ReservationState.PENDING.state)
+            .get().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    it.result.map { snapshot ->
+                        snapshot.toObject(Reservation::class.java).reservationDate
+                    }.also { result ->
+                        trySend(result)
+                    }
+                } else {
+                    trySend(emptyList())
                 }
-            } else {
-                trySend(emptyList())
             }
-        }
         awaitClose()
     }
 
-    fun updateReservationState(reservationId: String, state: String) = callbackFlow {
-        fireStore.document("reservations/$reservationId").update("state", state).addOnCompleteListener {
-            trySend(it.isSuccessful)
-        }
+    fun updateReservationState(reservationId: String, state: Int) = callbackFlow {
+        fireStore.document("reservations/$reservationId").update("state", state)
+            .addOnCompleteListener {
+                trySend(it.isSuccessful)
+            }
         awaitClose()
     }
 }

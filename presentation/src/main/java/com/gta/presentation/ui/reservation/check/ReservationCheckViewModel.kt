@@ -85,7 +85,7 @@ class ReservationCheckViewModel @Inject constructor(
             _createReservationEvent.emit(
                 finishReservationUseCase(
                     accepted,
-                    reservation.copy(state = state.string),
+                    reservation.copy(state = state.state),
                     ownerId
                 )
             )

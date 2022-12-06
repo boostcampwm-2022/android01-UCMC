@@ -37,7 +37,7 @@ class ReservationCheckFragment :
                             else -> null
                         }?.isChecked = true
 
-                        (if (result.data.state == ReservationState.PENDING.string) View.VISIBLE else View.GONE).also { visibility ->
+                        (if (result.data.state == ReservationState.PENDING.state) View.VISIBLE else View.GONE).also { visibility ->
                             binding.btnReservationDecline.visibility = visibility
                             binding.btnReservationAccept.visibility = visibility
                         }
