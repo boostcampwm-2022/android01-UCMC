@@ -42,7 +42,7 @@ class TransactionListViewModel @Inject constructor(
                 FirebaseUtil.uid,
                 userState == TransactionUserState.LENDER,
                 transactionState == TransactionState.TRADING
-            ).first())
+            ))
         }
     }
 }
