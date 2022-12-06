@@ -13,7 +13,16 @@ class GetTransactionsUseCase @Inject constructor(
     private val carRepository: CarRepository,
     private val transactionRepository: TransactionRepository
 ) {
-    operator fun invoke(uid: String, isLender: Boolean): Flow<List<Transaction>> {
+    private val tradingCondition =
+        { transaction: Transaction -> transaction.reservationState.state >= 0 }
+    private val completedCondition =
+        { transaction: Transaction -> transaction.reservationState.state < 0 }
+
+    operator fun invoke(
+        uid: String,
+        isLender: Boolean,
+        isTrading: Boolean
+    ): Flow<List<Transaction>> {
         val transactions = if (isLender) {
             transactionRepository.getYourCarTransactions(uid)
         } else {
@@ -24,7 +33,8 @@ class GetTransactionsUseCase @Inject constructor(
             reservations.map {
                 val simpleCar = carRepository.getSimpleCar(it.carId).first()
                 it.toTransaction(simpleCar)
-            }
+            }.filter(if (isTrading) tradingCondition else completedCondition)
         }
     }
+
 }
