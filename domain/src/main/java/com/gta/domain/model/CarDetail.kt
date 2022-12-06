@@ -16,5 +16,6 @@ data class CarDetail(
     val comment: String = "",
     val availableDate: AvailableDate = AvailableDate(),
     val images: List<String> = emptyList(),
-    val owner: UserProfile = UserProfile()
+    val owner: UserProfile = UserProfile(),
+    val coordinate: Coordinate = Coordinate(),
 )

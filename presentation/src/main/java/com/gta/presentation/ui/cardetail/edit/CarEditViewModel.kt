@@ -75,6 +75,7 @@ class CarEditViewModel @Inject constructor(
             }
             _availableDate.value = carInfo.availableDate
             _location.value = carInfo.location
+            coordinate = carInfo.coordinate
         }
     }
 

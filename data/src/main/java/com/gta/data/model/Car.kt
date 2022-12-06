@@ -54,7 +54,8 @@ fun Car.toDetailCar(id: String, owner: UserProfile): CarDetail = CarDetail(
     comment = comment,
     availableDate = availableDate,
     images = images,
-    owner = owner
+    owner = owner,
+    coordinate = coordinate
 )
 
 fun Car.update(update: UpdateCar): Car = Car(
