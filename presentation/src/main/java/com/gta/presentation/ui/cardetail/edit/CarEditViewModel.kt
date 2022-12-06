@@ -51,7 +51,7 @@ class CarEditViewModel @Inject constructor(
     var coordinate: Coordinate? = null
         private set
 
-    private val _updateState = MutableStateFlow<UpdateState>(UpdateState.NOMAL)
+    private val _updateState = MutableStateFlow<UpdateState>(UpdateState.NORMAL)
     val updateState: StateFlow<UpdateState>
         get() = _updateState
 
@@ -74,10 +74,10 @@ class CarEditViewModel @Inject constructor(
 
                 rentState.value = carInfo.data.rentState == RentState.AVAILABLE
                 _availableDate.value = carInfo.data.availableDate
+                _location.value = carInfo.data.location
+                coordinate = carInfo.data.coordinate
             }
-            _availableDate.value = carInfo.availableDate
-            _location.value = carInfo.location
-            coordinate = carInfo.coordinate
+
         }
     }
 

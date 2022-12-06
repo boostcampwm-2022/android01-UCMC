@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.gta.domain.model.LocationInfo
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditMapBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -209,8 +210,15 @@ class CarEditMapFragment :
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.searchResponse.collectLatest { list ->
-                menuAdapter.replace(list)
+            viewModel.searchResponse.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> {
+                        menuAdapter.replace(result.data)
+                    }
+                    is UCMCResult.Error -> {
+                        sendSnackBar(result.e.message)
+                    }
+                }
             }
         }
     }
