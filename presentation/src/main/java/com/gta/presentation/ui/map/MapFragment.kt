@@ -44,7 +44,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     private lateinit var menuAdapter: AutoCompleteAdapter
     private var mapMode = LocationTrackingMode.None
     private val viewModel: MapViewModel by viewModels()
-    private lateinit var inputManager: InputMethodManager
+    private val inputManager: InputMethodManager by lazy {
+        requireActivity().getSystemService(
+            Context.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+    }
 
     private val markerList = mutableListOf<Marker>()
     private var selectedMarker: Marker? = null
@@ -324,11 +328,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     private fun hideKeyboard() {
-        requireActivity().also { activity ->
-            if (activity.currentFocus != null) {
-                inputManager =
-                    activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                activity.currentFocus?.let { view ->
+        with(requireActivity()) {
+            if (currentFocus != null) {
+                currentFocus?.let { view ->
                     inputManager.hideSoftInputFromWindow(
                         view.windowToken,
                         InputMethodManager.HIDE_NOT_ALWAYS
