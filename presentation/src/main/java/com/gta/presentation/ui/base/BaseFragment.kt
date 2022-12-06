@@ -39,7 +39,7 @@ abstract class BaseFragment<VB : ViewDataBinding>(
     ) {
         Snackbar.make(
             binding.root,
-            message ?: requireContext().resources.getString(R.string.exception_not_found),
+            message ?: getString(R.string.exception_not_found),
             length
         ).apply {
             if (anchorView != null) {
