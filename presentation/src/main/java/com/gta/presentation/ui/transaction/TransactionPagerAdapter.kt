@@ -4,8 +4,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gta.presentation.model.TransactionState
+import com.gta.presentation.model.TransactionUserState
 
-class TransactionPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class TransactionPagerAdapter(private val userState: TransactionUserState, fragment: Fragment) : FragmentStateAdapter(fragment) {
     private val transactionStates = TransactionState.values()
 
     override fun getItemCount(): Int = transactionStates.size
@@ -13,12 +14,14 @@ class TransactionPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragmen
     override fun createFragment(position: Int): Fragment {
         val fragment = TransactionListFragment()
         fragment.arguments = Bundle().apply {
-            putParcelable(ARG_KEY, transactionStates[position])
+            putParcelable(USER_STATE_ARG, userState)
+            putParcelable(TRANSACTION_STATE_ARG, transactionStates[position])
         }
         return fragment
     }
 
     companion object {
-        const val ARG_KEY = "TRANSACTION_STATE"
+        const val TRANSACTION_STATE_ARG = "TRANSACTION_STATE"
+        const val USER_STATE_ARG = "USER_STATE"
     }
 }
