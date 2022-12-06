@@ -40,6 +40,7 @@
     <string name="car_edit_map_location_check_message">선택한 위치가 이 위치가 맞나요?\n선택한 곳의 장소명을 확인해주세요</string>
     <string name="car_edit_map_re_select_button">위치 다시 선택</string>
     <string name="car_edit_map_location_done">위치 확정</string>
+    <string name="car_edit_map_location_fail_text">직접 입력해 주세요</string>
 
     <string name="car_detail_day_price">금액 : 1일 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>

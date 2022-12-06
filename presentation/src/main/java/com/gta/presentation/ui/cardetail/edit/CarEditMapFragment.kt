@@ -127,7 +127,7 @@ class CarEditMapFragment :
                         binding.etLocationInput.setText(location)
                     } else {
                         binding.etLocationInput.isEnabled = true
-                        binding.etLocationInput.setText("직접 입력해 주세요")
+                        binding.etLocationInput.setText(resources.getString(R.string.car_edit_map_location_fail_text))
                     }
                 }
             }
