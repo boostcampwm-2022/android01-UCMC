@@ -15,6 +15,7 @@ import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMypageBinding
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.ui.bindImageUri
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -58,6 +59,12 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
         }
         binding.btnMypageLicense.setOnClickListener {
             findNavController().navigate(R.id.action_myPageFragment_to_myPageLicenseFragment)
+        }
+        binding.btnMypageBuyHistory.setOnClickListener {
+            findNavController().navigate(MyPageFragmentDirections.actionMyPageFragmentToTransactionListFragment(getString(R.string.mypage_btn_transaction_buy)))
+        }
+        binding.btnMypageSellHistory.setOnClickListener {
+            findNavController().navigate(MyPageFragmentDirections.actionMyPageFragmentToTransactionListFragment(getString(R.string.mypage_btn_transaction_sell)))
         }
     }
 
