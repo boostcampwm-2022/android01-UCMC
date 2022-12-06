@@ -201,7 +201,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
                         menuAdapter.replace(result.data)
                     }
                     is UCMCResult.Error -> {
-                        sendSnackBar(result.e.message ?: "알 수 없는 오류입니다.")
+                        sendSnackBar(result.e.message)
                     }
                 }
             }
