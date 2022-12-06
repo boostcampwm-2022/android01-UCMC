@@ -76,18 +76,6 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
             is CoolDownException -> {
                 sendSnackBar(message = getString(R.string.report_cooldown, e.cooldown))
             }
-            else -> sendSnackBar(e.message)
-        }
-    }
-
-    private fun handleErrorMessage(e: Exception) {
-        when (e) {
-            is FirestoreException -> {
-                sendSnackBar(message = getString(R.string.report_fail))
-            }
-            is CoolDownException -> {
-                sendSnackBar(message = getString(R.string.report_cooldown, e.cooldown))
-            }
         }
     }
 }

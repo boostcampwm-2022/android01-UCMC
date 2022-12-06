@@ -31,7 +31,7 @@ class CarDataSource @Inject constructor(
             .toObject(Car::class.java)
     }
 
-    fun getOwnerCars(cars: List<String>): Flow<List<Car>> = callbackFlow {
+    fun getOwnerCars(cars: List<String>): Flow<List<Car>?> = callbackFlow {
         fireStore
             .collection("cars")
             .get()
