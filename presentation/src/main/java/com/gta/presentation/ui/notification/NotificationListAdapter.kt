@@ -10,7 +10,6 @@ import com.gta.domain.model.NotificationInfo
 import com.gta.domain.model.NotificationType
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ItemNotificationListBinding
-import com.gta.presentation.ui.cardetail.edit.CarEditImagesAdapter
 
 class NotificationListAdapter :
     PagingDataAdapter<NotificationInfo, NotificationListAdapter.NotificationViewHolder>(

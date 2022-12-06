@@ -16,7 +16,6 @@ import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
@@ -36,7 +35,6 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
                 override fun onClick(type: NotificationType, reservation: String) {
                     when (type) {
                         NotificationType.REQUEST_RESERVATION -> {
-                            Timber.d("수락 요청")
                             findNavController().navigate(
                                 NotificationListFragmentDirections
                                     .actionNotificationListFragmentToReservationCheckFragment(
@@ -45,7 +43,6 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
                             )
                         }
                         NotificationType.ACCEPT_RESERVATION -> {
-                            Timber.d("수락")
                             findNavController().navigate(
                                 NotificationListFragmentDirections
                                     .actionNotificationListFragmentToReservationCheckFragment(
@@ -54,7 +51,6 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
                             )
                         }
                         NotificationType.DECLINE_RESERVATION -> {
-                            Timber.d("취소")
                             findNavController().navigate(
                                 NotificationListFragmentDirections
                                     .actionNotificationListFragmentToReservationCheckFragment(
@@ -63,7 +59,6 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
                             )
                         }
                         NotificationType.RETURN_CAR -> {
-                            Timber.d("반납 확인")
                             findNavController().navigate(
                                 NotificationListFragmentDirections
                                     .actionNotificationListFragmentToReviewFragment(
@@ -84,7 +79,6 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.notificationList.collectLatest {
-                    Timber.d("fragment $it")
                     adapter.submitData(it)
                 }
             }

@@ -32,7 +32,11 @@ class NotificationDataSource @Inject constructor(
         }.isSuccess
     }
 
-    fun saveNotification(notification: Notification, userId: String, notificationId: String): Flow<Boolean> =
+    fun saveNotification(
+        notification: Notification,
+        userId: String,
+        notificationId: String
+    ): Flow<Boolean> =
         callbackFlow {
             fireStore.document("users/$userId/notifications/$notificationId").set(notification)
                 .addOnCompleteListener {

@@ -1,7 +1,6 @@
 package com.gta.data.source
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.gta.data.model.Car
 import com.gta.domain.model.Coordinate
 import kotlinx.coroutines.channels.awaitClose

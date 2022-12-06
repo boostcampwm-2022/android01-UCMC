@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -60,7 +59,6 @@ class NotificationRepositoryImpl @Inject constructor(
 
         notifyInfo.date = dateFormat.format(notifyInfo.date.toLong())
 
-        Timber.d("notifyInfo 번호판 ${notifyInfo.licensePlate}")
         return notifyInfo
     }
 

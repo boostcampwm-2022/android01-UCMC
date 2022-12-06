@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +25,8 @@ class NotificationViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _notifyList.value = getNotificationInfo(FirebaseUtil.uid).cachedIn(viewModelScope).first()
+            _notifyList.value =
+                getNotificationInfo(FirebaseUtil.uid).cachedIn(viewModelScope).first()
         }
     }
 }
