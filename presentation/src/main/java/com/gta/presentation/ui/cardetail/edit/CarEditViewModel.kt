@@ -46,9 +46,8 @@ class CarEditViewModel @Inject constructor(
     val location: StateFlow<String>
         get() = _location
 
-    private var _coordinate: Coordinate? = null
-    val coordinate: Coordinate?
-        get() = _coordinate
+    var coordinate: Coordinate? = null
+        private set
 
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.NOMAL)
     val updateState: StateFlow<UpdateState>
@@ -56,6 +55,8 @@ class CarEditViewModel @Inject constructor(
 
     // 초기 이미지
     private var initImage: List<String> = emptyList()
+
+    val defaultCoordinate = Coordinate(37.3588798, 127.1051933)
 
     init {
         carId = args.get<String>("CAR_ID") ?: "정보 없음"
@@ -91,7 +92,7 @@ class CarEditViewModel @Inject constructor(
 
     fun setLocationData(text: String, latitude: Double, longitude: Double) {
         _location.value = text
-        _coordinate = Coordinate(latitude, longitude)
+        coordinate = Coordinate(latitude, longitude)
     }
 
     fun updateData() {
@@ -108,7 +109,7 @@ class CarEditViewModel @Inject constructor(
                         if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
                         availableDate.value,
                         location.value,
-                        coordinate ?: Coordinate(37.3588798, 127.1051933)
+                        coordinate ?: defaultCoordinate
                     ).first()
                 ) {
                     UpdateState.SUCCESS

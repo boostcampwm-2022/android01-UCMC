@@ -145,7 +145,7 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             findNavController().navigate(
                 CarEditFragmentDirections
                     .actionCarDetailEditFragmentToCarEditMapFragment(
-                        viewModel.coordinate ?: Coordinate(37.3588798, 127.1051933)
+                        viewModel.coordinate ?: viewModel.defaultCoordinate
                     )
             )
         }
