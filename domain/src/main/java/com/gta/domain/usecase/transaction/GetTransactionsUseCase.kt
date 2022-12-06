@@ -27,9 +27,11 @@ class GetTransactionsUseCase @Inject constructor(
             transactionRepository.getMyCarTransactions(uid)
         }
 
+        val filterCondition = if (isTrading) tradingCondition else completedCondition
+
         return transactions.map { reservation ->
             val simpleCar = carRepository.getSimpleCar(reservation.carId).first()
             reservation.toTransaction(simpleCar)
-        }.filter(if (isTrading) tradingCondition else completedCondition)
+        }.filter(filterCondition)
     }
 }

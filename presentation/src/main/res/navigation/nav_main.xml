@@ -312,4 +312,14 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/transactionListFragment"
+        android:name="com.gta.presentation.ui.transaction.TransactionListFragment"
+        android:label="fragment_transaction_list"
+        tools:layout="@layout/fragment_transaction_list" >
+        <action
+            android:id="@+id/action_transactionListFragment_to_reservationCheckFragment"
+            app:destination="@id/reservationCheckFragment" />
+    </fragment>
+
 </navigation>

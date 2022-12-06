@@ -6,7 +6,6 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentTransactionBinding
-import com.gta.presentation.model.TransactionState
 import com.gta.presentation.model.TransactionUserState
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
@@ -31,7 +30,11 @@ class TransactionFragment : BaseFragment<FragmentTransactionBinding>(R.layout.fr
 
     private fun setUpTabLayoutWithViewPager() {
         TabLayoutMediator(binding.tlTransactionListTabs, binding.vpTransactionListFragment) { tab, position ->
-            tab.text = TransactionState.values()[position].state
+            val tabTitle = when (position) {
+                0 -> getString(R.string.trading)
+                else -> getString(R.string.transaction_completed)
+            }
+            tab.text = tabTitle
         }.attach()
     }
 }

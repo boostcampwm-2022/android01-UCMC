@@ -20,18 +20,13 @@ class TransactionListViewModel @Inject constructor(
     private val getTransactionsUseCase: GetTransactionsUseCase
 ) : ViewModel() {
 
-    private val userState: TransactionUserState
-    private val transactionState: TransactionState
+    private val userState: TransactionUserState = args.get<TransactionUserState>(TransactionPagerAdapter.USER_STATE_ARG) ?: TransactionUserState.LENDER
+    private val transactionState: TransactionState = args.get<TransactionState>(TransactionPagerAdapter.TRANSACTION_STATE_ARG) ?: TransactionState.TRADING
 
     private val _transaction = MutableStateFlow<List<Transaction>>(emptyList())
     val transaction: StateFlow<List<Transaction>> get() = _transaction
 
     init {
-        userState = args.get<TransactionUserState>(TransactionPagerAdapter.USER_STATE_ARG)
-            ?: TransactionUserState.LENDER
-        transactionState = args.get<TransactionState>(TransactionPagerAdapter.TRANSACTION_STATE_ARG)
-            ?: TransactionState.TRADING
-
         setTransactions()
     }
 

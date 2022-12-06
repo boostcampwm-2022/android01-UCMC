@@ -3,6 +3,7 @@ package com.gta.presentation.ui.transaction
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentTransactionListBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -26,7 +27,7 @@ class TransactionListFragment : BaseFragment<FragmentTransactionListBinding>(R.l
 
     companion object {
         fun navigateToTransactionReservationCheck(view: View, reservationId: String) {
-            // Navigation.findNavController(view).navigate()
+            Navigation.findNavController(view).navigate(TransactionListFragmentDirections.actionTransactionListFragmentToReservationCheckFragment(reservationId))
         }
     }
 }
