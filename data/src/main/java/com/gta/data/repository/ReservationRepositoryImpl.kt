@@ -2,8 +2,10 @@ package com.gta.data.repository
 
 import com.gta.data.source.CarDataSource
 import com.gta.data.source.ReservationDataSource
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.Reservation
 import com.gta.domain.model.ReservationState
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.ReservationRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -28,15 +30,22 @@ class ReservationRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getReservationInfo(reservationId: String): Flow<Reservation> = callbackFlow {
-        reservationDataSource.getReservation(reservationId).first()?.let { reservation ->
-            trySend(reservation)
-        } ?: trySend(Reservation())
-        awaitClose()
-    }
+    override fun getReservationInfo(reservationId: String): Flow<UCMCResult<Reservation>> =
+        callbackFlow {
+            reservationDataSource.getReservation(reservationId).first()?.let { reservation ->
+                trySend(UCMCResult.Success(reservation))
+            } ?: trySend(UCMCResult.Error(FirestoreException()))
+            awaitClose()
+        }
 
     override fun getReservationCar(reservationId: String): Flow<String> {
-        return getReservationInfo(reservationId).map { it.carId }
+        return getReservationInfo(reservationId).map {
+            if (it is UCMCResult.Success) {
+                it.data.carId
+            } else {
+                ""
+            }
+        }
     }
 
     override suspend fun updateReservationState(

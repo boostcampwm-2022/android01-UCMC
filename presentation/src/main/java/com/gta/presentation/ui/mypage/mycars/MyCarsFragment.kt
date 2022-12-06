@@ -4,17 +4,18 @@ import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.DeleteFailException
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
+import com.gta.domain.model.UserNotFoundException
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMyCarsBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_cars) {
@@ -47,10 +48,28 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
 
     private fun setupWithRecyclerView() {
         binding.rvCarList.adapter = adapter
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.userCarList.collectLatest {
-                    adapter.submitList(it)
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.userCarEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> {
+                        adapter.submitList(result.data)
+                    }
+                    is UCMCResult.Error -> {
+                        handleErrorMessage(result.e)
+                    }
+                }
+            }
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.deleteEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> {
+                        viewModel.getCarList()
+                    }
+                    is UCMCResult.Error -> {
+                        handleErrorMessage(result.e)
+                    }
                 }
             }
         }
@@ -86,5 +105,14 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
                 popup.show()
             }
         })
+    }
+
+    private fun handleErrorMessage(e: Exception) {
+        when (e) {
+            is FirestoreException -> sendSnackBar(resources.getString(R.string.exception_car_list_fail))
+            is DeleteFailException -> sendSnackBar(resources.getString(R.string.exception_delete_fail))
+            is UserNotFoundException -> sendSnackBar(resources.getString(R.string.exception_user_not_found))
+            else -> sendSnackBar(e.message)
+        }
     }
 }

@@ -150,7 +150,7 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.updateState.collectLatest { result ->
                     when (result) {
-                        UpdateState.NOMAL -> {
+                        UpdateState.NORMAL -> {
                             binding.icLoading.root.visibility = View.GONE
                         }
                         UpdateState.LOAD -> {

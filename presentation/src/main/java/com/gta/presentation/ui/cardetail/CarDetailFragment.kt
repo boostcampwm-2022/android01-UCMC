@@ -41,6 +41,8 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.startCollect()
+
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.carInfo.collectLatest {
                 (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
@@ -120,6 +122,12 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
         }
     }
 
+
+    override fun onStop() {
+        viewModel.stopCollect()
+        super.onStop()
+    }
+    
     private fun handleErrorMessage(e: Exception) {
         when (e) {
             is FirestoreException -> {

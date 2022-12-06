@@ -151,7 +151,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
                 return if (viewModel.isLoading.not()) {
                     content.viewTreeObserver.removeOnPreDrawListener(this)
                     true
-                } else false
+                } else {
+                    false
+                }
             }
         })
     }

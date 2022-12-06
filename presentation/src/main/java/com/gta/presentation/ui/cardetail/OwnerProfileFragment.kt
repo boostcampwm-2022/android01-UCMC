@@ -26,6 +26,7 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         binding.vm = viewModel
+        viewModel.startCollect()
         binding.rvCars.adapter = carListAdapter.apply {
             setItemClickListener(
                 object : CarListAdapter.OnItemClickListener {
@@ -53,10 +54,18 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.carList.collectLatest {
-                carListAdapter.submitList(it)
+            viewModel.carListEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> carListAdapter.submitList(result.data)
+                    is UCMCResult.Error -> handleErrorMessage(result.e)
+                }
             }
         }
+    }
+
+    override fun onStop() {
+        viewModel.stopCollect()
+        super.onStop()
     }
 
     private fun handleErrorMessage(e: Exception) {
