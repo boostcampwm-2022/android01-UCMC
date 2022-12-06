@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.gta.domain.model.NotificationInfo
 import com.gta.domain.usecase.notification.GetNotificationsInfoUseCase
+import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +26,7 @@ class NotificationViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _notifyList.value = getNotificationInfo("ANDIMe6ctcbcsManr7AyOYigEhn1").cachedIn(viewModelScope).first()
+            _notifyList.value = getNotificationInfo(FirebaseUtil.uid).cachedIn(viewModelScope).first()
         }
     }
 }
