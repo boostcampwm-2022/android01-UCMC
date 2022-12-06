@@ -61,6 +61,9 @@ class ReservationCheckViewModel @Inject constructor(
         getReservationUseCase(reservationId)
             .flowOn(Dispatchers.IO)
             .onEach {
+                if (it is UCMCResult.Success) {
+                    _reservation.emit(it.data)
+                }
                 _reservationEvent.emit(it)
             }.launchIn(viewModelScope + collectJob)
 
@@ -68,6 +71,9 @@ class ReservationCheckViewModel @Inject constructor(
             getCarDetailDataUseCase(target.carId)
         }.flowOn(Dispatchers.IO)
             .onEach {
+                if (it is UCMCResult.Success) {
+                    _car.emit(it.data)
+                }
                 _carEvent.emit(it)
             }.launchIn(viewModelScope + collectJob)
     }
