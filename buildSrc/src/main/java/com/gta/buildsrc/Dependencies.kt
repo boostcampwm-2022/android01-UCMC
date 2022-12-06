@@ -182,7 +182,7 @@ object Dependencies {
 
         object Paging {
             const val PAGING = "androidx.paging:paging-runtime:${Versions.PAGING}"
-            const val KTX = "androidx.paging:paging-common-ktx:${Versions.PAGING}"
+            const val KTX = "androidx.paging:paging-common:${Versions.PAGING}"
 
             fun getAll(): ArrayList<String> {
                 return arrayListOf(PAGING, KTX)

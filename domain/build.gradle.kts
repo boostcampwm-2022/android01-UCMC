@@ -1,7 +1,6 @@
 plugins {
     id("java-library")
     kotlin("jvm")
-    kotlin("kapt")
 }
 
 java {
