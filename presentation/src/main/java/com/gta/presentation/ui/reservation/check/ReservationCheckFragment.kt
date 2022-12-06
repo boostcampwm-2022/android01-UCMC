@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.InsuranceOption
+import com.gta.domain.model.ReservationState
 import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationRequestBinding
@@ -36,7 +37,7 @@ class ReservationCheckFragment :
                             else -> null
                         }?.isChecked = true
 
-                        (if (result.data.state == "보류중") View.VISIBLE else View.GONE).also { visibility ->
+                        (if (result.data.state == ReservationState.PENDING.string) View.VISIBLE else View.GONE).also { visibility ->
                             binding.btnReservationDecline.visibility = visibility
                             binding.btnReservationAccept.visibility = visibility
                         }

@@ -51,10 +51,12 @@ class MyCarsFragment : BaseFragment<FragmentMyCarsBinding>(R.layout.fragment_my_
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.userCarEvent.collectLatest { result ->
                 when (result) {
-                    is UCMCResult.Success ->
+                    is UCMCResult.Success -> {
                         adapter.submitList(result.data)
-                    is UCMCResult.Error ->
+                    }
+                    is UCMCResult.Error -> {
                         handleErrorMessage(result.e)
+                    }
                 }
             }
         }
