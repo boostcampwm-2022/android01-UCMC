@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.LocationInfo
 import com.gta.domain.model.SimpleCar
+import com.gta.domain.usecase.cardetail.edit.GetCoordinateLocationUseCase
 import com.gta.domain.usecase.map.GetNearCarsUseCase
 import com.gta.domain.usecase.map.GetSearchAddressUseCase
-import com.gta.presentation.ui.cardetail.edit.GetCoordinateLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +34,7 @@ import javax.inject.Inject
 class MapViewModel @Inject constructor(
     private val getNearCarsUseCase: GetNearCarsUseCase,
     private val searchAddressUseCase: GetSearchAddressUseCase,
-    private val getCoordinateLocation: GetCoordinateLocation
+    private val getCoordinateLocationUseCase: GetCoordinateLocationUseCase
 ) : ViewModel() {
     private val SEARCH_TIMEOUT = 500L
 
@@ -111,7 +111,7 @@ class MapViewModel @Inject constructor(
 
     fun getLocationAddress(longitude: Double, latitude: Double) {
         viewModelScope.launch {
-            _location.emit(getCoordinateLocation(longitude, latitude).first())
+            _location.emit(getCoordinateLocationUseCase(longitude, latitude).first())
         }
     }
 }
