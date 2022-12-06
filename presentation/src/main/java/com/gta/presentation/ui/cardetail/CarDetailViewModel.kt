@@ -15,6 +15,8 @@ import com.gta.presentation.util.MutableEventFlow
 import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.getstream.chat.android.client.ChatClient
+import kotlinx.coroutines.CompletableJob
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,13 +26,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class CarDetailViewModel @Inject constructor(
     args: SavedStateHandle,
-    getCarDetailDataUseCase: GetCarDetailDataUseCase,
+    private val getCarDetailDataUseCase: GetCarDetailDataUseCase,
     getUseStateAboutCarUseCase: GetUseStateAboutCarUseCase,
     private val reportUserUseCase: ReportUserUseCase,
     private val chatClient: ChatClient
@@ -52,19 +55,29 @@ class CarDetailViewModel @Inject constructor(
     private val _reportEvent = MutableEventFlow<UCMCResult<Unit>>()
     val reportEvent get() = _reportEvent.asEventFlow()
 
-    init {
-        getCarDetailDataUseCase(carId).onEach {
-            if (it is UCMCResult.Success) {
-                _carInfo.emit(it.data)
-            }
-            _carInfoEvent.emit(it)
-        }.launchIn(viewModelScope)
+    private lateinit var collectJob: CompletableJob
 
+    init {
         useState = getUseStateAboutCarUseCase(FirebaseUtil.uid, carId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = UseState.UNAVAILABLE
         )
+    }
+
+    fun startCollect() {
+        collectJob = SupervisorJob()
+
+        getCarDetailDataUseCase(carId).onEach {
+            if (it is UCMCResult.Success) {
+                _carInfo.emit(it.data)
+            }
+            _carInfoEvent.emit(it)
+        }.launchIn(viewModelScope + collectJob)
+    }
+
+    fun stopCollect() {
+        collectJob.cancel()
     }
 
     fun onChattingClick() {
