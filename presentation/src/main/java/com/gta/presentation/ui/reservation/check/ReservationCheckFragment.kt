@@ -12,6 +12,7 @@ import com.gta.presentation.databinding.FragmentReservationRequestBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
@@ -43,8 +44,16 @@ class ReservationCheckFragment :
                         }
                     }
                     is UCMCResult.Error -> {
-                        sendSnackBar(resources.getString(R.string.exception_load_data))
+                        sendSnackBar(getString(R.string.exception_load_data))
                     }
+                }
+            }
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.carEvent.collect { result ->
+                if (result is UCMCResult.Error) {
+                    sendSnackBar(getString(R.string.exception_load_data))
                 }
             }
         }
