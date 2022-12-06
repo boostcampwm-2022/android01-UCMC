@@ -26,6 +26,7 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         binding.vm = viewModel
+        viewModel.startCollect()
         binding.rvCars.adapter = carListAdapter.apply {
             setItemClickListener(
                 object : CarListAdapter.OnItemClickListener {
@@ -60,6 +61,11 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        viewModel.stopCollect()
+        super.onStop()
     }
 
     private fun handleErrorMessage(e: Exception) {

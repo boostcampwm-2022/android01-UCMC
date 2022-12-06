@@ -14,11 +14,15 @@ import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.MutableEventFlow
 import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CompletableJob
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,22 +43,26 @@ class OwnerProfileViewModel @Inject constructor(
 
     private val ownerId = args.get<String>("OWNER_ID") ?: "정보 없음"
 
+    private lateinit var collectJob: CompletableJob
+
     init {
         owner = getOwnerInfoUseCase(ownerId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = UserProfile()
         )
-
-        getCarList()
     }
 
-    fun getCarList() {
-        viewModelScope.launch {
-            getOwnerCarsUseCase(ownerId).collectLatest {
-                _carListEvent.emit(it)
-            }
-        }
+    fun startCollect() {
+        collectJob = SupervisorJob()
+
+        getOwnerCarsUseCase(ownerId).onEach {
+            _carListEvent.emit(it)
+        }.launchIn(viewModelScope + collectJob)
+    }
+
+    fun stopCollect() {
+        collectJob.cancel()
     }
 
     fun onReportClick() {
