@@ -1,9 +1,9 @@
 package com.gta.domain.repository
 
 import com.gta.domain.model.NicknameState
-import kotlinx.coroutines.flow.Flow
+import com.gta.domain.model.UCMCResult
 
 interface NicknameRepository {
     fun checkNicknameState(nickname: String): NicknameState
-    fun updateNickname(uid: String, nickname: String): Flow<Boolean>
+    suspend fun updateNickname(uid: String, nickname: String): UCMCResult<Unit>
 }

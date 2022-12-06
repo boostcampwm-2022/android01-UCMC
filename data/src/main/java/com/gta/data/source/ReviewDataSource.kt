@@ -10,6 +10,19 @@ import javax.inject.Inject
 class ReviewDataSource @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) {
+    fun isExistReview(opponentId: String, reservationId: String): Flow<Boolean> = callbackFlow {
+        fireStore
+            .collection("users")
+            .document(opponentId)
+            .collection("reviews")
+            .document(reservationId)
+            .get()
+            .addOnCompleteListener {
+                trySend(it.isSuccessful && it.result.exists())
+            }
+        awaitClose()
+    }
+
     fun addReview(opponentId: String, reservationId: String, review: UserReview): Flow<Boolean> = callbackFlow {
         fireStore
             .collection("users")
