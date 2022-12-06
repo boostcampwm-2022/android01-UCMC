@@ -1,11 +1,10 @@
 package com.gta.data.repository
 
 import com.gta.data.source.NicknameDataSource
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.NicknameState
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.NicknameRepository
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -19,10 +18,12 @@ class NicknameRepositoryImpl @Inject constructor(
             else -> NicknameState.GREAT
         }
 
-    override fun updateNickname(uid: String, nickname: String): Flow<Boolean> = callbackFlow {
-        trySend(dataSource.updateNickname(uid, nickname).first())
-        awaitClose()
-    }
+    override suspend fun updateNickname(uid: String, nickname: String): UCMCResult<Unit> =
+        if (dataSource.updateNickname(uid, nickname).first()) {
+            UCMCResult.Success(Unit)
+        } else {
+            UCMCResult.Error(FirestoreException())
+        }
 
     companion object {
         private const val MIN_LENGTH = 2

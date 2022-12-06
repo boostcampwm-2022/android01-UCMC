@@ -3,7 +3,7 @@ const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
-exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 0 * * *")
+exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 9 * * *")
     .timeZone("Asia/Seoul")
     .onRun(async (context) => {
       const curr = new Date();
@@ -14,11 +14,11 @@ exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 0 * * *")
       const userRef = db.collection("users");
 
       const returnQuery = reservationRef
-          .where("state", "==", "대여중");
+          .where("state", "==", 2);
       await returnQuery.get().then((snapshot) => {
         snapshot.forEach(async (reservationDoc) => {
           if (reservationDoc.get("reservationDate.end") <= now) {
-            await reservationDoc.ref.update("state", "반납완료");
+            await reservationDoc.ref.update("state", -2);
             const reservation = await reservationDoc.ref.get();
             const lenderId = await reservation.data().lenderId;
             userRef.doc(lenderId).get().then(async (userDoc) => {
@@ -40,12 +40,21 @@ exports.dailyScheduledFunctionCrontab = functions.pubsub.schedule("0 0 * * *")
         });
       });
 
-      const rentQuery = reservationRef.where("state", "==", "허락");
+      const rentQuery = reservationRef.where("state", "==", 1);
       await rentQuery.get().then((snapshot) => {
         snapshot.forEach((doc) => {
           if (doc.get("reservationDate.start") <= now &&
               doc.get("reservationDate.end") >= now) {
-            doc.ref.update("state", "대여중");
+            doc.ref.update("state", 2);
+          }
+        });
+      });
+
+      const cancelQuery = reservationRef.where("state", "==", 0);
+      await cancelQuery.get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.get("reservationDate.start") <= now) {
+            doc.ref.update("state", -1);
           }
         });
       });

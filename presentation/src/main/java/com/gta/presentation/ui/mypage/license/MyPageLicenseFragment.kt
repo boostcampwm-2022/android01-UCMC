@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentMypageLicenseBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -19,7 +21,6 @@ class MyPageLicenseFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-
         binding.btnLicenseRegistration.setOnClickListener {
             findNavController().navigate(R.id.action_myPageLicenseFragment_to_licenseGuideFragment)
         }
@@ -37,6 +38,16 @@ class MyPageLicenseFragment :
                     binding.tvEmpty.visibility = View.GONE
                     binding.btnLicenseRegistration.text =
                         resources.getString(R.string.mypage_re_register)
+                }
+            }
+        }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.drivingLicenseEvent.collectLatest { result ->
+                if (result is UCMCResult.Error && result.e is FirestoreException) {
+                    sendSnackBar(
+                        message = getString(R.string.license_error_firestore),
+                        anchorView = binding.btnLicenseRegistration
+                    )
                 }
             }
         }

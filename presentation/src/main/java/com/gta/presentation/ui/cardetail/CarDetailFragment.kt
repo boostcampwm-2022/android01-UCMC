@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.CoolDownException
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
@@ -39,6 +41,8 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.startCollect()
+
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.carInfo.collectLatest {
                 (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
@@ -57,15 +61,12 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.reportEvent.collectLatest { result ->
                 when (result) {
+                    is UCMCResult.Error -> {
+                        handleErrorMessage(result.e)
+                    }
                     is UCMCResult.Success -> {
                         sendSnackBar(
                             message = getString(R.string.report_success),
-                            anchorView = binding.btnNext
-                        )
-                    }
-                    is UCMCResult.Error -> {
-                        sendSnackBar(
-                            message = result.message,
                             anchorView = binding.btnNext
                         )
                     }
@@ -117,6 +118,29 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                     )
                 }
                 else -> {}
+            }
+        }
+    }
+
+
+    override fun onStop() {
+        viewModel.stopCollect()
+        super.onStop()
+    }
+    
+    private fun handleErrorMessage(e: Exception) {
+        when (e) {
+            is FirestoreException -> {
+                sendSnackBar(
+                    message = getString(R.string.report_fail),
+                    anchorView = binding.btnNext
+                )
+            }
+            is CoolDownException -> {
+                sendSnackBar(
+                    message = getString(R.string.report_cooldown, e.cooldown),
+                    anchorView = binding.btnNext
+                )
             }
         }
     }

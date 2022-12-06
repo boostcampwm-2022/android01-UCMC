@@ -1,8 +1,11 @@
 package com.gta.data.source
 
+import android.content.res.Resources.NotFoundException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.model.UserInfo
 import com.gta.domain.model.DrivingLicense
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -19,14 +22,18 @@ class LicenseDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun getLicense(uid: String): Flow<DrivingLicense?> = callbackFlow {
+    fun getLicense(uid: String): Flow<UCMCResult<DrivingLicense>> = callbackFlow {
         fireStore.collection("users").document(uid).get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     val userInfo = it.result.toObject(UserInfo::class.java)
-                    trySend(userInfo?.license)
+                    if (userInfo?.license == null) {
+                        trySend(UCMCResult.Error(NotFoundException()))
+                    } else {
+                        trySend(UCMCResult.Success(userInfo.license))
+                    }
                 } else {
-                    trySend(null)
+                    trySend(UCMCResult.Error(FirestoreException()))
                 }
             }
         awaitClose()

@@ -35,13 +35,24 @@
 
     <string name="car_edit_wait_loading_text">변경사항을 업로드 중입니다.\n잠시만 기다려 주세요..</string>
 
+    
     <string name="car_edit_map_location_select_label">등록된 차량을\n주차할 장소를 선택해주세요</string>
     <string name="car_edit_map_location_select_button">위치 선택하기</string>
     <string name="car_edit_map_location_check_message">선택한 위치가 이 위치가 맞나요?\n선택한 곳의 장소명을 확인해주세요</string>
     <string name="car_edit_map_re_select_button">위치 다시 선택</string>
     <string name="car_edit_map_location_done">위치 확정</string>
     <string name="car_edit_map_location_fail_text">직접 입력해 주세요</string>
-
+    
+    <string name="notification_list_page">알림 목록</string>
+    <string name="notification_list_request_title">예약 요청이 왔습니다.</string>
+    <string name="notification_list_request_message">%s님이 %s 차를 원해요!</string>
+    <string name="notification_list_accept_title">예약이 수락되었습니다.</string>
+    <string name="notification_list_accept_message">%s님이 %s 차 대여를 허락했어요!</string>
+    <string name="notification_list_reject_title">예약이 거절되었습니다.</string>
+    <string name="notification_list_reject_message">%s님이 %s 차를 사정이 생겨 줄 수 없대요!</string>
+    <string name="notification_list_return_title">차량이 반납되었습니다.</string>
+    <string name="notification_list_return_message">%s님이 %s 차를 돌려줬어요!</string>
+    
     <string name="car_detail_day_price">금액 : 1일 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>
     <string name="temperature_type">%.1f℃</string>
@@ -86,17 +97,24 @@
     <string name="license_registration_aptitude">적성검사</string>
     <string name="license_registration_expiration">만료일</string>
     <string name="license_registration_button">등록하기</string>
+    <string name="license_registration_error_expired">만료된 면허증 입니다.</string>
+    <string name="license_registration_error_firestore">면허증 등록을 실패했습니다. 다시 시도해주세요.</string>
+    <string name="license_registration_apply_success">면허증 등록을 완료했어요!</string>
+    <string name="license_error_firestore">면허증 정보를 불러오는데 실패했습니다.</string>
 
     <string name="pink_slip_guide_toolbar">자동차 등록</string>
     <string name="pink_slip_guide_title">자동차 등록증을 등록해주세요</string>
 
-    <string name="pink_slip_registration_toolbar">운전면허 확인</string>
+    <string name="pink_slip_registration_toolbar">자동차 등록증 확인</string>
     <string name="pink_slip_registration_id">자동차 등록번호</string>
     <string name="pink_slip_registration_owner">소유주</string>
     <string name="pink_slip_registration_information_number">차대번호</string>
     <string name="pink_slip_registration_type">차종</string>
     <string name="pink_slip_registration_model">모델명</string>
     <string name="pink_slip_registration_year">모델연도</string>
+    <string name="pink_slip_error_duplicate">이미 등록된 자동차 입니다.</string>
+    <string name="pink_slip_error_firestore">자동차 등록을 실패했습니다. 다시 시도해주세요.</string>
+    <string name="pink_slip_apply_success">자동차 등록을 완료했어요!</string>
 
     <string name="mypage_nickname">%1s 님</string>
     <string name="mypage_title_account">계정 관리</string>
@@ -111,6 +129,7 @@
     <string name="mypage_title_other">기타</string>
     <string name="mypage_btn_terms">이용 약관</string>
     <string name="mypage_btn_sign_out">로그아웃</string>
+    <string name="mypage_error_firestore">썸네일 변경에 실패했습니다. 다시 시도해주세요.</string>
 
     <string name="mypage_carlist">내 차 목록</string>
 
@@ -120,6 +139,7 @@
     <string name="nickname_error_min_length">닉네임은 2자 이상 입력해주세요</string>
     <string name="nickname_error_symbols">한글, 영어, 숫자만 입력해주세요</string>
     <string name="nickname_btn_apply">적용하기</string>
+    <string name="nickname_error_firestore">닉네임 변경에 실패했습니다. 다시 시도해주세요.</string>
 
     <string name="review_toolbar">리뷰 남기기</string>
     <string name="review_nickname_for_lender">%1s님의</string>
@@ -128,6 +148,10 @@
     <string name="review_input_hint_for_lender">차주의 매너, 차 상태 등 서비스에 대한 리뷰를 남겨주세요. 감사 인사도 좋아요 :)</string>
     <string name="review_input_hint_for_owner">대여자의 매너, 대여 후 차 상태 등 리뷰를 남겨주세요. 감사 인사도 좋아요 :)</string>
     <string name="review_btn_apply">리뷰완료</string>
+    <string name="review_error_firestore_load_reservation">예약 정보를 불러오는데 실패했습니다.\n이전 화면으로 이동합니다.</string>
+    <string name="review_error_firestore_review_duplicated">이미 리뷰를 등록한 거래입니다.\n이전 화면으로 이동합니다.</string>
+    <string name="review_error_firestore_review_apply">리뷰 등록에 실패했습니다. 다시 시도해주세요.</string>
+    <string name="review_apply_success">리뷰 작성을 완료했어요!</string>
 
     <string name="default_notification_channel_id">ucmc_notifications</string>
     <string name="default_notification_name">자동차 예약, 반납 알림</string>
@@ -152,6 +176,8 @@
     <string name="permission_post_notification_denied">이 일을 기억할 것입니다.</string>
 
     <string name="report_success">신고가 접수됐습니다.</string>
+    <string name="report_cooldown">%1d초만 참아주세요..!</string>
+    <string name="report_fail">다시 시도해주세요.</string>
 
     <string name="return_car">반납하기</string>
     <string name="return_car_msg">차주님과 사전 합의된 장소에 반납해주세요.\n위반시 추가 요금이 발생합니다.</string>
@@ -159,4 +185,12 @@
     <string name="hour_format">%d시간</string>
     <string name="day_hour_format">%d일 %d시간</string>
     <string name="minute_format">%d분</string>
+
+    <string name="no_transactions">거래 내역이 존재하지 않습니다.</string>
+
+    <string name="exception_not_found">알 수 없는 오류가 발생헀어요.</string>
+    <string name="exception_user_not_found">사용자 정보를 찾을 수 없어요.</string>
+    <string name="exception_delete_fail">데이터를 삭제하는 데 실패했어요.</string>
+    <string name="exception_car_list_fail">차 목록을 불러오는 데 실패했어요.</string>
+    <string name="exception_load_data">데이터를 불러오는 데 실패했어요.</string>
 </resources>

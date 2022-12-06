@@ -6,6 +6,7 @@ import com.gta.domain.model.Coordinate
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class CarDataSource @Inject constructor(
@@ -22,7 +23,15 @@ class CarDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun getOwnerCars(cars: List<String>): Flow<List<Car>> = callbackFlow {
+    suspend fun getSuspendCar(carId: String): Car? {
+        return fireStore.collection("cars")
+            .document(carId)
+            .get()
+            .await()
+            .toObject(Car::class.java)
+    }
+
+    fun getOwnerCars(cars: List<String>): Flow<List<Car>?> = callbackFlow {
         fireStore
             .collection("cars")
             .get()
@@ -36,7 +45,7 @@ class CarDataSource @Inject constructor(
                         trySend(result)
                     }
                 } else {
-                    trySend(emptyList())
+                    trySend(null)
                 }
             }
         awaitClose()
@@ -68,7 +77,7 @@ class CarDataSource @Inject constructor(
         awaitClose()
     }
 
-    fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<Car>> = callbackFlow {
+    fun getNearCars(min: Coordinate, max: Coordinate): Flow<List<Car>?> = callbackFlow {
         fireStore.collection("cars").whereGreaterThan("coordinate.latitude", min.latitude)
             .whereLessThan("coordinate.latitude", max.latitude).get().addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -81,7 +90,7 @@ class CarDataSource @Inject constructor(
                         trySend(result)
                     }
                 } else {
-                    trySend(emptyList())
+                    trySend(null)
                 }
             }
         awaitClose()

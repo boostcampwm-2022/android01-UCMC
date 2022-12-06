@@ -3,47 +3,52 @@ package com.gta.data.repository
 import com.gta.data.source.LicenseDataSource
 import com.gta.data.source.StorageDataSource
 import com.gta.domain.model.DrivingLicense
+import com.gta.domain.model.ExpiredItemException
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.LicenseRepository
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import java.nio.ByteBuffer
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 class LicenseRepositoryImpl @Inject constructor(
     private val licenseDataSource: LicenseDataSource,
     private val storageDataSource: StorageDataSource
 ) : LicenseRepository {
-    override fun getLicenseFromImage(buffer: ByteBuffer): Flow<DrivingLicense?> = callbackFlow {
-        // 그냥 객체를 바로 리턴 받을 수 있지만
-        // 나중에 ML Kit를 사용하면 Flow로 받아와야 하므로 Flow 타입으로 정했습니다.
-        trySend(
-            DrivingLicense(
-                name = "이동훈",
-                id = "11-22-333444-55",
-                residentNumberFront = "999999",
-                residentNumberBack = "111111",
-                aptitudeTestDate = "2026/01/01",
-                expireDate = "2026/12/31"
-            )
+
+    private val dateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+
+    override fun getLicenseFromImage(buffer: ByteBuffer): DrivingLicense =
+        DrivingLicense(
+            name = "이동훈",
+            id = "11-22-333444-55",
+            residentNumberFront = "999999",
+            residentNumberBack = "111111",
+            aptitudeTestDate = "2026/01/01",
+            expireDate = "2026/12/31"
         )
-        awaitClose()
-    }
 
-    override fun getLicenseFromDatabase(uid: String): Flow<DrivingLicense?> = callbackFlow {
-        trySend(licenseDataSource.getLicense(uid).first())
-        awaitClose()
-    }
+    override suspend fun getLicenseFromDatabase(uid: String): UCMCResult<DrivingLicense> =
+        licenseDataSource.getLicense(uid).first()
 
-    override fun setLicense(uid: String, license: DrivingLicense, uri: String): Flow<Boolean> =
-        callbackFlow {
-            val result = storageDataSource.uploadPicture("users/$uid/license", uri).first() ?: ""
-            if (result.isNotEmpty()) {
-                trySend(licenseDataSource.registerLicense(uid, license.copy(uri = result)).first())
-            } else {
-                trySend(false)
-            }
-            awaitClose()
+    override suspend fun setLicense(uid: String, license: DrivingLicense, uri: String): UCMCResult<Unit> {
+        val expireDate = dateFormat.parse(license.expireDate)?.time ?: 0L
+        // 만료시간을 초과했는지 검사
+        if (expireDate < System.currentTimeMillis()) {
+            return UCMCResult.Error(ExpiredItemException())
         }
+        val uploadResult = storageDataSource.uploadPicture("users/$uid/license", uri).first() ?: ""
+        return if (uploadResult.isNotEmpty()) {
+            val registerResult = licenseDataSource.registerLicense(uid, license.copy(uri = uploadResult)).first()
+            if (registerResult) {
+                UCMCResult.Success(Unit)
+            } else {
+                UCMCResult.Error(FirestoreException())
+            }
+        } else {
+            UCMCResult.Error(FirestoreException())
+        }
+    }
 }

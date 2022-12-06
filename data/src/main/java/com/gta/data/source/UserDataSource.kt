@@ -5,6 +5,7 @@ import com.gta.data.model.UserInfo
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class UserDataSource @Inject constructor(
@@ -19,6 +20,14 @@ class UserDataSource @Inject constructor(
             }
         }
         awaitClose()
+    }
+
+    suspend fun getSuspendUser(uid: String): UserInfo? {
+        return fireStore.collection("users")
+            .document(uid)
+            .get()
+            .await()
+            .toObject(UserInfo::class.java)
     }
 
     fun removeCar(uid: String, newCars: List<String>): Flow<Boolean> = callbackFlow {

@@ -5,15 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.gta.domain.model.PinkSlip
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.pinkslip.GetPinkSlipUseCase
 import com.gta.domain.usecase.pinkslip.SetPinkSlipUseCase
 import com.gta.presentation.util.ImageUtil
+import com.gta.presentation.util.MutableEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,8 +28,8 @@ class PinkSlipRegistrationViewModel @Inject constructor(
     private val _pinkSlip = MutableStateFlow<PinkSlip?>(null)
     val pinkSlip: StateFlow<PinkSlip?> get() = _pinkSlip
 
-    private val _registerEvent = MutableSharedFlow<Boolean>()
-    val registerEvent: SharedFlow<Boolean> get() = _registerEvent
+    private val _registerEvent = MutableEventFlow<UCMCResult<Unit>>()
+    val registerEvent get() = _registerEvent
 
     private val _pinkSlipPicture = MutableStateFlow("")
     val pinkSlipPicture: StateFlow<String> get() = _pinkSlipPicture
@@ -47,7 +46,7 @@ class PinkSlipRegistrationViewModel @Inject constructor(
     private fun getPinkSlip(uri: String) {
         val buffer = imageUtil.getByteBuffer(uri) ?: return
         viewModelScope.launch {
-            _pinkSlip.emit(getPinkSlipUseCase(buffer).first())
+            _pinkSlip.emit(getPinkSlipUseCase(buffer))
         }
     }
 
@@ -55,7 +54,7 @@ class PinkSlipRegistrationViewModel @Inject constructor(
         val pinkSlip = pinkSlip.value ?: return
         val uid = auth.currentUser?.uid ?: return
         viewModelScope.launch {
-            _registerEvent.emit(setPinkSlipUseCase(uid, pinkSlip).first())
+            _registerEvent.emit(setPinkSlipUseCase(uid, pinkSlip))
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.Coordinate
 import com.gta.domain.model.RentState
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UpdateCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UploadCarImagesUseCase
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 enum class UpdateState {
-    NOMAL, LOAD, SUCCESS, FAIL
+    NORMAL, LOAD, SUCCESS, FAIL
 }
 
 @HiltViewModel
@@ -38,9 +39,10 @@ class CarEditViewModel @Inject constructor(
     val comment = MutableStateFlow("")
     val rentState = MutableStateFlow(false)
 
-    private val _availableDate = MutableStateFlow<AvailableDate>(AvailableDate())
+    private val _availableDate = MutableStateFlow(AvailableDate())
     val availableDate: StateFlow<AvailableDate>
         get() = _availableDate
+
 
     private val _location = MutableStateFlow<String>("정보 없음")
     val location: StateFlow<String>
@@ -63,15 +65,15 @@ class CarEditViewModel @Inject constructor(
 
         viewModelScope.launch {
             val carInfo = getCarDetailDataUseCase(carId).first()
-            _images.value = carInfo.images
-            initImage = carInfo.images
+            if (carInfo is UCMCResult.Success) {
+                _images.value = carInfo.data.images
+                initImage = carInfo.data.images
 
-            price.value = carInfo.price.toString()
-            comment.value = carInfo.comment
+                price.value = carInfo.data.price.toString()
+                comment.value = carInfo.data.comment
 
-            rentState.value = when (carInfo.rentState) {
-                RentState.AVAILABLE -> true
-                else -> false
+                rentState.value = carInfo.data.rentState == RentState.AVAILABLE
+                _availableDate.value = carInfo.data.availableDate
             }
             _availableDate.value = carInfo.availableDate
             _location.value = carInfo.location

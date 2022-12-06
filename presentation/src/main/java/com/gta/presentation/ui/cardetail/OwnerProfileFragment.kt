@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.CoolDownException
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentOwnerProfileBinding
@@ -24,6 +26,7 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         binding.vm = viewModel
+        viewModel.startCollect()
         binding.rvCars.adapter = carListAdapter.apply {
             setItemClickListener(
                 object : CarListAdapter.OnItemClickListener {
@@ -40,19 +43,38 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.reportEvent.collectLatest { result ->
                 when (result) {
-                    is UCMCResult.Success -> {
-                        sendSnackBar(getString(R.string.report_success))
-                    }
                     is UCMCResult.Error -> {
-                        sendSnackBar(result.message)
+                        handleErrorMessage(result.e)
+                    }
+                    is UCMCResult.Success -> {
+                        sendSnackBar(message = getString(R.string.report_success))
                     }
                 }
             }
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.carList.collectLatest {
-                carListAdapter.submitList(it)
+            viewModel.carListEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> carListAdapter.submitList(result.data)
+                    is UCMCResult.Error -> handleErrorMessage(result.e)
+                }
+            }
+        }
+    }
+
+    override fun onStop() {
+        viewModel.stopCollect()
+        super.onStop()
+    }
+
+    private fun handleErrorMessage(e: Exception) {
+        when (e) {
+            is FirestoreException -> {
+                sendSnackBar(message = getString(R.string.report_fail))
+            }
+            is CoolDownException -> {
+                sendSnackBar(message = getString(R.string.report_cooldown, e.cooldown))
             }
         }
     }

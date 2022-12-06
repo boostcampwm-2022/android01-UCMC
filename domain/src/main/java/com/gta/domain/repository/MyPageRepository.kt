@@ -1,9 +1,7 @@
 package com.gta.domain.repository
 
-import kotlinx.coroutines.flow.Flow
+import com.gta.domain.model.UCMCResult
 
 interface MyPageRepository {
-    fun setThumbnail(uid: String, uri: String): Flow<String>
-
-    fun deleteThumbnail(uid: String, path: String): Flow<Boolean>
+    suspend fun setThumbnail(uid: String, uri: String, prevThumbnailPath: String): UCMCResult<String>
 }
