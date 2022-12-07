@@ -13,8 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/notification_list_no_list"
-            android:visibility="gone" />
+            android:text="@string/notification_list_no_list" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_notification"
