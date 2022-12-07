@@ -52,6 +52,7 @@ object Dependencies {
         const val JUNIT = "4.13.2"
         const val JUNIT_EXT = "1.1.4"
         const val ESPRESSO_CORE = "3.5.0"
+        const val MOCKITO_INLINE = "4.9.0"
 
         // Github open Library
         const val INDICATOR = "4.3"
@@ -215,6 +216,7 @@ object Dependencies {
         object Test {
             const val EXT = "androidx.test.ext:junit:${Versions.JUNIT_EXT}"
             const val JUNIT = "junit:junit:${Versions.JUNIT}"
+            const val MOCKITO = "org.mockito:mockito-inline:${Versions.MOCKITO_INLINE}"
         }
 
         object AndroidTest {
@@ -244,6 +246,7 @@ object Dependencies {
             add(AndroidX.DATASTORE)
             add(LOGGING_INTERCEPTER)
             add(Paging.PAGING)
+            add(Test.MOCKITO)
         }
 
         val dataKaptLibraries = arrayListOf<String>().apply {
