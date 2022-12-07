@@ -20,7 +20,7 @@ class TransactionListAdapter : ListAdapter<Transaction, TransactionListAdapter.T
             with(binding) {
                 this.item = item
                 root.setOnClickListener {
-                    TransactionListFragment.navigateToTransactionReservationCheck(it, item.reservationId)
+                    TransactionFragment.navigateToReservationCheck(it, item.reservationId)
                 }
                 executePendingBindings()
             }

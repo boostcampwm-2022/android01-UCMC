@@ -2,6 +2,7 @@ package com.gta.presentation.ui.transaction
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.gta.presentation.R
@@ -22,12 +23,6 @@ class TransactionListFragment : BaseFragment<FragmentTransactionListBinding>(R.l
                 srlTransactionListRefresh.isRefreshing = false
                 viewModel.setTransactions()
             }
-        }
-    }
-
-    companion object {
-        fun navigateToTransactionReservationCheck(view: View, reservationId: String) {
-            Navigation.findNavController(view).navigate(TransactionListFragmentDirections.actionTransactionListFragmentToReservationCheckFragment(reservationId))
         }
     }
 }
