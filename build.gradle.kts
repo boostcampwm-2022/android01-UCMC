@@ -10,6 +10,7 @@ buildscript {
         classpath(Dependencies.Classpaths.NAVIGATION)
         classpath(Dependencies.Classpaths.HILT)
         classpath(Dependencies.Classpaths.CRASHLYTICS)
+        classpath(Dependencies.Classpaths.JUNIT5)
     }
 }
 
