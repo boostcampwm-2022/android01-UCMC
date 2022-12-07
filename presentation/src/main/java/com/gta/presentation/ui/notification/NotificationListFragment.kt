@@ -22,7 +22,7 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
     R.layout.fragment_notification_list
 ) {
 
-    private val viewModel: NotificationViewModel by viewModels()
+    private val viewModel: NotificationListViewModel by viewModels()
     private val adapter by lazy { NotificationListAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater,
