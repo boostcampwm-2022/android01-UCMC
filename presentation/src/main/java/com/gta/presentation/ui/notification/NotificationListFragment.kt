@@ -34,23 +34,7 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
             setItemClickListener(object : NotificationListAdapter.OnItemClickListener {
                 override fun onClick(type: NotificationType, reservation: String) {
                     when (type) {
-                        NotificationType.REQUEST_RESERVATION -> {
-                            findNavController().navigate(
-                                NotificationListFragmentDirections
-                                    .actionNotificationListFragmentToReservationCheckFragment(
-                                        reservation
-                                    )
-                            )
-                        }
-                        NotificationType.ACCEPT_RESERVATION -> {
-                            findNavController().navigate(
-                                NotificationListFragmentDirections
-                                    .actionNotificationListFragmentToReservationCheckFragment(
-                                        reservation
-                                    )
-                            )
-                        }
-                        NotificationType.DECLINE_RESERVATION -> {
+                        NotificationType.REQUEST_RESERVATION, NotificationType.ACCEPT_RESERVATION, NotificationType.DECLINE_RESERVATION -> {
                             findNavController().navigate(
                                 NotificationListFragmentDirections
                                     .actionNotificationListFragmentToReservationCheckFragment(
