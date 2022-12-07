@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.gta.domain.model.NotificationType
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentNotificationListBinding
@@ -59,6 +60,26 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter.addLoadStateListener {
+            binding.rvNotification.visibility = View.VISIBLE
+            binding.pgLoading.visibility = View.GONE
+
+            when (it.source.refresh) {
+                is LoadState.Loading -> {
+                    binding.pgLoading.visibility = View.VISIBLE
+                }
+                is LoadState.NotLoading -> {
+                    if (it.append.endOfPaginationReached && adapter.itemCount < 1) {
+                        binding.rvNotification.visibility = View.GONE
+                    }
+                }
+                is LoadState.Error -> {
+                    sendSnackBar(resources.getString(R.string.exception_load_data))
+                }
+                else -> {}
+            }
+        }
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

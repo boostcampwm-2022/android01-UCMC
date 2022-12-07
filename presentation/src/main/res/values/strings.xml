@@ -58,6 +58,8 @@
     <string name="car_detail_year">%d년식</string>
     <string name="car_detail_licensePlate">번호판 : %s</string>
 
+    <string name="notification_list_no_list">해당 내용이 없습니다.</string>
+
     <string name="search_hint">검색어를 입력하세요.</string>
     <string name="filter_car_type">차종</string>
     <string name="filter_day">날짜</string>
