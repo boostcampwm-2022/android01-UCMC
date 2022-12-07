@@ -45,7 +45,7 @@
 
 ## 🏗️ 아키텍처
 
-<img src="https://user-images.githubusercontent.com/54929665/206073770-22db87a8-a78a-4d2d-96fe-f45d9f7e138a.png" width=50%/><img src="https://user-images.githubusercontent.com/54929665/206073716-4ae3d9ba-9b47-4911-802e-750c279c4095.png" width=50%/>
+<img src="https://user-images.githubusercontent.com/54929665/206073770-22db87a8-a78a-4d2d-96fe-f45d9f7e138a.png" width=100%/><img src="https://user-images.githubusercontent.com/54929665/206073716-4ae3d9ba-9b47-4911-802e-750c279c4095.png" width=100%/>
 
 <br>
 
