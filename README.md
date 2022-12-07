@@ -107,7 +107,7 @@
 ### 니차내차 기록을 확인해요!
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/54929665/206101980-8342deb3-4d61-48c0-9548-3311f8ac9c94.jpg" width=30%><img src="" width=30%>
+  <img src="https://user-images.githubusercontent.com/54929665/206101980-8342deb3-4d61-48c0-9548-3311f8ac9c94.jpg" width=30%><img src="https://user-images.githubusercontent.com/59998983/206105920-a4fee38b-4ef2-4ccd-9aec-96a5c2cac38f.png" width=30%><img src="" width=30%>
   <img src="https://user-images.githubusercontent.com/54929665/206102016-e7b72b4a-4b10-49b6-8654-f03e590cfb02.jpg" width=30%>
 </p>
 
