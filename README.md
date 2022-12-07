@@ -32,7 +32,7 @@
 <img src="https://img.shields.io/badge/Android-Android Marshmallow (API23)-lightgreen?logo=Android" > <img src="https://img.shields.io/badge/Kotlin-1.7.1-orange?logo=Kotlin" >
 
 ### 라이브러리
-<img src="https://img.shields.io/badge/Navigation-2.5.3-lightgreen?logo=Android" > <img src="https://img.shields.io/badge/ViewPager2-1.0.0-lightgreen?logo=Android"> <img src="https://img.shields.io/badge/Pager3-3.1.1-lightgreen?logo=Android"> <img src="https://img.shields.io/badge/Kotlin Coroutine-1.6.4-orange?logo=Kotlin" > <img src="https://img.shields.io/badge/Flow-orange?logo=Kotlin" > <img src="https://img.shields.io/badge/Authentication-blue?logo=Firebase" > <img src="https://img.shields.io/badge/Cloud Firestore-blue?logo=Firebase" > <img src="https://img.shields.io/badge/Cloud Functions-blue?logo=Firebase" > <img src="https://img.shields.io/badge/Cloud Message-blue?logo=Firebase" > <img src="https://img.shields.io/badge/Github Action-222222?logo=GithubActions" > <img src="https://img.shields.io/badge/Hilt-2.44.0-lightgreen?logo=Android" > <img src="https://img.shields.io/badge/Glide-4.14.2-lightgreen" > <img src="https://img.shields.io/badge/Naver Map SDK-3.16.0-2db400?logo=Naver" > <img src="https://img.shields.io/badge/Kakao Local API-0.0.0-fae100?logo=Kakao" > <img src="https://img.shields.io/badge/StreamChat-5.11.0-blue" > <img src="https://img.shields.io/badge/Retrofit-2.9.0-48b983" > <img src="https://img.shields.io/badge/Timber-5.0.1-986500" > <img src="https://img.shields.io/badge/ktlint-0.47.1-ff4081" >
+<img src="https://img.shields.io/badge/Navigation-2.5.3-lightgreen?logo=Android" > <img src="https://img.shields.io/badge/ViewPager2-1.0.0-lightgreen?logo=Android"> <img src="https://img.shields.io/badge/Pager3-3.1.1-lightgreen?logo=Android"> <img src="https://img.shields.io/badge/Kotlin Coroutine-1.6.4-orange?logo=Kotlin" > <img src="https://img.shields.io/badge/Flow-orange?logo=Kotlin" > <img src="https://img.shields.io/badge/Authentication-blue?logo=Firebase" > <img src="https://img.shields.io/badge/Cloud Firestore-blue?logo=Firebase" > <img src="https://img.shields.io/badge/Cloud Functions-blue?logo=Firebase" > <img src="https://img.shields.io/badge/Cloud Message-blue?logo=Firebase" > <img src="https://img.shields.io/badge/Github Action-222222?logo=GithubActions" > <img src="https://img.shields.io/badge/Hilt-2.44.0-lightgreen?logo=Android" > <img src="https://img.shields.io/badge/Glide-4.14.2-lightgreen" > <img src="https://img.shields.io/badge/Naver Map SDK-3.16.0-2db400?logo=Naver" > <img src="https://img.shields.io/badge/Kakao Local API-222222?logo=Kakao" > <img src="https://img.shields.io/badge/StreamChat-5.11.0-blue" > <img src="https://img.shields.io/badge/Retrofit-2.9.0-48b983" > <img src="https://img.shields.io/badge/Timber-5.0.1-986500" > <img src="https://img.shields.io/badge/ktlint-0.47.1-ff4081" >
 
 <br>
 
@@ -40,6 +40,7 @@
 | [김민성](https://www.github.com/minseonglove) | [이동훈](https://www.github.com/ldh019) | [진주영](https://www.github.com/juyoung0520) | [최현지](https://www.github.com/hyunji99Choi) |
 | :-----: | :-----: | :-----: | :-----: |
 | K006 | K034 | K053 | K058 |
+
 
 <br>
 
