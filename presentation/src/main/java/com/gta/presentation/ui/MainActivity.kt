@@ -11,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ActivityMainBinding
 import com.gta.presentation.secret.NAVER_MAP_CLIENT_ID
@@ -20,9 +21,13 @@ import com.gta.presentation.util.repeatOnStarted
 import com.naver.maps.map.NaverMapSdk
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+
+    @Inject
+    lateinit var googleSignInClient: GoogleSignInClient
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -44,7 +49,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         repeatOnStarted(this) {
             viewModel.changeAuthStateEvent.collectLatest { state ->
                 if (state) {
-                    startLoginActivity()
+                    googleSignInClient.signOut().addOnCompleteListener {
+                        startLoginActivity()
+                    }
                 }
             }
         }
