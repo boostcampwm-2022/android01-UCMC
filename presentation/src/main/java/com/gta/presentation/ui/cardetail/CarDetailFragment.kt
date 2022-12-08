@@ -14,6 +14,7 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -47,6 +48,11 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
             viewModel.carInfo.collectLatest {
                 (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
                 pagerAdapter.submitList(it.images)
+                if (it.owner.id != FirebaseUtil.uid) {
+                    binding.tvReportPost.visibility = View.GONE
+                    binding.inOwnerProfile.tvChatting.visibility = View.GONE
+                    binding.inOwnerProfile.tvReport.visibility = View.GONE
+                }
             }
         }
 

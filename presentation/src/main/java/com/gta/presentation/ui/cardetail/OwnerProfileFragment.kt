@@ -10,6 +10,7 @@ import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentOwnerProfileBinding
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -38,6 +39,14 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
                     }
                 }
             )
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.owner.collectLatest {
+                if (it.id != FirebaseUtil.uid) {
+                    binding.tvReport.visibility = View.GONE
+                }
+            }
         }
 
         repeatOnStarted(viewLifecycleOwner) {
