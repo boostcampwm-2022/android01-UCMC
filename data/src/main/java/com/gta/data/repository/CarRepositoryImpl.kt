@@ -21,6 +21,7 @@ import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UpdateCar
+import com.gta.domain.model.UpdateFailException
 import com.gta.domain.model.UserNotFoundException
 import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
@@ -145,9 +146,9 @@ class CarRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun setCarImagesStorage(carId: String, images: List<String>): Flow<List<String>> =
+    override fun setCarImagesStorage(carId: String, images: List<String>): Flow<List<UCMCResult<String>>> =
         callbackFlow {
-            val imageUri = mutableListOf<String>()
+            val imageUri = mutableListOf<UCMCResult<String>>()
             images.forEach { img ->
                 val image = Uri.parse(img)
                 val name = image.path?.substringAfterLast("/") ?: ""
@@ -155,8 +156,8 @@ class CarRepositoryImpl @Inject constructor(
                     "car/$carId/${System.currentTimeMillis()}$name",
                     img
                 ).first()?.let { uri ->
-                    imageUri.add(uri)
-                }
+                    imageUri.add(UCMCResult.Success(uri))
+                } ?: imageUri.add(UCMCResult.Error(UpdateFailException()))
             }
             trySend(imageUri)
             awaitClose()

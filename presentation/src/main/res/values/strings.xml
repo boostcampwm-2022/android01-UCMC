@@ -202,4 +202,7 @@
     <string name="exception_delete_fail">데이터를 삭제하는 데 실패했어요.</string>
     <string name="exception_car_list_fail">차 목록을 불러오는 데 실패했어요.</string>
     <string name="exception_load_data">데이터를 불러오는 데 실패했어요.</string>
+    <string name="exception_delete_image_part">일부 사진이 삭제가 실패하였습니다.</string>
+    <string name="exception_upload_image_part">일부 사진이 업로드가 실패하였습니다.</string>
+    <string name="exception_upload_data">업로드가 실패하였습니다.</string>
 </resources>

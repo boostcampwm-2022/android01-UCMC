@@ -17,13 +17,15 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
+import com.gta.domain.model.DeleteFailException
+import com.gta.domain.model.UCMCResult
+import com.gta.domain.model.UpdateFailException
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditBinding
 import com.gta.presentation.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.text.DecimalFormat
 
 @AndroidEntryPoint
@@ -198,13 +200,29 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                             binding.btnDone.isEnabled = false
                             binding.icLoading.root.visibility = View.VISIBLE
                         }
-                        UpdateState.SUCCESS -> {
-                            // TODO 완료 sanckbar가 too much 인지 생각
+                        else -> {
+                            if (result != UpdateState.SUCCESS) {
+                                sendSnackBar(getString(R.string.exception_upload_data))
+                            }
                             finishUpdateMsg.show()
                             findNavController().navigateUp()
                         }
-                        else -> {
-                            Timber.d("차 상세 데이터 update 실패")
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.errorEvent.collectLatest {
+                    if (it is UCMCResult.Error) {
+                        when (it.e) {
+                            DeleteFailException() -> {
+                                sendSnackBar(getString(R.string.exception_delete_image_part))
+                            }
+                            UpdateFailException() -> {
+                                sendSnackBar(getString(R.string.exception_upload_image_part))
+                            }
                         }
                     }
                 }
