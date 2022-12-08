@@ -23,6 +23,7 @@ import com.gta.domain.model.UpdateFailException
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditBinding
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.DateUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -62,7 +63,7 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
     private val constraints: CalendarConstraints by lazy {
         CalendarConstraints.Builder()
             .setValidator(DateValidatorPointForward.now())
-            .setEnd(MaterialDatePicker.thisMonthInUtcMilliseconds())
+            .setEnd(MaterialDatePicker.thisMonthInUtcMilliseconds() + DateUtil.DAY_TIME_UNIT * 31)
             .build()
     }
     private val datePicker by lazy {
@@ -203,8 +204,9 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                         else -> {
                             if (result != UpdateState.SUCCESS) {
                                 sendSnackBar(getString(R.string.exception_upload_data))
+                            } else {
+                                finishUpdateMsg.show()
                             }
-                            finishUpdateMsg.show()
                             findNavController().navigateUp()
                         }
                     }
