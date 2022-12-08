@@ -12,11 +12,11 @@ class UploadCarImagesUseCase @Inject constructor(
 ) {
     operator fun invoke(
         carId: String,
-        old: List<String>,
-        new: List<String>
+        oldData: List<String>,
+        newData: List<String>
     ): Flow<List<UCMCResult<String>>> {
-        val delete = old.filter { !new.contains(it) }
-        val update = new.filter { !old.contains(it) }
+        val deleteData = oldData.filter { !newData.contains(it) }
+        val updateData = newData.filter { !oldData.contains(it) }
 
         /*
             1. 삭제된 이미지는 저장소에서 삭제
@@ -24,11 +24,11 @@ class UploadCarImagesUseCase @Inject constructor(
             3. 기존에 있던 이미지 + 새로 추가된 이미지 주소값 return
          */
 
-        return deleteImagesUseCase(delete).combine(setCarImagesUseCase(carId, update)) { deleteResult, list ->
+        return deleteImagesUseCase(deleteData).combine(setCarImagesUseCase(carId, updateData)) { deleteResult, list ->
             if (!deleteResult) {
-                old.filter { o -> new.contains(o) }.map { UCMCResult.Success(it) } + list + UCMCResult.Error(DeleteFailException())
+                oldData.filter { o -> newData.contains(o) }.map { UCMCResult.Success(it) } + list + UCMCResult.Error(DeleteFailException())
             } else {
-                old.filter { o -> new.contains(o) }.map { UCMCResult.Success(it) } + list
+                oldData.filter { o -> newData.contains(o) }.map { UCMCResult.Success(it) } + list
             }
         }
     }
