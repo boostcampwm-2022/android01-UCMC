@@ -11,7 +11,7 @@ class DateValidator(
 ) : CalendarConstraints.DateValidator {
 
     override fun isValid(date: Long): Boolean {
-        return date in reservationRange.first..reservationRange.second && date >= MaterialDatePicker.todayInUtcMilliseconds() && checkInvalidList(
+        return date in reservationRange.first..reservationRange.second && date > MaterialDatePicker.todayInUtcMilliseconds() && checkInvalidList(
             date
         )
     }
