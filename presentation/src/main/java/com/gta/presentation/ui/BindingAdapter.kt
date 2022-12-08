@@ -70,7 +70,7 @@ fun setReservationTime(textView: TextView, selection: AvailableDate?, dateType: 
 
 @BindingAdapter("text_AvailableDate")
 fun setAvailableDateText(textView: TextView, availableDate: AvailableDate?) {
-    textView.text = if (availableDate != null) {
+    textView.text = if (availableDate != null && !(availableDate.start == 0L && availableDate.end == 0L)) {
         String.format(
             textView.resources.getString(R.string.car_edit_rent_available_day_format),
             DateUtil.dateFormat.format(availableDate.start),
