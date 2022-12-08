@@ -2,7 +2,6 @@ package com.gta.presentation.ui.transaction
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator

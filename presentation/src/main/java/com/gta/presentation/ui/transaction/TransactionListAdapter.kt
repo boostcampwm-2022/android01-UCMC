@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gta.domain.model.Transaction
 import com.gta.presentation.R
