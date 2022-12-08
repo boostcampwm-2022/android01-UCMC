@@ -182,15 +182,6 @@
                     app:layout_constraintStart_toStartOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@+id/tl_comment_input" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="?attr/colorSecondary"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_day_able_label"
-                    app:layout_constraintEnd_toEndOf="@+id/sw_day_able"
-                    app:layout_constraintStart_toStartOf="@+id/tv_day_able_label"
-                    app:layout_constraintTop_toTopOf="@+id/tv_day_able_label" />
-
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_day_able_label"
                     android:layout_width="0dp"
@@ -231,6 +222,7 @@
                     android:layout_marginHorizontal="@dimen/padding_medium"
                     android:gravity="end"
                     android:textSize="@dimen/font_title_medium"
+                    android:layout_marginTop="@dimen/padding_small"
                     app:layout_constraintBottom_toTopOf="@+id/tv_location"
                     app:layout_constraintEnd_toStartOf="@+id/iv_day_edit"
                     app:layout_constraintStart_toEndOf="@+id/tv_day_label"
@@ -293,8 +285,8 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:alpha="0.3"
-                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.9"
+                    android:background="?android:attr/colorBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:visibility="@{vm.rentState ? View.GONE : View.VISIBLE}"
@@ -308,7 +300,7 @@
                     style="@style/Theme.UCMC.BottomButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/correction"
+                    android:text="@string/car_edit_done_button"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
