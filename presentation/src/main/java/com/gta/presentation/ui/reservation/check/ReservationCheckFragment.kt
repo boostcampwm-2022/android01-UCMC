@@ -21,6 +21,7 @@ class ReservationCheckFragment :
     BaseFragment<FragmentReservationCheckBinding>(R.layout.fragment_reservation_check) {
 
     private val viewModel: ReservationCheckViewModel by viewModels()
+    private var anchorView: View? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,7 +66,7 @@ class ReservationCheckFragment :
                     is UCMCResult.Success -> {
                         sendSnackBar(
                             message = getString(R.string.report_success),
-                            anchorView = if (binding.btnReservationAccept.visibility == View.VISIBLE) binding.btnReservationAccept else null
+                            anchorView = anchorView
 
                         )
                     }
@@ -84,7 +85,13 @@ class ReservationCheckFragment :
                             else -> null
                         }?.isChecked = true
 
-                        (if (result.data.state == ReservationState.PENDING.state) View.VISIBLE else View.GONE).also { visibility ->
+                        if (result.data.state == ReservationState.PENDING.state) {
+                            anchorView = binding.btnReservationAccept
+                            View.VISIBLE
+                        } else {
+                            anchorView = null
+                            View.GONE
+                        }.also { visibility ->
                             binding.btnReservationDecline.visibility = visibility
                             binding.btnReservationAccept.visibility = visibility
                         }
@@ -131,9 +138,7 @@ class ReservationCheckFragment :
                 is CoolDownException -> getString(R.string.report_cooldown, e.cooldown)
                 else -> e.message ?: getString(R.string.exception_not_found)
             }
-        val view =
-            if (binding.btnReservationAccept.visibility == View.VISIBLE) binding.btnReservationAccept else null
 
-        sendSnackBar(message = message, anchorView = view)
+        sendSnackBar(message = message, anchorView = anchorView)
     }
 }

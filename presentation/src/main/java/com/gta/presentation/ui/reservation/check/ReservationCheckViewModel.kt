@@ -91,19 +91,7 @@ class ReservationCheckViewModel @Inject constructor(
                     } else {
                         getUserProfileUseCase(target.data.ownerId)
                     }.combine(getSimpleCarUseCase(target.data.carId)) { userProfile, simpleCar ->
-                        _user.emit(userProfile)
-                        if (userProfile == UserProfile()) {
-                            _userEvent.emit(UCMCResult.Error(FirestoreException()))
-                        } else {
-                            _userEvent.emit(UCMCResult.Success(userProfile))
-                        }
-
-                        _car.emit(simpleCar)
-                        if (simpleCar == SimpleCar()) {
-                            _carEvent.emit(UCMCResult.Error(FirestoreException()))
-                        } else {
-                            _carEvent.emit(UCMCResult.Success(simpleCar))
-                        }
+                        emitResults(userProfile, simpleCar)
                     }
                 }
                 is UCMCResult.Error -> {
@@ -116,6 +104,24 @@ class ReservationCheckViewModel @Inject constructor(
 
     fun stopCollect() {
         collectJob.cancel()
+    }
+
+    private fun emitResults(userProfile: UserProfile, simpleCar: SimpleCar) {
+        viewModelScope.launch {
+            _user.emit(userProfile)
+            if (userProfile == UserProfile()) {
+                _userEvent.emit(UCMCResult.Error(FirestoreException()))
+            } else {
+                _userEvent.emit(UCMCResult.Success(userProfile))
+            }
+
+            _car.emit(simpleCar)
+            if (simpleCar == SimpleCar()) {
+                _carEvent.emit(UCMCResult.Error(FirestoreException()))
+            } else {
+                _carEvent.emit(UCMCResult.Success(simpleCar))
+            }
+        }
     }
 
     fun finishReservation(accepted: Boolean) {
