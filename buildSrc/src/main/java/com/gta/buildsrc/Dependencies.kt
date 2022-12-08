@@ -55,6 +55,7 @@ object Dependencies {
         const val JUNIT5 = "5.8.2"
         const val ESPRESSO_CORE = "3.5.0"
         const val MOCKITO = "4.9.0"
+        const val MOCKITO_KOTLIN = "4.1.0"
 
         // Github open Library
         const val INDICATOR = "4.3"
@@ -222,7 +223,8 @@ object Dependencies {
             const val JUNIT = "junit:junit:${Versions.JUNIT}"
             const val JUNIT5_API = "org.junit.jupiter:junit-jupiter-api:${Versions.JUNIT5}"
             const val JUNIT5_ENGINE = "org.junit.jupiter:junit-jupiter-engine:${Versions.JUNIT5}"
-            const val MOCKITO = "org.mockito:mockito-core:${Versions.MOCKITO}"
+            const val MOCKITO = "org.mockito:mockito-inline:${Versions.MOCKITO}"
+            const val MOCKITO_KOTLIN = "org.mockito.kotlin:mockito-kotlin:${Versions.MOCKITO_KOTLIN}"
             const val MOCKITO_JUPITER = "org.mockito:mockito-junit-jupiter:${Versions.MOCKITO}"
         }
 
@@ -254,6 +256,7 @@ object Dependencies {
             add(LOGGING_INTERCEPTER)
             add(Paging.PAGING)
             add(Test.MOCKITO)
+            add(Test.MOCKITO_KOTLIN)
             add(Test.MOCKITO_JUPITER)
             add(Test.JUNIT5_API)
             add(Test.JUNIT5_ENGINE)
