@@ -92,7 +92,7 @@
             android:onClick="@{() -> vm.onReportClick()}"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintTop_toBottomOf="@+id/iv_profile" />
-        
+
         <TextView
             android:id="@+id/tv_cars_label"
             android:layout_width="wrap_content"

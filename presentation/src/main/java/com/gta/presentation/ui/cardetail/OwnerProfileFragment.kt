@@ -43,7 +43,7 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
 
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.owner.collectLatest {
-                if (it.id != FirebaseUtil.uid) {
+                if (it.id == FirebaseUtil.uid) {
                     binding.tvReport.visibility = View.GONE
                 }
             }

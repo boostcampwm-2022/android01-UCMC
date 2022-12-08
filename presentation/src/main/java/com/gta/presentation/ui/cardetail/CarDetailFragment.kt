@@ -48,7 +48,7 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
             viewModel.carInfo.collectLatest {
                 (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
                 pagerAdapter.submitList(it.images)
-                if (it.owner.id != FirebaseUtil.uid) {
+                if (it.owner.id == FirebaseUtil.uid) {
                     binding.tvReportPost.visibility = View.GONE
                     binding.inOwnerProfile.tvChatting.visibility = View.GONE
                     binding.inOwnerProfile.tvReport.visibility = View.GONE
