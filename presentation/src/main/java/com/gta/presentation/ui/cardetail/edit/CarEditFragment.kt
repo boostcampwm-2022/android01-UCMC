@@ -168,13 +168,22 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             }
         }
 
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.price.collectLatest {
+                    if (it.isNotEmpty()) {
+                        binding.tvPrice.text = decimalFormat.format(viewModel.price.value.toInt())
+                    }
+                }
+            }
+        }
+
         binding.etPrice.setOnFocusChangeListener { _, boolean ->
             with(binding.tvPrice) {
-                if (boolean) {
-                    visibility = View.GONE
+                visibility = if (boolean) {
+                    View.GONE
                 } else {
-                    text = decimalFormat.format(viewModel.price.value.toInt())
-                    visibility = View.VISIBLE
+                    View.VISIBLE
                 }
             }
         }

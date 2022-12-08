@@ -114,7 +114,6 @@
                     android:gravity="end|center_vertical"
                     android:textSize="@dimen/font_body_large"
                     android:textStyle="bold"
-                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/et_price"
                     app:layout_constraintEnd_toEndOf="@+id/et_price"
                     app:layout_constraintStart_toStartOf="@+id/et_price"
