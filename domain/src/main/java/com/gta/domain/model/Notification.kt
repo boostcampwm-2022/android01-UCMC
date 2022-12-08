@@ -5,7 +5,7 @@ data class Notification(
     val message: String = "",
     val reservationId: String = "정보 없음",
     val fromId: String = "정보 없음",
-    val timestamp: Long = 0,
+    val timestamp: Long = 0
 )
 
 enum class NotificationType(val title: String, val msg: String) {
