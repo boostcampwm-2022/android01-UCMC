@@ -1,10 +1,15 @@
 package com.gta.domain.usecase.transaction
 
+import androidx.paging.PagingData
+import androidx.paging.filter
+import androidx.paging.map
 import com.gta.domain.model.Transaction
 import com.gta.domain.model.toTransaction
 import com.gta.domain.repository.CarRepository
 import com.gta.domain.repository.TransactionRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetTransactionsUseCase @Inject constructor(
@@ -16,22 +21,20 @@ class GetTransactionsUseCase @Inject constructor(
     private val completedCondition =
         { transaction: Transaction -> transaction.reservationState.state < 0 }
 
-    suspend operator fun invoke(
+    operator fun invoke(
         uid: String,
         isLender: Boolean,
         isTrading: Boolean
-    ): List<Transaction> {
-        val transactions = if (isLender) {
-            transactionRepository.getYourCarTransactions(uid)
-        } else {
-            transactionRepository.getMyCarTransactions(uid)
-        }
+    ): Flow<PagingData<Transaction>> {
+        val transactionPagingData = transactionRepository.getTransactions(uid, isLender)
 
         val filterCondition = if (isTrading) tradingCondition else completedCondition
 
-        return transactions.map { reservation ->
-            val simpleCar = carRepository.getSimpleCar(reservation.carId).first()
-            reservation.toTransaction(simpleCar)
-        }.filter(filterCondition)
+        return transactionPagingData.map { pagingData ->
+            pagingData.map { reservation ->
+                val simpleCar = carRepository.getSimpleCar(reservation.carId).first()
+                reservation.toTransaction(simpleCar)
+            }.filter(filterCondition)
+        }
     }
 }

@@ -21,6 +21,7 @@
     <string name="no_information">정보 없음</string>
 
     <string name="car_edit_label">내 차 수정하기</string>
+    <string name="car_edit_done_button">수정 완료하기</string>
     <string name="car_edit_price_label">금액 1일</string>
     <string name="car_edit_day_able">예약 가능 여부</string>
     <string name="car_edit_day_label">대여 가능 날짜</string>
@@ -57,6 +58,8 @@
     <string name="temperature_type">%.1f℃</string>
     <string name="car_detail_year">%d년식</string>
     <string name="car_detail_licensePlate">번호판 : %s</string>
+
+    <string name="notification_list_no_list">해당 내용이 없습니다.</string>
 
     <string name="search_hint">검색어를 입력하세요.</string>
     <string name="filter_car_type">차종</string>
@@ -169,7 +172,7 @@
     <string name="reservation_request_accept">수락하기</string>
     <string name="notification_toolbar">알림 목록</string>
     <string name="reservation_request_toolbar">예약 요청 확인</string>
-    <string name="reservation_lender">대여자 정보</string>
+    <string name="reservation_profile_title">상대방 정보</string>
 
     <string name="chatting_provider_name">ucmc</string>
     <string name="permission_post_notification_denied">이 일을 기억할 것입니다.</string>
@@ -199,4 +202,8 @@
     <string name="exception_delete_fail">데이터를 삭제하는 데 실패했어요.</string>
     <string name="exception_car_list_fail">차 목록을 불러오는 데 실패했어요.</string>
     <string name="exception_load_data">데이터를 불러오는 데 실패했어요.</string>
+    <string name="exception_delete_image_part">일부 사진이 삭제가 실패하였습니다.</string>
+    <string name="exception_upload_image_part">일부 사진이 업로드가 실패하였습니다.</string>
+    <string name="exception_upload_data">업로드가 실패하였습니다.</string>
+    <string name="exception_login">로그인에 실패했습니다. 다시 시도해주세요.</string>
 </resources>

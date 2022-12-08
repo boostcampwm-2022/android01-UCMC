@@ -20,6 +20,6 @@ interface CarRepository {
     fun getAllCars(): Flow<List<SimpleCar>>
     fun getNearCars(min: Coordinate, max: Coordinate): Flow<UCMCResult<List<SimpleCar>>>
     suspend fun removeCar(userId: String, carId: String): UCMCResult<Unit>
-    fun setCarImagesStorage(carId: String, images: List<String>): Flow<List<String>>
+    fun setCarImagesStorage(carId: String, images: List<String>): Flow<List<UCMCResult<String>>>
     fun deleteImagesStorage(images: List<String>): Flow<Boolean>
 }

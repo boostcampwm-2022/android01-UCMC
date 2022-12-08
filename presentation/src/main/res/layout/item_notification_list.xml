@@ -18,6 +18,7 @@
             android:layout_height="50dp"
             android:layout_margin="@dimen/padding_large"
             android:src="@drawable/ic_bottom_nav_my"
+            android:scaleType="centerCrop"
             app:image_uri="@{notification.carImage}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

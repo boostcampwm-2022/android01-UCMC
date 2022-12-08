@@ -65,6 +65,7 @@ class NotificationService : FirebaseMessagingService() {
             .setContentText(message.data["message"])
             .setContentIntent(createPendingIntent(message))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
 
         notificationManager.notify(0, builder.build())
     }

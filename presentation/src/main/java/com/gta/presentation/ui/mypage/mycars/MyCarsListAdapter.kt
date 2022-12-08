@@ -6,17 +6,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gta.domain.model.SimpleCar
-import com.gta.presentation.databinding.ItemMypageCarlistBinding
+import com.gta.presentation.databinding.ItemOwnerCarBinding
 
 class MyCarsListAdapter :
     ListAdapter<SimpleCar, MyCarsListAdapter.CarViewHolder>(diffUtil) {
     class CarViewHolder(
-        private val binding: ItemMypageCarlistBinding,
+        private val binding: ItemOwnerCarBinding,
         private val listener: OnItemClickListener<String>?
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(info: SimpleCar) {
-            binding.data = info
+            binding.item = info
             binding.root.setOnClickListener {
                 if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
                     listener?.onClick(info.id)
@@ -39,7 +39,7 @@ class MyCarsListAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
         val binding =
-            ItemMypageCarlistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemOwnerCarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CarViewHolder(binding, listener)
     }
 

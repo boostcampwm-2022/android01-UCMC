@@ -18,14 +18,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.core.widget.NestedScrollView
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_done">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/gl_start"
@@ -46,14 +48,13 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/padding_small"
                     android:orientation="vertical"
+                    android:layout_marginTop="@dimen/padding_medium"
                     android:paddingVertical="@dimen/padding_medium"
                     android:text="0/10"
                     app:cornerRadius="@dimen/padding_small"
                     app:icon="@drawable/ic_camera"
                     app:iconGravity="top"
-                    app:layout_constraintBottom_toTopOf="@+id/et_price"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -96,7 +97,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/padding_small"
-                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_small"
                     android:gravity="end"
                     android:inputType="number"
                     android:maxLength="9"
@@ -114,7 +115,6 @@
                     android:gravity="end|center_vertical"
                     android:textSize="@dimen/font_body_large"
                     android:textStyle="bold"
-                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/et_price"
                     app:layout_constraintEnd_toEndOf="@+id/et_price"
                     app:layout_constraintStart_toStartOf="@+id/et_price"
@@ -135,7 +135,7 @@
                     android:id="@+id/tv_comment_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_small"
                     android:gravity="start"
                     android:text="@string/car_detail_comment_label"
                     android:textSize="@dimen/font_title_medium"
@@ -147,7 +147,7 @@
                     android:id="@+id/tl_comment_input"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     app:boxStrokeColor="?attr/colorPrimary"
                     app:boxStrokeErrorColor="@android:color/holo_red_dark"
                     app:counterEnabled="true"
@@ -155,7 +155,7 @@
                     app:errorEnabled="true"
                     app:errorIconDrawable="@null"
                     app:helperText="@string/car_edit_comment_helper_message"
-                    app:layout_constraintBottom_toTopOf="@+id/div_comment_bottom"
+                    android:layout_marginTop="@dimen/padding_small"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintHeight_min="230dp"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
@@ -181,15 +181,6 @@
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@+id/tl_comment_input" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="?attr/colorSecondary"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_day_able_label"
-                    app:layout_constraintEnd_toEndOf="@+id/sw_day_able"
-                    app:layout_constraintStart_toStartOf="@+id/tv_day_able_label"
-                    app:layout_constraintTop_toTopOf="@+id/tv_day_able_label" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_day_able_label"
@@ -231,6 +222,7 @@
                     android:layout_marginHorizontal="@dimen/padding_medium"
                     android:gravity="end"
                     android:textSize="@dimen/font_title_medium"
+                    android:layout_marginTop="@dimen/padding_small"
                     app:layout_constraintBottom_toTopOf="@+id/tv_location"
                     app:layout_constraintEnd_toStartOf="@+id/iv_day_edit"
                     app:layout_constraintStart_toEndOf="@+id/tv_day_label"
@@ -272,7 +264,7 @@
                     android:gravity="end"
                     android:text="@{vm.location}"
                     android:textSize="@dimen/font_title_medium"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_done"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/iv_location_edit"
                     app:layout_constraintStart_toEndOf="@+id/tv_location_label"
                     app:layout_constraintTop_toBottomOf="@+id/tv_day" />
@@ -293,8 +285,8 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:alpha="0.3"
-                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.9"
+                    android:background="?android:attr/colorBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:visibility="@{vm.rentState ? View.GONE : View.VISIBLE}"
@@ -303,21 +295,26 @@
                     app:layout_constraintStart_toStartOf="@+id/tv_day_label"
                     app:layout_constraintTop_toTopOf="@+id/tv_day" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_done"
-                    style="@style/Theme.UCMC.BottomButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/correction"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_done"
+            style="@style/Theme.UCMC.BottomButton"
+            android:elevation="-1dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/car_edit_done_button"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <include
             android:id="@+id/ic_loading"
             layout="@layout/include_wait_loading"
+            android:elevation="3dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"

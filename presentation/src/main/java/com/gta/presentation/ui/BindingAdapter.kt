@@ -4,8 +4,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.NotificationType
 import com.gta.domain.model.ReservationState
@@ -70,7 +68,7 @@ fun setReservationTime(textView: TextView, selection: AvailableDate?, dateType: 
 
 @BindingAdapter("text_AvailableDate")
 fun setAvailableDateText(textView: TextView, availableDate: AvailableDate?) {
-    textView.text = if (availableDate != null) {
+    textView.text = if (availableDate != null && !(availableDate.start == 0L && availableDate.end == 0L)) {
         String.format(
             textView.resources.getString(R.string.car_edit_rent_available_day_format),
             DateUtil.dateFormat.format(availableDate.start),
@@ -148,11 +146,4 @@ fun setReservationState(textView: TextView, reservationState: ReservationState) 
                 textView.resources.getString(R.string.return_completed)
             }
         }
-}
-
-@BindingAdapter("submitList")
-fun bindSubmitList(view: RecyclerView, itemList: List<Any>?) {
-    view.adapter?.let {
-        (view.adapter as ListAdapter<Any, *>).submitList(itemList)
-    }
 }

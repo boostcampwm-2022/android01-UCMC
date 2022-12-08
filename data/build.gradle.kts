@@ -6,6 +6,7 @@ plugins {
     id("com.google.gms.google-services")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
+    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -38,6 +39,9 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -48,5 +52,5 @@ dependencies {
     implementation(Dependencies.Libraries.dataLibraries)
     kapt(Dependencies.Libraries.dataKaptLibraries)
 
-    testImplementation(Dependencies.Libraries.Test.JUNIT)
+    testImplementation(Dependencies.Libraries.dataTestLibraries)
 }

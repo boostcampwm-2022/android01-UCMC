@@ -3,6 +3,8 @@ package com.gta.presentation.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.gta.domain.usecase.login.UpdateUserMessageTokenUseCase
+import com.gta.presentation.util.FirebaseUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -11,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val updateUserMessageTokenUseCase: UpdateUserMessageTokenUseCase
 ) : ViewModel() {
 
     private val _changeAuthStateEvent = MutableSharedFlow<Boolean>()
@@ -27,6 +30,13 @@ class MainViewModel @Inject constructor(
 
     init {
         auth.addAuthStateListener(authStateListener)
+        updateMessageToken()
+    }
+
+    private fun updateMessageToken() {
+        viewModelScope.launch {
+            updateUserMessageTokenUseCase(FirebaseUtil.uid)
+        }
     }
 
     override fun onCleared() {

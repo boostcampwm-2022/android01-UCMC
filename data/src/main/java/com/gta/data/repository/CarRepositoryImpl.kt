@@ -21,14 +21,18 @@ import com.gta.domain.model.RentState
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UpdateCar
+import com.gta.domain.model.UpdateFailException
 import com.gta.domain.model.UserNotFoundException
 import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CarRepositoryImpl @Inject constructor(
@@ -145,17 +149,24 @@ class CarRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun setCarImagesStorage(carId: String, images: List<String>): Flow<List<String>> =
+    override fun setCarImagesStorage(
+        carId: String,
+        images: List<String>
+    ): Flow<List<UCMCResult<String>>> =
         callbackFlow {
-            val imageUri = mutableListOf<String>()
-            images.forEach { img ->
-                val image = Uri.parse(img)
-                val name = image.path?.substringAfterLast("/") ?: ""
-                storageDataSource.uploadPicture(
-                    "car/$carId/${System.currentTimeMillis()}$name",
-                    img
-                ).first()?.let { uri ->
-                    imageUri.add(uri)
+            val imageUri = mutableListOf<UCMCResult<String>>()
+            withContext(Dispatchers.IO) {
+                images.forEach { img ->
+                    launch {
+                        val image = Uri.parse(img)
+                        val name = image.path?.substringAfterLast("/") ?: ""
+                        storageDataSource.uploadPicture(
+                            "car/$carId/${System.currentTimeMillis()}$name",
+                            img
+                        ).first()?.let { uri ->
+                            imageUri.add(UCMCResult.Success(uri))
+                        } ?: imageUri.add(UCMCResult.Error(UpdateFailException()))
+                    }
                 }
             }
             trySend(imageUri)
@@ -164,8 +175,12 @@ class CarRepositoryImpl @Inject constructor(
 
     override fun deleteImagesStorage(images: List<String>): Flow<Boolean> = callbackFlow {
         val result = mutableListOf<Boolean>()
-        images.forEach { img ->
-            result.add(storageDataSource.deletePicture(img).first())
+        withContext(Dispatchers.IO) {
+            images.forEach { img ->
+                launch {
+                    result.add(storageDataSource.deletePicture(img).first())
+                }
+            }
         }
         trySend(!result.contains(false))
         awaitClose()

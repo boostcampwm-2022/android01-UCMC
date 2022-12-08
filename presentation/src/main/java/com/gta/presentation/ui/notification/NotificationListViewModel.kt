@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NotificationViewModel @Inject constructor(
+class NotificationListViewModel @Inject constructor(
     getNotificationInfo: GetNotificationsInfoUseCase
 ) : ViewModel() {
 

@@ -9,6 +9,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import com.gta.domain.model.NotificationType
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentNotificationListBinding
@@ -22,8 +24,29 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
     R.layout.fragment_notification_list
 ) {
 
-    private val viewModel: NotificationViewModel by viewModels()
+    private val viewModel: NotificationListViewModel by viewModels()
     private val adapter by lazy { NotificationListAdapter() }
+
+    private val pagingListener: (CombinedLoadStates) -> Unit = {
+        binding.rvNotification.visibility = View.VISIBLE
+        binding.pgLoading.visibility = View.GONE
+
+        when (it.source.refresh) {
+            is LoadState.Loading -> {
+                binding.pgLoading.visibility = View.VISIBLE
+            }
+            is LoadState.NotLoading -> {
+                if (it.append.endOfPaginationReached && adapter.itemCount < 1) {
+                    binding.rvNotification.visibility = View.GONE
+                }
+            }
+            is LoadState.Error -> {
+                sendSnackBar(resources.getString(R.string.exception_load_data))
+            }
+            else -> {}
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,23 +57,7 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
             setItemClickListener(object : NotificationListAdapter.OnItemClickListener {
                 override fun onClick(type: NotificationType, reservation: String) {
                     when (type) {
-                        NotificationType.REQUEST_RESERVATION -> {
-                            findNavController().navigate(
-                                NotificationListFragmentDirections
-                                    .actionNotificationListFragmentToReservationCheckFragment(
-                                        reservation
-                                    )
-                            )
-                        }
-                        NotificationType.ACCEPT_RESERVATION -> {
-                            findNavController().navigate(
-                                NotificationListFragmentDirections
-                                    .actionNotificationListFragmentToReservationCheckFragment(
-                                        reservation
-                                    )
-                            )
-                        }
-                        NotificationType.DECLINE_RESERVATION -> {
+                        NotificationType.REQUEST_RESERVATION, NotificationType.ACCEPT_RESERVATION, NotificationType.DECLINE_RESERVATION -> {
                             findNavController().navigate(
                                 NotificationListFragmentDirections
                                     .actionNotificationListFragmentToReservationCheckFragment(
@@ -76,6 +83,8 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter.addLoadStateListener(pagingListener)
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.notificationList.collectLatest {
@@ -83,5 +92,10 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
                 }
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        adapter.removeLoadStateListener(pagingListener)
     }
 }
