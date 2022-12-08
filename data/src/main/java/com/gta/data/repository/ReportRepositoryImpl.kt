@@ -14,20 +14,23 @@ class ReportRepositoryImpl @Inject constructor(
 
     private var lastReportedTime = 0L
 
-    override suspend fun reportUser(uid: String): UCMCResult<Unit> {
-        val cooldown = REPORT_COOL_DOWN - getTimeAfterReporting()
+    override suspend fun reportUser(
+        uid: String,
+        currentTime: Long
+    ): UCMCResult<Unit> {
+        val cooldown = REPORT_COOL_DOWN - getTimeAfterReporting(currentTime)
         return if (cooldown > 0) {
             UCMCResult.Error(CoolDownException(cooldown / 1000 + 1))
         } else {
-            addReportCount(uid)
+            addReportCount(uid, currentTime)
         }
     }
 
-    private suspend fun addReportCount(uid: String): UCMCResult<Unit> {
+    private suspend fun addReportCount(uid: String, currentTime: Long): UCMCResult<Unit> {
         return userDataSource.getUser(uid).first()?.let { user ->
             val result = userDataSource.addReportCount(uid, user.reportCount + 1).first()
             if (result) {
-                lastReportedTime = System.currentTimeMillis()
+                lastReportedTime = currentTime
                 UCMCResult.Success(Unit)
             } else {
                 UCMCResult.Error(FirestoreException())
@@ -35,8 +38,8 @@ class ReportRepositoryImpl @Inject constructor(
         } ?: UCMCResult.Error(FirestoreException())
     }
 
-    private fun getTimeAfterReporting(): Long =
-        (System.currentTimeMillis() - lastReportedTime)
+    private fun getTimeAfterReporting(currentTime: Long): Long =
+        (currentTime - lastReportedTime)
 
     companion object {
         private const val REPORT_COOL_DOWN = 10000

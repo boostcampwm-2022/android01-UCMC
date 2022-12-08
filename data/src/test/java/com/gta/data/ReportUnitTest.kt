@@ -7,7 +7,6 @@ import com.gta.domain.model.CoolDownException
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.ReportRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
@@ -77,9 +76,9 @@ class ReportUnitTest(
     @DisplayName("reportUser : 메소드를 호출한 뒤 10초뒤에 다시 호출하면 Success(Unit)을 리턴한다.")
     fun Should_Success_When_SuccessAndCallAfter10seconds() {
         runBlocking {
-            Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID))
-            delay(10000)
-            Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID))
+            val currentTime = System.currentTimeMillis()
+            Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID, currentTime))
+            Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID, currentTime + 10000))
         }
     }
 
