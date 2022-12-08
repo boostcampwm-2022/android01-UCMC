@@ -42,7 +42,7 @@ class NotificationRepositoryImpl @Inject constructor(
     suspend fun getNotificationInfoDetailItem(notifyInfo: NotificationInfo): NotificationInfo {
         val reservation = reservationDataSource.getReservation(notifyInfo.reservationId).first()
         val from = notifyInfo.fromId
-        val car = reservation?.carId ?: "-"
+        val car = reservation?.carId ?: "정보 없음"
 
         withContext(Dispatchers.IO) {
             launch {

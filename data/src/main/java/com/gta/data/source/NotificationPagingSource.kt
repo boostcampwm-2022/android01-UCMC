@@ -19,8 +19,14 @@ class NotificationPagingSource(
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, NotificationInfo> {
         return try {
             val currentPage = params.key ?: dataSource.getNotificationInfoCurrentItem(userId)
-            val lastDocumentSnapshot = currentPage.documents[currentPage.size() - 1]
-            val nextPage = dataSource.getNotificationInfoNextItem(userId, lastDocumentSnapshot)
+
+            val nextPage: QuerySnapshot? =
+                if (currentPage.size() > 0) {
+                    val lastDocumentSnapshot = currentPage.documents[currentPage.size() - 1]
+                    dataSource.getNotificationInfoNextItem(userId, lastDocumentSnapshot)
+                } else {
+                    null
+                }
 
             LoadResult.Page(
                 data = currentPage.map {
