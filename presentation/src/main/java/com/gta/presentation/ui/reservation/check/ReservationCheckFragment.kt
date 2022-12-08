@@ -8,16 +8,15 @@ import com.gta.domain.model.InsuranceOption
 import com.gta.domain.model.ReservationState
 import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
-import com.gta.presentation.databinding.FragmentReservationRequestBinding
+import com.gta.presentation.databinding.FragmentReservationCheckBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class ReservationCheckFragment :
-    BaseFragment<FragmentReservationRequestBinding>(R.layout.fragment_reservation_request) {
+    BaseFragment<FragmentReservationCheckBinding>(R.layout.fragment_reservation_check) {
 
     private val viewModel: ReservationCheckViewModel by viewModels()
 
@@ -44,7 +43,7 @@ class ReservationCheckFragment :
                         }
                     }
                     is UCMCResult.Error -> {
-                        sendSnackBar(getString(R.string.exception_load_data))
+                        sendSnackBar(getString(R.string.exception_load_data), anchorView = binding.btnReservationAccept)
                     }
                 }
             }
@@ -53,7 +52,7 @@ class ReservationCheckFragment :
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.carEvent.collect { result ->
                 if (result is UCMCResult.Error) {
-                    sendSnackBar(getString(R.string.exception_load_data))
+                    sendSnackBar(getString(R.string.exception_load_data), anchorView = binding.btnReservationAccept)
                 }
             }
         }
