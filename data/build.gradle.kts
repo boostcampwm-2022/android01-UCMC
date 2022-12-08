@@ -39,7 +39,6 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
@@ -53,5 +52,5 @@ dependencies {
     implementation(Dependencies.Libraries.dataLibraries)
     kapt(Dependencies.Libraries.dataKaptLibraries)
 
-    testImplementation(Dependencies.Libraries.Test.JUNIT)
+    testImplementation(Dependencies.Libraries.dataTestLibraries)
 }
