@@ -1,13 +1,12 @@
 package com.gta.data.repository
 
+import android.content.res.Resources.NotFoundException
 import com.gta.data.source.LoginDataSource
 import com.gta.data.source.MessageTokenDataSource
 import com.gta.data.source.UserDataSource
-import com.gta.domain.model.LoginResult
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.LoginRepository
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -16,27 +15,25 @@ class LoginRepositoryImpl @Inject constructor(
     private val loginDataSource: LoginDataSource,
     private val messageTokenDataSource: MessageTokenDataSource
 ) : LoginRepository {
-    override fun checkCurrentUser(
+    override suspend fun checkCurrentUser(
         uid: String
-    ): Flow<LoginResult> = callbackFlow {
+    ): UCMCResult<Unit> {
         val userInfo = userDataSource.getUser(uid).first()
-        if (userInfo != null) {
-            trySend(LoginResult.SUCCESS)
+        return if (userInfo != null) {
+            UCMCResult.Success(Unit)
         } else {
-            trySend(LoginResult.NEWUSER)
+            UCMCResult.Error(NotFoundException())
         }
-        awaitClose()
     }
 
-    override fun signUp(uid: String) = callbackFlow {
+    override suspend fun signUp(uid: String): UCMCResult<Unit> {
         val messageToken = messageTokenDataSource.getMessageToken().first()
         val created = loginDataSource.createUser(uid, messageToken).first()
-        if (created) {
-            trySend(LoginResult.SUCCESS)
+        return if (created) {
+            UCMCResult.Success(Unit)
         } else {
-            trySend(LoginResult.FAILURE)
+            UCMCResult.Error(FirestoreException())
         }
-        awaitClose()
     }
 
     override suspend fun updateUserMessageToken(uid: String): Boolean {

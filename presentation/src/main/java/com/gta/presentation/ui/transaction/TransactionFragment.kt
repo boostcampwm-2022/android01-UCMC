@@ -2,6 +2,7 @@ package com.gta.presentation.ui.transaction
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gta.presentation.R
@@ -36,5 +37,11 @@ class TransactionFragment : BaseFragment<FragmentTransactionBinding>(R.layout.fr
             }
             tab.text = tabTitle
         }.attach()
+    }
+
+    companion object {
+        fun navigateToReservationCheck(view: View, reservationId: String) {
+            Navigation.findNavController(view).navigate(TransactionFragmentDirections.actionTransactionFragmentToReservationCheckFragment(reservationId))
+        }
     }
 }

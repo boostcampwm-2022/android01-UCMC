@@ -149,10 +149,3 @@ fun setReservationState(textView: TextView, reservationState: ReservationState) 
             }
         }
 }
-
-@BindingAdapter("submitList")
-fun bindSubmitList(view: RecyclerView, itemList: List<Any>?) {
-    view.adapter?.let {
-        (view.adapter as ListAdapter<Any, *>).submitList(itemList)
-    }
-}

@@ -4,16 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.gta.domain.model.LoginResult
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.login.CheckCurrentUserUseCase
 import com.gta.domain.usecase.login.SignUpUseCase
 import com.gta.domain.usecase.user.GetUserProfileUseCase
 import com.gta.presentation.util.FirebaseUtil
+import com.gta.presentation.util.MutableEventFlow
+import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.models.User
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -28,8 +29,8 @@ class LoginViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
 
-    private val _loginEvent = MutableSharedFlow<LoginResult>()
-    val loginEvent: SharedFlow<LoginResult> get() = _loginEvent
+    private val _loginEvent = MutableEventFlow<UCMCResult<Unit>>()
+    val loginEvent get() = _loginEvent.asEventFlow()
 
     var isLoading = true
         private set
@@ -39,24 +40,19 @@ class LoginViewModel @Inject constructor(
         val credential = GoogleAuthProvider.getCredential(token, null)
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                checkCurrentUser(shouldUpdateMessageToken = true)
+                checkCurrentUser()
             } else {
                 Timber.e(task.exception)
             }
         }
     }
 
-    fun checkCurrentUser(shouldUpdateMessageToken: Boolean = false) {
+    fun checkCurrentUser() {
         val user = auth.currentUser
         if (user != null) {
             FirebaseUtil.setUid(user)
             viewModelScope.launch {
-                handleLoginResult(
-                    checkCurrentUserUseCase(
-                        FirebaseUtil.uid,
-                        shouldUpdateMessageToken
-                    ).first()
-                )
+                handleLoginResult(checkCurrentUserUseCase(FirebaseUtil.uid))
             }
         } else {
             isLoading = false
@@ -65,17 +61,17 @@ class LoginViewModel @Inject constructor(
 
     fun signUp() {
         viewModelScope.launch {
-            handleLoginResult(signUpUseCase(FirebaseUtil.uid).first())
+            handleLoginResult(signUpUseCase(FirebaseUtil.uid))
         }
     }
 
-    private fun handleLoginResult(loginResult: LoginResult) {
+    private fun handleLoginResult(result: UCMCResult<Unit>) {
         viewModelScope.launch {
-            if (loginResult == LoginResult.SUCCESS) {
+            if (result is UCMCResult.Success) {
                 createChatUser()
             } else {
                 isLoading = false
-                _loginEvent.emit(loginResult)
+                _loginEvent.emit(result)
             }
         }
     }
@@ -92,7 +88,11 @@ class LoginViewModel @Inject constructor(
                 user = user,
                 token = chatClient.devToken(user.id)
             ).enqueue { result ->
-                val loginResult = if (result.isSuccess) LoginResult.SUCCESS else LoginResult.FAILURE
+                val loginResult = if (result.isSuccess) {
+                    UCMCResult.Success(Unit)
+                } else {
+                    UCMCResult.Error(FirestoreException())
+                }
                 viewModelScope.launch {
                     _loginEvent.emit(loginResult)
                 }

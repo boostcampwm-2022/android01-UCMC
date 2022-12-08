@@ -3,14 +3,14 @@ package com.gta.presentation.ui.transaction
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gta.domain.model.Transaction
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ItemTransactionBinding
 
-class TransactionListAdapter : ListAdapter<Transaction, TransactionListAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
+class TransactionListAdapter : PagingDataAdapter<Transaction, TransactionListAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
 
     class TransactionViewHolder(
         private val binding: ItemTransactionBinding
@@ -20,7 +20,7 @@ class TransactionListAdapter : ListAdapter<Transaction, TransactionListAdapter.T
             with(binding) {
                 this.item = item
                 root.setOnClickListener {
-                    TransactionListFragment.navigateToTransactionReservationCheck(it, item.reservationId)
+                    TransactionFragment.navigateToReservationCheck(it, item.reservationId)
                 }
                 executePendingBindings()
             }
@@ -39,7 +39,7 @@ class TransactionListAdapter : ListAdapter<Transaction, TransactionListAdapter.T
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
     }
 }
 

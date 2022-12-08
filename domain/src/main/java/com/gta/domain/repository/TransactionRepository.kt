@@ -1,8 +1,9 @@
 package com.gta.domain.repository
 
+import androidx.paging.PagingData
 import com.gta.domain.model.SimpleReservation
+import kotlinx.coroutines.flow.Flow
 
 interface TransactionRepository {
-    suspend fun getYourCarTransactions(uid: String): List<SimpleReservation>
-    suspend fun getMyCarTransactions(uid: String): List<SimpleReservation>
+    fun getTransactions(userId: String, isLender: Boolean): Flow<PagingData<SimpleReservation>>
 }
