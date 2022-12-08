@@ -4,8 +4,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.NotificationType
 import com.gta.domain.model.ReservationState
