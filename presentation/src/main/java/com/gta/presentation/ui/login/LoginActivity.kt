@@ -180,7 +180,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
             is FirestoreException -> {
-                Snackbar.make(binding.root, getString(R.string.login_error_firestore), Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, getString(R.string.exception_login), Snackbar.LENGTH_SHORT).show()
             }
         }
     }
