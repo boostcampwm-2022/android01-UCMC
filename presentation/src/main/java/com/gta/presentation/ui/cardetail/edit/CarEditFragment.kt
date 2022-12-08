@@ -192,9 +192,10 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                 viewModel.updateState.collectLatest { result ->
                     when (result) {
                         UpdateState.NORMAL -> {
-                            binding.icLoading.root.visibility = View.GONE
+                            binding.btnDone.visibility = View.VISIBLE
                         }
                         UpdateState.LOAD -> {
+                            binding.btnDone.isEnabled = false
                             binding.icLoading.root.visibility = View.VISIBLE
                         }
                         UpdateState.SUCCESS -> {
