@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">니차내차</string>
 
+    <string name="login_error_firestore">로그인에 실패했습니다. 다시 시도해주세요.</string>
+
     <string name="my_near">내 주변</string>
     <string name="chatting">채팅</string>
     <string name="my_page">마이페이지</string>

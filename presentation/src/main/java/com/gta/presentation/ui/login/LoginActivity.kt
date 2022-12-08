@@ -3,6 +3,7 @@ package com.gta.presentation.ui.login
 import android.Manifest
 import android.content.Intent
 import android.content.res.AssetManager
+import android.content.res.Resources.NotFoundException
 import android.os.Build
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
@@ -17,7 +18,8 @@ import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
-import com.gta.domain.model.LoginResult
+import com.gta.domain.model.FirestoreException
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.ActivityLoginBinding
 import com.gta.presentation.ui.MainActivity
@@ -61,7 +63,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         requestNotificationPermission()
         initCollector()
@@ -69,7 +71,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         binding.btnLoginGoogle.setOnClickListener {
             googleLogin()
         }
-        setupSplashScreen(splashScreen)
+        setupSplashScreen()
     }
 
     override fun onResume() {
@@ -91,13 +93,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
     private fun initCollector() {
         repeatOnStarted(this) {
-            viewModel.loginEvent.collectLatest { state ->
-                when (state) {
-                    LoginResult.SUCCESS -> startMainActivity()
-                    LoginResult.NEWUSER -> {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            viewModel.loginEvent.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Error -> {
+                        handleError(result.e)
                     }
-                    LoginResult.FAILURE -> {}
+                    is UCMCResult.Success -> {
+                        startMainActivity()
+                    }
                 }
             }
         }
@@ -144,7 +147,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         requestActivity.launch(googleSignInClient.signInIntent)
     }
 
-    private fun setupSplashScreen(splashScreen: androidx.core.splashscreen.SplashScreen) {
+    private fun setupSplashScreen() {
         val content: View = findViewById(android.R.id.content)
         content.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
@@ -169,5 +172,16 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
             result = ""
         }
         return result
+    }
+
+    private fun handleError(e: Exception) {
+        when (e) {
+            is NotFoundException -> {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+            is FirestoreException -> {
+                Snackbar.make(binding.root, getString(R.string.login_error_firestore), Snackbar.LENGTH_SHORT).show()
+            }
+        }
     }
 }
