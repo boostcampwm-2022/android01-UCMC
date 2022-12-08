@@ -34,7 +34,9 @@
             android:id="@+id/iv_profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="@dimen/padding_small"
+            android:scaleType="centerCrop"
             app:image_uri="@{vm.owner.image}"
             app:layout_constraintEnd_toEndOf="@+id/tv_nick_name"
             app:layout_constraintHorizontal_bias="0"
@@ -88,19 +90,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
+            android:layout_marginEnd="@dimen/padding_small"
             android:text="@string/report_it"
             android:onClick="@{() -> vm.onReportClick()}"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintTop_toBottomOf="@+id/iv_profile" />
 
-        <!-- TODO : text color 수정 -->
         <TextView
             android:id="@+id/tv_cars_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_extra_large"
+            android:layout_marginStart="@dimen/padding_small"
             android:text="@string/registered_vehicle"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="@dimen/font_title_large"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/gl_start"
@@ -110,7 +113,7 @@
             android:id="@+id/tv_cars_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="@dimen/font_title_large"
             app:layout_constraintBottom_toBottomOf="@+id/tv_cars_label"
             app:layout_constraintEnd_toEndOf="@+id/gl_end"
@@ -119,12 +122,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_cars"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/padding_medium"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="@+id/gl_end"
             app:layout_constraintStart_toStartOf="@+id/gl_start"
             app:layout_constraintTop_toBottomOf="@id/tv_cars_label"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/item_owner_car" />
 
 

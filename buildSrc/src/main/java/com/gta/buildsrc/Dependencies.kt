@@ -49,9 +49,11 @@ object Dependencies {
         const val LOGGING_INTERCEPTER = "5.0.0-alpha.6"
 
         // Test
-        const val JUNIT = "4.13.2"
-        const val JUNIT_EXT = "1.1.4"
+        const val JUNIT5_PLUGIN = "1.8.2.1"
+        const val JUNIT5 = "5.8.2"
         const val ESPRESSO_CORE = "3.5.0"
+        const val MOCKITO = "4.9.0"
+        const val MOCKITO_KOTLIN = "4.1.0"
 
         // Github open Library
         const val INDICATOR = "4.3"
@@ -65,6 +67,8 @@ object Dependencies {
         const val HILT = "com.google.dagger:hilt-android-gradle-plugin:${Versions.HILT}"
         const val CRASHLYTICS =
             "com.google.firebase:firebase-crashlytics-gradle:${Versions.CRASHLYTICS}"
+        const val JUNIT5 =
+            "de.mannodermaus.gradle.plugins:android-junit5:${Versions.JUNIT5_PLUGIN}"
     }
 
     object Libraries {
@@ -186,10 +190,6 @@ object Dependencies {
         object Paging {
             const val PAGING = "androidx.paging:paging-runtime:${Versions.PAGING}"
             const val KTX = "androidx.paging:paging-common:${Versions.PAGING}"
-
-            fun getAll(): ArrayList<String> {
-                return arrayListOf(PAGING, KTX)
-            }
         }
 
         const val INDICATOR = "com.tbuonomo:dotsindicator:${Versions.INDICATOR}"
@@ -213,8 +213,11 @@ object Dependencies {
         const val INJECT = "javax.inject:javax.inject:${Versions.INJECT}"
 
         object Test {
-            const val EXT = "androidx.test.ext:junit:${Versions.JUNIT_EXT}"
-            const val JUNIT = "junit:junit:${Versions.JUNIT}"
+            const val JUNIT5_API = "org.junit.jupiter:junit-jupiter-api:${Versions.JUNIT5}"
+            const val JUNIT5_ENGINE = "org.junit.jupiter:junit-jupiter-engine:${Versions.JUNIT5}"
+            const val MOCKITO = "org.mockito:mockito-inline:${Versions.MOCKITO}"
+            const val MOCKITO_KOTLIN = "org.mockito.kotlin:mockito-kotlin:${Versions.MOCKITO_KOTLIN}"
+            const val MOCKITO_JUPITER = "org.mockito:mockito-junit-jupiter:${Versions.MOCKITO}"
         }
 
         object AndroidTest {
@@ -244,6 +247,14 @@ object Dependencies {
             add(AndroidX.DATASTORE)
             add(LOGGING_INTERCEPTER)
             add(Paging.PAGING)
+        }
+
+        val dataTestLibraries = arrayListOf<String>().apply {
+            add(Test.MOCKITO)
+            add(Test.MOCKITO_KOTLIN)
+            add(Test.MOCKITO_JUPITER)
+            add(Test.JUNIT5_API)
+            add(Test.JUNIT5_ENGINE)
         }
 
         val dataKaptLibraries = arrayListOf<String>().apply {
@@ -307,6 +318,12 @@ fun DependencyHandler.androidTestImplementation(list: List<String>) {
 fun DependencyHandler.testImplementation(list: List<String>) {
     list.forEach { dependency ->
         add("testImplementation", dependency)
+    }
+}
+
+fun DependencyHandler.testRuntimeOnly(list: List<String>) {
+    list.forEach { dependency ->
+        add("testRuntimeOnly", dependency)
     }
 }
 

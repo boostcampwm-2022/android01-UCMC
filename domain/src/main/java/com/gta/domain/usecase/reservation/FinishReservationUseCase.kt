@@ -23,7 +23,8 @@ class FinishReservationUseCase @Inject constructor(
                 type = if (accepted) NotificationType.ACCEPT_RESERVATION.title else NotificationType.DECLINE_RESERVATION.title,
                 message = if (accepted) NotificationType.ACCEPT_RESERVATION.msg else NotificationType.DECLINE_RESERVATION.msg,
                 reservationId = reservationId,
-                fromId = ownerId
+                fromId = ownerId,
+                timestamp = System.currentTimeMillis()
             ),
             reservation.lenderId
         )

@@ -20,7 +20,8 @@ class ReturnCarUseCase @Inject constructor(
             type = NotificationType.RETURN_CAR.title,
             message = NotificationType.RETURN_CAR.msg,
             reservationId = reservationId,
-            fromId = userId
+            fromId = userId,
+            timestamp = System.currentTimeMillis()
         )
         return ownerId.isNotEmpty() && reservationRepository.updateReservationState(
             reservationId,

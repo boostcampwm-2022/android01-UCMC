@@ -12,14 +12,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/padding_small">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_medium"
-            android:src="@drawable/ic_bottom_nav_my"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginVertical="@dimen/padding_medium"
+            android:layout_marginStart="@dimen/padding_large"
+            android:scaleType="centerCrop"
+            app:image_uri="@{owner.image}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

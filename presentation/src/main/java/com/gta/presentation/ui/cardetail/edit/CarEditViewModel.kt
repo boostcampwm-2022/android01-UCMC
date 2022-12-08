@@ -10,6 +10,8 @@ import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UpdateCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.edit.UploadCarImagesUseCase
+import com.gta.presentation.util.MutableEventFlow
+import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -53,6 +55,9 @@ class CarEditViewModel @Inject constructor(
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.NORMAL)
     val updateState: StateFlow<UpdateState>
         get() = _updateState
+
+    private val _errorEvent = MutableEventFlow<UCMCResult<String>>()
+    val errorEvent get() = _errorEvent.asEventFlow()
 
     // 초기 이미지
     private var initImage: List<String> = emptyList()
@@ -100,23 +105,28 @@ class CarEditViewModel @Inject constructor(
         _updateState.value = UpdateState.LOAD
 
         viewModelScope.launch {
-            _updateState.value =
-                if (
-                    updateCarDetailDataUseCase(
-                        carId,
-                        uploadCarImagesUseCase(carId, initImage, images.value).first(),
-                        price.value.toInt(),
-                        comment.value,
-                        if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
-                        availableDate.value,
-                        location.value,
-                        coordinate ?: defaultCoordinate
-                    ).first()
-                ) {
-                    UpdateState.SUCCESS
-                } else {
-                    UpdateState.FAIL
-                }
+            val uploadResult = uploadCarImagesUseCase(carId, initImage, images.value).first()
+            uploadResult.filterIsInstance<UCMCResult.Error>().toSet().forEach {
+                _errorEvent.emit(it)
+            }
+
+            _updateState.value = if (
+                updateCarDetailDataUseCase(
+                    carId,
+                    uploadResult.filter { it is UCMCResult.Success }
+                        .map { (it as UCMCResult.Success<String>).data },
+                    price.value.toInt(),
+                    comment.value,
+                    if (rentState.value) RentState.AVAILABLE else RentState.UNAVAILABLE,
+                    availableDate.value,
+                    location.value,
+                    coordinate ?: defaultCoordinate
+                ).first()
+            ) {
+                UpdateState.SUCCESS
+            } else {
+                UpdateState.FAIL
+            }
         }
     }
 }

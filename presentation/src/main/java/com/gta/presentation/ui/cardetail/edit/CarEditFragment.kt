@@ -17,13 +17,16 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
+import com.gta.domain.model.DeleteFailException
+import com.gta.domain.model.UCMCResult
+import com.gta.domain.model.UpdateFailException
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditBinding
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.DateUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.text.DecimalFormat
 
 @AndroidEntryPoint
@@ -60,7 +63,7 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
     private val constraints: CalendarConstraints by lazy {
         CalendarConstraints.Builder()
             .setValidator(DateValidatorPointForward.now())
-            .setEnd(MaterialDatePicker.thisMonthInUtcMilliseconds())
+            .setEnd(MaterialDatePicker.thisMonthInUtcMilliseconds() + DateUtil.DAY_TIME_UNIT * 31)
             .build()
     }
     private val datePicker by lazy {
@@ -168,13 +171,22 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             }
         }
 
-        binding.etPrice.setOnFocusChangeListener { _, boolean ->
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.price.collectLatest {
+                    if (it.isNotEmpty()) {
+                        binding.tvPrice.text = decimalFormat.format(it.toInt())
+                    }
+                }
+            }
+        }
+
+        binding.etPrice.setOnFocusChangeListener { _, isFocused ->
             with(binding.tvPrice) {
-                if (boolean) {
-                    visibility = View.GONE
+                visibility = if (isFocused) {
+                    View.GONE
                 } else {
-                    text = decimalFormat.format(viewModel.price.value.toInt())
-                    visibility = View.VISIBLE
+                    View.VISIBLE
                 }
             }
         }
@@ -183,18 +195,36 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                 viewModel.updateState.collectLatest { result ->
                     when (result) {
                         UpdateState.NORMAL -> {
-                            binding.icLoading.root.visibility = View.GONE
+                            binding.btnDone.visibility = View.VISIBLE
                         }
                         UpdateState.LOAD -> {
+                            binding.btnDone.isEnabled = false
                             binding.icLoading.root.visibility = View.VISIBLE
                         }
-                        UpdateState.SUCCESS -> {
-                            // TODO 완료 sanckbar가 too much 인지 생각
-                            finishUpdateMsg.show()
+                        else -> {
+                            if (result != UpdateState.SUCCESS) {
+                                sendSnackBar(getString(R.string.exception_upload_data))
+                            } else {
+                                finishUpdateMsg.show()
+                            }
                             findNavController().navigateUp()
                         }
-                        else -> {
-                            Timber.d("차 상세 데이터 update 실패")
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.errorEvent.collectLatest {
+                    if (it is UCMCResult.Error) {
+                        when (it.e) {
+                            DeleteFailException() -> {
+                                sendSnackBar(getString(R.string.exception_delete_image_part))
+                            }
+                            UpdateFailException() -> {
+                                sendSnackBar(getString(R.string.exception_upload_image_part))
+                            }
                         }
                     }
                 }

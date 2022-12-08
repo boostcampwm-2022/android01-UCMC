@@ -84,7 +84,12 @@ class ReservationViewModel @Inject constructor(
     }
 
     fun createReservation() {
-        val date = reservationDate.value ?: return
+        val date = reservationDate.value?.let {
+            AvailableDate(
+                it.start,
+                it.end + 86399999
+            )
+        } ?: return
         val price = totalPrice.value ?: return
         val option = insuranceOption.value ?: return
         val ownerId = car?.value?.ownerId ?: return
