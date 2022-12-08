@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class TransactionRepositoryImpl @Inject constructor(private val transactionDataSource: TransactionDataSource) : TransactionRepository {
     override fun getTransactions(userId: String, isLender: Boolean): Flow<PagingData<SimpleReservation>> {
-        return Pager(PagingConfig(10)) {
+        return Pager(PagingConfig(transactionDataSource.pagingSize.toInt())) {
             TransactionPagingSource(userId, isLender, transactionDataSource)
         }.flow
     }

@@ -7,7 +7,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class TransactionDataSource @Inject constructor(private val fireStore: FirebaseFirestore) {
-    private val pagingSize = 10L
+    val pagingSize = 10L
 
     suspend fun getYourCarTransactions(uid: String): QuerySnapshot {
         return fireStore.collection("reservations")
