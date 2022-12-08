@@ -283,8 +283,13 @@
         android:id="@+id/reservationCheckFragment"
         android:name="com.gta.presentation.ui.reservation.check.ReservationCheckFragment"
         android:label="@string/reservation_request_toolbar"
-        tools:layout="@layout/fragment_reservation_request">
-
+        tools:layout="@layout/fragment_reservation_check">
+        <action
+            android:id="@+id/action_reservationCheckFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment"/>
+        <action
+            android:id="@+id/action_reservationCheckFragment_to_ownerProfileFragment"
+            app:destination="@id/ownerProfileFragment"/>
         <argument
             android:name="RESERVATION_ID"
             app:argType="string" />
