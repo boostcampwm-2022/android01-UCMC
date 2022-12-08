@@ -40,24 +40,19 @@ class LoginViewModel @Inject constructor(
         val credential = GoogleAuthProvider.getCredential(token, null)
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                checkCurrentUser(shouldUpdateMessageToken = true)
+                checkCurrentUser()
             } else {
                 Timber.e(task.exception)
             }
         }
     }
 
-    fun checkCurrentUser(shouldUpdateMessageToken: Boolean = false) {
+    fun checkCurrentUser() {
         val user = auth.currentUser
         if (user != null) {
             FirebaseUtil.setUid(user)
             viewModelScope.launch {
-                handleLoginResult(
-                    checkCurrentUserUseCase(
-                        FirebaseUtil.uid,
-                        shouldUpdateMessageToken
-                    )
-                )
+                handleLoginResult(checkCurrentUserUseCase(FirebaseUtil.uid))
             }
         } else {
             isLoading = false

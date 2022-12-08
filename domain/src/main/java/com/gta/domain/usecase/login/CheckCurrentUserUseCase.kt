@@ -5,13 +5,8 @@ import com.gta.domain.repository.LoginRepository
 import javax.inject.Inject
 
 class CheckCurrentUserUseCase @Inject constructor(
-    private val repository: LoginRepository,
-    private val updateUserMessageTokenUseCase: UpdateUserMessageTokenUseCase
+    private val repository: LoginRepository
 ) {
-    suspend operator fun invoke(uid: String, shouldUpdateMessageToken: Boolean = false): UCMCResult<Unit> {
-        if (shouldUpdateMessageToken) {
-            updateUserMessageTokenUseCase(uid)
-        }
-        return repository.checkCurrentUser(uid)
-    }
+    suspend operator fun invoke(uid: String): UCMCResult<Unit> =
+        repository.checkCurrentUser(uid)
 }
