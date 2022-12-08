@@ -13,7 +13,7 @@ import kotlin.reflect.KSuspendFunction2
 class TransactionPagingSource(
     private val userId: String,
     isLender: Boolean,
-    private val dataSource: TransactionDataSource
+    dataSource: TransactionDataSource
 ) : PagingSource<QuerySnapshot, SimpleReservation>() {
 
     private val getTransactions: KSuspendFunction1<String, QuerySnapshot> =
@@ -28,8 +28,13 @@ class TransactionPagingSource(
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, SimpleReservation> {
         return try {
             val currentPage = params.key ?: getTransactions(userId)
-            val lastDocumentSnapshot = currentPage.documents[currentPage.size() - 1]
-            val nextPage = getTransactionsNext(userId, lastDocumentSnapshot)
+            val nextPage: QuerySnapshot? =
+                if (currentPage.size() > 0) {
+                    val lastDocumentSnapshot = currentPage.documents[currentPage.size() - 1]
+                    getTransactionsNext(userId, lastDocumentSnapshot)
+                } else {
+                    null
+                }
 
             LoadResult.Page(
                 data = currentPage.map { snapshot ->
