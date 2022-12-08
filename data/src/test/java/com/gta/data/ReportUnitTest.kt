@@ -44,7 +44,6 @@ class ReportUnitTest(
         }
     }
 
-
     @Test
     @DisplayName("reportUser : 유효하지 않은 uid를 매개변수로 받으면 Error(FirestoreException)을 리턴한다.")
     fun Should_FirestoreException_When_Baduid() {
@@ -73,7 +72,6 @@ class ReportUnitTest(
             Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID))
         }
     }
-
 
     @Test
     @DisplayName("reportUser : 메소드를 호출한 뒤 10초뒤에 다시 호출하면 Success(Unit)을 리턴한다.")
