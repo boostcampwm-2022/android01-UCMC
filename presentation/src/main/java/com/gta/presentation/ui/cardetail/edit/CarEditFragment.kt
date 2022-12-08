@@ -175,7 +175,7 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.price.collectLatest {
                     if (it.isNotEmpty()) {
-                        binding.tvPrice.text = decimalFormat.format(viewModel.price.value.toInt())
+                        binding.tvPrice.text = decimalFormat.format(it.toInt())
                     }
                 }
             }
