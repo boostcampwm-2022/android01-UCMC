@@ -21,7 +21,7 @@
     <string name="no_information">정보 없음</string>
 
     <string name="car_edit_label">내 차 수정하기</string>
-    <string name="car_edit_done_button">수정완료하기</string>
+    <string name="car_edit_done_button">수정 완료하기</string>
     <string name="car_edit_price_label">금액 1일</string>
     <string name="car_edit_day_able">예약 가능 여부</string>
     <string name="car_edit_day_label">대여 가능 날짜</string>
