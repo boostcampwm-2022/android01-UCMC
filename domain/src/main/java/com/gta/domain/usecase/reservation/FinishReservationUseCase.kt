@@ -3,6 +3,7 @@ package com.gta.domain.usecase.reservation
 import com.gta.domain.model.Notification
 import com.gta.domain.model.NotificationType
 import com.gta.domain.model.Reservation
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.ReservationRepository
 import com.gta.domain.usecase.SendNotificationUseCase
 import kotlinx.coroutines.flow.first
@@ -28,6 +29,6 @@ class FinishReservationUseCase @Inject constructor(
             ),
             reservation.lenderId
         )
-        return reservationId.isNotEmpty() && notificationResult
+        return reservationId.isNotEmpty() && notificationResult is UCMCResult.Success
     }
 }
