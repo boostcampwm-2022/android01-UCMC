@@ -20,6 +20,7 @@
             android:name=".ui.login.LoginActivity"
             android:theme="@style/Theme.UCMC.Splash"
             android:exported="true"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
