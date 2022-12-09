@@ -95,7 +95,7 @@
                 android:hint="@string/license_registration_id"
                 android:text="@{vm.drivingLicense.id}"
                 android:maxLines="1"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnBackground"
                 android:enabled="false"
                 android:textSize="@dimen/font_body_small"
                 tools:ignore="TouchTargetSizeCheck" />
