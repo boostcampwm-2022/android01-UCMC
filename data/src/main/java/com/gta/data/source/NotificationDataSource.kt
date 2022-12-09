@@ -25,10 +25,6 @@ class NotificationDataSource @Inject constructor(
                     data = notification
                 )
             )
-        }.onSuccess {
-            Timber.d(it.results.toString())
-        }.onFailure {
-            Timber.d(it.message)
         }.isSuccess
     }
 

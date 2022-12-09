@@ -51,7 +51,11 @@ class ReservationRepositoryImpl @Inject constructor(
     override suspend fun updateReservationState(
         reservationId: String,
         state: ReservationState
-    ): Boolean {
-        return reservationDataSource.updateReservationState(reservationId, state.state).first()
+    ): UCMCResult<Unit> {
+        return if (reservationDataSource.updateReservationState(reservationId, state.state).first()) {
+            UCMCResult.Success(Unit)
+        } else {
+            UCMCResult.Error(FirestoreException())
+        }
     }
 }

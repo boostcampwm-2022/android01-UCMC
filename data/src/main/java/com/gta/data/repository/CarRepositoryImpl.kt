@@ -30,6 +30,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,8 +43,14 @@ class CarRepositoryImpl @Inject constructor(
     private val reservationDataSource: ReservationDataSource,
     private val storageDataSource: StorageDataSource
 ) : CarRepository {
-    override fun getOwnerId(carId: String): Flow<String> {
-        return getCar(carId).map { it.ownerId }
+    override fun getOwnerId(carId: String): Flow<UCMCResult<String>> {
+        return carDataSource.getCar(carId).map { car ->
+            if (car != null) {
+                UCMCResult.Success(car.ownerId)
+            } else {
+                UCMCResult.Error(FirestoreException())
+            }
+        }
     }
 
     override fun getCarRentState(carId: String): Flow<RentState> {

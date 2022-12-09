@@ -9,5 +9,5 @@ interface ReservationRepository {
     fun createReservation(reservation: Reservation): Flow<String>
     fun getReservationInfo(reservationId: String): Flow<UCMCResult<Reservation>>
     fun getReservationCar(reservationId: String): Flow<String>
-    suspend fun updateReservationState(reservationId: String, state: ReservationState): Boolean
+    suspend fun updateReservationState(reservationId: String, state: ReservationState): UCMCResult<Unit>
 }
