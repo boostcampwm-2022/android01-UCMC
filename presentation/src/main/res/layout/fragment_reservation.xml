@@ -33,7 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_end="395dp" />
+                    app:layout_constraintGuide_begin="@dimen/padding_medium" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/gl_reservation_end"
