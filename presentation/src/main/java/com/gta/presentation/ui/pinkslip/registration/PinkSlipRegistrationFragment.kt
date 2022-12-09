@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.gta.domain.model.DuplicatedItemException
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentPinkSlipRegistrationBinding
+import com.gta.presentation.ui.GlideApp
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +42,22 @@ class PinkSlipRegistrationFragment : BaseFragment<FragmentPinkSlipRegistrationBi
                 }
             }
         }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.pinkSlipPictureEvent.collectLatest { uri ->
+                updateResultImage(uri)
+            }
+        }
+    }
+
+    private fun updateResultImage(uri: String) {
+        GlideApp.with(requireContext())
+            .load(uri)
+            .placeholder(R.color.neutral80)
+            .error(R.drawable.ic_broken_image)
+            .fallback(R.drawable.ic_logo)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .into(binding.ivPinkSlipRegistrationResult)
     }
 
     private fun handleErrorMessage(e: Exception) {
