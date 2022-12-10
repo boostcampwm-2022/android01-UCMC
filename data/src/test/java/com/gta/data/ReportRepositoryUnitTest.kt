@@ -24,7 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.eq
 
 @ExtendWith(MockitoExtension::class)
-class ReportUnitTest(
+class ReportRepositoryUnitTest(
     @Mock private val userDataSource: UserDataSource
 ) {
 

@@ -30,7 +30,7 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
 @ExtendWith(MockitoExtension::class)
-class LoginUnitTest (
+class LoginRepositoryUnitTest (
     @Mock private val userDataSource: UserDataSource,
     @Mock private val loginDataSource: LoginDataSource,
     @Mock private val messageTokenDataSource: MessageTokenDataSource
