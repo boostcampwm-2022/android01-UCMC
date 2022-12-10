@@ -17,16 +17,23 @@ class LoginRepositoryImpl @Inject constructor(
 ) : LoginRepository {
     override suspend fun checkCurrentUser(
         uid: String
-    ): UCMCResult<Unit> {
-        val userInfo = userDataSource.getUser(uid).first()
-        return if (userInfo != null) {
+    ): UCMCResult<Unit> =
+        userDataSource.getUser(uid).first()?.let {
             UCMCResult.Success(Unit)
-        } else {
-            UCMCResult.Error(NotFoundException())
-        }
+        } ?: UCMCResult.Error(NotFoundException())
+
+
+    override suspend fun signUp(uid: String): UCMCResult<Unit> =
+        userDataSource.getUser(uid).first()?.let {
+            UCMCResult.Success(Unit)
+        } ?: createUser(uid)
+
+    override suspend fun updateUserMessageToken(uid: String): Boolean {
+        val messageToken = messageTokenDataSource.getMessageToken().first()
+        return userDataSource.updateUserMessageToken(uid, messageToken).first()
     }
 
-    override suspend fun signUp(uid: String): UCMCResult<Unit> {
+    private suspend fun createUser(uid: String): UCMCResult<Unit> {
         val messageToken = messageTokenDataSource.getMessageToken().first()
         val created = loginDataSource.createUser(uid, messageToken).first()
         return if (created) {
@@ -34,10 +41,5 @@ class LoginRepositoryImpl @Inject constructor(
         } else {
             UCMCResult.Error(FirestoreException())
         }
-    }
-
-    override suspend fun updateUserMessageToken(uid: String): Boolean {
-        val messageToken = messageTokenDataSource.getMessageToken().first()
-        return userDataSource.updateUserMessageToken(uid, messageToken).first()
     }
 }
