@@ -1,7 +1,9 @@
 package com.gta.data.repository
 
+import android.content.res.Resources.NotFoundException
 import com.gta.data.source.LicenseDataSource
 import com.gta.data.source.StorageDataSource
+import com.gta.data.source.UserDataSource
 import com.gta.domain.model.DrivingLicense
 import com.gta.domain.model.ExpiredItemException
 import com.gta.domain.model.FirestoreException
@@ -14,6 +16,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 class LicenseRepositoryImpl @Inject constructor(
+    private val userDataSource: UserDataSource,
     private val licenseDataSource: LicenseDataSource,
     private val storageDataSource: StorageDataSource
 ) : LicenseRepository {
@@ -31,7 +34,14 @@ class LicenseRepositoryImpl @Inject constructor(
         )
 
     override suspend fun getLicenseFromDatabase(uid: String): UCMCResult<DrivingLicense> =
-        licenseDataSource.getLicense(uid).first()
+        userDataSource.getUser(uid).first()?.let { user ->
+            if (user.license == null) {
+                UCMCResult.Error(NotFoundException())
+            } else {
+                UCMCResult.Success(user.license)
+            }
+        } ?: UCMCResult.Error(FirestoreException())
+
 
     override suspend fun setLicense(uid: String, license: DrivingLicense, uri: String): UCMCResult<Unit> {
         val expireDate = dateFormat.parse(license.expireDate)?.time ?: 0L

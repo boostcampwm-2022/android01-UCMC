@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.repository.LicenseRepositoryImpl
 import com.gta.data.source.LicenseDataSource
 import com.gta.data.source.StorageDataSource
+import com.gta.data.source.UserDataSource
 import com.gta.domain.repository.LicenseRepository
 import dagger.Module
 import dagger.Provides
@@ -21,6 +22,9 @@ object LicenseModule {
 
     @Singleton
     @Provides
-    fun provideLicenseRepository(licenseDataSource: LicenseDataSource, storageDataSource: StorageDataSource): LicenseRepository =
-        LicenseRepositoryImpl(licenseDataSource, storageDataSource)
+    fun provideLicenseRepository(
+        userDataSource: UserDataSource,
+        licenseDataSource: LicenseDataSource,
+        storageDataSource: StorageDataSource
+    ): LicenseRepository = LicenseRepositoryImpl(userDataSource, licenseDataSource, storageDataSource)
 }
