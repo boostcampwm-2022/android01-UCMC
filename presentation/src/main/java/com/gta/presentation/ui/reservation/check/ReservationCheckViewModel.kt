@@ -126,7 +126,6 @@ class ReservationCheckViewModel @Inject constructor(
 
     fun finishReservation(accepted: Boolean) {
         val reservation = reservation.value
-        val ownerId = reservation.ownerId
         val state = if (accepted) ReservationState.ACCEPT else ReservationState.CANCEL
 
         viewModelScope.launch {
@@ -134,7 +133,7 @@ class ReservationCheckViewModel @Inject constructor(
                 finishReservationUseCase(
                     accepted,
                     reservation.copy(state = state.state),
-                    ownerId
+                    reservationId
                 )
             )
         }
