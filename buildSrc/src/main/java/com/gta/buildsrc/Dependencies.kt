@@ -54,6 +54,7 @@ object Dependencies {
         const val ESPRESSO_CORE = "3.5.0"
         const val MOCKITO = "4.9.0"
         const val MOCKITO_KOTLIN = "4.1.0"
+        const val JACOCO = "0.8.8"
 
         // Github open Library
         const val INDICATOR = "4.3"
@@ -69,6 +70,8 @@ object Dependencies {
             "com.google.firebase:firebase-crashlytics-gradle:${Versions.CRASHLYTICS}"
         const val JUNIT5 =
             "de.mannodermaus.gradle.plugins:android-junit5:${Versions.JUNIT5_PLUGIN}"
+        const val JACOCO =
+            "org.jacoco:org.jacoco.core:${Versions.JACOCO}"
     }
 
     object Libraries {
