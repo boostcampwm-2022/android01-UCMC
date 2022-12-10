@@ -3,6 +3,8 @@ package com.gta.data
 import com.gta.data.model.UserInfo
 import com.gta.data.repository.ReportRepositoryImpl
 import com.gta.data.source.UserDataSource
+import com.gta.data.util.BAD_UID
+import com.gta.data.util.GOOD_UID
 import com.gta.domain.model.CoolDownException
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
@@ -15,8 +17,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
-import org.mockito.Mockito.anyInt
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.anyInt
+import org.mockito.Mockito.anyString
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.eq
 
@@ -29,10 +32,10 @@ class ReportUnitTest(
 
     @BeforeEach
     fun init() {
+        `when`(userDataSource.addReportCount(anyString(), anyInt())).thenReturn(flow { emit(false) })
         `when`(userDataSource.addReportCount(eq(GOOD_UID), anyInt())).thenReturn(flow { emit(true) })
-        `when`(userDataSource.addReportCount(eq(BAD_UID), anyInt())).thenReturn(flow { emit(false) })
+        `when`(userDataSource.getUser(anyString())).thenReturn(flow { emit(null) })
         `when`(userDataSource.getUser(GOOD_UID)).thenReturn(flow { emit(UserInfo()) })
-        `when`(userDataSource.getUser(BAD_UID)).thenReturn(flow { emit(null) })
     }
 
     @Test
@@ -80,10 +83,5 @@ class ReportUnitTest(
             Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID, currentTime))
             Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID, currentTime + 10000))
         }
-    }
-
-    companion object {
-        private const val GOOD_UID = "GoodDonghoon"
-        private const val BAD_UID = "BadDonghoon"
     }
 }
