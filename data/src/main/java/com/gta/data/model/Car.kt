@@ -29,7 +29,8 @@ fun Car.toSimple(id: String): SimpleCar = SimpleCar(
     model = pinkSlip.model,
     year = pinkSlip.year,
     price = price.toInt(),
-    coordinate = coordinate
+    coordinate = coordinate,
+    licensePlate = pinkSlip.id
 )
 
 fun Car.toCarRentInfo(reservationDates: List<AvailableDate>): CarRentInfo = CarRentInfo(

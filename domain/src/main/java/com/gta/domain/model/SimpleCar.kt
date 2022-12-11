@@ -7,5 +7,6 @@ data class SimpleCar(
     val model: String = "정보 없음",
     val year: Int = 0,
     val price: Int = 0,
-    val coordinate: Coordinate = Coordinate()
+    val coordinate: Coordinate = Coordinate(),
+    val licensePlate: String = "정보 없음"
 )
