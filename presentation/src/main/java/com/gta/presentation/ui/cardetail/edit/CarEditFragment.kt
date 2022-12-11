@@ -18,6 +18,7 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.gta.domain.model.DeleteFailException
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UpdateFailException
 import com.gta.presentation.R
@@ -224,6 +225,9 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                             }
                             UpdateFailException() -> {
                                 sendSnackBar(getString(R.string.exception_upload_image_part))
+                            }
+                            FirestoreException() -> {
+                                sendSnackBar(getString(R.string.exception_load_data))
                             }
                         }
                     }

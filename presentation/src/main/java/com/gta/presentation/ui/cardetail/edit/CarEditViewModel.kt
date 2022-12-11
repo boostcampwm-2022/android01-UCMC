@@ -56,7 +56,7 @@ class CarEditViewModel @Inject constructor(
     val updateState: StateFlow<UpdateState>
         get() = _updateState
 
-    private val _errorEvent = MutableEventFlow<UCMCResult<String>>()
+    private val _errorEvent = MutableEventFlow<UCMCResult<Any>>()
     val errorEvent get() = _errorEvent.asEventFlow()
 
     // 초기 이미지
@@ -80,6 +80,8 @@ class CarEditViewModel @Inject constructor(
                 _availableDate.value = carInfo.data.availableDate
                 _location.value = carInfo.data.location
                 coordinate = carInfo.data.coordinate
+            } else if (carInfo is UCMCResult.Error) {
+                _errorEvent.emit(carInfo)
             }
         }
     }
