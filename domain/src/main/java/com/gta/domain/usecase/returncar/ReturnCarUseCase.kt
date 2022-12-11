@@ -3,6 +3,7 @@ package com.gta.domain.usecase.returncar
 import com.gta.domain.model.Notification
 import com.gta.domain.model.NotificationType
 import com.gta.domain.model.ReservationState
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.CarRepository
 import com.gta.domain.repository.ReservationRepository
 import com.gta.domain.usecase.SendNotificationUseCase
@@ -23,9 +24,13 @@ class ReturnCarUseCase @Inject constructor(
             fromId = userId,
             timestamp = System.currentTimeMillis()
         )
-        return ownerId.isNotEmpty() && reservationRepository.updateReservationState(
-            reservationId,
-            ReservationState.DONE
-        ) && sendNotificationUseCase(notification, ownerId)
+        return if (ownerId is UCMCResult.Success) {
+            ownerId.data.isNotEmpty() && reservationRepository.updateReservationState(
+                reservationId,
+                ReservationState.DONE
+            ) && sendNotificationUseCase(notification, ownerId.data)
+        } else {
+            false
+        }
     }
 }

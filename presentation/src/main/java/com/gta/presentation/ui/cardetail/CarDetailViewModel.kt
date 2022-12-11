@@ -63,7 +63,14 @@ class CarDetailViewModel @Inject constructor(
             initialValue = CarDetail()
         )
 
-        useState = getUseStateAboutCarUseCase(FirebaseUtil.uid, carId).stateIn(
+        useState = getUseStateAboutCarUseCase(FirebaseUtil.uid, carId).map {
+            _errorEvent.emit(it)
+            if (it is UCMCResult.Success) {
+                it.data
+            } else {
+                UseState.UNAVAILABLE
+            }
+        }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = UseState.UNAVAILABLE

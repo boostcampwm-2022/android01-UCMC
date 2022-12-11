@@ -41,12 +41,19 @@ class CarRepositoryImpl @Inject constructor(
     private val reservationDataSource: ReservationDataSource,
     private val storageDataSource: StorageDataSource
 ) : CarRepository {
-    override fun getOwnerId(carId: String): Flow<String> {
-        return getCar(carId).map { it.ownerId }
+    override fun getOwnerId(carId: String): Flow<UCMCResult<String>> = callbackFlow {
+        carDataSource.getCar(carId).first()?.let {
+            trySend(UCMCResult.Success(it.ownerId))
+        } ?: trySend((UCMCResult.Error(FirestoreException())))
+        awaitClose()
     }
 
-    override fun getCarRentState(carId: String): Flow<RentState> {
-        return getCar(carId).map { it.toDetailCar("", UserProfile()).rentState }
+    // TODO 대여 가능 ,대여 불가능 정보 (실시간으로 받아오기)
+    override fun getCarRentState(carId: String): Flow<UCMCResult<RentState>> = callbackFlow {
+        carDataSource.getCar(carId).first()?.let {
+            trySend(UCMCResult.Success(it.toDetailCar("", UserProfile()).rentState))
+        } ?: trySend((UCMCResult.Error(FirestoreException())))
+        awaitClose()
     }
 
     override fun getCarData(carId: String): Flow<UCMCResult<CarDetail>> = callbackFlow {
