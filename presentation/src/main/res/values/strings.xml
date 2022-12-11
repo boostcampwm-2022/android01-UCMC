@@ -23,7 +23,7 @@
 
     <string name="car_edit_label">내 차 수정하기</string>
     <string name="car_edit_done_button">수정 완료하기</string>
-    <string name="car_edit_price_label">금액 1일</string>
+    <string name="car_edit_price_label">일일 대여료</string>
     <string name="car_edit_day_able">예약 가능 여부</string>
     <string name="car_edit_day_label">대여 가능 날짜</string>
     <string name="car_edit_location_label">대여/반납 위치</string>
@@ -54,7 +54,7 @@
     <string name="notification_list_return_title">차량이 반납되었습니다.</string>
     <string name="notification_list_return_message">%s님이 %s 차를 돌려줬어요!</string>
     
-    <string name="car_detail_day_price">금액 : 1일 %,d원</string>
+    <string name="car_detail_day_price">일일 대여료 %,d원</string>
     <string name="car_detail_location">위치 : %s</string>
     <string name="temperature_type">%.1f℃</string>
     <string name="car_detail_year">%d년식</string>
