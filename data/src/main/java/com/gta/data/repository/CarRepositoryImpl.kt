@@ -48,12 +48,15 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    // TODO 대여 가능 ,대여 불가능 정보 (실시간으로 받아오기)
-    override fun getCarRentState(carId: String): Flow<UCMCResult<RentState>> = callbackFlow {
-        carDataSource.getCar(carId).first()?.let {
-            trySend(UCMCResult.Success(it.toDetailCar("", UserProfile()).rentState))
-        } ?: trySend((UCMCResult.Error(FirestoreException())))
-        awaitClose()
+    // 대여 가능 ,대여 불가능 정보 (실시간)
+    override fun getCarRentState(carId: String): Flow<UCMCResult<RentState>> {
+        return carDataSource.getCar(carId).map {
+            if (it != null) {
+                UCMCResult.Success(it.toDetailCar("", UserProfile()).rentState)
+            } else {
+                UCMCResult.Error(FirestoreException())
+            }
+        }
     }
 
     override fun getCarData(carId: String): Flow<UCMCResult<CarDetail>> = callbackFlow {

@@ -22,15 +22,15 @@ class GetUseStateAboutCarUseCase @Inject constructor(
             val ownerId = carRepository.getOwnerId(carId).first()
             if (reservation is UCMCResult.Success && carRentState is UCMCResult.Success && ownerId is UCMCResult.Success) {
                 when {
-                    // 내 아이디와 차주의 아이디가 같을 때
+                    // 내 아이디와 차주의 아이디가 같을 때 (first)
                     uid == ownerId.data -> {
                         UCMCResult.Success(UseState.OWNER)
                     }
-                    // 차 아이디와 현재 대여중인 예약의 차 아이디가 같을 때
+                    // 차 아이디와 현재 대여중인 예약의 차 아이디가 같을 때 (실시간)
                     carId == reservation.data.carId -> {
                         UCMCResult.Success(UseState.NOW_RENT_USER)
                     }
-                    // 현재 차 상태가 대여 불가능 일때
+                    // 현재 차 상태가 대여 불가능 일때 (실시간)
                     RentState.UNAVAILABLE == carRentState.data -> {
                         UCMCResult.Success(UseState.UNAVAILABLE)
                     }
@@ -41,7 +41,6 @@ class GetUseStateAboutCarUseCase @Inject constructor(
             } else {
                 UCMCResult.Error(FirestoreException())
             }
-
         }
     }
 }
