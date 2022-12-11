@@ -2,6 +2,7 @@ package com.gta.data.source
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.gta.data.model.NotificationMessage
 import com.gta.data.service.CloudMessageService
@@ -49,6 +50,7 @@ class NotificationDataSource @Inject constructor(
 
     suspend fun getNotificationInfoCurrentItem(userId: String): QuerySnapshot {
         return fireStore.collection("users/$userId/notifications")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .limit(ITEMS_PER_PAGE)
             .get()
             .await()
@@ -56,6 +58,7 @@ class NotificationDataSource @Inject constructor(
 
     suspend fun getNotificationInfoNextItem(userId: String, doc: DocumentSnapshot): QuerySnapshot {
         return fireStore.collection("users/$userId/notifications")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .limit(ITEMS_PER_PAGE)
             .startAfter(doc)
             .get()
