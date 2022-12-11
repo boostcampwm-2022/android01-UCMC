@@ -49,7 +49,7 @@ class OwnerProfileViewModel @Inject constructor(
         owner = getOwnerInfoUseCase(ownerId).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = UserProfile()
+            initialValue = UserProfile(image = null)
         )
     }
 

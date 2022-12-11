@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gta.domain.model.CarDetail
 import com.gta.domain.model.UCMCResult
+import com.gta.domain.model.UserProfile
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.GetUseStateAboutCarUseCase
 import com.gta.domain.usecase.cardetail.UseState
@@ -57,12 +58,12 @@ class CarDetailViewModel @Inject constructor(
             if (it is UCMCResult.Success) {
                 it.data
             } else {
-                CarDetail()
+                CarDetail(owner = UserProfile(image = null))
             }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = CarDetail()
+            initialValue = CarDetail(owner = UserProfile(image = null))
         )
 
         useState = getUseStateAboutCarUseCase(FirebaseUtil.uid, carId).map {

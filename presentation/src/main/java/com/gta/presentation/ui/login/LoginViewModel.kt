@@ -82,7 +82,7 @@ class LoginViewModel @Inject constructor(
             val user = User(
                 id = FirebaseUtil.uid,
                 name = profile.name,
-                image = profile.image
+                image = profile.image ?: ""
             )
             chatClient.connectUser(
                 user = user,

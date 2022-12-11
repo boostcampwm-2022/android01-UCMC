@@ -49,7 +49,7 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun updateThumbnail(uri: String) {
-        val previousImage = userProfile.value.image
+        val previousImage = userProfile.value.image ?: ""
         viewModelScope.launch {
             val result = setThumbnailUseCase(FirebaseUtil.uid, uri, previousImage)
             if (result is UCMCResult.Success && result.data.isNotEmpty()) {
@@ -62,7 +62,7 @@ class MyPageViewModel @Inject constructor(
 
     fun navigateNicknameEdit() {
         viewModelScope.launch {
-            _nicknameEditEvent.emit(userProfile.value.image)
+            _nicknameEditEvent.emit(userProfile.value.image ?: "")
         }
     }
 
