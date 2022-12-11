@@ -85,7 +85,9 @@
             app:argType="string" />
         <action
             android:id="@+id/action_carDetailFragment_to_ownerProfileFragment"
-            app:destination="@id/ownerProfileFragment" />
+            app:destination="@id/ownerProfileFragment"
+            app:popUpTo="@id/carDetailFragment"
+            app:popUpToInclusive="false"/>
         <action
             android:id="@+id/action_carDetailFragment_to_carDetailEditFragment"
             app:destination="@id/carDetailEditFragment" />
