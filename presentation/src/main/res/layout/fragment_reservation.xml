@@ -268,7 +268,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/padding_medium"
-            android:text="@{@string/price_format(vm.totalPrice ?? 0)}"
+            android:text="@{@string/price_format(vm.totalPrice ?? 0L)}"
             android:textAppearance="@style/Title"
             android:textColor="@color/primaryColor"
             app:layout_constraintBottom_toBottomOf="@id/tv_reservation_title_total_payment"

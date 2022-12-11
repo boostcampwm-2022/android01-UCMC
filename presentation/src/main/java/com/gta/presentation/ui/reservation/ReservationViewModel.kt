@@ -42,8 +42,8 @@ class ReservationViewModel @Inject constructor(
     private val _insuranceOption = MutableLiveData<InsuranceOption>()
     val insuranceOption: LiveData<InsuranceOption> get() = _insuranceOption
 
-    private val _totalPrice = MediatorLiveData<Int>()
-    val totalPrice: LiveData<Int> get() = _totalPrice
+    private val _totalPrice = MediatorLiveData<Long>()
+    val totalPrice: LiveData<Long> get() = _totalPrice
 
     private val _createReservationEvent = MutableEventFlow<UCMCResult<Unit>>()
     val createReservationEvent get() = _createReservationEvent.asEventFlow()
@@ -83,12 +83,12 @@ class ReservationViewModel @Inject constructor(
     init {
         _totalPrice.addSource(basePrice) { basePrice ->
             val insurancePrice = insuranceOption.value?.price ?: 0
-            _totalPrice.value = basePrice.plus(insurancePrice)
+            _totalPrice.value = basePrice.plus(insurancePrice.toLong())
         }
 
         _totalPrice.addSource(insuranceOption) { option ->
             val price = basePrice.value ?: 0
-            _totalPrice.value = price.plus(option.price)
+            _totalPrice.value = price.plus(option.price.toLong())
         }
     }
 
