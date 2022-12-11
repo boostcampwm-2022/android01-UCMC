@@ -6,7 +6,6 @@
     tools:context=".ui.cardetail.CarDetailFragment">
 
     <data>
-
         <variable
             name="vm"
             type="com.gta.presentation.ui.cardetail.CarDetailViewModel" />
@@ -120,15 +119,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_location"
                     tools:text="번호판 : 12가2345" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_report_post"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_small"
-                    android:onClick="@{() -> vm.onReportClick()}"
-                    android:text="@string/report_it"
-                    app:layout_constraintEnd_toEndOf="@id/gl_end"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_licensePlate" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_comment_label"
@@ -139,7 +129,7 @@
                     android:textSize="@dimen/font_headline_small"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_report_post" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_licensePlate" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_comment"
