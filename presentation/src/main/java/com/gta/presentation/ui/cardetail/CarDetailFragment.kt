@@ -14,7 +14,6 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
-import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -42,17 +41,10 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.startCollect()
-
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.carInfo.collectLatest {
                 (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
                 pagerAdapter.submitList(it.images)
-                if (it.owner.id == FirebaseUtil.uid) {
-                    binding.tvReportPost.visibility = View.GONE
-                    binding.inOwnerProfile.tvChatting.visibility = View.GONE
-                    binding.inOwnerProfile.tvReport.visibility = View.GONE
-                }
             }
         }
 
@@ -61,6 +53,21 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                 findNavController().navigate(
                     CarDetailFragmentDirections.actionCarDetailFragmentToChattingFragment(cid)
                 )
+            }
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.errorEvent.collectLatest { result ->
+                if (result is UCMCResult.Error) {
+                    when (result.e) {
+                        is FirestoreException -> {
+                            sendSnackBar(
+                                message = getString(R.string.exception_load_data),
+                                anchorView = binding.btnNext
+                            )
+                        }
+                    }
+                }
             }
         }
 
@@ -126,11 +133,6 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                 else -> {}
             }
         }
-    }
-
-    override fun onStop() {
-        viewModel.stopCollect()
-        super.onStop()
     }
 
     private fun handleErrorMessage(e: Exception) {

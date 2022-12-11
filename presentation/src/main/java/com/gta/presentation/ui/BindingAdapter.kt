@@ -1,5 +1,6 @@
 package com.gta.presentation.ui
 
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,6 +12,7 @@ import com.gta.domain.usecase.cardetail.UseState
 import com.gta.presentation.R
 import com.gta.presentation.model.DateType
 import com.gta.presentation.util.DateUtil
+import com.gta.presentation.util.FirebaseUtil
 
 @BindingAdapter("image_uri")
 fun bindImageUri(view: ImageView, uri: String?) {
@@ -146,4 +148,13 @@ fun setReservationState(textView: TextView, reservationState: ReservationState) 
                 textView.resources.getString(R.string.return_completed)
             }
         }
+}
+
+@BindingAdapter("when_other_user_visible")
+fun setVisibilityOtherUserView(view: View, otherId: String) {
+    if (FirebaseUtil.uid == otherId) {
+        view.visibility = View.GONE
+    } else {
+        view.visibility = View.VISIBLE
+    }
 }
