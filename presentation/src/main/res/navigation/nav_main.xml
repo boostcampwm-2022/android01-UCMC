@@ -181,7 +181,9 @@
         tools:layout="@layout/fragment_owner_profile">
         <action
             android:id="@+id/action_ownerProfileFragment_to_carDetailFragment"
-            app:destination="@id/carDetailFragment" />
+            app:destination="@id/carDetailFragment"
+            app:popUpTo="@id/carDetailFragment"
+            app:popUpToInclusive="true"/>
         <argument
             android:name="OWNER_ID"
             app:argType="string" />
