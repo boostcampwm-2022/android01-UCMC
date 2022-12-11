@@ -1,10 +1,12 @@
 package com.gta.presentation.ui.cardetail
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.CoolDownException
 import com.gta.domain.model.FirestoreException
@@ -14,9 +16,11 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarDetailBinding
 import com.gta.presentation.ui.MainActivity
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
@@ -116,12 +120,22 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                     )
                 }
                 UseState.USER -> {
-                    findNavController().navigate(
-                        CarDetailFragmentDirections
-                            .actionCarDetailFragmentToReservationFragment(
-                                viewModel.carInfo.value.id
-                            )
-                    )
+                    // 면허 있는지 확인
+                    // TODO 로딩..
+                    lifecycleScope.launch {
+                        val myLicense = viewModel.getLicenseFromDatabaseUseCase(FirebaseUtil.uid)
+                        if (myLicense is UCMCResult.Error && myLicense.e is Resources.NotFoundException || myLicense is UCMCResult.Error) {
+                            sendSnackBar(resources.getString(R.string.car_detail_no_license), anchorView = binding.btnNext)
+                            return@launch
+                        }
+
+                        findNavController().navigate(
+                            CarDetailFragmentDirections
+                                .actionCarDetailFragmentToReservationFragment(
+                                    viewModel.carInfo.value.id
+                                )
+                        )
+                    }
                 }
                 UseState.NOW_RENT_USER -> {
                     findNavController().navigate(

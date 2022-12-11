@@ -17,6 +17,7 @@
     <string name="car_detail_car_owner_label">차주 정보</string>
     <string name="registered_vehicle">등록한 차량</string>
     <string name="car_detail_info_label">세부 정보</string>
+    <string name="car_detail_no_license">면허를 먼저 등록해주세요.</string>
 
     <string name="no_information">정보 없음</string>
 

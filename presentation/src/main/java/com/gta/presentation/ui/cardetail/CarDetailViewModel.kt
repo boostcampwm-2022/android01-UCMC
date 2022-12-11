@@ -8,6 +8,7 @@ import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.cardetail.GetCarDetailDataUseCase
 import com.gta.domain.usecase.cardetail.GetUseStateAboutCarUseCase
 import com.gta.domain.usecase.cardetail.UseState
+import com.gta.domain.usecase.license.GetLicenseFromDatabaseUseCase
 import com.gta.domain.usecase.user.ReportUserUseCase
 import com.gta.presentation.util.EventFlow
 import com.gta.presentation.util.FirebaseUtil
@@ -31,7 +32,8 @@ class CarDetailViewModel @Inject constructor(
     getCarDetailDataUseCase: GetCarDetailDataUseCase,
     getUseStateAboutCarUseCase: GetUseStateAboutCarUseCase,
     private val reportUserUseCase: ReportUserUseCase,
-    private val chatClient: ChatClient
+    private val chatClient: ChatClient,
+    val getLicenseFromDatabaseUseCase: GetLicenseFromDatabaseUseCase
 ) : ViewModel() {
 
     private val _errorEvent = MutableEventFlow<UCMCResult<Any>>()
