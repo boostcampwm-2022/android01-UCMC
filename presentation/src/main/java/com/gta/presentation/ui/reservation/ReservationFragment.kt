@@ -2,6 +2,7 @@ package com.gta.presentation.ui.reservation
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -11,12 +12,14 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.InsuranceOption
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.toPair
 import com.gta.domain.model.toPairList
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateValidator
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,24 +34,39 @@ class ReservationFragment :
 
         setUpRadioGroup()
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.car?.collectLatest { car ->
-                    setupDatePicker(car.availableDate, car.reservationDates)
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.car.collectLatest { car ->
+                setupDatePicker(car.availableDate, car.reservationDates)
+            }
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.getCarRentInfoEvent.collectLatest { state ->
+                binding.cpiReservationProgress.isVisible = false
+                if (state is UCMCResult.Error) {
+                    sendSnackBar(
+                        message = getString(R.string.exception_not_found)
+                    )
                 }
             }
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.createReservationEvent.collectLatest { state ->
-                    if (state) {
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.createReservationEvent.collectLatest { state ->
+                when (state) {
+                    is UCMCResult.Success -> {
                         findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToPaymentFragment())
+                    }
+                    is UCMCResult.Error -> {
+                        sendSnackBar(
+                            message = getString(R.string.exception_not_found)
+                        )
                     }
                 }
             }
         }
     }
+
 
     private fun setupDatePicker(
         availableDate: AvailableDate,

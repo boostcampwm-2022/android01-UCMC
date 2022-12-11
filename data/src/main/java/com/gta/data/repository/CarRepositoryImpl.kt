@@ -30,6 +30,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -77,11 +78,16 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getCarRentInfo(carId: String): Flow<CarRentInfo> = callbackFlow {
-        carDataSource.getCar(carId).first()?.let { car ->
-            trySend(car.toCarRentInfo(reservationDataSource.getCarReservationDates(carId).first()))
-        } ?: trySend(CarRentInfo())
-        awaitClose()
+    override fun getCarRentInfo(carId: String): Flow<UCMCResult<CarRentInfo>> {
+        return carDataSource.getCar(carId).flatMapLatest { car ->
+            if (car != null) {
+                reservationDataSource.getCarReservationDates(carId).map {
+                    UCMCResult.Success(car.toCarRentInfo(it))
+                }
+            } else {
+                flow { UCMCResult.Error(FirestoreException()) }
+            }
+        }
     }
 
     override fun getSimpleCar(carId: String): Flow<SimpleCar> = callbackFlow {

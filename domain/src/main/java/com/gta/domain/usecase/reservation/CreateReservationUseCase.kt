@@ -13,18 +13,23 @@ class CreateReservationUseCase @Inject constructor(
     private val repository: ReservationRepository,
     private val notificationUseCase: SendNotificationUseCase
 ) {
-    suspend operator fun invoke(reservation: Reservation): Boolean {
-        val reservationId = repository.createReservation(reservation).first()
-        val notificationResult = notificationUseCase(
-            Notification(
-                type = NotificationType.REQUEST_RESERVATION.title,
-                message = NotificationType.REQUEST_RESERVATION.msg,
-                reservationId = reservationId,
-                fromId = reservation.lenderId,
-                timestamp = System.currentTimeMillis()
-            ),
-            reservation.ownerId
-        )
-        return reservationId.isNotEmpty() && notificationResult is UCMCResult.Success
+    suspend operator fun invoke(reservation: Reservation): UCMCResult<Unit> {
+        return when (val result = repository.createReservation(reservation)) {
+            is UCMCResult.Success -> {
+                return notificationUseCase(
+                    Notification(
+                        type = NotificationType.REQUEST_RESERVATION.title,
+                        message = NotificationType.REQUEST_RESERVATION.msg,
+                        reservationId = result.data,
+                        fromId = reservation.lenderId,
+                        timestamp = System.currentTimeMillis()
+                    ),
+                    reservation.ownerId
+                )
+            }
+            is UCMCResult.Error -> {
+                result
+            }
+        }
     }
 }
