@@ -140,7 +140,11 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             }
         }
 
+        // TODO 보일러 코드 제거
         binding.ivDayEdit.setOnClickListener {
+            datePicker.show(childFragmentManager, null)
+        }
+        binding.tvDay.setOnClickListener {
             datePicker.show(childFragmentManager, null)
         }
 
@@ -152,9 +156,16 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                     )
             )
         }
+        binding.tvLocation.setOnClickListener {
+            findNavController().navigate(
+                CarEditFragmentDirections
+                    .actionCarDetailEditFragmentToCarEditMapFragment(
+                        viewModel.coordinate ?: viewModel.defaultCoordinate
+                    )
+            )
+        }
 
         binding.btnDone.setOnClickListener {
-            // TODO 확인 작업
             viewModel.updateData()
         }
 
