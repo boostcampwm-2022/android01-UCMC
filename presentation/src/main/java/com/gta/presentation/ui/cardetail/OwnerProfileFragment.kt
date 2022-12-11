@@ -42,14 +42,6 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.owner.collectLatest {
-                if (it.id == FirebaseUtil.uid) {
-                    binding.tvReport.visibility = View.GONE
-                }
-            }
-        }
-
-        repeatOnStarted(viewLifecycleOwner) {
             viewModel.reportEvent.collectLatest { result ->
                 when (result) {
                     is UCMCResult.Error -> {
