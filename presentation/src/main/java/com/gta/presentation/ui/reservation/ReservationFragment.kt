@@ -55,7 +55,25 @@ class ReservationFragment :
             viewModel.createReservationEvent.collectLatest { state ->
                 when (state) {
                     is UCMCResult.Success -> {
-                        findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToPaymentFragment())
+                        binding.icLoading.root.visibility = View.VISIBLE
+                        binding.btnReservationPaying.isEnabled = false
+                        viewModel.payBill()
+                    }
+                    is UCMCResult.Error -> {
+                        sendSnackBar(
+                            message = getString(R.string.exception_not_found)
+                        )
+                    }
+                }
+            }
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.payingEvent.collectLatest { state ->
+                when (state) {
+                    is UCMCResult.Success -> {
+                        binding.icLoading.root.visibility = View.GONE
+                        findNavController().navigate(ReservationFragmentDirections.actionReservationFragmentToMapFragment())
                     }
                     is UCMCResult.Error -> {
                         sendSnackBar(

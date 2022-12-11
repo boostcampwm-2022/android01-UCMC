@@ -19,9 +19,8 @@ import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.MutableEventFlow
 import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -51,6 +50,9 @@ class ReservationViewModel @Inject constructor(
 
     private val _getCarRentInfoEvent = MutableEventFlow<UCMCResult<Unit>>()
     val getCarRentInfoEvent get() = _getCarRentInfoEvent.asEventFlow()
+
+    private val _payingEvent = MutableEventFlow<UCMCResult<Unit>>()
+    val payingEvent get() = _payingEvent.asEventFlow()
 
     var car: StateFlow<CarRentInfo> = getCarRentInfoUseCase(carId).map { result ->
         when (result) {
@@ -125,6 +127,13 @@ class ReservationViewModel @Inject constructor(
                     )
                 )
             )
+        }
+    }
+
+    fun payBill() {
+        viewModelScope.launch {
+            delay(2000)
+            _payingEvent.emit(UCMCResult.Success(Unit))
         }
     }
 }
