@@ -3,6 +3,7 @@ package com.gta.data.repository
 import com.gta.data.model.toProfile
 import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.UserDataSource
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.SimpleReservation
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UserProfile
@@ -19,10 +20,10 @@ class UserRepositoryImpl @Inject constructor(
     private val reservationDataSource: ReservationDataSource
 ) : UserRepository {
 
-    override fun getUserProfile(uid: String): Flow<UserProfile> = callbackFlow {
+    override fun getUserProfile(uid: String): Flow<UCMCResult<UserProfile>> = callbackFlow {
         userDataSource.getUser(uid).first()?.let { profile ->
-            trySend(profile.toProfile(uid))
-        } ?: trySend(UserProfile())
+            trySend(UCMCResult.Success(profile.toProfile(uid)))
+        } ?: trySend(UCMCResult.Error(FirestoreException()))
         awaitClose()
     }
 

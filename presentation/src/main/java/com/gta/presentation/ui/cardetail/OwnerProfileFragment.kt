@@ -70,6 +70,14 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
                 }
             }
         }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.errorEvent.collectLatest { result ->
+                if (result is UCMCResult.Error) {
+                    sendSnackBar(message = getString(R.string.exception_load_data))
+                }
+            }
+        }
     }
 
     override fun onStop() {

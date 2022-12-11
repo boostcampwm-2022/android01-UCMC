@@ -39,7 +39,7 @@ class CarDetailViewModel @Inject constructor(
 
     private val _errorEvent = MutableEventFlow<UCMCResult<Any>>()
     val errorEvent: EventFlow<UCMCResult<Any>>
-        get() = _errorEvent
+        get() = _errorEvent.asEventFlow()
 
     val carInfo: StateFlow<CarDetail>
     val useState: StateFlow<UseState>

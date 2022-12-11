@@ -3,6 +3,7 @@ package com.gta.presentation.ui.cardetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gta.domain.model.CarDetail
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UserProfile
@@ -19,6 +20,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -33,6 +35,10 @@ class OwnerProfileViewModel @Inject constructor(
     private val reportUserUseCase: ReportUserUseCase
 ) : ViewModel() {
 
+    private val _errorEvent = MutableEventFlow<UCMCResult<Any>>()
+    val errorEvent: EventFlow<UCMCResult<Any>>
+        get() = _errorEvent.asEventFlow()
+
     val owner: StateFlow<UserProfile>
 
     private val _carListEvent = MutableEventFlow<UCMCResult<List<SimpleCar>>>()
@@ -46,7 +52,14 @@ class OwnerProfileViewModel @Inject constructor(
     private lateinit var collectJob: CompletableJob
 
     init {
-        owner = getOwnerInfoUseCase(ownerId).stateIn(
+        owner = getOwnerInfoUseCase(ownerId).map {
+            _errorEvent.emit(it)
+            if (it is UCMCResult.Success) {
+                it.data
+            } else {
+                UserProfile(image = null)
+            }
+        }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = UserProfile(image = null)

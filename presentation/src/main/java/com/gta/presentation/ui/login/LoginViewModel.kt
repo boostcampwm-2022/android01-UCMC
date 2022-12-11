@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
+import com.gta.domain.model.UserProfile
 import com.gta.domain.usecase.login.CheckCurrentUserUseCase
 import com.gta.domain.usecase.login.SignUpUseCase
 import com.gta.domain.usecase.user.GetUserProfileUseCase
@@ -16,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.models.User
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -78,7 +80,14 @@ class LoginViewModel @Inject constructor(
 
     private fun createChatUser() {
         viewModelScope.launch {
-            val profile = getUserProfileUseCase(FirebaseUtil.uid).first()
+            val profile = getUserProfileUseCase(FirebaseUtil.uid).map {
+                // TODO 예외처리
+                if (it is UCMCResult.Success) {
+                    it.data
+                } else {
+                    UserProfile()
+                }
+            }.first()
             val user = User(
                 id = FirebaseUtil.uid,
                 name = profile.name,
