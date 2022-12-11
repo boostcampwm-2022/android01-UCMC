@@ -3,8 +3,6 @@ package com.gta.data
 import com.gta.data.model.UserInfo
 import com.gta.data.repository.ReportRepositoryImpl
 import com.gta.data.source.UserDataSource
-import com.gta.data.util.BAD_UID
-import com.gta.data.util.GOOD_UID
 import com.gta.domain.model.CoolDownException
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult

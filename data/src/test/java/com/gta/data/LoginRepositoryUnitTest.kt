@@ -6,9 +6,6 @@ import com.gta.data.repository.LoginRepositoryImpl
 import com.gta.data.source.LoginDataSource
 import com.gta.data.source.MessageTokenDataSource
 import com.gta.data.source.UserDataSource
-import com.gta.data.util.BAD_UID
-import com.gta.data.util.EXCEPTION_UID
-import com.gta.data.util.GOOD_UID
 import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.LoginRepository

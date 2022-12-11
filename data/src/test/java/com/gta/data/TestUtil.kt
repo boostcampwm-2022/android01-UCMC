@@ -1,4 +1,4 @@
-package com.gta.data.util
+package com.gta.data
 
 const val GOOD_UID = "GoodDonghoon"
 const val BAD_UID = "BadDonghoon"
