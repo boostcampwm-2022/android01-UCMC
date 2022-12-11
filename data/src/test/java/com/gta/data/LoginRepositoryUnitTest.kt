@@ -17,8 +17,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.anyString
+import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
@@ -27,7 +27,7 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
 @ExtendWith(MockitoExtension::class)
-class LoginRepositoryUnitTest (
+class LoginRepositoryUnitTest(
     @Mock private val userDataSource: UserDataSource,
     @Mock private val loginDataSource: LoginDataSource,
     @Mock private val messageTokenDataSource: MessageTokenDataSource
@@ -94,7 +94,7 @@ class LoginRepositoryUnitTest (
     @Test
     @DisplayName("updateUserMessageToken : 유효한 uid를 받으면 토큰을 업데이트하고 true를 반환한다.")
     fun Should_True_When_updateUserMessageTokenWithGooduid() {
-        `when`(userDataSource.updateUserMessageToken(eq(GOOD_UID), anyString())).thenReturn( flow { emit(true) } )
+        `when`(userDataSource.updateUserMessageToken(eq(GOOD_UID), anyString())).thenReturn(flow { emit(true) })
         runBlocking {
             Assertions.assertTrue(repository.updateUserMessageToken(GOOD_UID))
         }
@@ -103,7 +103,7 @@ class LoginRepositoryUnitTest (
     @Test
     @DisplayName("updateUserMessageToken : 유효하지 않은 uid를 받으면 false를 반환한다.")
     fun Should_False_When_updateUserMessageTokenWithBaduid() {
-        `when`(userDataSource.updateUserMessageToken(eq(BAD_UID), anyString())).thenReturn( flow { emit(false) } )
+        `when`(userDataSource.updateUserMessageToken(eq(BAD_UID), anyString())).thenReturn(flow { emit(false) })
         runBlocking {
             Assertions.assertFalse(repository.updateUserMessageToken(BAD_UID))
         }

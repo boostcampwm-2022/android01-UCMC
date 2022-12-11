@@ -42,7 +42,6 @@ class LicenseRepositoryImpl @Inject constructor(
             }
         } ?: UCMCResult.Error(FirestoreException())
 
-
     override suspend fun setLicense(uid: String, license: DrivingLicense, uri: String): UCMCResult<Unit> {
         val expireDate = dateFormat.parse(license.expireDate)?.time ?: 0L
         // 만료시간을 초과했는지 검사

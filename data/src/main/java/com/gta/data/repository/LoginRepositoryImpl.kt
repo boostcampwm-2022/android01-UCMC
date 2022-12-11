@@ -22,7 +22,6 @@ class LoginRepositoryImpl @Inject constructor(
             UCMCResult.Success(Unit)
         } ?: UCMCResult.Error(NotFoundException())
 
-
     override suspend fun signUp(uid: String): UCMCResult<Unit> =
         userDataSource.getUser(uid).first()?.let {
             UCMCResult.Success(Unit)
