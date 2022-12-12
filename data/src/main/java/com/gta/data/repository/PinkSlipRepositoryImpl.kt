@@ -1,5 +1,7 @@
 package com.gta.data.repository
 
+import com.gta.data.model.Car
+import com.gta.data.source.CarDataSource
 import com.gta.data.source.PinkSlipDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.model.DuplicatedItemException
@@ -12,6 +14,7 @@ import java.nio.ByteBuffer
 import javax.inject.Inject
 
 class PinkSlipRepositoryImpl @Inject constructor(
+    private val carDataSource: CarDataSource,
     private val userDataSource: UserDataSource,
     private val pinkSlipDataSource: PinkSlipDataSource
 ) : PinkSlipRepository {
@@ -35,13 +38,13 @@ class PinkSlipRepositoryImpl @Inject constructor(
         } ?: UCMCResult.Error(FirestoreException())
     }
 
-    private suspend fun updateCars(uid: String, cars: List<String>, pinkSlip: PinkSlip): UCMCResult<Unit> =
-        pinkSlipDataSource.run {
-            val result = updateCars(uid, cars).first() && createCar(uid, pinkSlip).first()
-            if (result) {
-                UCMCResult.Success(Unit)
-            } else {
-                UCMCResult.Error(FirestoreException())
-            }
+    private suspend fun updateCars(uid: String, cars: List<String>, pinkSlip: PinkSlip): UCMCResult<Unit> {
+        val car = Car(ownerId = uid, pinkSlip = pinkSlip)
+        val result = pinkSlipDataSource.updateCars(uid, cars).first() && carDataSource.createCar(pinkSlip.informationNumber, car).first()
+        return if (result) {
+            UCMCResult.Success(Unit)
+        } else {
+            UCMCResult.Error(FirestoreException())
         }
+    }
 }
