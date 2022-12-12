@@ -50,9 +50,9 @@ class CarRepositoryImpl @Inject constructor(
 
     // 대여 가능 ,대여 불가능 정보 (실시간)
     override fun getCarRentState(carId: String): Flow<UCMCResult<RentState>> {
-        return carDataSource.getCar(carId).map {
-            if (it != null) {
-                UCMCResult.Success(it.toDetailCar("", UserProfile()).rentState)
+        return carDataSource.getCar(carId).map { car ->
+            if (car != null) {
+                UCMCResult.Success(RentState.values().filter { it.string == car.rentState }[0])
             } else {
                 UCMCResult.Error(FirestoreException())
             }
