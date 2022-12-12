@@ -13,7 +13,7 @@ import com.gta.domain.model.UserProfile
 data class Car(
     val pinkSlip: PinkSlip = PinkSlip(),
     val images: List<String> = emptyList(),
-    val price: Long = 10000,
+    val price: Int = 10000,
     val location: String = "정보 없음",
     val coordinate: Coordinate = Coordinate(),
     val rentState: String = RentState.UNAVAILABLE.string,
@@ -28,7 +28,7 @@ fun Car.toSimple(id: String): SimpleCar = SimpleCar(
     carType = pinkSlip.type,
     model = pinkSlip.model,
     year = pinkSlip.year,
-    price = price.toInt(),
+    price = price,
     coordinate = coordinate,
     licensePlate = pinkSlip.id
 )
@@ -36,7 +36,7 @@ fun Car.toSimple(id: String): SimpleCar = SimpleCar(
 fun Car.toCarRentInfo(reservationDates: List<AvailableDate>): CarRentInfo = CarRentInfo(
     images = images,
     model = pinkSlip.model,
-    price = price.toInt(),
+    price = price,
     comment = comment,
     availableDate = availableDate,
     reservationDates = reservationDates,
@@ -49,7 +49,7 @@ fun Car.toDetailCar(id: String, owner: UserProfile): CarDetail = CarDetail(
     model = pinkSlip.model,
     year = pinkSlip.year,
     licensePlate = pinkSlip.id,
-    price = price.toInt(),
+    price = price,
     location = location,
     rentState = RentState.values().filter { it.string == rentState }[0],
     comment = comment,
@@ -63,7 +63,7 @@ fun Car.update(update: UpdateCar): Car = Car(
     pinkSlip = pinkSlip,
     ownerId = ownerId,
     images = update.images,
-    price = update.price.toLong(),
+    price = update.price,
     comment = update.comment,
     rentState = update.rentState.string,
     availableDate = update.availableDate,
