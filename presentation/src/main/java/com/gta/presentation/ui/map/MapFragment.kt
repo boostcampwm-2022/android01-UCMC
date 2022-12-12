@@ -35,7 +35,6 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
@@ -53,7 +52,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     private val markerList = mutableListOf<Marker>()
-    private var selectedMarker: Marker? = null
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { resultMap ->
@@ -75,7 +73,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     private val bottomSheetCallback = object :
         BottomSheetBehavior.BottomSheetCallback() {
-        override fun onStateChanged(bottomSheet: View, newState: Int) {}
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                setMarkerColor(null)
+            }
+        }
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
             naverMap.setContentPadding(
                 0,
@@ -135,7 +137,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             if (event.y >= binding.bottomSheet.top && event.y <= binding.bottomSheet.bottom) {
                 true
             } else {
-                selectedMarker = null
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 binding.mapView.onTouchEvent(event)
             }
@@ -149,10 +150,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
             viewModel.carsResponse.collectLatest { result ->
                 when (result) {
                     is UCMCResult.Success -> {
-                        resetMarkers()
-                        result.data.forEach { car ->
-                            markerList.add(createMarker(car))
-                        }
+                        resetMarkers(result.data)
                     }
                     is UCMCResult.Error -> {
                         sendSnackBar(result.e.message ?: "알 수 없는 오류입니다.")
@@ -213,9 +211,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     private fun getNearCars() {
-        markerList.forEach {
-            setMarkerColor(it, selectedMarker?.position == it.position)
-        }
         naverMap.let { naverMap ->
             var minLat = 91.0
             var maxLat = -91.0
@@ -253,13 +248,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         marker.apply {
             position = LatLng(car.coordinate.latitude, car.coordinate.longitude)
             icon = MarkerIcons.BLACK
-            setMarkerColor(this, selectedMarker?.position == position)
+            iconTintColor = requireContext().getColor(R.color.primaryColor)
             map = naverMap
 
             setOnClickListener {
-                setMarkerColor(selectedMarker, false)
-                selectedMarker = this
-                setMarkerColor(this, true)
+                setMarkerColor(this)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 naverMap.moveCamera(CameraUpdate.zoomTo(MAP_FOCUS_ZOOM))
                 naverMap.moveCamera(
@@ -274,16 +267,60 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         return marker
     }
 
-    private fun resetMarkers() {
-        markerList.forEach {
+    private fun resetMarkers(list: List<SimpleCar>) {
+        var oldIdx = 0
+        var newIdx = 0
+        val newList = mutableListOf<Marker>()
+        while (oldIdx < markerList.size && newIdx < list.size) {
+            val old = markerList[oldIdx]
+            val new = list[newIdx]
+            when (compare(old.position, new.coordinate)) {
+                0 -> {
+                    newList.add(old)
+                    oldIdx++
+                    newIdx++
+                }
+                1 -> {
+                    newList.add(createMarker(new))
+                    newIdx++
+                }
+                -1 -> {
+                    old.map = null
+                    oldIdx++
+                }
+            }
+        }
+        markerList.subList(oldIdx, markerList.size).forEach {
             it.map = null
         }
+        list.subList(newIdx, list.size).forEach {
+            newList.add(createMarker(it))
+        }
         markerList.clear()
+        markerList.addAll(newList)
     }
 
-    private fun setMarkerColor(marker: Marker?, selected: Boolean) {
-        marker?.iconTintColor =
-            requireContext().getColor(if (selected) R.color.primaryDarkColor else R.color.primaryColor)
+    private fun compare(old: LatLng, new: Coordinate): Int {
+        return if (old.latitude == new.latitude && old.longitude == new.longitude) 0
+        else if (old.latitude < new.latitude) -1
+        else if (old.latitude > new.latitude) 1
+        else if (old.latitude == new.latitude && old.longitude < new.longitude) -1
+        else 1
+    }
+
+    private fun setMarkerColor(marker: Marker?) {
+        if (marker == null) {
+            viewModel.selectedMarker?.zIndex = 0
+            viewModel.selectedMarker?.iconTintColor =
+                requireContext().getColor(R.color.primaryColor)
+            viewModel.clickMarker(null)
+        } else if (marker != viewModel.selectedMarker) {
+            marker.zIndex = 1
+            viewModel.selectedMarker?.iconTintColor =
+                requireContext().getColor(R.color.primaryColor)
+            viewModel.clickMarker(marker)
+            marker.iconTintColor = requireContext().getColor(R.color.primaryDarkColor)
+        }
     }
 
     override fun onAttach(context: Context) {
