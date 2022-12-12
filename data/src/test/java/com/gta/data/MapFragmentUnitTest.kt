@@ -8,7 +8,6 @@ import com.gta.domain.model.UCMCResult
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -26,7 +25,7 @@ class MapFragmentUnitTest(
     private val GOOD_QUERY = "good"
     private val BAD_QUERY = "bad"
 
-    @BeforeAll
+    @BeforeEach
     fun init() {
         runBlocking {
             `when`(mapDataSource.getSearchAddressList(GOOD_QUERY)).thenReturn(
@@ -52,7 +51,7 @@ class MapFragmentUnitTest(
 
     @Test
     @DisplayName("getSearchAddressList : 검색어를 받으면 Success(List<LocationInfo>)를 리턴한다.")
-    fun Should_Success_When_getSearchAddressListwithQuery() {
+    fun Should_Success_When_getSearchAddressList_withQuery() {
         runBlocking {
             val result = repository.getSearchAddressList(GOOD_QUERY).first()
             Assertions.assertTrue(result is UCMCResult.Success)
@@ -60,7 +59,7 @@ class MapFragmentUnitTest(
     }
 
     @Test
-    @DisplayName("getSearchAddressList : 검색어를 받으면 Success(List<LocationInfo>)를 리턴한다.")
+    @DisplayName("getSearchAddressList : 검색어를 받으면 Error(Exception)를 리턴한다.")
     fun Should_Exception_When_getSearchAddressList_withBadQuery() {
         runBlocking {
             val result = repository.getSearchAddressList(BAD_QUERY).first()
