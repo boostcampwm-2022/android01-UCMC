@@ -10,7 +10,7 @@ data class Reservation(
     val ownerId: String = "정보 없음",
     val state: Int = ReservationState.PENDING.state,
     val reservationDate: AvailableDate = AvailableDate(),
-    val price: Int = 0,
+    val price: Long = 0,
     val insuranceOption: String = InsuranceOption.LOW.name
 )
 
