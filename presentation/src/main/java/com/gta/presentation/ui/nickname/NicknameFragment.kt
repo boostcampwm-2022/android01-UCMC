@@ -1,6 +1,7 @@
 package com.gta.presentation.ui.nickname
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,9 +21,16 @@ class NicknameFragment : BaseFragment<FragmentNicknameBinding>(
 
     private val viewModel: NicknameViewModel by viewModels()
 
+    private val nicknameFilter by lazy {
+        InputFilter { source, _, _, _, _, _ ->
+            source.replace("\n".toRegex(), "")
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
+        binding.etNicknameInput.filters = arrayOf(nicknameFilter, InputFilter.LengthFilter(MAX_NICKNAME_LENGTH))
         initCollector()
     }
 
@@ -61,5 +69,9 @@ class NicknameFragment : BaseFragment<FragmentNicknameBinding>(
                 binding.tlNicknameInput.error = getString(R.string.nickname_error_symbols)
             }
         }
+    }
+
+    companion object {
+        private const val MAX_NICKNAME_LENGTH = 10
     }
 }
