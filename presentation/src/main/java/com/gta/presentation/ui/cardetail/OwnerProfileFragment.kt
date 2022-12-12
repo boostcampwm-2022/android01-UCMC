@@ -42,14 +42,6 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.owner.collectLatest {
-                if (it.id == FirebaseUtil.uid) {
-                    binding.tvReport.visibility = View.GONE
-                }
-            }
-        }
-
-        repeatOnStarted(viewLifecycleOwner) {
             viewModel.reportEvent.collectLatest { result ->
                 when (result) {
                     is UCMCResult.Error -> {
@@ -67,6 +59,14 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
                 when (result) {
                     is UCMCResult.Success -> carListAdapter.submitList(result.data)
                     is UCMCResult.Error -> handleErrorMessage(result.e)
+                }
+            }
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.errorEvent.collectLatest { result ->
+                if (result is UCMCResult.Error) {
+                    sendSnackBar(message = getString(R.string.exception_load_data))
                 }
             }
         }

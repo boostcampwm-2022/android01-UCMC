@@ -23,7 +23,6 @@ import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UpdateCar
 import com.gta.domain.model.UpdateFailException
 import com.gta.domain.model.UserNotFoundException
-import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -53,8 +52,15 @@ class CarRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getCarRentState(carId: String): Flow<RentState> {
-        return getCar(carId).map { it.toDetailCar("", UserProfile()).rentState }
+    // 대여 가능 ,대여 불가능 정보 (실시간)
+    override fun getCarRentState(carId: String): Flow<UCMCResult<RentState>> {
+        return carDataSource.getCar(carId).map { car ->
+            if (car != null) {
+                UCMCResult.Success(RentState.values().filter { it.string == car.rentState }[0])
+            } else {
+                UCMCResult.Error(FirestoreException())
+            }
+        }
     }
 
     override fun getCarData(carId: String): Flow<UCMCResult<CarDetail>> = callbackFlow {

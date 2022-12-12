@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,12 +45,21 @@ class MyPageViewModel @Inject constructor(
 
     private fun requestUserProfile() {
         viewModelScope.launch {
-            _userProfile.emit(getUserProfileUseCase(FirebaseUtil.uid).first())
+            _userProfile.emit(
+                getUserProfileUseCase(FirebaseUtil.uid).map {
+                    // TODO 예외처리
+                    if (it is UCMCResult.Success) {
+                        it.data
+                    } else {
+                        UserProfile()
+                    }
+                }.first()
+            )
         }
     }
 
     fun updateThumbnail(uri: String) {
-        val previousImage = userProfile.value.image
+        val previousImage = userProfile.value.image ?: ""
         viewModelScope.launch {
             val result = setThumbnailUseCase(FirebaseUtil.uid, uri, previousImage)
             if (result is UCMCResult.Success && result.data.isNotEmpty()) {
@@ -62,7 +72,7 @@ class MyPageViewModel @Inject constructor(
 
     fun navigateNicknameEdit() {
         viewModelScope.launch {
-            _nicknameEditEvent.emit(userProfile.value.image)
+            _nicknameEditEvent.emit(userProfile.value.image ?: "")
         }
     }
 

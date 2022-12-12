@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="item"
             type="com.gta.domain.model.SimpleCar" />
@@ -18,15 +19,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_medium"
+            android:layout_marginEnd="@dimen/padding_small"
             android:padding="@dimen/padding_medium">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_thumbnail"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_logo"
                 android:scaleType="centerCrop"
+                android:src="@drawable/ic_logo"
                 app:image_uri="@{item.image}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -42,8 +43,8 @@
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:car_title="@{item.model}"
-                app:car_year="@{item.year}"
                 app:car_type="@{item.carType}"
+                app:car_year="@{item.year}"
                 app:layout_constraintBottom_toTopOf="@+id/tv_price"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_thumbnail"
@@ -56,11 +57,23 @@
                 android:layout_height="wrap_content"
                 android:text="@{@string/car_detail_day_price(item.price)}"
                 android:textSize="@dimen/font_body_medium"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_thumbnail"
+                app:layout_constraintBottom_toTopOf="@+id/tv_licensePlate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_title"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title"
                 tools:text="하루당 10000원" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_licensePlate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{item.licensePlate}"
+                android:textSize="@dimen/font_body_small"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_thumbnail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@+id/iv_thumbnail"
+                tools:text="123가 3423"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

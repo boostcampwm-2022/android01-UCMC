@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CarRepository {
     fun getOwnerId(carId: String): Flow<UCMCResult<String>>
-    fun getCarRentState(carId: String): Flow<RentState>
+    fun getCarRentState(carId: String): Flow<UCMCResult<RentState>>
     fun getCarData(carId: String): Flow<UCMCResult<CarDetail>>
     fun updateCarDetail(carId: String, update: UpdateCar): Flow<Boolean>
     fun getCarRentInfo(carId: String): Flow<UCMCResult<CarRentInfo>>

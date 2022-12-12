@@ -91,7 +91,13 @@ class ReservationCheckViewModel @Inject constructor(
                     } else {
                         getUserProfileUseCase(target.data.ownerId)
                     }.combine(getSimpleCarUseCase(target.data.carId)) { userProfile, simpleCar ->
-                        emitResults(userProfile, simpleCar)
+                        if (userProfile is UCMCResult.Success) {
+                            emitResults(userProfile.data, simpleCar)
+                        } else {
+                            // TODO 예외처리
+                            emitResults(UserProfile(), simpleCar)
+                        }
+
                     }
                 }
                 is UCMCResult.Error -> {

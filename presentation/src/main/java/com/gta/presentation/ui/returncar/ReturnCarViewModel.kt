@@ -18,6 +18,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,7 +34,14 @@ class ReturnCarViewModel @Inject constructor(
     private val carId = args.get<String>("carId") ?: ""
 
     val simpleReservation: StateFlow<SimpleReservation> =
-        getNowRentCarUseCase(uid = FirebaseUtil.uid, carId = carId).stateIn(
+        getNowRentCarUseCase(uid = FirebaseUtil.uid, carId = carId).map {
+            // TODO 예외 처리
+            if (it is UCMCResult.Success) {
+                it.data
+            } else {
+                SimpleReservation()
+            }
+        }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SimpleReservation()

@@ -12,16 +12,17 @@ import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class ReservationDataSource @Inject constructor(private val fireStore: FirebaseFirestore) {
-    fun createReservation(reservation: Reservation, reservationId: String): Flow<Boolean> = callbackFlow {
-        fireStore
-            .collection("reservations")
-            .document(reservationId)
-            .set(reservation)
-            .addOnCompleteListener {
-                trySend(it.isSuccessful)
-            }
-        awaitClose()
-    }
+    fun createReservation(reservation: Reservation, reservationId: String): Flow<Boolean> =
+        callbackFlow {
+            fireStore
+                .collection("reservations")
+                .document(reservationId)
+                .set(reservation)
+                .addOnCompleteListener {
+                    trySend(it.isSuccessful)
+                }
+            awaitClose()
+        }
 
     // TODO addSnapshotListener
     fun getReservation(reservationId: String): Flow<Reservation?> = callbackFlow {
@@ -35,24 +36,32 @@ class ReservationDataSource @Inject constructor(private val fireStore: FirebaseF
         awaitClose()
     }
 
+    // 실시간
     fun getRentingStateReservations(uid: String): Flow<List<SimpleReservation>> = callbackFlow {
-        fireStore
+        val job = fireStore
             .collection("reservations")
             .whereEqualTo("lenderId", uid)
             .whereEqualTo("state", ReservationState.RENTING.state)
-            .get()
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    it.result.map { snapshot ->
-                        snapshot.toObject(Reservation::class.java).toSimpleReservation(snapshot.id)
-                    }.also { result ->
-                        trySend(result)
+            .addSnapshotListener { result, error ->
+                if (error != null) {
+                    close()
+                    return@addSnapshotListener
+                }
+
+                if (result != null) {
+                    result.map {
+                        it.toObject(Reservation::class.java).toSimpleReservation(it.id)
+                    }.also { resultList ->
+                        trySend(resultList)
                     }
                 } else {
                     trySend(emptyList())
                 }
             }
-        awaitClose()
+
+        awaitClose {
+            job.remove()
+        }
     }
 
     fun getCarReservationDates(carId: String): Flow<List<AvailableDate>> = callbackFlow {

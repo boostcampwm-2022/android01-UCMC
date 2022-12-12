@@ -3,6 +3,7 @@ package com.gta.data.repository
 import com.gta.data.model.toLocationInfo
 import com.gta.data.source.MapDataSource
 import com.gta.domain.model.LocationInfo
+import com.gta.domain.model.NotFoundDataException
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
@@ -37,15 +38,25 @@ class MapRepositoryImpl @Inject constructor(private val mapDataSource: MapDataSo
         }
     }
 
-    override fun getSearchCoordinate(longitude: String, latitude: String): Flow<String?> = flow {
+    override fun getSearchCoordinate(
+        longitude: String,
+        latitude: String
+    ): Flow<UCMCResult<String>> = flow {
         try {
+            val location = mapDataSource.getSearchCoordinate(
+                longitude,
+                latitude
+            ).documents[0].addressName.addressName
+
             emit(
-                mapDataSource.getSearchCoordinate(
-                    longitude,
-                    latitude
-                ).documents[0].addressName.addressName
+                if (location != "") {
+                    UCMCResult.Success(location)
+                } else {
+                    UCMCResult.Error(NotFoundDataException())
+                }
             )
         } catch (e: Exception) {
+            // TODO 고민
             Timber.d("실패")
         }
     }
