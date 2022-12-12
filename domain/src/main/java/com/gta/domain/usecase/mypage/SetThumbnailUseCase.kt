@@ -7,6 +7,6 @@ import javax.inject.Inject
 class SetThumbnailUseCase @Inject constructor(
     private val repository: MyPageRepository
 ) {
-    suspend operator fun invoke(uid: String, uri: String, prevThumbnailPath: String): UCMCResult<String> =
-        repository.setThumbnail(uid, uri, prevThumbnailPath)
+    suspend operator fun invoke(uid: String, uri: String): UCMCResult<String> =
+        repository.setThumbnail(uid, uri)
 }
