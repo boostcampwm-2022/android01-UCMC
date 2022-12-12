@@ -30,8 +30,7 @@ class ReportRepositoryUnitTest(
 
     @BeforeEach
     fun init() {
-        `when`(userDataSource.addReportCount(anyString(), anyInt())).thenReturn(flow { emit(false) })
-        `when`(userDataSource.addReportCount(eq(GOOD_UID), anyInt())).thenReturn(flow { emit(true) })
+        `when`(userDataSource.addReportCount(anyString(), anyInt())).thenReturn(flow { emit(true) })
         `when`(userDataSource.getUser(anyString())).thenReturn(flow { emit(null) })
         `when`(userDataSource.getUser(GOOD_UID)).thenReturn(flow { emit(UserInfo()) })
     }
@@ -80,6 +79,18 @@ class ReportRepositoryUnitTest(
             val currentTime = System.currentTimeMillis()
             Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID, currentTime))
             Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID, currentTime + 10000))
+        }
+    }
+
+    @Test
+    @DisplayName("reportUser : addReportCount 쿼리에 실패하면 Error(CoolDownException)를 리턴한다.")
+    fun Should_FirestoreException_When_addReportCountFailed() {
+        `when`(userDataSource.addReportCount(eq(GOOD_UID), anyInt())).thenReturn(
+            flow { emit(false) }
+        )
+        runBlocking {
+            val result = repository.reportUser(GOOD_UID)
+            Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
         }
     }
 }
