@@ -121,8 +121,8 @@ class ReservationCheckFragment :
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.createReservationEvent.collect {
-                if (it) findNavController().popBackStack()
+            viewModel.createReservationEvent.collect { result ->
+                if (result is UCMCResult.Success) findNavController().popBackStack()
             }
         }
     }

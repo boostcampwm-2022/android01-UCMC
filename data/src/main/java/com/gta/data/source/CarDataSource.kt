@@ -12,15 +12,20 @@ import javax.inject.Inject
 class CarDataSource @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) {
+    // 실시간
     fun getCar(carId: String): Flow<Car?> = callbackFlow {
-        fireStore.collection("cars").document(carId).get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                trySend(it.result.toObject(Car::class.java))
-            } else {
-                trySend(null)
+        val job =
+            fireStore.collection("cars").document(carId).addSnapshotListener { result, error ->
+                if (error != null) {
+                    close()
+                    return@addSnapshotListener
+                }
+                trySend(result?.toObject(Car::class.java))
             }
+
+        awaitClose {
+            job.remove()
         }
-        awaitClose()
     }
 
     suspend fun getSuspendCar(carId: String): Car? {

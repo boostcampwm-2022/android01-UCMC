@@ -23,13 +23,14 @@ import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UpdateCar
 import com.gta.domain.model.UpdateFailException
 import com.gta.domain.model.UserNotFoundException
-import com.gta.domain.model.UserProfile
 import com.gta.domain.repository.CarRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,12 +42,25 @@ class CarRepositoryImpl @Inject constructor(
     private val reservationDataSource: ReservationDataSource,
     private val storageDataSource: StorageDataSource
 ) : CarRepository {
-    override fun getOwnerId(carId: String): Flow<String> {
-        return getCar(carId).map { it.ownerId }
+    override fun getOwnerId(carId: String): Flow<UCMCResult<String>> {
+        return carDataSource.getCar(carId).map { car ->
+            if (car != null) {
+                UCMCResult.Success(car.ownerId)
+            } else {
+                UCMCResult.Error(FirestoreException())
+            }
+        }
     }
 
-    override fun getCarRentState(carId: String): Flow<RentState> {
-        return getCar(carId).map { it.toDetailCar("", UserProfile()).rentState }
+    // 대여 가능 ,대여 불가능 정보 (실시간)
+    override fun getCarRentState(carId: String): Flow<UCMCResult<RentState>> {
+        return carDataSource.getCar(carId).map { car ->
+            if (car != null) {
+                UCMCResult.Success(RentState.values().filter { it.string == car.rentState }[0])
+            } else {
+                UCMCResult.Error(FirestoreException())
+            }
+        }
     }
 
     override fun getCarData(carId: String): Flow<UCMCResult<CarDetail>> = callbackFlow {
@@ -69,11 +83,16 @@ class CarRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun getCarRentInfo(carId: String): Flow<CarRentInfo> = callbackFlow {
-        carDataSource.getCar(carId).first()?.let { car ->
-            trySend(car.toCarRentInfo(reservationDataSource.getCarReservationDates(carId).first()))
-        } ?: trySend(CarRentInfo())
-        awaitClose()
+    override fun getCarRentInfo(carId: String): Flow<UCMCResult<CarRentInfo>> {
+        return carDataSource.getCar(carId).flatMapLatest { car ->
+            if (car != null) {
+                reservationDataSource.getCarReservationDates(carId).map {
+                    UCMCResult.Success(car.toCarRentInfo(it))
+                }
+            } else {
+                flow { UCMCResult.Error(FirestoreException()) }
+            }
+        }
     }
 
     override fun getSimpleCar(carId: String): Flow<SimpleCar> = callbackFlow {

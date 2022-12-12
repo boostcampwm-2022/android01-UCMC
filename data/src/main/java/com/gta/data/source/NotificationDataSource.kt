@@ -2,6 +2,7 @@ package com.gta.data.source
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.gta.data.model.NotificationMessage
 import com.gta.data.service.CloudMessageService
@@ -10,7 +11,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import javax.inject.Inject
 
 class NotificationDataSource @Inject constructor(
@@ -25,10 +25,6 @@ class NotificationDataSource @Inject constructor(
                     data = notification
                 )
             )
-        }.onSuccess {
-            Timber.d(it.results.toString())
-        }.onFailure {
-            Timber.d(it.message)
         }.isSuccess
     }
 
@@ -49,6 +45,7 @@ class NotificationDataSource @Inject constructor(
 
     suspend fun getNotificationInfoCurrentItem(userId: String): QuerySnapshot {
         return fireStore.collection("users/$userId/notifications")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .limit(ITEMS_PER_PAGE)
             .get()
             .await()
@@ -56,6 +53,7 @@ class NotificationDataSource @Inject constructor(
 
     suspend fun getNotificationInfoNextItem(userId: String, doc: DocumentSnapshot): QuerySnapshot {
         return fireStore.collection("users/$userId/notifications")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .limit(ITEMS_PER_PAGE)
             .startAfter(doc)
             .get()

@@ -12,6 +12,7 @@ import com.gta.domain.usecase.map.GetSearchAddressUseCase
 import com.gta.presentation.util.EventFlow
 import com.gta.presentation.util.MutableEventFlow
 import com.gta.presentation.util.asEventFlow
+import com.naver.maps.map.overlay.Marker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +47,7 @@ class MapViewModel @Inject constructor(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    val carsRequest: SharedFlow<Pair<Coordinate, Coordinate>> get() = _carsRequest
+    private val carsRequest: SharedFlow<Pair<Coordinate, Coordinate>> get() = _carsRequest
 
     private var _carsResponse = MutableEventFlow<UCMCResult<List<SimpleCar>>>()
     val carsResponse: EventFlow<UCMCResult<List<SimpleCar>>> get() = _carsResponse.asEventFlow()
@@ -62,6 +63,9 @@ class MapViewModel @Inject constructor(
 
     private var _selectCar = MutableStateFlow(SimpleCar())
     val selectCar: StateFlow<SimpleCar> get() = _selectCar
+
+    var selectedMarker: Marker? = null
+        private set
 
     private lateinit var collectJob: CompletableJob
 
@@ -109,8 +113,12 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private val _location = MutableSharedFlow<String?>()
-    val location: SharedFlow<String?>
+    fun clickMarker(marker: Marker?) {
+        selectedMarker = marker
+    }
+
+    private val _location = MutableSharedFlow<UCMCResult<String>>()
+    val location: SharedFlow<UCMCResult<String>>
         get() = _location
 
     fun getLocationAddress(longitude: Double, latitude: Double) {

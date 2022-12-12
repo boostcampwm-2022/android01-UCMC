@@ -123,12 +123,13 @@ class CarEditMapFragment :
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.location.collectLatest { location ->
-                    if (location != null && location != "") {
+                    if (location is UCMCResult.Success) {
                         binding.etLocationInput.isEnabled = false
-                        binding.etLocationInput.setText(location)
+                        binding.etLocationInput.setText(location.data)
                     } else {
                         binding.etLocationInput.isEnabled = true
                         binding.etLocationInput.setText(resources.getString(R.string.car_edit_map_location_fail_text))
+                        sendSnackBar(resources.getString(R.string.exception_load_data))
                     }
                 }
             }

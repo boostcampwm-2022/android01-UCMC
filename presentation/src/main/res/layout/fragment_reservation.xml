@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.reservation.reservationFragment">
 
@@ -267,7 +268,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/padding_medium"
-            android:text="@{@string/price_format(vm.totalPrice ?? 0)}"
+            android:text="@{@string/price_format(vm.totalPrice ?? 0L)}"
             android:textAppearance="@style/Title"
             android:textColor="@color/primaryColor"
             app:layout_constraintBottom_toBottomOf="@id/tv_reservation_title_total_payment"
@@ -288,6 +289,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_reservation_title_total_payment" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpi_reservation_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/ic_loading"
+            layout="@layout/include_wait_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="3dp"
+            android:fillViewport="true"
+            android:visibility="gone"
+            bind:message="@{@string/paying_wait_loading_text}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

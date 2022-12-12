@@ -1,10 +1,12 @@
 package com.gta.presentation.ui.cardetail
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.gta.domain.model.CoolDownException
 import com.gta.domain.model.FirestoreException
@@ -18,6 +20,7 @@ import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
@@ -42,17 +45,10 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.startCollect()
-
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.carInfo.collectLatest {
                 (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
                 pagerAdapter.submitList(it.images)
-                if (it.owner.id == FirebaseUtil.uid) {
-                    binding.tvReportPost.visibility = View.GONE
-                    binding.inOwnerProfile.tvChatting.visibility = View.GONE
-                    binding.inOwnerProfile.tvReport.visibility = View.GONE
-                }
             }
         }
 
@@ -61,6 +57,21 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                 findNavController().navigate(
                     CarDetailFragmentDirections.actionCarDetailFragmentToChattingFragment(cid)
                 )
+            }
+        }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.errorEvent.collectLatest { result ->
+                if (result is UCMCResult.Error) {
+                    when (result.e) {
+                        is FirestoreException -> {
+                            sendSnackBar(
+                                message = getString(R.string.exception_load_data),
+                                anchorView = binding.btnNext
+                            )
+                        }
+                    }
+                }
             }
         }
 
@@ -109,12 +120,22 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                     )
                 }
                 UseState.USER -> {
-                    findNavController().navigate(
-                        CarDetailFragmentDirections
-                            .actionCarDetailFragmentToReservationFragment(
-                                viewModel.carInfo.value.id
-                            )
-                    )
+                    // 면허 있는지 확인
+                    // TODO 로딩..
+                    lifecycleScope.launch {
+                        val myLicense = viewModel.getLicenseFromDatabaseUseCase(FirebaseUtil.uid)
+                        if (myLicense is UCMCResult.Error && myLicense.e is Resources.NotFoundException || myLicense is UCMCResult.Error) {
+                            sendSnackBar(resources.getString(R.string.car_detail_no_license), anchorView = binding.btnNext)
+                            return@launch
+                        }
+
+                        findNavController().navigate(
+                            CarDetailFragmentDirections
+                                .actionCarDetailFragmentToReservationFragment(
+                                    viewModel.carInfo.value.id
+                                )
+                        )
+                    }
                 }
                 UseState.NOW_RENT_USER -> {
                     findNavController().navigate(
@@ -126,11 +147,6 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                 else -> {}
             }
         }
-    }
-
-    override fun onStop() {
-        viewModel.stopCollect()
-        super.onStop()
     }
 
     private fun handleErrorMessage(e: Exception) {
