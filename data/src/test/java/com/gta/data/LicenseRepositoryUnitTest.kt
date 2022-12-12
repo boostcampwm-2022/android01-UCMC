@@ -86,7 +86,6 @@ class LicenseRepositoryUnitTest(
             val result = repository.getLicenseFromDatabase(BAD_UID)
             Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
         }
-        System.currentTimeMillis()
     }
 
     @Test
