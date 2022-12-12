@@ -18,16 +18,15 @@ class ReservationRepositoryImpl @Inject constructor(
     private val reservationDataSource: ReservationDataSource,
     private val carDataSource: CarDataSource
 ) : ReservationRepository {
-    override fun createReservation(reservation: Reservation): Flow<String> = callbackFlow {
+    override suspend fun createReservation(reservation: Reservation): UCMCResult<String> {
         val reservationId = "${System.currentTimeMillis()}${reservation.carId}"
-        carDataSource.getCar(reservation.carId).first()?.let {
+        return carDataSource.getCar(reservation.carId).first()?.let {
             if (reservationDataSource.createReservation(reservation, reservationId).first()) {
-                trySend(reservationId)
+                UCMCResult.Success(reservationId)
             } else {
-                trySend("")
+                UCMCResult.Error(FirestoreException())
             }
-        } ?: trySend("")
-        awaitClose()
+        } ?: UCMCResult.Error(FirestoreException())
     }
 
     override fun getReservationInfo(reservationId: String): Flow<UCMCResult<Reservation>> =
@@ -51,7 +50,11 @@ class ReservationRepositoryImpl @Inject constructor(
     override suspend fun updateReservationState(
         reservationId: String,
         state: ReservationState
-    ): Boolean {
-        return reservationDataSource.updateReservationState(reservationId, state.state).first()
+    ): UCMCResult<Unit> {
+        return if (reservationDataSource.updateReservationState(reservationId, state.state).first()) {
+            UCMCResult.Success(Unit)
+        } else {
+            UCMCResult.Error(FirestoreException())
+        }
     }
 }

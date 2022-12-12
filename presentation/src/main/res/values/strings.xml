@@ -83,7 +83,8 @@
     <string name="placeholder_date_range">시작일 ~ 종료일</string>
     <string name="payment_option">결제 수단</string>
     <string name="payment_option_1">카드 결제</string>
-    <string name="payment_option_2">휴대폰 결제</string>
+    <string name="payment_option_2">휴대폰 결제</string>제
+    <string name="paying_wait_loading_text">결제 중입니다.\n잠시만 기다려 주세요..</string>
 
     <string name="license_guide_toolbar">운전자 등록</string>
     <string name="license_guide_title">운전면허를 등록해주세요</string>
@@ -188,6 +189,7 @@
     <string name="hour_format">%d시간</string>
     <string name="day_hour_format">%d일 %d시간</string>
     <string name="minute_format">%d분</string>
+    <string name="return_car_complete_msg">반납이 완료되었습니다.</string>
 
     <string name="no_transactions">거래 내역이 존재하지 않습니다.</string>
     <string name="cancel">취소</string>

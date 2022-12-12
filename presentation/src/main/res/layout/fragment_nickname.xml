@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_extra_large"
             android:text="@string/nickname_input_text"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="@dimen/font_label_large"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toTopOf="@id/tl_nickname_input"
@@ -65,9 +65,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:afterTextChanged="@{(e) -> vm.checkNicknameState(String.valueOf(e))}"
-                android:maxLength="10"
-                android:maxLines="1"
                 android:text="@={vm.nickname}"
+                android:textColor="?attr/colorOnBackground"
                 android:textSize="@dimen/font_body_medium"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>

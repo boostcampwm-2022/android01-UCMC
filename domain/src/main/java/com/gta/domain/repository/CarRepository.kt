@@ -14,7 +14,7 @@ interface CarRepository {
     fun getCarRentState(carId: String): Flow<UCMCResult<RentState>>
     fun getCarData(carId: String): Flow<UCMCResult<CarDetail>>
     fun updateCarDetail(carId: String, update: UpdateCar): Flow<Boolean>
-    fun getCarRentInfo(carId: String): Flow<CarRentInfo>
+    fun getCarRentInfo(carId: String): Flow<UCMCResult<CarRentInfo>>
     fun getSimpleCar(carId: String): Flow<SimpleCar>
     fun getSimpleCarList(ownerId: String): Flow<UCMCResult<List<SimpleCar>>>
     fun getAllCars(): Flow<List<SimpleCar>>

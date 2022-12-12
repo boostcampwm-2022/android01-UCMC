@@ -16,12 +16,13 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito.anyInt
+import org.mockito.Mockito.anyString
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.eq
 
 @ExtendWith(MockitoExtension::class)
-class ReportUnitTest(
+class ReportRepositoryUnitTest(
     @Mock private val userDataSource: UserDataSource
 ) {
 
@@ -29,10 +30,10 @@ class ReportUnitTest(
 
     @BeforeEach
     fun init() {
+        `when`(userDataSource.addReportCount(anyString(), anyInt())).thenReturn(flow { emit(false) })
         `when`(userDataSource.addReportCount(eq(GOOD_UID), anyInt())).thenReturn(flow { emit(true) })
-        `when`(userDataSource.addReportCount(eq(BAD_UID), anyInt())).thenReturn(flow { emit(false) })
+        `when`(userDataSource.getUser(anyString())).thenReturn(flow { emit(null) })
         `when`(userDataSource.getUser(GOOD_UID)).thenReturn(flow { emit(UserInfo()) })
-        `when`(userDataSource.getUser(BAD_UID)).thenReturn(flow { emit(null) })
     }
 
     @Test
@@ -80,10 +81,5 @@ class ReportUnitTest(
             Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID, currentTime))
             Assertions.assertEquals(UCMCResult.Success(Unit), repository.reportUser(GOOD_UID, currentTime + 10000))
         }
-    }
-
-    companion object {
-        private const val GOOD_UID = "GoodDonghoon"
-        private const val BAD_UID = "BadDonghoon"
     }
 }

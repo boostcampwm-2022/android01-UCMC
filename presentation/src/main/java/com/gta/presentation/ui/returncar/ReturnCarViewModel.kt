@@ -11,11 +11,11 @@ import com.gta.domain.usecase.returncar.ReturnCarUseCase
 import com.gta.presentation.R
 import com.gta.presentation.util.DateUtil
 import com.gta.presentation.util.FirebaseUtil
+import com.gta.presentation.util.MutableEventFlow
+import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -50,8 +50,8 @@ class ReturnCarViewModel @Inject constructor(
     private val _remainTime = MutableStateFlow("-")
     val remainTime: StateFlow<String> get() = _remainTime
 
-    private val _returnCarEvent = MutableSharedFlow<String>()
-    val returnCarEvent: SharedFlow<String> get() = _returnCarEvent
+    private val _returnCarEvent = MutableEventFlow<UCMCResult<String>>()
+    val returnCarEvent get() = _returnCarEvent.asEventFlow()
 
     private val minuteFormat: String by lazy { context.getString(R.string.day_hour_format) }
     private val hourFormat: String by lazy { context.getString(R.string.hour_format) }
@@ -93,8 +93,13 @@ class ReturnCarViewModel @Inject constructor(
         val reservationId = simpleReservation.value.reservationId
 
         viewModelScope.launch {
-            if (returnCarUseCase(reservationId, carId, FirebaseUtil.uid)) {
-                _returnCarEvent.emit(reservationId)
+            when (val result = returnCarUseCase(reservationId, carId, FirebaseUtil.uid)) {
+                is UCMCResult.Success -> {
+                    _returnCarEvent.emit(UCMCResult.Success(reservationId))
+                }
+                is UCMCResult.Error -> {
+                    _returnCarEvent.emit(result)
+                }
             }
         }
     }
