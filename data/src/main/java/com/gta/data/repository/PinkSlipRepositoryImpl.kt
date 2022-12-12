@@ -29,7 +29,7 @@ class PinkSlipRepositoryImpl @Inject constructor(
             3. 차 테이블에 새로운 차 추가
          */
         return userDataSource.getUser(uid).first()?.let { userInfo ->
-            if (userInfo.myCars.contains(pinkSlip.informationNumber)) {
+            if (carDataSource.getCar(pinkSlip.informationNumber).first() != null) {
                 UCMCResult.Error(DuplicatedItemException())
             } else {
                 val updatedCars = userInfo.myCars.plus(pinkSlip.informationNumber)
