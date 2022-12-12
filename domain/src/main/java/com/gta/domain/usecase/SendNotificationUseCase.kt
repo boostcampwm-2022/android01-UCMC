@@ -9,7 +9,7 @@ class SendNotificationUseCase @Inject constructor(private val notificationReposi
     suspend operator fun invoke(notification: Notification, receiverId: String): UCMCResult<Unit> {
         val saveResult = notificationRepository.saveNotification(notification, receiverId)
         return if (saveResult is UCMCResult.Success) {
-            return notificationRepository.sendNotification(notification, receiverId)
+            notificationRepository.sendNotification(notification, receiverId)
         } else {
             saveResult
         }
