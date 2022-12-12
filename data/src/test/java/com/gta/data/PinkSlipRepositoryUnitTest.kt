@@ -50,7 +50,7 @@ class PinkSlipRepositoryUnitTest(
         `when`(carDataSource.createCar(anyString(), any())).thenReturn(
             flow { emit(true) }
         )
-        `when`(carDataSource.getCar(NEW_CAR)).thenReturn(
+        `when`(carDataSource.getCar(GOOD_CAR)).thenReturn(
             flow { emit(null) }
         )
         `when`(carDataSource.getCar(DUPLICATED_CAR)).thenReturn(
@@ -64,7 +64,7 @@ class PinkSlipRepositoryUnitTest(
         runBlocking {
             Assertions.assertEquals(
                 UCMCResult.Success(Unit),
-                repository.setPinkSlip(GOOD_UID, PinkSlip(informationNumber = NEW_CAR))
+                repository.setPinkSlip(GOOD_UID, PinkSlip(informationNumber = GOOD_CAR))
             )
         }
     }
@@ -73,7 +73,7 @@ class PinkSlipRepositoryUnitTest(
     @DisplayName("setPinkSlip : 유효하지 않은 uid를 받으면 Error(FirestoreException)을 리턴한다.")
     fun Should_FirestoreException_When_Baduid() {
         runBlocking {
-            val result = repository.setPinkSlip(BAD_UID, PinkSlip(informationNumber = NEW_CAR))
+            val result = repository.setPinkSlip(BAD_UID, PinkSlip(informationNumber = GOOD_CAR))
             Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
         }
     }
@@ -94,7 +94,7 @@ class PinkSlipRepositoryUnitTest(
             flow { emit(false) }
         )
         runBlocking {
-            val result = repository.setPinkSlip(GOOD_UID, PinkSlip(informationNumber = NEW_CAR))
+            val result = repository.setPinkSlip(GOOD_UID, PinkSlip(informationNumber = GOOD_CAR))
             Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
         }
     }
@@ -106,13 +106,8 @@ class PinkSlipRepositoryUnitTest(
             flow { emit(false) }
         )
         runBlocking {
-            val result = repository.setPinkSlip(GOOD_UID, PinkSlip(informationNumber = NEW_CAR))
+            val result = repository.setPinkSlip(GOOD_UID, PinkSlip(informationNumber = GOOD_CAR))
             Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
         }
-    }
-
-    companion object {
-        private const val NEW_CAR = "newCar"
-        private const val DUPLICATED_CAR = "duplicatedCar"
     }
 }
