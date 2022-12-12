@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.databinding.BindingAdapter
 import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.NotificationType
@@ -152,9 +153,5 @@ fun setReservationState(textView: TextView, reservationState: ReservationState) 
 
 @BindingAdapter("when_other_user_visible")
 fun setVisibilityOtherUserView(view: View, otherId: String) {
-    if (FirebaseUtil.uid == otherId) {
-        view.visibility = View.GONE
-    } else {
-        view.visibility = View.VISIBLE
-    }
+    view.isGone = FirebaseUtil.uid == otherId
 }
