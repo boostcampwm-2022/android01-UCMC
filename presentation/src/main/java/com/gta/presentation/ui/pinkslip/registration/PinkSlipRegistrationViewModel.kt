@@ -10,6 +10,7 @@ import com.gta.domain.usecase.pinkslip.GetPinkSlipUseCase
 import com.gta.domain.usecase.pinkslip.SetPinkSlipUseCase
 import com.gta.presentation.util.ImageUtil
 import com.gta.presentation.util.MutableEventFlow
+import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,16 +32,16 @@ class PinkSlipRegistrationViewModel @Inject constructor(
     private val _registerEvent = MutableEventFlow<UCMCResult<Unit>>()
     val registerEvent get() = _registerEvent
 
-    private val _pinkSlipPicture = MutableStateFlow("")
-    val pinkSlipPicture: StateFlow<String> get() = _pinkSlipPicture
+    private val _pinkSlipPictureEvent = MutableEventFlow<String>()
+    val pinkSlipPictureEvent get() = _pinkSlipPictureEvent.asEventFlow()
+
+    val pinkSlipPicture = args.get<String>("uri") ?: ""
 
     init {
-        args.get<String>("uri")?.let { uri ->
-            viewModelScope.launch {
-                _pinkSlipPicture.emit(uri)
-            }
-            getPinkSlip(uri)
+        viewModelScope.launch {
+            _pinkSlipPictureEvent.emit(pinkSlipPicture)
         }
+        getPinkSlip(pinkSlipPicture)
     }
 
     private fun getPinkSlip(uri: String) {

@@ -6,7 +6,6 @@ import com.gta.domain.model.Reservation
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.ReservationRepository
 import com.gta.domain.usecase.SendNotificationUseCase
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class CreateReservationUseCase @Inject constructor(

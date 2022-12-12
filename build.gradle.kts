@@ -11,6 +11,7 @@ buildscript {
         classpath(Dependencies.Classpaths.HILT)
         classpath(Dependencies.Classpaths.CRASHLYTICS)
         classpath(Dependencies.Classpaths.JUNIT5)
+        classpath(Dependencies.Classpaths.JACOCO)
     }
 }
 

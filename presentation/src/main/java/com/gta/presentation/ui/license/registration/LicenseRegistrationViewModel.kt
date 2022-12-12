@@ -10,6 +10,7 @@ import com.gta.domain.usecase.license.GetLicenseFromImageUseCase
 import com.gta.domain.usecase.license.SetLicenseUseCase
 import com.gta.presentation.util.ImageUtil
 import com.gta.presentation.util.MutableEventFlow
+import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,16 +32,16 @@ class LicenseRegistrationViewModel @Inject constructor(
     private val _registerEvent = MutableEventFlow<UCMCResult<Unit>>()
     val registerEvent get() = _registerEvent
 
-    private val _licensePicture = MutableStateFlow("")
-    val licensePicture: StateFlow<String> get() = _licensePicture
+    private val _licensePictureEvent = MutableEventFlow<String>()
+    val licensePictureEvent get() = _licensePictureEvent.asEventFlow()
+
+    private val licensePicture = args.get<String>("uri") ?: ""
 
     init {
-        args.get<String>("uri")?.let { uri ->
-            viewModelScope.launch {
-                _licensePicture.emit(uri)
-            }
-            getLicense(uri)
+        viewModelScope.launch {
+            _licensePictureEvent.emit(licensePicture)
         }
+        getLicense(licensePicture)
     }
 
     private fun getLicense(uri: String) {
@@ -54,7 +55,7 @@ class LicenseRegistrationViewModel @Inject constructor(
         val license = drivingLicense.value ?: return
         val uid = auth.currentUser?.uid ?: return
         viewModelScope.launch {
-            _registerEvent.emit(setLicenseUseCase(uid, license, licensePicture.value))
+            _registerEvent.emit(setLicenseUseCase(uid, license, licensePicture))
         }
     }
 }

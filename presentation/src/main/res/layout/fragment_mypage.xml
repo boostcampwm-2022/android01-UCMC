@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{@string/mypage_nickname(vm.userProfile.name)}"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnBackground"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/tv_mypage_temperature"
@@ -96,12 +96,14 @@
                 android:id="@+id/tv_mypage_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(vm.userProfile.temp)}"
+                android:text="@{@string/temperature_type(vm.userProfile.temp)}"
                 android:textSize="@dimen/font_title_small"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
                 app:layout_constraintTop_toBottomOf="@id/tv_mypage_nickname"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_mypage_thumb"
                 app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
-                tools:text="양심 36.5도"/>
+                tools:text="36.5℃"/>
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/div_mypage_level0"
@@ -118,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_large"
                 android:text="@string/mypage_title_account"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnBackground"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
@@ -145,48 +147,16 @@
                 app:layout_constraintTop_toBottomOf="@id/btn_mypage_license" />
 
             <TextView
-                android:id="@+id/tv_mypage_title_payment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_large"
-                android:text="@string/mypage_title_payment"
-                android:textSize="@dimen/font_title_medium"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
-                app:layout_constraintTop_toBottomOf="@+id/div_mypage_level1" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_mypage_payment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                style="@style/mypageButton"
-                android:text="@string/mypage_btn_payment"
-                app:icon="@drawable/ic_mypage_payment"
-                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
-                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
-                app:layout_constraintTop_toBottomOf="@id/tv_mypage_title_payment" />
-
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/div_mypage_level2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_small"
-                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
-                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
-                app:layout_constraintTop_toBottomOf="@id/btn_mypage_payment" />
-
-            <TextView
                 android:id="@+id/tv_mypage_title_transaction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_large"
                 android:text="@string/mypage_title_transaction"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnBackground"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"
-                app:layout_constraintTop_toBottomOf="@+id/div_mypage_level2" />
+                app:layout_constraintTop_toBottomOf="@+id/div_mypage_level1" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_mypage_car"
@@ -223,18 +193,6 @@
                 app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
                 app:layout_constraintTop_toBottomOf="@id/btn_mypage_buy_history" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_mypage_fine"
-                style="@style/mypageButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/mypage_btn_fine"
-                app:icon="@drawable/ic_mypage_fine"
-                app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
-                app:layout_constraintTop_toBottomOf="@id/btn_mypage_sell_history" />
-
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/div_mypage_level3"
                 android:layout_width="0dp"
@@ -242,7 +200,7 @@
                 android:layout_marginTop="@dimen/padding_small"
                 app:layout_constraintEnd_toEndOf="@id/gl_mypage_end"
                 app:layout_constraintStart_toStartOf="@id/gl_mypage_start"
-                app:layout_constraintTop_toBottomOf="@id/btn_mypage_fine" />
+                app:layout_constraintTop_toBottomOf="@id/btn_mypage_sell_history" />
 
             <TextView
                 android:id="@+id/tv_mypage_title_other"
@@ -250,7 +208,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_large"
                 android:text="@string/mypage_title_other"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnBackground"
                 android:textSize="@dimen/font_title_medium"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/gl_mypage_start"

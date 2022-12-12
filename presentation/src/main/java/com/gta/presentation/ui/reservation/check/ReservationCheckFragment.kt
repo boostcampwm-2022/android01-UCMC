@@ -12,6 +12,7 @@ import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReservationCheckBinding
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -85,7 +86,7 @@ class ReservationCheckFragment :
                             else -> null
                         }?.isChecked = true
 
-                        if (result.data.state == ReservationState.PENDING.state) {
+                        if (result.data.state == ReservationState.PENDING.state && result.data.ownerId == FirebaseUtil.uid) {
                             anchorView = binding.btnReservationAccept
                             View.VISIBLE
                         } else {

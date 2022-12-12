@@ -57,7 +57,7 @@ class ReturnCarFragment : BaseFragment<FragmentReturnCarBinding>(R.layout.fragme
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.returnCarEvent.collectLatest { state  ->
+            viewModel.returnCarEvent.collectLatest { state ->
                 when (state) {
                     is UCMCResult.Success -> {
                         sendSnackBar(

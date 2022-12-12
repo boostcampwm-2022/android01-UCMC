@@ -10,7 +10,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import javax.inject.Inject
 
 class NotificationDataSource @Inject constructor(
