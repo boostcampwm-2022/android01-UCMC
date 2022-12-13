@@ -61,20 +61,20 @@ class ReservationRepositoryUnitTest(
     }
 
     @Test
-    @DisplayName("createReservation : 예약을 받으면 String를 리턴한다.")
+    @DisplayName("createReservation : 예약을 받으면 UCMCResult(String)를 리턴한다.")
     fun Should_Success_When_createReservation() {
         runBlocking {
-            val result = repository.createReservation(GOOD_RES).first()
-            Assertions.assertNotEquals("", result)
+            val result = repository.createReservation(GOOD_RES)
+            Assertions.assertTrue(result is UCMCResult.Success && result.data != "")
         }
     }
 
     @Test
-    @DisplayName("createReservation : 예약을 받으면 빈 스트링을 리턴한다.")
+    @DisplayName("createReservation : 예약을 받으면 UCMCError을 리턴한다.")
     fun Should_Success_When_createReservationFail() {
         runBlocking {
-            val result = repository.createReservation(BAD_RES).first()
-            Assertions.assertEquals("", result)
+            val result = repository.createReservation(BAD_RES)
+            Assertions.assertTrue(result is UCMCResult.Error)
         }
     }
 
@@ -115,20 +115,20 @@ class ReservationRepositoryUnitTest(
     }
 
     @Test
-    @DisplayName("updateReservationState : 정상적인 아이디와 상태가 들어오면 true를 리턴한다.")
+    @DisplayName("updateReservationState : 정상적인 아이디와 상태가 들어오면 Success를 리턴한다.")
     fun Should_Success_When_updateReservationState() {
         runBlocking {
             val result = repository.updateReservationState(GOOD_ID, STATE)
-            Assertions.assertTrue(result)
+            Assertions.assertTrue(result is UCMCResult.Success)
         }
     }
 
     @Test
-    @DisplayName("updateReservationState : 비정상적인 입력, 또는 비정상적인 동작 시 false를 리턴한다.")
+    @DisplayName("updateReservationState : 비정상적인 입력, 또는 비정상적인 동작 시 Error를 리턴한다.")
     fun Should_Success_When_updateReservationState_Fail() {
         runBlocking {
             val result = repository.updateReservationState(BAD_ID, STATE)
-            Assertions.assertFalse(result)
+            Assertions.assertFalse(result is UCMCResult.Error)
         }
     }
 }
