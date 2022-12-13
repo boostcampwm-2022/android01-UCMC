@@ -67,11 +67,11 @@ class CarRepositoryUnitTest(
         Mockito.`when`(carDataSource.getCar(BAD_UID)).thenReturn(flow { emit(null) })
 
         Mockito.`when`(carDataSource.getCar(UNAVAILABLE_CAR))
-            .thenReturn(flow { emit(Car(rentState = "대여 불가능")) })
+            .thenReturn(flow { emit(Car(rentState = RentState.UNAVAILABLE.string)) })
         Mockito.`when`(carDataSource.getCar(AVAILABLE_CAR))
-            .thenReturn(flow { emit(Car(rentState = "대여 가능")) })
+            .thenReturn(flow { emit(Car(rentState = RentState.AVAILABLE.string)) })
         Mockito.`when`(carDataSource.getCar(RENTED_CAR))
-            .thenReturn(flow { emit(Car(rentState = "대여중")) })
+            .thenReturn(flow { emit(Car(rentState = RentState.RENTED.string)) })
 
         Mockito.`when`(
             carDataSource.createCar(
