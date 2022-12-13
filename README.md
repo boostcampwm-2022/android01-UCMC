@@ -73,7 +73,7 @@
 - ### 원하는 차를 대여할 수 있어요! 수락될 수도 있지만 거절될 수도 있어요~
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/54929665/206104307-299e4957-383e-48ce-867d-06fd2d906322.jpg" width=30%> <img src="https://user-images.githubusercontent.com/59998983/207208084-e9906b54-fd23-44cb-8429-118e42ec939e.png" width=30%> 
+  <img src="https://user-images.githubusercontent.com/59998983/207209053-6ab95c31-461a-491e-859a-3d81c4b99541.png" width=30%> <img src="https://user-images.githubusercontent.com/59998983/207208084-e9906b54-fd23-44cb-8429-118e42ec939e.png" width=30%> 
   <img src="https://user-images.githubusercontent.com/59998983/207208209-9b0c327a-1fba-414b-ad21-21fa90441c76.png" width=30%>
 </p>
 
@@ -82,8 +82,8 @@
 - ### 내 차를 등록하고 상세 정보를 수정할 수 있어요!
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/59998983/207206380-2f11df1b-a16e-4753-9d4e-8e1a7f999a05.png" width=30%> <img src="https://user-images.githubusercontent.com/59998983/207209053-6ab95c31-461a-491e-859a-3d81c4b99541.png" width=30%>
-  <img src="https://user-images.githubusercontent.com/59998983/207205119-fecce329-6bf6-4cbc-9f6a-68a2e8dc79cc.png" width=30%>
+  <img src="https://user-images.githubusercontent.com/59998983/207206380-2f11df1b-a16e-4753-9d4e-8e1a7f999a05.png" width=30%> <img src="https://user-images.githubusercontent.com/59998983/207205119-fecce329-6bf6-4cbc-9f6a-68a2e8dc79cc.png" width=30%> <img src="https://user-images.githubusercontent.com/59998983/207212727-4380f916-c142-4843-b0be-0220858fd97e.png" width=30%>
+
 </p>
 <p align="center">
   <img src="https://user-images.githubusercontent.com/59998983/207205205-d9c9efe1-7a33-4f12-b56b-d3418fc3ad25.png" width=30%> <img src="https://user-images.githubusercontent.com/59998983/207205261-257a0649-96c1-43ac-9f88-576ffd8150d2.png" width=30%>
