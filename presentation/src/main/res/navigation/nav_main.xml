@@ -201,7 +201,7 @@
         android:label="@string/review_toolbar"
         tools:layout="@layout/fragment_review">
         <argument
-            android:name="reservationId"
+            android:name="RESERVATION_ID"
             app:argType="string" />
         <action
             android:id="@+id/action_reviewFragment_to_mapFragment"
