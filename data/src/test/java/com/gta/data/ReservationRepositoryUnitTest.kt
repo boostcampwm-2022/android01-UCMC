@@ -70,7 +70,7 @@ class ReservationRepositoryUnitTest(
     }
 
     @Test
-    @DisplayName("createReservation : 예약을 받으면 null를 리턴한다.")
+    @DisplayName("createReservation : 예약을 받으면 빈 스트링을 리턴한다.")
     fun Should_Success_When_createReservationFail() {
         runBlocking {
             val result = repository.createReservation(BAD_RES).first()
@@ -115,7 +115,7 @@ class ReservationRepositoryUnitTest(
     }
 
     @Test
-    @DisplayName("getReservationCar : ID를 받으면 carID를 리턴한다.")
+    @DisplayName("updateReservationState : 정상적인 아이디와 상태가 들어오면 true를 리턴한다.")
     fun Should_Success_When_updateReservationState() {
         runBlocking {
             val result = repository.updateReservationState(GOOD_ID, STATE)
@@ -124,7 +124,7 @@ class ReservationRepositoryUnitTest(
     }
 
     @Test
-    @DisplayName("getReservationCar : ID를 받으면 빈 스트링을 리턴한다.")
+    @DisplayName("updateReservationState : 비정상적인 입력, 또는 비정상적인 동작 시 false를 리턴한다.")
     fun Should_Success_When_updateReservationState_Fail() {
         runBlocking {
             val result = repository.updateReservationState(BAD_ID, STATE)
