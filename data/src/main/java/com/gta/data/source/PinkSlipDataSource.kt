@@ -1,7 +1,6 @@
 package com.gta.data.source
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.gta.data.model.Car
 import com.gta.domain.model.PinkSlip
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -39,17 +38,6 @@ class PinkSlipDataSource @Inject constructor(
         fireStore.collection("users").document(uid).update("myCars", cars).addOnCompleteListener {
             trySend(it.isSuccessful)
         }
-        awaitClose()
-    }
-
-    fun createCar(uid: String, pinkSlip: PinkSlip): Flow<Boolean> = callbackFlow {
-        fireStore
-            .collection("cars")
-            .document(pinkSlip.informationNumber)
-            .set(Car(ownerId = uid, pinkSlip = pinkSlip))
-            .addOnCompleteListener {
-                trySend(it.isSuccessful)
-            }
         awaitClose()
     }
 

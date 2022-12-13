@@ -2,6 +2,7 @@ package com.gta.data.di
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gta.data.repository.PinkSlipRepositoryImpl
+import com.gta.data.source.CarDataSource
 import com.gta.data.source.PinkSlipDataSource
 import com.gta.data.source.UserDataSource
 import com.gta.domain.repository.PinkSlipRepository
@@ -17,9 +18,10 @@ object PinkSlipModule {
     @Singleton
     @Provides
     fun providePinkSlipRepository(
+        carDataSource: CarDataSource,
         userDataSource: UserDataSource,
         pinkSlipDataSource: PinkSlipDataSource
-    ): PinkSlipRepository = PinkSlipRepositoryImpl(userDataSource, pinkSlipDataSource)
+    ): PinkSlipRepository = PinkSlipRepositoryImpl(carDataSource, userDataSource, pinkSlipDataSource)
 
     @Singleton
     @Provides

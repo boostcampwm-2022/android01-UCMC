@@ -12,7 +12,7 @@ class MyPageRepositoryImpl @Inject constructor(
     private val myPageDataSource: MyPageDataSource,
     private val storageDataSource: StorageDataSource
 ) : MyPageRepository {
-    override suspend fun setThumbnail(uid: String, uri: String, prevThumbnailPath: String): UCMCResult<String> {
+    override suspend fun setThumbnail(uid: String, uri: String): UCMCResult<String> {
         val result = storageDataSource.uploadPicture("users/$uid/thumbnail", uri).first() ?: ""
         return if (result.isNotEmpty() && myPageDataSource.setThumbnail(uid, result).first()) {
             UCMCResult.Success(uri)

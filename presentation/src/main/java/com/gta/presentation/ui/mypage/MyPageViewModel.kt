@@ -59,9 +59,8 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun updateThumbnail(uri: String) {
-        val previousImage = userProfile.value.image ?: ""
         viewModelScope.launch {
-            val result = setThumbnailUseCase(FirebaseUtil.uid, uri, previousImage)
+            val result = setThumbnailUseCase(FirebaseUtil.uid, uri)
             if (result is UCMCResult.Success && result.data.isNotEmpty()) {
                 updateChatThumbnail(result.data)
                 _userProfile.emit(userProfile.value.copy(image = uri))
