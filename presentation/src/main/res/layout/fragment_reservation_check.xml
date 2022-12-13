@@ -57,7 +57,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize5Percent" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_reservation_car_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                     app:layout_constraintTop_toBottomOf="@id/iv_reservation_car_thumbnail"
                     tools:text="제네시스 GV80" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_reservation_title_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
