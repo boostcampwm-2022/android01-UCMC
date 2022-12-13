@@ -41,6 +41,9 @@ class NotificationRepositoryUnitTest(
     )
     private val notification: Notification = Notification()
 
+    private val BAD_TOKEN = "bad"
+    private val GOOD_TOKEN = "good"
+
     @BeforeEach
     fun init() {
         `when`(notificationDataSource.saveNotification(any(), anyString(), anyString())).thenReturn(flow { emit(false) })
@@ -49,29 +52,37 @@ class NotificationRepositoryUnitTest(
 
     @Test
     @DisplayName("saveNotification: 유효한 uid일 떄 Notification 저장에 성공하면 Success(Unit)을 리턴 한다.")
-    fun Should_Success_When_saveNotificationWithGoodUid() = runBlocking {
-        val result = repository.saveNotification(notification, GOOD_UID)
+    fun Should_Success_When_saveNotificationWithGoodUid() {
+        runBlocking {
+            val result = repository.saveNotification(notification, GOOD_UID)
 
-        Assertions.assertTrue(result is UCMCResult.Success<Unit>)
+            Assertions.assertTrue(result is UCMCResult.Success<Unit>)
+        }
     }
 
     @Test
     @DisplayName("saveNotification: Notificaiton 저장에 실패하면 Error(FirestoreException)를 리턴한다.")
-    fun Should_FirestoreException_When_saveNotificationWithBadUid() = runBlocking {
-        val result = repository.saveNotification(notification, BAD_UID)
+    fun Should_FirestoreException_When_saveNotificationWithBadUid() {
+        runBlocking {
+            val result = repository.saveNotification(notification, BAD_UID)
 
-        Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
+            Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
+        }
     }
 
     @Test
     @DisplayName("sendNotification: 유효한 uid일 떄 Notification 전송에 성공하면 Success(Unit)을 리턴한다.")
-    fun Should_Success_When_sendNotificationWithGoodUid() = runBlocking {
-        `when`(userDataSource.getUser(GOOD_UID)).thenReturn(flow { emit(UserInfo(messageToken = GOOD_TOKEN)) })
-        `when`(notificationDataSource.sendNotification(notification, GOOD_TOKEN)).thenReturn(true)
+    fun Should_Success_When_sendNotificationWithGoodUid() {
+        runBlocking {
+            `when`(userDataSource.getUser(GOOD_UID)).thenReturn(flow { emit(UserInfo(messageToken = GOOD_TOKEN)) })
+            `when`(notificationDataSource.sendNotification(notification, GOOD_TOKEN)).thenReturn(
+                true
+            )
 
-        val result = repository.sendNotification(notification, GOOD_UID)
+            val result = repository.sendNotification(notification, GOOD_UID)
 
-        Assertions.assertTrue(result is UCMCResult.Success<Unit>)
+            Assertions.assertTrue(result is UCMCResult.Success<Unit>)
+        }
     }
 
     @Test
@@ -89,17 +100,14 @@ class NotificationRepositoryUnitTest(
 
     @Test
     @DisplayName("sendNotification: 유효하지 않은 토큰일 때 Notification 전송에 실패하면 Error(FirestoreException)를 리턴한다.")
-    fun Should_FirestoreException_When_sendNotificationWithBadToken() = runBlocking {
-        `when`(userDataSource.getUser(eq(GOOD_UID))).thenReturn(flow { emit(UserInfo(messageToken = BAD_TOKEN)) })
-        `when`(notificationDataSource.sendNotification(notification, BAD_TOKEN)).thenReturn(false)
+    fun Should_FirestoreException_When_sendNotificationWithBadToken() {
+        runBlocking {
+            `when`(userDataSource.getUser(eq(GOOD_UID))).thenReturn(flow { emit(UserInfo(messageToken = BAD_TOKEN)) })
+            `when`(notificationDataSource.sendNotification(notification, BAD_TOKEN)).thenReturn(false)
 
-        val result = repository.sendNotification(notification, GOOD_UID)
+            val result = repository.sendNotification(notification, GOOD_UID)
 
-        Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
-    }
-
-    companion object {
-        private const val BAD_TOKEN = "bad"
-        private const val GOOD_TOKEN = "good"
+            Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
+        }
     }
 }
