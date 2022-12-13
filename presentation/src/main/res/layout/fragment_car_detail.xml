@@ -45,7 +45,7 @@
                     android:id="@+id/vp_images"
                     android:layout_width="0dp"
                     android:layout_height="300dp"
-                    android:layout_marginTop="@dimen/padding_large"
+                    android:layout_marginTop="@dimen/padding_medium"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@+id/gl_start"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -54,16 +54,15 @@
                     android:id="@+id/indicator_images"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_small"
                     app:dotsColor="?attr/colorSecondary"
-                    app:dotsStrokeColor="?attr/colorPrimary"
                     app:dotsSize="@dimen/padding_small"
                     app:dotsSpacing="4dp"
+                    app:dotsStrokeColor="?attr/colorPrimary"
                     app:dotsStrokeWidth="2dp"
-                    android:layout_marginBottom="@dimen/padding_small"
-                    app:layout_constraintStart_toStartOf="@+id/vp_images"
-                    app:layout_constraintEnd_toEndOf="@+id/vp_images"
                     app:layout_constraintBottom_toBottomOf="@+id/vp_images"
-                    />
+                    app:layout_constraintEnd_toEndOf="@+id/vp_images"
+                    app:layout_constraintStart_toStartOf="@+id/vp_images" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title"
@@ -89,11 +88,10 @@
                     android:layout_marginTop="@dimen/padding_medium"
                     android:text="@{@string/car_detail_day_price(vm.carInfo.price)}"
                     android:textSize="@dimen/font_body_large"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@+id/tv_title"
-                    tools:text="금액 : 1일 23,000원" />
+                    tools:text="일일 대여료 23,000원" />
 
 
                 <com.google.android.material.textview.MaterialTextView
@@ -101,45 +99,24 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_small"
-                    android:text="@{@string/car_detail_location(vm.carInfo.location)}"
+                    android:text="@{vm.carInfo.location}"
+                    android:textSize="@dimen/font_body_large"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@+id/tv_price"
-                    tools:text="위치 : 무슨동 오션타운 주차장" />
+                    tools:text="무슨동 오션타운 주차장" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_licensePlate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_extra_large"
-                    android:text="@{@string/car_detail_licensePlate(vm.carInfo.licensePlate)}"
-                    android:textSize="@dimen/font_body_large"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/gl_end"
-                    app:layout_constraintStart_toStartOf="@+id/gl_start"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_location"
-                    tools:text="번호판 : 12가2345" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_report_post"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_small"
-                    android:onClick="@{() -> vm.onReportClick()}"
-                    android:text="@string/report_it"
-                    app:layout_constraintEnd_toEndOf="@id/gl_end"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_licensePlate" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_comment_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_extra_large"
                     android:text="@string/car_detail_comment_label"
                     android:textSize="@dimen/font_headline_small"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_report_post" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_comment"
@@ -147,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_small"
                     android:text="@{vm.carInfo.comment}"
-                    android:textSize="@dimen/font_body_medium"
+                    android:textSize="@dimen/font_body_large"
                     app:layout_constraintEnd_toEndOf="@+id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@+id/tv_comment_label"
@@ -158,7 +135,7 @@
                     android:id="@+id/tv_owner_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_large"
+                    android:layout_marginTop="@dimen/padding_extra_large"
                     android:text="@string/car_detail_car_owner_label"
                     android:textSize="@dimen/font_headline_small"
                     android:textStyle="bold"
@@ -171,10 +148,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/padding_small"
                     app:cardCornerRadius="@dimen/padding_medium"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_start"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_owner_label"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_owner_label">
 
                     <include
                         android:id="@+id/in_owner_profile"

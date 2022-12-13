@@ -11,16 +11,19 @@ import com.gta.domain.model.AvailableDate
 import com.gta.domain.model.CarRentInfo
 import com.gta.domain.model.InsuranceOption
 import com.gta.domain.model.Reservation
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.reservation.CreateReservationUseCase
 import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.presentation.util.DateUtil
 import com.gta.presentation.util.FirebaseUtil
+import com.gta.presentation.util.MutableEventFlow
+import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,20 +42,38 @@ class ReservationViewModel @Inject constructor(
     private val _insuranceOption = MutableLiveData<InsuranceOption>()
     val insuranceOption: LiveData<InsuranceOption> get() = _insuranceOption
 
-    private val _totalPrice = MediatorLiveData<Int>()
-    val totalPrice: LiveData<Int> get() = _totalPrice
+    private val _totalPrice = MediatorLiveData<Long>()
+    val totalPrice: LiveData<Long> get() = _totalPrice
 
-    private val _createReservationEvent = MutableSharedFlow<Boolean>()
-    val createReservationEvent: SharedFlow<Boolean> get() = _createReservationEvent
+    private val _createReservationEvent = MutableEventFlow<UCMCResult<Unit>>()
+    val createReservationEvent get() = _createReservationEvent.asEventFlow()
 
-    var car: StateFlow<CarRentInfo>? = getCarRentInfoUseCase(carId).stateIn(
+    private val _getCarRentInfoEvent = MutableEventFlow<UCMCResult<Unit>>()
+    val getCarRentInfoEvent get() = _getCarRentInfoEvent.asEventFlow()
+
+    private val _payingEvent = MutableEventFlow<UCMCResult<Unit>>()
+    val payingEvent get() = _payingEvent.asEventFlow()
+
+    var car: StateFlow<CarRentInfo> = getCarRentInfoUseCase(carId).map { result ->
+        when (result) {
+            is UCMCResult.Success -> {
+                Result
+                _getCarRentInfoEvent.emit(UCMCResult.Success(Unit))
+                result.data
+            }
+            is UCMCResult.Error -> {
+                _getCarRentInfoEvent.emit(UCMCResult.Error(result.e))
+                CarRentInfo()
+            }
+        }
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = CarRentInfo()
     )
 
     val basePrice: LiveData<Int> = Transformations.map(_reservationDate) {
-        val carPrice = car?.value?.price ?: 0
+        val carPrice = car.value.price
         DateUtil.getDateCount(it.start, it.end) * carPrice
     }
 
@@ -62,12 +83,12 @@ class ReservationViewModel @Inject constructor(
     init {
         _totalPrice.addSource(basePrice) { basePrice ->
             val insurancePrice = insuranceOption.value?.price ?: 0
-            _totalPrice.value = basePrice.plus(insurancePrice)
+            _totalPrice.value = basePrice.plus(insurancePrice.toLong())
         }
 
         _totalPrice.addSource(insuranceOption) { option ->
             val price = basePrice.value ?: 0
-            _totalPrice.value = price.plus(option.price)
+            _totalPrice.value = price.plus(option.price.toLong())
         }
     }
 
@@ -92,7 +113,7 @@ class ReservationViewModel @Inject constructor(
         } ?: return
         val price = totalPrice.value ?: return
         val option = insuranceOption.value ?: return
-        val ownerId = car?.value?.ownerId ?: return
+        val ownerId = car.value.ownerId
         viewModelScope.launch {
             _createReservationEvent.emit(
                 createReservationUseCase(
@@ -106,6 +127,13 @@ class ReservationViewModel @Inject constructor(
                     )
                 )
             )
+        }
+    }
+
+    fun payBill() {
+        viewModelScope.launch {
+            delay(2000)
+            _payingEvent.emit(UCMCResult.Success(Unit))
         }
     }
 }

@@ -66,8 +66,8 @@ class ReservationCheckViewModel @Inject constructor(
     private val _reservation = MutableStateFlow(Reservation())
     val reservation: StateFlow<Reservation> get() = _reservation
 
-    private val _createReservationEvent = MutableEventFlow<Boolean>()
-    val createReservationEvent: EventFlow<Boolean> get() = _createReservationEvent.asEventFlow()
+    private val _createReservationEvent = MutableEventFlow<UCMCResult<Unit>>()
+    val createReservationEvent: EventFlow<UCMCResult<Unit>> get() = _createReservationEvent.asEventFlow()
 
     private val _navigateChattingEvent = MutableSharedFlow<String>()
     val navigateChattingEvent: SharedFlow<String> get() = _navigateChattingEvent
@@ -91,7 +91,13 @@ class ReservationCheckViewModel @Inject constructor(
                     } else {
                         getUserProfileUseCase(target.data.ownerId)
                     }.combine(getSimpleCarUseCase(target.data.carId)) { userProfile, simpleCar ->
-                        emitResults(userProfile, simpleCar)
+                        if (userProfile is UCMCResult.Success) {
+                            emitResults(userProfile.data, simpleCar)
+                        } else {
+                            // TODO 예외처리
+                            emitResults(UserProfile(), simpleCar)
+                        }
+
                     }
                 }
                 is UCMCResult.Error -> {

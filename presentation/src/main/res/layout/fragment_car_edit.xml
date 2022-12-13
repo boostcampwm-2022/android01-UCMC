@@ -100,7 +100,7 @@
                     android:layout_marginTop="@dimen/padding_small"
                     android:gravity="end"
                     android:inputType="number"
-                    android:maxLength="9"
+                    android:maxLength="8"
                     android:text="@={vm.price}"
                     app:layout_constraintEnd_toStartOf="@+id/tv_price_unit"
                     app:layout_constraintStart_toEndOf="@+id/tv_price_label"

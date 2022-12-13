@@ -27,7 +27,7 @@ class ReviewViewModel @Inject constructor(
     val comment = MutableStateFlow("")
     val rating = MutableStateFlow(5.0f)
 
-    private val reservationId = args.get<String>("reservationId") ?: ""
+    private val reservationId = args.get<String>("RESERVATION_ID") ?: ""
 
     private val _reviewDTO = MutableStateFlow(ReviewDTO())
     val reviewDTO: StateFlow<ReviewDTO> get() = _reviewDTO

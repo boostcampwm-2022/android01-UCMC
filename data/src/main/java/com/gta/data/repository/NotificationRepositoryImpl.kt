@@ -8,8 +8,10 @@ import com.gta.data.source.NotificationDataSource
 import com.gta.data.source.NotificationPagingSource
 import com.gta.data.source.ReservationDataSource
 import com.gta.data.source.UserDataSource
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.Notification
 import com.gta.domain.model.NotificationInfo
+import com.gta.domain.model.UCMCResult
 import com.gta.domain.repository.NotificationRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -26,15 +28,23 @@ class NotificationRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
     private val carDataSource: CarDataSource
 ) : NotificationRepository {
-    override suspend fun sendNotification(notification: Notification, receiverId: String): Boolean {
-        val user = userDataSource.getUser(receiverId).first() ?: return false
+    override suspend fun sendNotification(notification: Notification, receiverId: String): UCMCResult<Unit> {
+        val user = userDataSource.getUser(receiverId).first() ?: return UCMCResult.Error(FirestoreException())
         val receiverToken = user.messageToken
-        return notificationDataSource.sendNotification(notification, receiverToken)
+        return if (notificationDataSource.sendNotification(notification, receiverToken)) {
+            UCMCResult.Success(Unit)
+        } else {
+            UCMCResult.Error(FirestoreException())
+        }
     }
 
-    override suspend fun saveNotification(notification: Notification, userId: String): Boolean {
+    override suspend fun saveNotification(notification: Notification, userId: String): UCMCResult<Unit> {
         val notificationId = "${System.currentTimeMillis()}-$userId"
-        return notificationDataSource.saveNotification(notification, userId, notificationId).first()
+        return if (notificationDataSource.saveNotification(notification, userId, notificationId).first()) {
+            UCMCResult.Success(Unit)
+        } else {
+            UCMCResult.Error(FirestoreException())
+        }
     }
 
     private val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())

@@ -8,6 +8,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentReturnCarBinding
 import com.gta.presentation.ui.base.BaseFragment
@@ -56,12 +57,24 @@ class ReturnCarFragment : BaseFragment<FragmentReturnCarBinding>(R.layout.fragme
         }
 
         repeatOnStarted(viewLifecycleOwner) {
-            viewModel.returnCarEvent.collectLatest { reservationId ->
-                findNavController().navigate(
-                    ReturnCarFragmentDirections.actionReturnCarFragmentToReviewFragment(
-                        reservationId = reservationId
-                    )
-                )
+            viewModel.returnCarEvent.collectLatest { state ->
+                when (state) {
+                    is UCMCResult.Success -> {
+                        sendSnackBar(
+                            message = getString(R.string.return_car_complete_msg)
+                        )
+                        findNavController().navigate(
+                            ReturnCarFragmentDirections.actionReturnCarFragmentToReviewFragment(
+                                reservationId = state.data
+                            )
+                        )
+                    }
+                    is UCMCResult.Error -> {
+                        sendSnackBar(
+                            message = getString(R.string.exception_not_found)
+                        )
+                    }
+                }
             }
         }
     }

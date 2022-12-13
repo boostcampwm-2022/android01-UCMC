@@ -18,6 +18,7 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.gta.domain.model.DeleteFailException
+import com.gta.domain.model.FirestoreException
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UpdateFailException
 import com.gta.presentation.R
@@ -139,7 +140,11 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             }
         }
 
+        // TODO 보일러 코드 제거
         binding.ivDayEdit.setOnClickListener {
+            datePicker.show(childFragmentManager, null)
+        }
+        binding.tvDay.setOnClickListener {
             datePicker.show(childFragmentManager, null)
         }
 
@@ -151,9 +156,16 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                     )
             )
         }
+        binding.tvLocation.setOnClickListener {
+            findNavController().navigate(
+                CarEditFragmentDirections
+                    .actionCarDetailEditFragmentToCarEditMapFragment(
+                        viewModel.coordinate ?: viewModel.defaultCoordinate
+                    )
+            )
+        }
 
         binding.btnDone.setOnClickListener {
-            // TODO 확인 작업
             viewModel.updateData()
         }
 
@@ -224,6 +236,9 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                             }
                             UpdateFailException() -> {
                                 sendSnackBar(getString(R.string.exception_upload_image_part))
+                            }
+                            FirestoreException() -> {
+                                sendSnackBar(getString(R.string.exception_load_data))
                             }
                         }
                     }

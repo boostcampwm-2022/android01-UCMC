@@ -117,8 +117,8 @@ class MapViewModel @Inject constructor(
         selectedMarker = marker
     }
 
-    private val _location = MutableSharedFlow<String?>()
-    val location: SharedFlow<String?>
+    private val _location = MutableSharedFlow<UCMCResult<String>>()
+    val location: SharedFlow<UCMCResult<String>>
         get() = _location
 
     fun getLocationAddress(longitude: Double, latitude: Double) {
