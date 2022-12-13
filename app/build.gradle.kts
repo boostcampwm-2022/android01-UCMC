@@ -51,6 +51,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":presentation"))
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.10")
 
     implementation(Dependencies.Libraries.appLibraries)
     kapt(Dependencies.Libraries.appKaptLibraries)
