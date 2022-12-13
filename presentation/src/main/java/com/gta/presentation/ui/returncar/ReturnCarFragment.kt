@@ -65,7 +65,7 @@ class ReturnCarFragment : BaseFragment<FragmentReturnCarBinding>(R.layout.fragme
                         )
                         findNavController().navigate(
                             ReturnCarFragmentDirections.actionReturnCarFragmentToReviewFragment(
-                                reservationId = state.data
+                                state.data
                             )
                         )
                     }
