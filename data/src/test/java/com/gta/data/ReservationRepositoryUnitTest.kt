@@ -128,7 +128,7 @@ class ReservationRepositoryUnitTest(
     fun Should_Success_When_updateReservationState_Fail() {
         runBlocking {
             val result = repository.updateReservationState(BAD_ID, STATE)
-            Assertions.assertFalse(result is UCMCResult.Error)
+            Assertions.assertTrue(result is UCMCResult.Error)
         }
     }
 }
