@@ -301,11 +301,17 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
     }
 
     private fun compare(old: LatLng, new: Coordinate): Int {
-        return if (old.latitude == new.latitude && old.longitude == new.longitude) 0
-        else if (old.latitude < new.latitude) -1
-        else if (old.latitude > new.latitude) 1
-        else if (old.latitude == new.latitude && old.longitude < new.longitude) -1
-        else 1
+        return if (old.latitude == new.latitude && old.longitude == new.longitude) {
+            0
+        } else if (old.latitude < new.latitude) {
+            -1
+        } else if (old.latitude > new.latitude) {
+            1
+        } else if (old.latitude == new.latitude && old.longitude < new.longitude) {
+            -1
+        } else {
+            1
+        }
     }
 
     private fun setMarkerColor(marker: Marker?) {

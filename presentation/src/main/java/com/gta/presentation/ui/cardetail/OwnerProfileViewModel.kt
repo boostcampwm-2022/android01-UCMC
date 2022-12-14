@@ -3,7 +3,6 @@ package com.gta.presentation.ui.cardetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gta.domain.model.CarDetail
 import com.gta.domain.model.SimpleCar
 import com.gta.domain.model.UCMCResult
 import com.gta.domain.model.UserProfile
