@@ -85,6 +85,7 @@
     <string name="payment_option_1">카드 결제</string>
     <string name="payment_option_2">휴대폰 결제</string>제
     <string name="paying_wait_loading_text">결제 중입니다.\n잠시만 기다려 주세요..</string>
+    <string name="invalid_date_in_selection">이미 예약된 날짜입니다. 다시 선택해주세요.</string>
 
     <string name="license_guide_toolbar">운전자 등록</string>
     <string name="license_guide_title">운전면허를 등록해주세요</string>

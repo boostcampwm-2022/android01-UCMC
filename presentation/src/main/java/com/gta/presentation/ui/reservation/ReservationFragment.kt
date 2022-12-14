@@ -30,6 +30,10 @@ class ReservationFragment :
 
         setUpRadioGroup()
 
+        initCollector()
+    }
+
+    private fun initCollector() {
         repeatOnStarted(viewLifecycleOwner) {
             viewModel.car.collectLatest { car ->
                 setupDatePicker(car.availableDate, car.reservationDates)
@@ -79,6 +83,13 @@ class ReservationFragment :
                 }
             }
         }
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.invalidDateSelectionEvent.collectLatest { _ ->
+                sendSnackBar(message = getString(R.string.invalid_date_in_selection))
+                setupDatePicker(viewModel.car.value.availableDate, viewModel.car.value.reservationDates)
+            }
+        }
     }
 
     private fun setupDatePicker(
@@ -86,9 +97,10 @@ class ReservationFragment :
         reservationDates: List<AvailableDate>
     ) {
         val (startDate, endDate) = availableDate
+        val dateValidator = DateValidator(availableDate.toPair(), reservationDates.toPairList())
 
         val constraints = CalendarConstraints.Builder()
-            .setValidator(DateValidator(availableDate.toPair(), reservationDates.toPairList()))
+            .setValidator(dateValidator)
             .setStart(startDate)
             .setEnd(endDate)
             .build()
@@ -100,7 +112,7 @@ class ReservationFragment :
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.setReservationDate(AvailableDate(it.first, it.second))
+            viewModel.setReservationDate(AvailableDate(it.first, it.second), dateValidator)
         }
 
         val onClick = { _: View -> datePicker.show(childFragmentManager, null) }
