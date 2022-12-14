@@ -17,8 +17,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
-import org.mockito.Mockito.anyString
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.anyString
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
@@ -44,10 +44,11 @@ class LoginRepositoryUnitTest(
     }
 
     @Test
-    @DisplayName("checkCurrentUser : 이미 가입된 유저는 Success(Unit)을 반환한다.")
+    @DisplayName("checkCurrentUser : 이미 가입된 유저는 Success(UserProfile)을 반환한다.")
     fun Should_Success_When_checkUserWithGooduid() {
         runBlocking {
-            Assertions.assertEquals(UCMCResult.Success(Unit), repository.checkCurrentUser(GOOD_UID))
+            val result = repository.checkCurrentUser(GOOD_UID)
+            Assertions.assertTrue(result is UCMCResult.Success && result.data.id == GOOD_UID)
         }
     }
 
@@ -61,22 +62,22 @@ class LoginRepositoryUnitTest(
     }
 
     @Test
-    @DisplayName("signUp : 이미 가입된 유저는 유저 생성 메소드를 수행하지 않고 Success(Unit)을 반환한다.")
+    @DisplayName("signUp : 이미 가입된 유저는 유저 생성 메소드를 수행하지 않고 Success(UserProfile)을 반환한다.")
     fun Should_Success_When_signUpWithGooduid() {
         runBlocking {
             val result = repository.signUp(GOOD_UID)
-            Assertions.assertEquals(UCMCResult.Success(Unit), result)
+            Assertions.assertTrue(result is UCMCResult.Success && result.data.id == GOOD_UID)
             verify(loginDataSource, never()).createUser(eq(GOOD_UID), any())
         }
     }
 
     @Test
-    @DisplayName("signUp : 새로 가입하는 유저는 유저 생성 메소드를 수행하고 Success(Unit)을 반환한다.")
+    @DisplayName("signUp : 새로 가입하는 유저는 유저 생성 메소드를 수행하고 Success(UserProfile)을 반환한다.")
     fun Should_Success_When_signUpWithBaduid() {
-        `when`(loginDataSource.createUser(eq(BAD_UID), anyString())).thenReturn(flow { emit(true) })
+        `when`(loginDataSource.createUser(eq(BAD_UID), anyString())).thenReturn(flow { emit(UserInfo()) })
         runBlocking {
             val result = repository.signUp(BAD_UID)
-            Assertions.assertEquals(UCMCResult.Success(Unit), result)
+            Assertions.assertTrue(result is UCMCResult.Success && result.data.id == BAD_UID)
             verify(loginDataSource, times(1)).createUser(eq(BAD_UID), any())
         }
     }
@@ -84,7 +85,7 @@ class LoginRepositoryUnitTest(
     @Test
     @DisplayName("signUp : 유저 생성 메소드가 실패하면 Error(FirestoreException)을 반환한다.")
     fun Should_FirestoreException_When_createUserFailed() {
-        `when`(loginDataSource.createUser(eq(EXCEPTION_UID), anyString())).thenReturn(flow { emit(false) })
+        `when`(loginDataSource.createUser(eq(EXCEPTION_UID), anyString())).thenReturn(flow { emit(null) })
         runBlocking {
             val result = repository.signUp(EXCEPTION_UID)
             Assertions.assertTrue(result is UCMCResult.Error && result.e is FirestoreException)
