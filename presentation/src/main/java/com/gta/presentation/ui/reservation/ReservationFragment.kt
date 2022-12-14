@@ -103,9 +103,11 @@ class ReservationFragment :
             viewModel.setReservationDate(AvailableDate(it.first, it.second))
         }
 
-        binding.ivReservationNext.setOnClickListener {
-            datePicker.show(childFragmentManager, null)
-        }
+        val onClick = { _: View -> datePicker.show(childFragmentManager, null) }
+
+        binding.ivReservationNext.setOnClickListener(onClick)
+        binding.tvReservationTime.setOnClickListener(onClick)
+        binding.tvReservationTotalTime.setOnClickListener(onClick)
     }
 
     private fun setUpRadioGroup() {
