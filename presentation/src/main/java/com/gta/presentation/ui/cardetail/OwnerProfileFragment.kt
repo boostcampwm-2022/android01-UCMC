@@ -10,7 +10,6 @@ import com.gta.domain.model.UCMCResult
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentOwnerProfileBinding
 import com.gta.presentation.ui.base.BaseFragment
-import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -27,7 +26,7 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         binding.vm = viewModel
-        viewModel.startCollect()
+        // viewModel.startCollect()
         binding.rvCars.adapter = carListAdapter.apply {
             setItemClickListener(
                 object : CarListAdapter.OnItemClickListener {
@@ -55,12 +54,20 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         }
 
         repeatOnStarted(viewLifecycleOwner) {
+            viewModel.carList.collectLatest { result ->
+                when (result) {
+                    is UCMCResult.Success -> carListAdapter.submitList(result.data)
+                    is UCMCResult.Error -> handleErrorMessage(result.e)
+                }
+            }
+            /*
             viewModel.carListEvent.collectLatest { result ->
                 when (result) {
                     is UCMCResult.Success -> carListAdapter.submitList(result.data)
                     is UCMCResult.Error -> handleErrorMessage(result.e)
                 }
             }
+             */
         }
 
         repeatOnStarted(viewLifecycleOwner) {
@@ -72,10 +79,12 @@ class OwnerProfileFragment : BaseFragment<FragmentOwnerProfileBinding>(
         }
     }
 
+    /*
     override fun onStop() {
         viewModel.stopCollect()
         super.onStop()
     }
+     */
 
     private fun handleErrorMessage(e: Exception) {
         when (e) {
