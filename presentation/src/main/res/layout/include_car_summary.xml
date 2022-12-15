@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_medium"
             android:text="@{car.model}"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="@dimen/font_title_medium"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/tv_chatting_price"

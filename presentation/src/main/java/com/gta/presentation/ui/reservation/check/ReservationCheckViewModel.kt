@@ -97,7 +97,6 @@ class ReservationCheckViewModel @Inject constructor(
                             // TODO 예외처리
                             emitResults(UserProfile(), simpleCar)
                         }
-
                     }
                 }
                 is UCMCResult.Error -> {
