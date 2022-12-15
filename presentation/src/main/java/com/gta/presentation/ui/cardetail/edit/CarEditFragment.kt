@@ -9,9 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -25,6 +22,7 @@ import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentCarEditBinding
 import com.gta.presentation.ui.base.BaseFragment
 import com.gta.presentation.util.DateUtil
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -169,26 +167,22 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             viewModel.updateData()
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.images.collectLatest {
-                    imagesAdapter.submitList(it)
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.images.collectLatest {
+                imagesAdapter.submitList(it)
 
-                    binding.btnAddImage.text =
-                        String.format(
-                            resources.getString(R.string.car_edit_images_count),
-                            it.size
-                        )
-                }
+                binding.btnAddImage.text =
+                    String.format(
+                        resources.getString(R.string.car_edit_images_count),
+                        it.size
+                    )
             }
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.price.collectLatest {
-                    if (it.isNotEmpty()) {
-                        binding.tvPrice.text = decimalFormat.format(it.toInt())
-                    }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.price.collectLatest {
+                if (it.isNotEmpty()) {
+                    binding.tvPrice.text = decimalFormat.format(it.toInt())
                 }
             }
         }
@@ -202,44 +196,41 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
                 }
             }
         }
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.updateState.collectLatest { result ->
-                    when (result) {
-                        UpdateState.NORMAL -> {
-                            binding.btnDone.visibility = View.VISIBLE
+
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.updateState.collectLatest { result ->
+                when (result) {
+                    UpdateState.NORMAL -> {
+                        binding.btnDone.visibility = View.VISIBLE
+                    }
+                    UpdateState.LOAD -> {
+                        binding.btnDone.isEnabled = false
+                        binding.icLoading.root.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        if (result != UpdateState.SUCCESS) {
+                            sendSnackBar(getString(R.string.exception_upload_data))
+                        } else {
+                            finishUpdateMsg.show()
                         }
-                        UpdateState.LOAD -> {
-                            binding.btnDone.isEnabled = false
-                            binding.icLoading.root.visibility = View.VISIBLE
-                        }
-                        else -> {
-                            if (result != UpdateState.SUCCESS) {
-                                sendSnackBar(getString(R.string.exception_upload_data))
-                            } else {
-                                finishUpdateMsg.show()
-                            }
-                            findNavController().navigateUp()
-                        }
+                        findNavController().navigateUp()
                     }
                 }
             }
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.errorEvent.collectLatest {
-                    if (it is UCMCResult.Error) {
-                        when (it.e) {
-                            DeleteFailException() -> {
-                                sendSnackBar(getString(R.string.exception_delete_image_part))
-                            }
-                            UpdateFailException() -> {
-                                sendSnackBar(getString(R.string.exception_upload_image_part))
-                            }
-                            FirestoreException() -> {
-                                sendSnackBar(getString(R.string.exception_load_data))
-                            }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.errorEvent.collectLatest {
+                if (it is UCMCResult.Error) {
+                    when (it.e) {
+                        DeleteFailException() -> {
+                            sendSnackBar(getString(R.string.exception_delete_image_part))
+                        }
+                        UpdateFailException() -> {
+                            sendSnackBar(getString(R.string.exception_upload_image_part))
+                        }
+                        FirestoreException() -> {
+                            sendSnackBar(getString(R.string.exception_load_data))
                         }
                     }
                 }
