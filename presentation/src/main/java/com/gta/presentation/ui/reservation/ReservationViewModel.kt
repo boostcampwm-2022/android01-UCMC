@@ -15,6 +15,7 @@ import com.gta.domain.model.UCMCResult
 import com.gta.domain.usecase.reservation.CreateReservationUseCase
 import com.gta.domain.usecase.reservation.GetCarRentInfoUseCase
 import com.gta.presentation.util.DateUtil
+import com.gta.presentation.util.DateValidator
 import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.MutableEventFlow
 import com.gta.presentation.util.asEventFlow
@@ -54,7 +55,10 @@ class ReservationViewModel @Inject constructor(
     private val _payingEvent = MutableEventFlow<UCMCResult<Unit>>()
     val payingEvent get() = _payingEvent.asEventFlow()
 
-    var car: StateFlow<CarRentInfo> = getCarRentInfoUseCase(carId).map { result ->
+    private val _invalidDateSelectionEvent = MutableEventFlow<Boolean>()
+    val invalidDateSelectionEvent = _invalidDateSelectionEvent.asEventFlow()
+
+    val car: StateFlow<CarRentInfo> = getCarRentInfoUseCase(carId).map { result ->
         when (result) {
             is UCMCResult.Success -> {
                 Result
@@ -92,8 +96,25 @@ class ReservationViewModel @Inject constructor(
         }
     }
 
-    fun setReservationDate(selected: AvailableDate) {
-        _reservationDate.value = selected
+    fun setReservationDate(selected: AvailableDate, dateValidator: DateValidator) {
+        if (hasInvalidateInSelectedDate(selected, dateValidator)) {
+            _reservationDate.value = selected
+        } else {
+            viewModelScope.launch {
+                _invalidDateSelectionEvent.emit(true)
+            }
+        }
+    }
+
+    private fun hasInvalidateInSelectedDate(selected: AvailableDate, dateValidator: DateValidator): Boolean {
+        var cursor = selected.start + DateUtil.DAY_TIME_UNIT
+        while (cursor < selected.end) {
+            if (dateValidator.isValid(cursor).not()) {
+                return false
+            }
+            cursor += DateUtil.DAY_TIME_UNIT
+        }
+        return true
     }
 
     fun setInsuranceOption(option: InsuranceOption) {

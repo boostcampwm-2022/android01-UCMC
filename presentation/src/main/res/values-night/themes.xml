@@ -14,9 +14,14 @@
         <item name="colorOnBackground">@color/neutral90</item>
         <item name="colorSurface">@color/neutral10</item>
         <item name="colorOnSurface">@color/neutral80</item>
+        <item name="colorSurfaceVariant">@color/neutral30</item>
+        <item name="colorOnSurfaceVariant">@color/neutral90</item>
+        <item name="colorOutline">@color/neutral70</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="toolbarStyle">@style/Theme.UCMC.Toolbar</item>
+        <item name="radioButtonStyle">@style/Theme.UCMC.RadioButton</item>
+        <item name="materialDividerStyle">@style/Theme.UCMC.Divider</item>
     </style>
 </resources>

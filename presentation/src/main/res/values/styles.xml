@@ -90,7 +90,7 @@
     </style>
 
     <style name="ThemeOverlay.App.MaterialDivider" parent="">
-        <item name="colorOnSurface">@color/neutral40</item>
+        <item name="colorOnSurface">?attr/colorOutline</item>
     </style>
 
 </resources>
