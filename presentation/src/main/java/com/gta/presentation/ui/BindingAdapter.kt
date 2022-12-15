@@ -27,7 +27,8 @@ fun bindImageUri(view: ImageView, uri: String?) {
 
 @BindingAdapter("car_type", "car_year", "car_title")
 fun setCarDetailTitle(textView: TextView, type: String, year: Int, title: String) {
-    textView.text = "[$type] $year $title"
+    // textView.text = "[$type] $year $title"
+    textView.text = "$year $title"
 }
 
 @BindingAdapter("set_car_detail_button")
