@@ -54,7 +54,7 @@ class CarDetailViewModel @Inject constructor(
     val reportEvent get() = _reportEvent.asEventFlow()
 
     private val _settingState = MutableStateFlow(true)
-    val setting get() = _settingState
+    val setting: StateFlow<Boolean> get() = _settingState
 
     init {
         carInfo = getCarDetailDataUseCase(carId).map {
