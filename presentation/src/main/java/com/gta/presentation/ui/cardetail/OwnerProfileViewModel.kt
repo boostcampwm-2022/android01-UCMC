@@ -14,13 +14,11 @@ import com.gta.presentation.util.FirebaseUtil
 import com.gta.presentation.util.MutableEventFlow
 import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
@@ -30,7 +28,7 @@ import javax.inject.Inject
 class OwnerProfileViewModel @Inject constructor(
     args: SavedStateHandle,
     getOwnerInfoUseCase: GetOwnerInfoUseCase,
-    private val getOwnerCarsUseCase: GetOwnerCarsUseCase,
+    getOwnerCarsUseCase: GetOwnerCarsUseCase,
     private val reportUserUseCase: ReportUserUseCase
 ) : ViewModel() {
 
@@ -40,17 +38,31 @@ class OwnerProfileViewModel @Inject constructor(
 
     val owner: StateFlow<UserProfile>
 
+    /*
     private val _carListEvent = MutableEventFlow<UCMCResult<List<SimpleCar>>>()
     val carListEvent: EventFlow<UCMCResult<List<SimpleCar>>> get() = _carListEvent.asEventFlow()
+     */
+    val carList: SharedFlow<UCMCResult<List<SimpleCar>>>
 
     private val _reportEvent = MutableEventFlow<UCMCResult<Unit>>()
     val reportEvent get() = _reportEvent.asEventFlow()
 
     private val ownerId = args.get<String>("OWNER_ID") ?: "정보 없음"
 
-    private lateinit var collectJob: CompletableJob
+    // private lateinit var collectJob: CompletableJob
 
     init {
+        /*
+            현재 상태에서는 eventFlow의 장점을 사용하고 있지 못하다
+            왜냐하면 Fragment가 박살나면 viewmodel의 collect가 멈추기 때문에
+            flow에서 방출되는 값을 받지 못하기 때문이다.
+            그렇기 때문에 에초에 eventFlow 장점을 살리지 못한다면 viewModel의 collect를 제거하는것이
+            좋다고 판단하였다.
+            현재 코드나 그전 코드나 동작 방식은 같다.
+     */
+        carList = getOwnerCarsUseCase(ownerId)
+            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000L))
+
         owner = getOwnerInfoUseCase(ownerId).map {
             _errorEvent.emit(it)
             if (it is UCMCResult.Success) {
@@ -65,6 +77,7 @@ class OwnerProfileViewModel @Inject constructor(
         )
     }
 
+    /*
     fun startCollect() {
         collectJob = SupervisorJob()
 
@@ -76,6 +89,7 @@ class OwnerProfileViewModel @Inject constructor(
     fun stopCollect() {
         collectJob.cancel()
     }
+     */
 
     fun onReportClick() {
         if (ownerId == "정보 없음" || FirebaseUtil.uid == ownerId) {
