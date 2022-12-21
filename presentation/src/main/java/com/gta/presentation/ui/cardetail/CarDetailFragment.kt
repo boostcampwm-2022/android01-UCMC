@@ -128,7 +128,7 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                     // TODO 로딩..
                     lifecycleScope.launch {
                         val myLicense = viewModel.getLicenseFromDatabaseUseCase(FirebaseUtil.uid)
-                        if (myLicense is UCMCResult.Error && myLicense.e is Resources.NotFoundException || myLicense is UCMCResult.Error) {
+                        if (myLicense is UCMCResult.Error) {
                             sendSnackBar(
                                 resources.getString(R.string.car_detail_no_license),
                                 anchorView = binding.btnNext
