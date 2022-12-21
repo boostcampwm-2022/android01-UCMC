@@ -116,7 +116,7 @@ class CarDetailViewModel @Inject constructor(
         }
     }
 
-    fun settingFinish() {
+    fun finishSetting() {
         _settingState.value = false
     }
 }

@@ -51,7 +51,7 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                 pagerAdapter.submitList(it.images)
 
                 if (it.model != "정보 없음") {
-                    viewModel.settingFinish()
+                    viewModel.finishSetting()
                 }
             }
         }
