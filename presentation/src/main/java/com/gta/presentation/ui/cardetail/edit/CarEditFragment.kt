@@ -223,13 +223,13 @@ class CarEditFragment : BaseFragment<FragmentCarEditBinding>(
             viewModel.errorEvent.collectLatest {
                 if (it is UCMCResult.Error) {
                     when (it.e) {
-                        DeleteFailException() -> {
+                        is DeleteFailException -> {
                             sendSnackBar(getString(R.string.exception_delete_image_part))
                         }
-                        UpdateFailException() -> {
+                        is UpdateFailException -> {
                             sendSnackBar(getString(R.string.exception_upload_image_part))
                         }
-                        FirestoreException() -> {
+                        is FirestoreException -> {
                             sendSnackBar(getString(R.string.exception_load_data))
                         }
                     }
