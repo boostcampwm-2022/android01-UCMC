@@ -49,6 +49,10 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
             viewModel.carInfo.collectLatest {
                 (requireActivity() as MainActivity).supportActionBar?.title = it.licensePlate
                 pagerAdapter.submitList(it.images)
+
+                if (it.model != "정보 없음") {
+                    viewModel.finishSetting()
+                }
             }
         }
 
@@ -124,8 +128,11 @@ class CarDetailFragment : BaseFragment<FragmentCarDetailBinding>(
                     // TODO 로딩..
                     lifecycleScope.launch {
                         val myLicense = viewModel.getLicenseFromDatabaseUseCase(FirebaseUtil.uid)
-                        if (myLicense is UCMCResult.Error && myLicense.e is Resources.NotFoundException || myLicense is UCMCResult.Error) {
-                            sendSnackBar(resources.getString(R.string.car_detail_no_license), anchorView = binding.btnNext)
+                        if (myLicense is UCMCResult.Error) {
+                            sendSnackBar(
+                                resources.getString(R.string.car_detail_no_license),
+                                anchorView = binding.btnNext
+                            )
                             return@launch
                         }
 

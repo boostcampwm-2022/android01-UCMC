@@ -9,7 +9,6 @@ import com.gta.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import timber.log.Timber
 import javax.inject.Inject
 
 class MapRepositoryImpl @Inject constructor(private val mapDataSource: MapDataSource) :
@@ -41,22 +40,19 @@ class MapRepositoryImpl @Inject constructor(private val mapDataSource: MapDataSo
         longitude: String,
         latitude: String
     ): Flow<UCMCResult<String>> = flow {
-        try {
-            val location = mapDataSource.getSearchCoordinate(
-                longitude,
-                latitude
-            ).documents[0].addressName.addressName
+        val location = mapDataSource.getSearchCoordinate(
+            longitude,
+            latitude
+        ).documents[0].addressName.addressName
 
-            emit(
-                if (location != "") {
-                    UCMCResult.Success(location)
-                } else {
-                    UCMCResult.Error(NotFoundDataException())
-                }
-            )
-        } catch (e: Exception) {
-            // TODO 고민
-            Timber.d("실패")
-        }
+        emit(
+            if (location != "") {
+                UCMCResult.Success(location)
+            } else {
+                UCMCResult.Error(NotFoundDataException())
+            }
+        )
+    }.catch { e ->
+        emit(UCMCResult.Error(Exception(e.message)))
     }
 }

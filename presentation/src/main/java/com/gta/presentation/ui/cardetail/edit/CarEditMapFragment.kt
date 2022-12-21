@@ -9,9 +9,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.gta.domain.model.LocationInfo
@@ -120,17 +117,15 @@ class CarEditMapFragment :
             findNavController().navigateUp()
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.location.collectLatest { location ->
-                    if (location is UCMCResult.Success) {
-                        binding.etLocationInput.isEnabled = false
-                        binding.etLocationInput.setText(location.data)
-                    } else {
-                        binding.etLocationInput.isEnabled = true
-                        binding.etLocationInput.setText(resources.getString(R.string.car_edit_map_location_fail_text))
-                        sendSnackBar(resources.getString(R.string.exception_load_data))
-                    }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.location.collectLatest { location ->
+                if (location is UCMCResult.Success) {
+                    binding.etLocationInput.isEnabled = false
+                    binding.etLocationInput.setText(location.data)
+                } else {
+                    binding.etLocationInput.isEnabled = true
+                    binding.etLocationInput.setText(resources.getString(R.string.car_edit_map_location_fail_text))
+                    sendSnackBar(resources.getString(R.string.exception_load_data))
                 }
             }
         }

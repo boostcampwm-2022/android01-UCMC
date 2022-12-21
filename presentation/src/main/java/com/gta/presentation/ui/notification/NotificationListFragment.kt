@@ -15,6 +15,7 @@ import com.gta.domain.model.NotificationType
 import com.gta.presentation.R
 import com.gta.presentation.databinding.FragmentNotificationListBinding
 import com.gta.presentation.ui.base.BaseFragment
+import com.gta.presentation.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -85,11 +86,9 @@ class NotificationListFragment : BaseFragment<FragmentNotificationListBinding>(
 
         adapter.addLoadStateListener(pagingListener)
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.notificationList.collectLatest {
-                    adapter.submitData(it)
-                }
+        repeatOnStarted(viewLifecycleOwner) {
+            viewModel.notificationList.collectLatest {
+                adapter.submitData(it)
             }
         }
     }

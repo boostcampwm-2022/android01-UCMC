@@ -7,6 +7,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.gta.presentation.ui.cardetail.CarDetailViewModel" />
@@ -171,6 +173,29 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:set_car_detail_button="@{vm.useState}"
             tools:text="예약하기" />
+
+        <View
+            android:id="@+id/view_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.8"
+            android:background="?android:attr/colorBackground"
+            android:clickable="true"
+            android:elevation="3dp"
+            android:focusable="true"
+            android:visibility="@{vm.setting ? View.VISIBLE : View.GONE}" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/pg_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="5dp"
+            android:indeterminate="true"
+            android:visibility="@{vm.setting ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,7 @@ import com.gta.presentation.util.asEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.getstream.chat.android.client.ChatClient
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -51,6 +52,9 @@ class CarDetailViewModel @Inject constructor(
 
     private val _reportEvent = MutableEventFlow<UCMCResult<Unit>>()
     val reportEvent get() = _reportEvent.asEventFlow()
+
+    private val _settingState = MutableStateFlow(true)
+    val setting: StateFlow<Boolean> get() = _settingState
 
     init {
         carInfo = getCarDetailDataUseCase(carId).map {
@@ -110,5 +114,9 @@ class CarDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _reportEvent.emit(reportUserUseCase(carInfo.value.owner.id))
         }
+    }
+
+    fun finishSetting() {
+        _settingState.value = false
     }
 }
